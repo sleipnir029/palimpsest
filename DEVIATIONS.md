@@ -32,3 +32,13 @@ Template per entry:
 **What:** Added a second tool `read_first_page_text(path)` (`fitz.open(path)[0].get_text()`) plus its registration and a mention in the `__main__` / e2e system prompts — beyond the card's two named files. With only `read_paper` (metadata: SHA-256/pages/size), the model correctly refused to invent a title; the literal "output contains the title" check couldn't pass. The card pre-authorizes exactly this tool as "acceptable scope expansion" and asks to log it here. User confirmed adding it over accepting the metadata-only answer. CLI now returns the real title ("Iridium single atoms incorporated in Co₃O₄ efficiently catalyze the oxygen evolution in acidic conditions", Nat. Commun. 2022).
 **Verdict:** accepted
 **Lesson:** A metadata-only tool can't satisfy a text question, and an honest model refuses rather than hallucinates — the card anticipated this and shipped the escape hatch with the task.
+
+## 2026-05-26 — T09
+**What:** The card's second verification snippet does `r.json().get("data", [])`, but `GET https://rest.runpod.io/v1/pods` returns a **bare JSON list**, not `{"data": [...]}`. The snippet crashes (`AttributeError: 'list' object has no attribute 'get'`) on the pod-count line — *after* the auth assert (`status_code == 200`) has already passed. Ran a shape-tolerant variant to confirm: status 200, 0 pods (test pod terminated). Pass condition (key accepted → 200) is met; only the cosmetic count line was buggy.
+**Verdict:** accepted (card snippet had a latent bug; auth verification itself succeeds). **Fixed:** card snippet updated to `body if isinstance(body, list) else body.get('data', [])`; now exits 0 literally.
+**Lesson:** The RunPod REST `/v1/pods` response shape is a top-level array; don't assume a `data` envelope. The card's count line was never load-bearing — 200 is the real gate.
+
+## 2026-05-26 — T09
+**What:** Used **RTX 3090** (Community Cloud) for the manual SSH connectivity test instead of the RTX 4090 named in the card, because the 4090 showed "Low" availability at deploy time. Card explicitly permits "any small GPU" for this test.
+**Verdict:** accepted
+**Lesson:** Availability on Community Cloud is variable; the connectivity path is GPU-agnostic, so substitute freely for a throwaway test. The 4090 is only load-bearing later (T10/T14) for the actual parsers.

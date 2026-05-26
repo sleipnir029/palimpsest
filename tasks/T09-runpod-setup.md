@@ -25,7 +25,9 @@ import os, httpx, dotenv
 dotenv.load_dotenv()
 r = httpx.get('https://rest.runpod.io/v1/pods', headers={'Authorization': f'Bearer {os.environ[\"RUNPOD_API_KEY\"]}'})
 assert r.status_code == 200, f'runpod API rejected key: {r.status_code} {r.text}'
-print(f'runpod API ok; {len(r.json().get(\"data\", []))} pods listed')
+body = r.json()
+pods = body if isinstance(body, list) else body.get('data', [])
+print(f'runpod API ok; {len(pods)} pods listed')
 "
 ```
 Both must succeed.
