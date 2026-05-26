@@ -11,7 +11,9 @@ layer; T11–T13 (MinerU / olmOCR / Chandra) extend this same image.
 - `vllm==0.19.1` (cu129 wheels) + `docling` + `docling-ibm-models`.
 - `ibm-granite/granite-docling-258M` weights baked into `/root/.cache/huggingface`
   (default + `untied` revisions), so the first pod run does not download.
-- `CMD ["bash"]` — interactive; the `gpu_provider` (T14) SSHes in.
+- `CMD ["sleep", "infinity"]` — keeps the container alive so RunPod can exec/SSH
+  in (a bare `bash` exits immediately on a detached pod start). `gpu_provider`
+  (T14) execs `docling` / `vllm serve` in the running container.
 
 Image is ~10–15 GB. Pulled to the pod once, then cached on RunPod's side.
 

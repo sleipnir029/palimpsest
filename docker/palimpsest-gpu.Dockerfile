@@ -50,5 +50,7 @@ RUN python -c "from huggingface_hub import snapshot_download; \
 snapshot_download('ibm-granite/granite-docling-258M'); \
 snapshot_download('ibm-granite/granite-docling-258M', revision='untied')"
 
-# Interactive: gpu_provider (T14) SSHes in and runs docling / vllm serve.
-CMD ["bash"]
+# Keep the container alive so RunPod can exec/SSH into it (a bare `bash` as PID 1
+# exits immediately when the pod starts detached, stopping the container).
+# gpu_provider (T14) execs `docling` / `vllm serve` in the running container.
+CMD ["sleep", "infinity"]
