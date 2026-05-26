@@ -6,7 +6,7 @@ Follow this top-to-bottom. Do not skip steps. Do not work ahead.
 
 You need:
 
-- **macOS arm64** (M1/M2/M3) or **Linux x86_64**.
+- **macOS arm64** (M1 - being used)
 - **Pixi** — install once: `curl -fsSL https://pixi.sh/install.sh | bash`. Confirm: `pixi --version`.
 - **Git** — confirm: `git --version`.
 - **Docker Desktop** (only needed for T10–T13, Dockerfile builds). Defer install until week 2 if you want.
