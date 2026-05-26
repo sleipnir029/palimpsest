@@ -5,11 +5,12 @@
 # T11-T13 add MinerU / olmOCR / Chandra on top of this image.
 #
 # NOTE (deviation from task card, see DEVIATIONS.md): the card pins
-# nvidia/cuda:12.1.0-devel. vLLM 0.19.x ships cu129 wheels and no longer runs on
-# CUDA 12.1, so the base is bumped to 12.9.1 and torch/vLLM are installed from the
-# cu129 PyTorch index — matching vLLM's documented default. Base runtime, torch
-# wheel, and vLLM then agree on CUDA 12.9 (asserted at build time below).
-FROM nvidia/cuda:12.9.1-devel-ubuntu22.04
+# nvidia/cuda:12.1.0-devel. vLLM 0.19.x dropped CUDA 12.1, so the base is on a
+# newer CUDA. 12.8 (not vLLM's 12.9 default) is chosen because it is the ceiling
+# RunPod's available host drivers support, and it is vLLM's lowest supported CUDA
+# AND olmOCR's official image version — so all four parsers (T11-T13) share it.
+# Base runtime, torch wheel, and vLLM all agree on CUDA 12.8 (asserted below).
+FROM nvidia/cuda:12.8.1-devel-ubuntu22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -28,15 +29,15 @@ RUN python3.11 -m venv /opt/venv
 ENV PATH=/opt/venv/bin:$PATH
 RUN pip install --no-cache-dir --upgrade pip
 
-# Install torch from the cu129 index FIRST so vLLM resolves against it. With
+# Install torch from the cu128 index FIRST so vLLM resolves against it. With
 # --extra-index-url alone, pip can pick PyPI's default-CUDA torch on a version
-# tie, silently disagreeing with the 12.9 base. The assert fails the build in CI
+# tie, silently disagreeing with the 12.8 base. The assert fails the build in CI
 # (free, ~20 min) if the CUDA build is wrong, before any paid GPU pod.
 RUN pip install --no-cache-dir torch \
-        --index-url https://download.pytorch.org/whl/cu129
+        --index-url https://download.pytorch.org/whl/cu128
 RUN pip install --no-cache-dir vllm==0.19.1 \
-        --extra-index-url https://download.pytorch.org/whl/cu129
-RUN python -c "import torch; assert '+cu129' in torch.__version__, torch.__version__"
+        --extra-index-url https://download.pytorch.org/whl/cu128
+RUN python -c "import torch; assert '+cu128' in torch.__version__, torch.__version__"
 
 # docling + the granite VLM models package. huggingface_hub is pinned explicitly
 # (not left to a transitive dep) because the next RUN depends on it.

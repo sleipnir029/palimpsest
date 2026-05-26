@@ -6,9 +6,9 @@ layer; T11–T13 (MinerU / olmOCR / Chandra) extend this same image.
 
 ## Contents
 
-- `nvidia/cuda:12.9.1-devel-ubuntu22.04` base (nvcc + CUDA 12.9 runtime).
+- `nvidia/cuda:12.8.1-devel-ubuntu22.04` base (nvcc + CUDA 12.8 runtime).
 - Python 3.11 in `/opt/venv` (on `PATH`).
-- `vllm==0.19.1` (cu129 wheels) + `docling` + `docling-ibm-models`.
+- `vllm==0.19.1` (cu128 wheels) + `docling` + `docling-ibm-models`.
 - `ibm-granite/granite-docling-258M` weights baked into `/root/.cache/huggingface`
   (default + `untied` revisions), so the first pod run does not download.
 - `CMD ["sleep", "infinity"]` — keeps the container alive so RunPod can exec/SSH
@@ -18,8 +18,9 @@ layer; T11–T13 (MinerU / olmOCR / Chandra) extend this same image.
 Image is ~10–15 GB. Pulled to the pod once, then cached on RunPod's side.
 
 > **CUDA note (deviation from task card):** the card pins CUDA 12.1.0, but vLLM
-> 0.19.x dropped 12.1 and ships cu129 wheels. Base bumped to 12.9.1 + cu129 wheels
-> so base runtime, torch, and vLLM agree (asserted at build time). See `DEVIATIONS.md`.
+> 0.19.x dropped 12.1. Base is 12.8.1 + cu128 wheels — the ceiling RunPod's host
+> drivers support and the version all four parsers share (olmOCR's official image
+> is also 12.8). Base, torch, and vLLM agree (asserted at build time). See `DEVIATIONS.md`.
 
 ## Build
 
