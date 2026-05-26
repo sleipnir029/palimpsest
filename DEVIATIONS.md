@@ -42,3 +42,8 @@ Template per entry:
 **What:** Used **RTX 3090** (Community Cloud) for the manual SSH connectivity test instead of the RTX 4090 named in the card, because the 4090 showed "Low" availability at deploy time. Card explicitly permits "any small GPU" for this test.
 **Verdict:** accepted
 **Lesson:** Availability on Community Cloud is variable; the connectivity path is GPU-agnostic, so substitute freely for a throwaway test. The 4090 is only load-bearing later (T10/T14) for the actual parsers.
+
+## 2026-05-26 — T10
+**What:** The card pins `FROM nvidia/cuda:12.1.0-devel-ubuntu22.04`. Current vLLM (0.19.1, released 2026-04-18) ships cu129 prebuilt wheels and dropped CUDA 12.1 support — torch/vLLM will not load on a 12.1 base. Bumped the Dockerfile base to **`nvidia/cuda:12.9.1-devel-ubuntu22.04`** and install torch + **`vllm==0.19.1`** from the cu129 PyTorch index (vLLM's documented default), so base runtime + torch wheel + vLLM all agree on CUDA 12.9 — enforced by a build-time `assert '+cu129' in torch.__version__`. Also dropped flash-attn (HF model card marks it optional; not named in the T10 card; saves a long nvcc build), and added a GitHub Actions workflow (`.github/workflows/build-gpu-image.yml`) as the build host since there is no local GPU/Docker — a 4th file beyond the card's three. User approved the base bump and the CI setup before code was written.
+**Verdict:** accepted
+**Lesson:** Pinned base-image / CUDA versions in a task card written months earlier go stale fast against a fast-moving dep like vLLM; check the dep's current CUDA support before honoring the literal pin.
