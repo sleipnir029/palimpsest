@@ -444,7 +444,7 @@ Print this table. Keep it next to your keyboard for the first two weeks. After t
 
 ---
 
-## Part 10 — The daily rhythm
+## Part 10 — The daily rhythm (suggestion and not an obligation)
 
 A typical palimpsest workday:
 
