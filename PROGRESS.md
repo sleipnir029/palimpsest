@@ -4,7 +4,7 @@ Append one line per merged task. Status markers: `✓` done, `⏳` in progress, 
 
 ## Week 1 — foundations
 
-(empty — start here with T01)
+- ✓ T01 pixi init + lockfile — reproducible osx-arm64/linux-64 env; `pixi install` + `import palimpsest` verified (2026-05-26, 5404418)
 
 ## Week 2 — parsing & cache
 
