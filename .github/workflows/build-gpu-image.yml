@@ -37,3 +37,9 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/palimpsest-gpu:0.1.0-docling
+          # Push a plain single-image manifest. Without these, buildx attaches a
+          # provenance/SBOM attestation, producing an OCI index that RunPod's
+          # image puller rejects: "layers from manifest don't match image
+          # configuration". See DEVIATIONS.md.
+          provenance: false
+          sbom: false
