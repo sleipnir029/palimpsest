@@ -17,7 +17,7 @@ Confirm CLAUDE.md is present and intact (this is the agent's constitution and mu
   - It contains the line `### Anti-patterns — refuse on sight`.
   - It contains the line `### Budget — €50 hard cap`.
 - File `LICENSE` exists at repo root with the MIT license text, copyright `Copyright (c) 2026 Rahat <last name>`.
-- File `AUTHORS.md` exists with one line: `Rahat <last name>, RWTH Aachen, Group G03 Earth`.
+- File `AUTHORS.md` exists with one line: `Rahat <last name>`.
 
 ## Verification
 ```bash
