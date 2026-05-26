@@ -8,6 +8,8 @@ the paid call and recorded after.
 
 from __future__ import annotations
 
+from jsonschema import ValidationError, validate
+
 from .tools import TOOLS
 
 # USD per token, Sonnet pricing (card T06). 5-minute cache-creation tier.
@@ -90,6 +92,10 @@ class Agent:
         fn = TOOLS.get(call["name"])
         if fn is None:
             return {**block, "content": f"error: unknown tool {call['name']!r}", "is_error": True}
+        try:
+            validate(call["input"], fn.tool_schema["input_schema"])
+        except ValidationError as exc:
+            return {**block, "content": f"error: invalid arguments: {exc.message}", "is_error": True}
         try:
             block["content"] = str(fn(**call["input"]))
         except Exception as exc:  # noqa: BLE001 — surface any tool failure to the model

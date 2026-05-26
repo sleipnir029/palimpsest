@@ -13,6 +13,8 @@ Append one line per merged task. Status markers: `✓` done, `⏳` in progress, 
 
 ## Week 2 — parsing & cache
 
+- ✓ T07 read_paper tool — `read_paper(path)` → `{sha256, page_count, bytes_len, path}`; opens fitz from the same bytes it hashes (`stream=data`) so the sha256 (future T15 cache key) and page_count can't disagree. Registered via import side-effect in `tools/__init__.py`. **Scope add (authorized):** resolved T06's carried-over input-validation item by inserting `jsonschema.validate` in `agent.py:_dispatch` before `fn(**input)` — bad/missing args now return a clean `is_error` instead of a raw `TypeError`; card's `input_schema` left verbatim (no `additionalProperties`, so extra args still TypeError → contained by existing except). Fixture `sample.pdf` copied from `papers/`. 2 offline tests green; `test_max_turns` regression green; 358 LOC total (2026-05-26)
+
 ## Week 3 — schema & extraction
 
 ## Week 4 — UI & viewer

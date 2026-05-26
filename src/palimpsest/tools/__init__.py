@@ -25,3 +25,6 @@ def register(name: str, schema: dict) -> Callable:
         return fn
 
     return decorator
+
+
+from . import read_paper  # noqa: E402,F401 — import for @register side effect
