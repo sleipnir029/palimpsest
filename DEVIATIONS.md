@@ -27,3 +27,8 @@ Template per entry:
 **What:** Added two things to `pyproject.toml` not in the card spec: a `[build-system]` table (`requires = ["setuptools"]`, setuptools build backend) and `requires-python = ">=3.11"`. The build-system table is load-bearing — PEP 517 editable install of the src-layout package (deviation above) needs it. `requires-python` agrees with the pixi `python = "3.11.*"` pin.
 **Verdict:** accepted
 **Lesson:** A pyproject that gets pip-installed editable needs a build-system table; the card's `[project]`-only spec was incomplete.
+
+## 2026-05-26 — T08
+**What:** Added a second tool `read_first_page_text(path)` (`fitz.open(path)[0].get_text()`) plus its registration and a mention in the `__main__` / e2e system prompts — beyond the card's two named files. With only `read_paper` (metadata: SHA-256/pages/size), the model correctly refused to invent a title; the literal "output contains the title" check couldn't pass. The card pre-authorizes exactly this tool as "acceptable scope expansion" and asks to log it here. User confirmed adding it over accepting the metadata-only answer. CLI now returns the real title ("Iridium single atoms incorporated in Co₃O₄ efficiently catalyze the oxygen evolution in acidic conditions", Nat. Commun. 2022).
+**Verdict:** accepted
+**Lesson:** A metadata-only tool can't satisfy a text question, and an honest model refuses rather than hallucinates — the card anticipated this and shipped the escape hatch with the task.
