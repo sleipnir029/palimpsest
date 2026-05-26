@@ -35,7 +35,8 @@ First command must exit 0 (downloads packages). Second must print exactly `ok`.
 - `.gitignore` (new or edit)
 
 ## Will NOT touch
-- `CLAUDE.md`, `EXECUTION.md`, `palimpsest-v2-design.md`, `README.md`, `SETUP.md`, `PROGRESS.md`, `DEVIATIONS.md`
+- `CLAUDE.md`, `EXECUTION.md`, `palimpsest-v2-design.md`, `README.md`, `SETUP.md`, `PROGRESS.md`
+- `DEVIATIONS.md` is exempt: append a log entry when a deviation occurs (per the file's own header), but make no other edits.
 - Any file in `tasks/`
 - Any file in `papers/`, `schema/`, `skills/`, `docker/`, `notebooks/`, `tests/`, `queries/`, `experiments/`, `thesis/`
 - Any source file under `src/palimpsest/` other than `__init__.py`

@@ -1,0 +1,32 @@
+[workspace]
+name = "palimpsest"
+channels = ["conda-forge"]
+platforms = ["osx-arm64", "linux-64"]
+
+[dependencies]
+python = "3.11.*"
+sqlite = "*"
+pymupdf = "*"
+
+[pypi-dependencies]
+pymupdf4llm = "*"
+anthropic = "*"
+pyoxigraph = ">=0.5.8"
+rdflib = "*"
+pyshacl = "*"
+linkml = "*"
+linkml-runtime = "*"
+marimo = "*"
+textual = "*"
+rich = "*"
+typer = "*"
+fastapi = "*"
+uvicorn = "*"
+dulwich = "*"
+httpx = "*"
+pydantic = ">=2"
+python-dotenv = "*"
+palimpsest = { path = ".", editable = true }
+
+[tasks]
+test = "pytest -v"
