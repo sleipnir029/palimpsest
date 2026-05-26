@@ -7,6 +7,7 @@ platforms = ["osx-arm64", "linux-64"]
 python = "3.11.*"
 sqlite = "*"
 pymupdf = "*"
+jsonschema = "*"
 
 [pypi-dependencies]
 pymupdf4llm = "*"
