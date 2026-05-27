@@ -39,9 +39,12 @@ RUN pip install --no-cache-dir vllm==0.19.1 \
         --extra-index-url https://download.pytorch.org/whl/cu128
 RUN python -c "import torch; assert '+cu128' in torch.__version__, torch.__version__"
 
-# docling + the granite VLM models package. huggingface_hub is pinned explicitly
-# (not left to a transitive dep) because the next RUN depends on it.
-RUN pip install --no-cache-dir docling docling-ibm-models huggingface_hub
+# docling + the granite VLM models package. Versions pinned to what the first
+# verified build resolved (docling --version on a RunPod pod), so the
+# 0.1.0-docling tag means fixed content. huggingface_hub is explicit (not a
+# transitive dep) because the next RUN depends on it.
+RUN pip install --no-cache-dir \
+        docling==2.95.0 docling-ibm-models==3.13.2 huggingface_hub
 
 # Bake granite-docling-258M into the image so the first pod run does not download.
 # Two revisions: default branch for the docling CLI VLM pipeline, and `untied`
