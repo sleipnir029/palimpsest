@@ -1,27 +1,43 @@
-# T16 — run_all_parsers in one GPU session
+# T16 — run all four parsers, batch-by-parser, with cache
 
 ## Why
-The whole point of the parse-once design: one pod startup, four parsers per paper, all caches written.
+The parse-once design with four **isolated** parser images: each image runs in its own pod, so
+the runner loops parser-first — start one pod per parser, push the whole corpus through it, tear
+down, next parser. (Image pull is the dominant RunPod cost; one pull per parser amortizes over
+all PDFs.) All caches written, keyed `(sha256, parser)`.
 
 ## Input state
-- T14 (gpu_provider) + T15 (cache) merged.
+- T14 (gpu_provider) + T15 (cache) merged. All four RunPod templates registered (T13).
 
 ## Output state
+- File `src/palimpsest/parsers/commands.py` — the **parser registry**: a module-level dict
+  `PARSERS` mapping each parser name to `{template_id_env, run_cmd}`, where `run_cmd`
+  is a function returning the shell command for an input/output path pair (e.g. mineru → `mineru -b vlm ...`).
+  (The cache output filename is uniformly `{parser}.json`, so no per-parser `output_name` is needed.)
+  One literal dict, ~4 entries — it absorbs the heterogeneity of the four images (different
+  entrypoints incl. olmOCR's upstream `python -m olmocr.pipeline`) in one place. Easy to test,
+  easy to update when a parser CLI changes.
 - File `src/palimpsest/parsers/runner.py` exports:
   - `def parse_with_cache(pdf_paths: list[Path], cost_meter, cache: ParserCache) -> dict[str, dict[str, Path]]`:
     1. For each PDF, compute sha256.
-    2. Call `cache.list_unseen(pdfs)`. If all cached, return mapping from cache without starting pod.
-    3. Otherwise, `with RunPodSession(cost_meter) as gpu:`
-       - For each unseen `(pdf, sha)`:
+    2. Call `cache.list_unseen(pdfs)`. If all cached, return mapping from cache without starting any pod.
+    3. **For each parser** in `PARSERS`:
+       - First fill `result[sha][parser]` from cache for every PDF *already cached* for this
+         parser (so cached papers still appear in the output — see the invariant in step 5).
+       - If no PDF is unseen for this parser, skip the pod entirely.
+       - Otherwise `with RunPodSession(cost_meter, template_id=env[PARSERS[parser]["template_id_env"]]) as gpu:`
+         and for each `(pdf, sha)` *unseen* for this parser:
          - `gpu.scp_up(pdf, f"/workspace/in/{pdf.name}")`
-         - For each parser in `["docling", "mineru", "olmocr", "chandra"]`:
-           - `gpu.ssh(f"<parser-specific command> in/{pdf.name} > out/{sha}_{parser}.json")`
-           - `gpu.scp_down(f"/workspace/out/{sha}_{parser}.json", cache_dir / sha / f"{parser}.json")`
-           - `cache.insert_parser_run(sha, parser, version, output_path, seconds, cost, run_id)`
-       - `cache.add_paper(sha, filename, page_count)`
-    4. Return mapping `{sha: {parser_name: Path}}`.
-- File `src/palimpsest/parsers/commands.py` — module-level dict `PARSER_COMMANDS` mapping parser name to a function that returns the shell command string for that parser. Easier to test and easier to update when parser CLIs change.
-- File `tests/test_runner.py` with mocked gpu_provider covers happy path and "all cached" short-circuit.
+         - `gpu.ssh(PARSERS[parser]["run_cmd"](f"in/{pdf.name}", f"out/{sha}_{parser}.json"))`
+         - `gpu.scp_down(f"/workspace/out/{sha}_{parser}.json", cache_dir / sha / f"{parser}.json")`
+         - `cache.insert_parser_run(sha, parser, version, output_path, seconds, cost, run_id)`
+    4. `cache.add_paper(sha, filename, page_count)` for each new paper.
+    5. Return mapping `{sha: {parser_name: Path}}`. **Invariant:** the mapping is COMPLETE —
+       every sha × every parser is present, whether the path came from cache or a fresh run.
+- File `tests/test_runner.py` with mocked gpu_provider covers happy path, "all cached"
+  short-circuit, and the **mixed/per-parser-skip case** (one parser fully cached, another not) —
+  asserting the returned mapping is complete (all shas × all parsers), which is the invariant the
+  cached-fill in step 3 protects.
 
 ## Verification
 ```bash

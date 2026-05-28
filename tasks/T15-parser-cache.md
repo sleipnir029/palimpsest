@@ -3,6 +3,12 @@
 ## Why
 The parse-once cache is the single biggest budget lever. SHA-256 keys + side-by-side storage of all four parsers' outputs.
 
+## Architecture note
+**Unchanged by the four-isolated-images decision** (reviewed, not missed): the cache key is
+`(sha256, parser_name)`, which is already per-parser-independent. Whether the four parsers run in
+one pod (old design) or one pod per parser (new batch-by-parser design), the rows and helpers are
+identical. No edits required here.
+
 ## Input state
 - T05 merged (SQLite DB exists).
 - T07 merged (read_paper produces sha256).

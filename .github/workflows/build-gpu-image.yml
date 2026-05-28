@@ -1,7 +1,9 @@
-# Build the palimpsest GPU image (T10) and push to Docker Hub.
+# Build the palimpsest parser images and push to Docker Hub.
+# One isolated image per parser we build ourselves (docling, mineru; chandra in T13).
+# olmOCR is NOT built here — it uses Allen AI's upstream image (see tasks/T12).
 # Manual trigger only — avoids surprise builds and Actions-minute burn.
 # Needs repo secrets: DOCKERHUB_USERNAME, DOCKERHUB_TOKEN.
-name: Build GPU image
+name: Build parser images
 
 on:
   workflow_dispatch:
@@ -9,10 +11,15 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      # Each image builds independently; one parser failing does not cancel the rest.
+      fail-fast: false
+      matrix:
+        parser: [docling, mineru]
     steps:
       - uses: actions/checkout@v4
 
-      # The image is ~12-15 GB; the default runner has too little free disk.
+      # Each image is ~12-15 GB; the default runner has too little free disk.
       # Reclaim ~25 GB by removing preinstalled toolchains we do not use.
       - name: Free disk space
         run: |
@@ -33,10 +40,10 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: docker
-          file: docker/palimpsest-gpu.Dockerfile
+          file: docker/palimpsest-${{ matrix.parser }}.Dockerfile
           platforms: linux/amd64
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/palimpsest-gpu:0.1.0-docling
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/palimpsest-${{ matrix.parser }}:0.1.0
           # Push a plain single-image manifest. Without these, buildx attaches a
           # provenance/SBOM attestation, producing an OCI index that RunPod's
           # image puller rejects: "layers from manifest don't match image

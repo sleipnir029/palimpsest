@@ -15,7 +15,7 @@ Build the smallest possible agent that turns a folder of PEM electrolyzer / OER 
 **Five rules that override everything else:**
 
 1. **Plain Python, no frameworks.** ~400 LOC modeled on Thorsten Ball's "How to Build an Agent" loop. No LangChain, LangGraph, CrewAI, AutoGen, smolagents, pydantic-ai. No MCP. No LiteLLM / OpenRouter.
-2. **Parse once, cache forever.** Every PDF is shipped to RunPod exactly once, all four parsers run in one GPU session, outputs are stored by SHA-256 content hash in SQLite, and every subsequent need for that paper reads from cache.
+2. **Parse once, cache forever.** Each PDF is parsed by each parser exactly once — the corpus runs one parser-pod at a time (the four parsers ship as isolated images) — outputs are stored by SHA-256 content hash in SQLite, and every subsequent need for that paper reads from cache.
 3. **Provenance is non-negotiable.** Every extracted triple carries `(paper_hash, parser_name, page, bbox, run_id)`. The viewer must let Rahat click any value and see the exact glyph it came from.
 4. **Schema-first, then extraction.** LinkML schema generates Pydantic, JSON-Schema, JSON-LD context, and SHACL shapes. Every slot has an explicit `slot_uri` — EMMO ECHO when possible, palimpsest-local with `skos:closeMatch` when not.
 5. **€50 is a hard wall.** CostMeter refuses to dial any API once spend hits €50. The `/budget` slash command can raise it live, but the default is €50.
@@ -27,7 +27,7 @@ If a session ends with the agent doing something other than (a) building one of 
 ## 2. TL;DR
 
 - **Architecture:** ~400 LOC Python agent loop (direct Anthropic SDK), prompt-cached Claude Sonnet 4.5 as the primary brain, LinkML→Pydantic+SHACL schema, pyoxigraph (RocksDB) for the triple store, FastAPI + vendored PDF.js + HTMX for the bbox-hover viewer, Textual chat TUI, dulwich for git-style versioning of the graph, marimo notebooks spawned on demand.
-- **Parser strategy (thesis contribution):** All four heavyweight parsers — **docling (via `ibm-granite/granite-docling-258M`, released Sept 2025), MinerU 2.5 (1.2B VLM, 75.2 on olmOCR-Bench), olmOCR 2 (checkpoint `olmOCR-2-7B-1025`, 7B VLM, RLVR-trained), and Chandra (v0.1.0 9B at 83.1 ± 0.9%, or Chandra 2 4B at 85.9% — current SOTA)** — run on a single RunPod RTX 4090 ($0.34/hr community cloud, $0.69/hr secure cloud, verified April 2026), with outputs cached side-by-side in SQLite by content hash. Local CPU keeps `pymupdf4llm` + GROBID for cheap text/bibliographic lookups only; they are **not** part of the comparison.
+- **Parser strategy (thesis contribution):** All four heavyweight parsers — **docling (via `ibm-granite/granite-docling-258M`, released Sept 2025), MinerU 2.5 (1.2B VLM, 75.2 on olmOCR-Bench), olmOCR 2 (checkpoint `olmOCR-2-7B-1025`, 7B VLM, RLVR-trained), and Chandra (v0.1.0 9B at 83.1 ± 0.9%, or Chandra 2 4B at 85.9% — current SOTA)** — each run in its own isolated image on a RunPod RTX 4090 ($0.34/hr community cloud, $0.69/hr secure cloud, verified April 2026), with outputs cached side-by-side in SQLite by content hash. Local CPU keeps `pymupdf4llm` + GROBID for cheap text/bibliographic lookups only; they are **not** part of the comparison.
 - **Budget reality:** 25 papers × 4 parsers ≈ 1–2 GPU-hours ≈ €0.30–0.70 in GPU. Sonnet 4.5 extraction with 1-hour prompt caching (cache write 2× base = $6/MTok, cache read 0.1× base = $0.30/MTok) ≈ €8–25 across the project. **€50 hard cap is comfortable; spend is dominated by re-runs and exploration, not parsing.**
 
 ---
@@ -74,8 +74,8 @@ That is the entire heartbeat. Everything else is tools + UI + storage.
 - Implementation: `skills/oer-extraction/SKILL.md` describes what an OER extraction looks like (which slots, which heuristics, which units, which traps — e.g. iR-correction, scan-rate sensitivity, Tafel-from-LSV pitfalls). A `read_skill(name)` tool pulls the full body into context when picked.
 - Adding HER later is literally `skills/her-extraction/SKILL.md` — no loop changes.
 
-### F4. Parser orchestration — all four on cloud GPU, one session per paper
-**Verdict:** Promote docling to a first-class remote parser. Eliminate the docling-on-M1 dependency hell. RTX 4090 (24 GB VRAM) is enough for all four.
+### F4. Parser orchestration — all four on cloud GPU, one isolated image per parser
+**Verdict:** Promote docling to a first-class remote parser. Eliminate the docling-on-M1 dependency hell. RTX 4090 (24 GB VRAM) is enough for any one of the four.
 
 VRAM footprints (verified):
 
@@ -84,20 +84,21 @@ VRAM footprints (verified):
 - **olmOCR 2** — checkpoint **`olmOCR-2-7B-1025`**, ~7B-param VLM trained with reinforcement learning with verifiable rewards (RLVR), per Poznanski, Soldaini & Lo, arXiv 2510.19817 (22 Oct 2025). FP16 fits in ~14 GB on RTX 4090.
 - **Chandra OCR** — two model lines: **Chandra v0.1.0 is a 9B-param model scoring 83.1 ± 0.9% on olmOCR-Bench** (release Oct 26 2024, per Datalab); **Chandra OCR 2 is a separate 4B model released March 18 2026 scoring 85.9%** — current state of the art, smaller and more accurate than Chandra 1 across every category (per `datalab-to/chandra` GitHub releases). 8–12 GB VRAM recommended. **Default to Chandra 2 for the thesis comparison; cite v0.1.0 results as the historical baseline.**
 
-All four therefore run comfortably on one RTX 4090. We use **RunPod community cloud at $0.34/hr** (verified April 2026; secure cloud $0.69/hr as fallback when community is unavailable).
+Each parser therefore runs comfortably on a single RTX 4090 — one parser per pod, so the four
+24 GB-tight VLMs never have to co-reside. We target **RunPod community cloud** (≈$0.34/hr for a 4090, ≈$0.69/hr secure as fallback when community is unavailable — April 2026 reference points; the CostMeter bills each pod's actual rate read from the RunPod API).
 
 **Local CPU parsers are explicitly out of the comparison.** `pymupdf4llm` and a Dockerised GROBID exist for cheap quick lookups (abstract, references, author list) but are never benchmarked against the four heavy parsers — they live on M1 and never see RunPod.
 
 ### F5. Parse-once cache — SQLite table keyed by SHA-256
 **Verdict:** This is the single most important budget lever. See Appendix C for DDL.
 
-When the agent encounters a new PDF, it computes `sha256(pdf_bytes)`, spins the GPU pod, runs all four parsers in one session, writes four blob files to `cache/{hash}/{parser}.json|md`, and inserts four rows into the `parser_runs` table. Every subsequent need for that paper checks the table and reads from disk. **Re-extracting a paper never re-parses.**
+When the agent encounters a new PDF, it computes `sha256(pdf_bytes)`; the batch runner sends it through each parser's pod in turn, writes a blob file per parser to `cache/{hash}/{parser}.json|md`, and inserts one row per parser into the `parser_runs` table. Every subsequent need for that paper checks the table and reads from disk. **Re-extracting a paper never re-parses.**
 
 ### F6. Env management — pixi, Python 3.11
 **Verdict:** `pixi` (not bare conda, not poetry, not uv-alone) because pixi handles the conda-forge binaries (pyoxigraph, dulwich) on macOS arm64 cleanly while still managing pip-only packages.
 
 - `pixi.toml` pins Python 3.11, `pyoxigraph >= 0.5.8`, anthropic SDK, marimo, textual, rich, typer, fastapi, linkml, pyshacl, rdflib, dulwich, httpx, pymupdf4llm.
-- Cloud GPU side runs a separate Docker image (`palimpsest-gpu`) baked with docling + vLLM, MinerU 2.5 weights, olmOCR-2-7B-1025, Chandra 2 weights pre-pulled.
+- Cloud GPU side runs **four isolated Docker images, one per parser** — `palimpsest/docling`, `palimpsest/mineru`, `palimpsest/chandra` (we build these; weights pre-pulled), plus Allen AI's **upstream** olmOCR image used as-is. They are kept separate because the parsers' `torch`/`vLLM`/`transformers` pins conflict; stacking them in one image risks an unsatisfiable resolver or silent version clobbering that would corrupt the parser comparison.
 - M1 Air is the primary dev box; everything except parsing runs locally.
 
 ### F7. Ontology layer — EMMO ECHO + QUDT + PROV-O + palimpsest-local
@@ -204,15 +205,15 @@ The four parsers represent four different design philosophies as of late 2025 / 
 6. **downstream extraction accuracy conditional on parser** (i.e. how well does Sonnet 4.5 do given each parser's output?) — this last one is the most thesis-relevant.
 
 ### 4.2 GPU lifecycle and CostMeter
-`gpu_provider` is a context manager that calls the RunPod REST API to (a) start a pod from the `palimpsest-gpu` template, (b) wait for SSH ready, (c) tunnel a port, (d) yield a `RunPodSession` object, (e) on `__exit__`, send a stop signal. The CostMeter wraps connect/disconnect timestamps and bills wall-clock at the community-cloud rate ($0.34/hr verified April 2026). An **idle watchdog** sends a soft stop at 60 s of no activity; a **hard kill** at 5 minutes idle protects against hangs. See Appendix C.
+`gpu_provider` is a context manager that calls the RunPod REST API to (a) start a pod from the requested parser's template (one template per parser image), (b) wait for SSH ready, (c) tunnel a port, (d) yield a `RunPodSession` object, (e) on `__exit__`, send a stop signal. The CostMeter wraps connect/disconnect timestamps and bills wall-clock at **the pod's actual hourly rate**, read from the RunPod API pod object (`adjustedCostPerHr` or `costPerHr`) at start — so the charge tracks whatever GPU type and cloud (community/secure/spot) the pod actually got, not a hardcoded number. An **idle watchdog** sends a soft stop at 60 s of no activity; a **hard kill** at 5 minutes idle protects against hangs. See Appendix C.
 
 ### 4.3 Budget math (25 papers, RTX 4090 community cloud, Sonnet 4.5 + caching)
 
 **Parsing (one-time, amortized):**
 - 25 papers × ~10 pages/paper × 4 parsers
 - Empirical assumption: ~1 s/page docling, ~2 s/page MinerU, ~3 s/page olmOCR, ~2 s/page Chandra → ~8 s/page × 250 pages ≈ 33 min of pure parser time.
-- Add pod startup (~90 s), model loading (~3 min for the 4 models), I/O → ~1 hour wall-clock per *batch* of 25 papers.
-- At $0.34/hr community cloud: **~$0.34 (≈ €0.32) to parse the entire 25-paper corpus once.**
+- Batch-by-parser means **4 pod sessions** (one per isolated image), not one. Each pod's steady-state startup is ~90 s and it loads only its single model (~45 s, vs ~3 min for all four together) → ~9 min of startup/load overhead. (The 10–15 GB image pull is a one-time cold cost per image, then cached host-side by RunPod.) With I/O, ~1–1.5 hours wall-clock per *batch* of 25 papers.
+- At ~$0.34/hr (illustrative, RTX 4090 community; the CostMeter bills each pod's *actual* rate read from the RunPod API): **~$0.45 (≈ €0.40) to parse the entire 25-paper corpus once** — isolation costs ~€0.10 more than the old single-pod estimate, a price worth paying for non-conflicting parser envs.
 - 5× headroom for re-runs, parser updates, new papers: **€2–4 total parsing cost.**
 
 **Extraction (Sonnet 4.5 with prompt caching, 1-hour TTL):**
@@ -239,9 +240,9 @@ The four parsers represent four different design philosophies as of late 2025 / 
 4. Add CostMeter with €50 default cap and SQLite persistence.
 
 **Week 2 (parsing & cache):**
-5. Build `palimpsest-gpu` Docker image with all four parsers + weights pre-pulled.
-6. Implement `gpu_provider` context manager with RunPod REST API.
-7. Implement parser cache (Appendix C). End-to-end: agent receives a PDF, ships to GPU, runs all four parsers, caches outputs, tears down pod. Verify SHA-256 hit on second call.
+5. Build the four parser images — `docling` / `mineru` / `chandra` (we build, weights pre-pulled) + olmOCR's upstream image — and register one RunPod template per image.
+6. Implement `gpu_provider` context manager with RunPod REST API (parser-agnostic; caller passes the parser's template).
+7. Implement parser cache (Appendix C). End-to-end: agent receives a PDF, the batch runner sends it through each parser's pod in turn, caches outputs, tears down each pod. Verify SHA-256 hit on second call.
 
 **Week 3 (schema & extraction):**
 8. Author the LinkML schema with EMMO / QUDT / palimpsest-local IRIs (Appendix E). Generate Pydantic + SHACL.
@@ -335,6 +336,7 @@ The whole agent is ~400 lines of Python. Keep it that way.
 
 ### Parsers — all four, cloud only
 - docling, MinerU, olmOCR, Chandra all run on RunPod RTX 4090.
+- Each ships as its own isolated image (we build docling/MinerU/Chandra; olmOCR uses upstream); one pod per parser, batch-by-parser across the corpus. Conflicting torch/vLLM pins keep them apart.
 - Local CPU is pymupdf4llm + GROBID for cheap lookups only, NOT in the comparison.
 - Parse-once cache by SHA-256 of PDF bytes is mandatory. Never re-parse.
 
@@ -384,17 +386,15 @@ palimpsest/
 │   │   └── gemini.py
 │   ├── tools/
 │   │   ├── read_paper.py
-│   │   ├── parse_pdf.py      # invokes gpu_provider
+│   │   ├── parse_pdf.py      # agent tool → parsers/runner.parse_with_cache
 │   │   ├── extract.py        # LinkML + Sonnet + SHACL
 │   │   ├── sparql.py         # query the pyoxigraph store
 │   │   ├── open_notebook.py  # spawns marimo edit
 │   │   └── read_skill.py
 │   ├── parsers/
-│   │   ├── gpu_provider.py   # RunPod context manager
-│   │   ├── docling.py
-│   │   ├── mineru.py
-│   │   ├── olmocr.py
-│   │   └── chandra.py
+│   │   ├── gpu_provider.py   # RunPod context manager, one pod per parser (T14)
+│   │   ├── runner.py         # parse_with_cache: batch-by-parser loop (T16, Appendix C)
+│   │   └── commands.py       # parser registry: name → {template, run_cmd, output} (T16)
 │   ├── cache.py              # SQLite parser cache (Appendix C)
 │   ├── cost.py               # CostMeter, /budget live update
 │   ├── store.py              # pyoxigraph wrapper
@@ -466,34 +466,54 @@ INSERT INTO settings VALUES ('budget_eur', '50');
 ### C.2 `gpu_provider` lifecycle (pseudocode)
 
 ```python
-class RunPodSession:
-    GPU_USD_PER_HOUR = 0.34   # community cloud, verified April 2026
-    EUR_PER_USD = 0.92        # snapshot; update from a single FX endpoint
+# Parser registry (parsers/commands.py): one entry per isolated image. `run_cmd` builds
+# the shell command for an (input, output) path pair; `template_id_env` names the env var
+# holding that parser's RunPod template id. Commands are illustrative — the exact CLI is
+# verified against each image in T16/T11-T13.
+PARSERS = {
+    "docling": {"template_id_env": "RUNPOD_TEMPLATE_DOCLING",
+                "run_cmd": lambda i, o: f"docling {i} --to json --output {o}"},
+    "mineru":  {"template_id_env": "RUNPOD_TEMPLATE_MINERU",
+                "run_cmd": lambda i, o: f"mineru -b vlm -p {i} -o {o}"},
+    "olmocr":  {"template_id_env": "RUNPOD_TEMPLATE_OLMOCR",
+                "run_cmd": lambda i, o: f"python -m olmocr.pipeline {i} --output {o}"},
+    "chandra": {"template_id_env": "RUNPOD_TEMPLATE_CHANDRA",
+                "run_cmd": lambda i, o: f"chandra {i} --output {o}"},
+}
 
-    def __init__(self, idle_soft=60, idle_hard=300):
+
+class RunPodSession:
+    """Generic pod lifecycle for ONE parser image. Parser-agnostic: the caller passes the
+    template id (resolved from the registry); the session only does pod start/stop + ssh/scp
+    (ssh / scp_up / scp_down per T14). Matches T14's constructor contract."""
+    EUR_PER_USD = 0.92        # FX snapshot; update from a single FX endpoint
+
+    def __init__(self, cost_meter, template_id, idle_soft=60, idle_hard=300):
+        self.cost_meter = cost_meter
+        self.template_id = template_id
         self.pod_id = None
+        self.usd_per_hour = None    # read from the ACTUAL pod at __enter__ (varies by GPU/cloud)
         self.connect_ts = None
         self.last_activity = None
         self.idle_soft = idle_soft
         self.idle_hard = idle_hard
 
     def __enter__(self):
-        self.pod_id = runpod_api.start_pod(template="palimpsest-gpu",
-                                           gpu_type="RTX 4090",
-                                           cloud="community")
+        pod = runpod_api.start_pod(template=self.template_id,
+                                   gpu_type="RTX 4090", cloud="community")
+        self.pod_id = pod["id"]
+        # Bill at the pod's ACTUAL rate, not a hardcoded one — it varies by GPU type and
+        # cloud (community / secure / spot). RunPod credits are USD-denominated (funded in
+        # dollars at par), so costPerHr is USD/hr; adjustedCostPerHr reflects Savings Plans.
+        self.usd_per_hour = pod.get("adjustedCostPerHr") or pod["costPerHr"]
         wait_for_ssh(self.pod_id, timeout=180)
         self.connect_ts = time.time()
         self.last_activity = self.connect_ts
         Thread(target=self._idle_watchdog, daemon=True).start()
         return self
 
-    def run_all_parsers(self, pdf_path: Path, sha: str) -> dict[str, Path]:
-        self._touch()
-        outputs = {}
-        for name in ("docling", "mineru", "olmocr", "chandra"):
-            outputs[name] = self._run_one(name, pdf_path, sha)
-            self._touch()
-        return outputs
+    # ssh(cmd) / scp_up(local, remote) / scp_down(remote, local) per T14; each calls
+    # self._touch() so the idle watchdog sees activity. Omitted here for brevity.
 
     def _idle_watchdog(self):
         while self.pod_id:
@@ -510,36 +530,49 @@ class RunPodSession:
     def _teardown(self, reason: str):
         wall = time.time() - self.connect_ts
         runpod_api.stop_pod(self.pod_id)
-        eur = wall / 3600 * self.GPU_USD_PER_HOUR * self.EUR_PER_USD
-        cost_meter.record_gpu(eur, detail=reason)
+        eur = wall / 3600 * self.usd_per_hour * self.EUR_PER_USD
+        self.cost_meter.record_gpu(eur, detail=reason)
         self.pod_id = None
 
 
-def parse_with_cache(pdf_paths: list[Path]) -> dict[str, dict[str, Path]]:
-    """Batch entrypoint: dedupes against the cache, spins ONE pod for all unseen."""
-    results = {}
-    unseen = []
-    for p in pdf_paths:
-        sha = sha256_file(p)
-        cached = db.fetch_all(
-          "SELECT parser_name, output_path FROM parser_runs WHERE paper_sha256=?", sha)
-        if len(cached) == 4:
-            results[sha] = {row.parser_name: Path(row.output_path) for row in cached}
-        else:
-            unseen.append((p, sha))
-    if unseen:
-        with RunPodSession() as gpu:
-            for pdf_path, sha in unseen:
-                outputs = gpu.run_all_parsers(pdf_path, sha)
-                for name, path in outputs.items():
-                    db.insert_parser_run(sha, name, path,
-                                         gpu.seconds_for(name),
-                                         gpu.cost_for(name))
-                results[sha] = outputs
+def parse_with_cache(pdf_paths, cost_meter, cache) -> dict[str, dict[str, Path]]:
+    """Batch entrypoint: one pod PER PARSER, each running the whole corpus, then torn down.
+    The returned mapping is COMPLETE (every sha × every parser) regardless of cache state —
+    a cached output is filled from disk, an uncached one is parsed on the pod."""
+    run_id = new_run_id()                            # one id for this batch invocation
+    shas = {p: sha256_file(p) for p in pdf_paths}
+    results: dict[str, dict[str, Path]] = {sha: {} for sha in shas.values()}
+
+    for parser, spec in PARSERS.items():
+        todo = []
+        for p in pdf_paths:
+            sha = shas[p]
+            cached = cache.get_output(sha, parser)       # Path | None (T15 API)
+            if cached is not None:                       # already cached for THIS parser
+                results[sha][parser] = cached
+            else:
+                todo.append((p, sha))
+        if not todo:                                     # parser fully cached → no pod
+            continue
+        template_id = os.environ[spec["template_id_env"]]
+        with RunPodSession(cost_meter, template_id) as gpu:   # one pod, this parser's image
+            for pdf_path, sha in todo:
+                gpu.scp_up(pdf_path, f"/workspace/in/{pdf_path.name}")
+                t0 = time.time()
+                gpu.ssh(spec["run_cmd"](f"in/{pdf_path.name}", f"out/{sha}_{parser}.json"))
+                secs = time.time() - t0
+                out = cache.cache_dir / sha / f"{parser}.json"
+                gpu.scp_down(f"/workspace/out/{sha}_{parser}.json", out)
+                eur = secs / 3600 * gpu.usd_per_hour * RunPodSession.EUR_PER_USD
+                # parser_ver: the parser's self-reported version string (T15). The whole
+                # session's wall-clock is billed once to the CostMeter at _teardown; the
+                # per-row eur here is an informational attribution in parser_runs only.
+                cache.insert_parser_run(sha, parser, parser_ver, out, secs, eur, run_id)
+                results[sha][parser] = out
     return results
 ```
 
-**Batch flow rationale:** if the user drops 5 PDFs into the queue at once, `parse_with_cache` sorts unseen vs cached, spins **one** pod, runs all 4 parsers on each unseen PDF sequentially within that single pod, and tears down once at the end. One pod startup amortized across N papers — this is the single largest cost saving against a naïve "one pod per paper" design.
+**Batch flow rationale:** the four parsers can't share an image (their torch/vLLM pins conflict), so `parse_with_cache` loops **parser-first**: for each parser it spins one pod from that parser's image, runs the whole unseen corpus through it, then tears down before the next parser. That is 4 pod startups per batch instead of 1 — but each pod loads only its single model, and one startup is still amortized across all N papers (not the naïve "one pod per paper"). The 10–15 GB image pull dominates only the *first* cold start of each image; RunPod caches it host-side, so later pods start in ~90 s.
 
 ---
 

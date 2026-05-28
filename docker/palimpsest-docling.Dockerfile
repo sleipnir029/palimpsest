@@ -1,15 +1,15 @@
-# palimpsest GPU image — base + docling (T10)
+# palimpsest docling image (T10) — one of four isolated per-parser GPU images.
 #
 # Runs on a RunPod RTX 4090/3090 pod. docling never runs on the M1 dev box.
 # Layer order: CUDA base -> Python 3.11 -> vLLM -> docling -> baked weights.
-# T11-T13 add MinerU / olmOCR / Chandra on top of this image.
+# Each parser (docling / MinerU / olmOCR / Chandra) ships as its own image so their
+# conflicting torch/vLLM pins never collide; this Dockerfile builds docling only.
 #
 # NOTE (deviation from task card, see DEVIATIONS.md): the card pins
 # nvidia/cuda:12.1.0-devel. vLLM 0.19.x dropped CUDA 12.1, so the base is on a
 # newer CUDA. 12.8 (not vLLM's 12.9 default) is chosen because it is the ceiling
-# RunPod's available host drivers support, and it is vLLM's lowest supported CUDA
-# AND olmOCR's official image version — so all four parsers (T11-T13) share it.
-# Base runtime, torch wheel, and vLLM all agree on CUDA 12.8 (asserted below).
+# RunPod's available host drivers support, and it is also vLLM's lowest supported
+# CUDA. Base runtime, torch wheel, and vLLM all agree on CUDA 12.8 (asserted below).
 FROM nvidia/cuda:12.8.1-devel-ubuntu22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
