@@ -111,4 +111,6 @@ First prints help. Second exits 0 **if** the weights are baked at that exact pat
   pip show chandra-ocr      # installed version (0.2.0)
   python -c "import os; assert os.path.exists(os.path.expanduser('~/.cache/huggingface/hub/models--datalab-to--chandra-ocr-2'))"
   ```
-- Run with `chandra <pdf> <outdir> --method vllm` (vLLM backend) — wired in T16's parser registry.
+- Run with `chandra <pdf> <outdir> --method hf` (HuggingFace/transformers, in-process) — wired in
+  T16's parser registry. (Base `chandra-ocr` is only the OpenAI-API client; the image bakes the
+  `[hf]` backend so the model runs in-process — see DEVIATIONS.md, T13.)
