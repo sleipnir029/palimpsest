@@ -11,7 +11,7 @@ pins are the tightest of the four, so Allen AI ships its own image — the "hybr
 | docling | `docker.io/<your-user>/palimpsest-docling:0.1.0` | RTX 4090 / 3090   | we build (T10) |
 | mineru  | `docker.io/<your-user>/palimpsest-mineru:0.1.0`  | RTX 4090 / 3090   | we build (T11) |
 | olmocr  | `alleninstituteforai/olmocr:latest-with-model`   | **Ada+ (FP8)**    | upstream (T12) |
-| chandra | _added in T13_                                   | —                 | we build (T13) |
+| chandra | `docker.io/<your-user>/palimpsest-chandra:0.1.0` | RTX 4090 / 3090   | we build (T13) |
 
 ## Register a template (RunPod console)
 
@@ -96,3 +96,19 @@ First prints help. Second exits 0 **if** the weights are baked at that exact pat
 2. **FP8 init.** Confirm the FP8 model loads on the chosen Ada GPU (e.g. RTX 4000 Ada, 20 GB).
 3. **Exact tag.** `:latest-with-model` is not reproducible — pin to the dated v0.4.x tag
    (Oct 2025) once a pod confirms which tag ships the 1025 model.
+
+## chandra — `palimpsest/chandra:0.1.0`
+
+- Container Image: `docker.io/<your-user>/palimpsest-chandra:0.1.0`
+- Container Start Command: _(leave blank — the image `CMD` is already `sleep infinity`)_
+- Disk: ~35 GB (image + ~10 GB `chandra-ocr-2` weights baked).
+- GPU: RTX 4090 / 3090 — Chandra OCR 2 is ~5B params in **BF16**, so an Ampere 3090 works
+  (unlike olmOCR's FP8, which needs Ada+). ~10 GB weights fit comfortably on 24 GB.
+- Verify on the pod (Chandra has **no `--version` flag** — confirmed from the project README / PyPI;
+  use `--help` + `pip show`):
+  ```bash
+  chandra --help
+  pip show chandra-ocr      # installed version (0.2.0)
+  python -c "import os; assert os.path.exists(os.path.expanduser('~/.cache/huggingface/hub/models--datalab-to--chandra-ocr-2'))"
+  ```
+- Run with `chandra <pdf> <outdir> --method vllm` (vLLM backend) — wired in T16's parser registry.
