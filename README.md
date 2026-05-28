@@ -23,7 +23,7 @@ palimpsest/
 ├── src/palimpsest/              ← code goes here (T01 onwards)
 ├── schema/                      ← LinkML schema (T18 onwards)
 ├── skills/                      ← SKILL.md files (T20 onwards)
-├── docker/                      ← Dockerfile for palimpsest-gpu (T10–T13)
+├── docker/                      ← per-parser GPU Dockerfiles + build.sh (T10–T13)
 ├── notebooks/                   ← marimo notebooks (agent-generated)
 ├── tests/                       ← pytest + fixtures
 ├── queries/                     ← SPARQL queries (T40)
