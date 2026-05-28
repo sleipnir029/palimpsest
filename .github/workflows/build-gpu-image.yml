@@ -1,5 +1,5 @@
 # Build the palimpsest parser images and push to Docker Hub.
-# One isolated image per parser we build ourselves (docling, mineru; chandra in T13).
+# One isolated image per parser we build ourselves (docling, mineru, chandra).
 # olmOCR is NOT built here — it uses Allen AI's upstream image (see tasks/T12).
 # Manual trigger only — avoids surprise builds and Actions-minute burn.
 # Needs repo secrets: DOCKERHUB_USERNAME, DOCKERHUB_TOKEN.
@@ -15,7 +15,7 @@ jobs:
       # Each image builds independently; one parser failing does not cancel the rest.
       fail-fast: false
       matrix:
-        parser: [docling, mineru]
+        parser: [docling, mineru, chandra]
     steps:
       - uses: actions/checkout@v4
 
