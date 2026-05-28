@@ -16,12 +16,18 @@ See the plan in `.claude/plans/` and DEVIATIONS.md (CUDA 12.8 host-driver ceilin
 ## Output state
 - `docker/palimpsest-mineru.Dockerfile` (new, standalone):
   - `FROM nvidia/cuda:12.8.1-devel-ubuntu22.04`, Python 3.11 venv (mirrors docling).
-  - `pip install -U "mineru[all]"` — the documented upstream default; on resolver failure
-    fall back to `mineru[core]` and log it in DEVIATIONS.md. MinerU brings its own torch/vLLM
-    (NOT pinned here). Assert torch is a CUDA build (`'+cu' in torch.__version__`).
-  - Pre-download `opendatalab/MinerU2.5-2509-1.2B` weights via `huggingface_hub.snapshot_download`
-    into `HF_HOME=/root/.cache/huggingface`. (`mineru-models-download` could not be confirmed in
-    current MinerU — snapshot_download is the robust path.)
+  - **Seed torch from the cu128 index first** (`pip install torch --index-url …/whl/cu128`), then
+    `pip install "mineru[all]" huggingface_hub --extra-index-url …/whl/cu128` (no `-U`, fresh venv).
+    MinerU 2.5 needs torch ≥ 2.8; cu128 serves 2.8–2.11, so the version is left to MinerU's resolver
+    while the CUDA build is pinned to 12.8. On `[all]` resolver failure, fall back to `mineru[core]`
+    and log it in DEVIATIONS.md. Assert `'+cu128' in torch.__version__` — guards both a CPU-only torch
+    and a CUDA build above RunPod's 12.8 host ceiling.
+  - Pre-download `opendatalab/MinerU2.5-2509-1.2B` (verified HF repo id) via
+    `huggingface_hub.snapshot_download` into `HF_HOME=/root/.cache/huggingface`. MinerU's own offline
+    tool is `mineru-models-download` but it is interactive (no confirmed non-interactive flags), so
+    snapshot_download is the build-safe path; `MINERU_MODEL_SOURCE` stays at its `huggingface` default
+    (huggingface_hub's cache is global, so MinerU's loader finds the baked weights). Worst case is a
+    one-time runtime re-download, not a build break.
   - `CMD ["sleep","infinity"]` (RunPod detached-pod liveness, per T10).
 - `docker/build.sh` builds it via `./build.sh mineru [push]` → `palimpsest/mineru:0.1.0`
   (Docker Hub: `<user>/palimpsest-mineru:0.1.0`).
