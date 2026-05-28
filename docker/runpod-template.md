@@ -10,7 +10,7 @@ pins are the tightest of the four, so Allen AI ships its own image — the "hybr
 |---------|--------------------------------------------------|-------------------|----------------|
 | docling | `docker.io/<your-user>/palimpsest-docling:0.1.0` | RTX 4090 / 3090   | we build (T10) |
 | mineru  | `docker.io/<your-user>/palimpsest-mineru:0.1.0`  | RTX 4090 / 3090   | we build (T11) |
-| olmocr  | `alleninstituteforai/olmocr:latest-with-model`   | **RTX 4090 only** | upstream (T12) |
+| olmocr  | `alleninstituteforai/olmocr:latest-with-model`   | **Ada+ (FP8)**    | upstream (T12) |
 | chandra | _added in T13_                                   | —                 | we build (T13) |
 
 ## Register a template (RunPod console)
@@ -50,14 +50,17 @@ which is the **FP8** variant `allenai/olmOCR-2-7B-1025-FP8` (README; the base `:
 bakes no weights — its root Dockerfile has no download step).
 
 - Container Image: `alleninstituteforai/olmocr:latest-with-model`
-- Container Start Command: `-c "sleep infinity"`
-  > The upstream image's `ENTRYPOINT` is `/bin/bash` (its own run example is
-  > `docker run … olmocr:latest-with-model -c "olmocr …"`). A bare `sleep infinity` would be
-  > parsed as `/bin/bash sleep infinity` and fail; `-c "sleep infinity"` runs
-  > `/bin/bash -c "sleep infinity"`. Same liveness need as our images' `CMD ["sleep","infinity"]`
-  > (T10), different syntax because of the bash entrypoint. **Confirm on the first pod.**
-- GPU: **RTX 4090 (Ada)** — the FP8 model needs Ada/Hopper FP8 support; an RTX 3090
-  (Ampere) will not run it. (docling/mineru are fine on a 3090; olmOCR is not.)
+- Container Start Command: `sleep infinity`
+  > **Confirmed on a pod (2026-05-28):** RunPod **shell-wraps** this field (`sh -c "<field>"`),
+  > so it does NOT append to the image's `/bin/bash` ENTRYPOINT the way `docker run` would.
+  > `-c "sleep infinity"` was tried first and the container exited immediately
+  > (`container … is not running` on connect) because `sh -c '-c "sleep infinity"'` runs a
+  > command literally named `-c`. **Bare `sleep infinity` is correct.** Same liveness need as
+  > our own images' baked `CMD ["sleep","infinity"]` (T10).
+- GPU: **any Ada / Hopper / Blackwell** (FP8) — RTX 4090, **RTX 4000 Ada (20 GB, cheapest Ada)**,
+  L4, L40S, H100. An RTX 3090 / A100 (Ampere) will **not** run the FP8 checkpoint.
+  (docling/mineru are fine on a 3090; olmOCR is not.) On a 20 GB card watch for vLLM OOM →
+  lower `--gpu-memory-utilization`.
 - Disk: **≥ 50 GB** (~30 GB image + weights + work-dir headroom).
 - CUDA: 12.8 (`FROM vllm/vllm-openai:v0.11.2`) = RunPod's host-driver ceiling. No bump needed.
 - Run form: `olmocr /workspace/out --markdown --pdfs /workspace/sample.pdf`
@@ -65,23 +68,31 @@ bakes no weights — its root Dockerfile has no download step).
 
 ### Verify on the pod (from the T12 card, verbatim)
 
+Access: RunPod **Web Terminal**, or **Basic SSH** via the proxy
+(`ssh <pod-id>@ssh.runpod.io -i <key>` — confirmed working 2026-05-28). The image has **no
+sshd**, so "SSH over exposed TCP" (direct `root@ip`) will not work; the proxy / web terminal
+`exec` into the running container instead (which is why the container must stay alive).
+
 ```bash
 python -m olmocr.pipeline --help
 python -c "from huggingface_hub import snapshot_download; import os; assert os.path.exists(os.path.expanduser('~/.cache/huggingface/hub/models--allenai--olmOCR-2-7B-1025'))"
 ```
 
-First prints help. Second exits 0 **if** the weights are baked at that exact path.
+First prints help. Second exits 0 **if** the weights are baked at that exact path — expected to
+**fail** here (the real dir is likely `…-1025-FP8`; confirm with
+`ls ~/.cache/huggingface/hub/ | grep -i olmocr`, then verify a real parse — see status below).
 
-### Confirm on first pod spin-up (open empirical items)
+### Confirm on first pod spin-up — status
 
-The card deliberately defers these to a live pod — do not lock them in from docs:
+**Resolved this session (2026-05-28):**
+- Container Start Command is **`sleep infinity`** (the `-c` form exited the container — see above).
+- Pod access via RunPod proxy SSH / Web Terminal works for this custom image (no sshd needed).
 
-1. **Exact tag.** `:latest-with-model` is not reproducible. Once a pod confirms the image,
-   pin to the dated/version tag that ships the 1025 model (the v0.4.x release, Oct 2025).
-2. **FP8 path mismatch.** The baked model is the FP8 variant, so the weights likely live at
-   `models--allenai--olmOCR-2-7B-1025-FP8`, **not** the card's `…-1025`. If the verbatim
-   assert above fails on that path, confirm the real path and — per the card — verify a
-   **real parse run** instead; do not assume the image is wrong.
-3. **Entrypoint form.** Confirm `python -m olmocr.pipeline` works as well as the `olmocr`
-   console script, and that `-c "sleep infinity"` keeps the pod alive.
-4. **GPU.** Confirm FP8 inference actually initializes on the chosen 4090 pod.
+**Still deferred — no GPU available 2026-05-28, model verification postponed:**
+1. **`--help` + baked weights path.** Run the two commands above; the baked dir is expected to
+   be `models--allenai--olmOCR-2-7B-1025-FP8`, **not** the card's `…-1025`, so that verbatim
+   assert will likely fail. Confirm the real path (`ls … | grep -i olmocr`) and, per the card,
+   verify a real parse run; do not assume the image is wrong.
+2. **FP8 init.** Confirm the FP8 model loads on the chosen Ada GPU (e.g. RTX 4000 Ada, 20 GB).
+3. **Exact tag.** `:latest-with-model` is not reproducible — pin to the dated v0.4.x tag
+   (Oct 2025) once a pod confirms which tag ships the 1025 model.
