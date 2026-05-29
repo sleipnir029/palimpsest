@@ -25,6 +25,7 @@ fastapi = "*"
 uvicorn = "*"
 dulwich = "*"
 httpx = "*"
+fabric = ">=3"
 pydantic = ">=2"
 python-dotenv = "*"
 palimpsest = { path = ".", editable = true }
