@@ -112,3 +112,21 @@ PP-StructureV3 models now download on first pod run instead of baking — Paddle
 whose weights can't be pre-pulled at build (no GPU at build time).
 **Verdict:** accepted (the import-time driver dependency is intrinsic to paddlepaddle-gpu; metadata is the right CI-time guard).
 **Lesson:** Not every GPU framework defers the driver like PyTorch — `paddlepaddle-gpu` needs `libcuda.so.1` at *import*, so it can't be import-checked OR run (to bake weights) on a no-GPU CI builder. Verify GPU-framework wheels by metadata in CI; do the real import + weight bake on the GPU pod.
+
+## 2026-05-29 — T15 (parser_runs CHECK uses T17 5-parser set, not card's 4)
+**What:** T15 card line 20 froze the parser set at the 4-parser era:
+`CHECK (parser_name IN ('docling','mineru','olmocr','chandra'))`,
+and `has_all_parsers` is documented as "true iff **4 rows** exist … across all **4** parser names."
+PROGRESS T17 dropped olmOCR (FP8/Ada-only vendor image, no sshd we control) and added dots.ocr +
+PaddleOCR PP-StructureV3 → 5 parsers at image `0.2.0`. `cache.py` encodes the live set:
+`PARSERS = ("docling", "mineru", "chandra", "dots", "paddle")`, the CHECK enforces the same five,
+and `has_all_parsers` expects 5 distinct `parser_name` rows. Confirmed with user before writing.
+Also clarified the storage shape the card under-specified: `output_path` is a relative string
+under `cache_dir` and may point to a **file OR a directory** — 3 of the 5 parsers emit a dir
+(MinerU/Chandra/Paddle: markdown + images + structured JSON); docling and dots.ocr emit a single
+JSON. T16 owns the per-parser convention; T15 is content-agnostic.
+**Verdict:** accepted (T17 supersedes T15's frozen set; the cache shape is unchanged by the pivot
+since the key is per-parser-independent — only the set membership moved).
+**Lesson:** When a downstream task (T15) lists a constituency (the 4 parser names), check the
+latest upstream re-issue (T17) before encoding it — a card that froze "the four parsers" doesn't
+self-update when "the four parsers" stops being the canonical set.
