@@ -1,5 +1,11 @@
 # T12 — Register olmOCR-2-7B from Allen AI's upstream image
 
+> **⏭ SUPERSEDED by T17 (2026-05-29).** olmOCR was dropped from the comparison — its only
+> distribution is Allen AI's FP8/Ada-only prebuilt image (no Dockerfile we control, no sshd),
+> which proved too painful to fit the self-built + SSH-able 5-parser design. Replaced by
+> **dots.ocr** and **PaddleOCR PP-StructureV3** (both self-built, BF16/cheap-GPU, emit bbox +
+> tables). This card is kept for history; see DEVIATIONS.md (T17) and the plan file.
+
 ## Why
 Third parser. olmOCR 2 (7B VLM, RLVR-trained, allenai/olmOCR-2-7B-1025).
 

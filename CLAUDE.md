@@ -50,8 +50,8 @@ The whole agent is ~400 lines of Python. Keep it that way.
 - The Claude Code subscription used to BUILD palimpsest is separate from the
   €50; the €50 is what palimpsest itself spends when it runs.
 
-### Parsers — all four, cloud only
-- docling, MinerU, olmOCR, Chandra all run on RunPod RTX 4090.
+### Parsers — all five, cloud only
+- docling, MinerU, Chandra, dots.ocr, PaddleOCR all run on RunPod; GPU is chosen dynamically from availability.
 - Local CPU is pymupdf4llm + GROBID for cheap lookups only, NOT in the comparison.
 - Parse-once cache by SHA-256 of PDF bytes is mandatory. Never re-parse.
 

@@ -1,21 +1,21 @@
-# T16 — run all four parsers, batch-by-parser, with cache
+# T16 — run all five parsers, batch-by-parser, with cache
 
 ## Why
-The parse-once design with four **isolated** parser images: each image runs in its own pod, so
+The parse-once design with five **isolated** parser images: each image runs in its own pod, so
 the runner loops parser-first — start one pod per parser, push the whole corpus through it, tear
 down, next parser. (Image pull is the dominant RunPod cost; one pull per parser amortizes over
 all PDFs.) All caches written, keyed `(sha256, parser)`.
 
 ## Input state
-- T14 (gpu_provider) + T15 (cache) merged. All four RunPod templates registered (T13).
+- T14 (gpu_provider) + T15 (cache) merged. All five RunPod templates registered (T13/T17).
 
 ## Output state
 - File `src/palimpsest/parsers/commands.py` — the **parser registry**: a module-level dict
   `PARSERS` mapping each parser name to `{template_id_env, run_cmd}`, where `run_cmd`
   is a function returning the shell command for an input/output path pair (e.g. mineru → `mineru -b vlm ...`).
   (The cache output filename is uniformly `{parser}.json`, so no per-parser `output_name` is needed.)
-  One literal dict, ~4 entries — it absorbs the heterogeneity of the four images (different
-  entrypoints incl. olmOCR's upstream `python -m olmocr.pipeline`) in one place. Easy to test,
+  One literal dict, ~5 entries — it absorbs the heterogeneity of the five images (different
+  entrypoints incl. the baked wrappers `python /opt/dots_run.py` and `python /opt/paddle_run.py`) in one place. Easy to test,
   easy to update when a parser CLI changes.
 - File `src/palimpsest/parsers/runner.py` exports:
   - `def parse_with_cache(pdf_paths: list[Path], cost_meter, cache: ParserCache) -> dict[str, dict[str, Path]]`:
@@ -50,11 +50,11 @@ from palimpsest.cost import CostMeter
 from pathlib import Path
 result = parse_with_cache([Path('tests/fixtures/sample.pdf')], CostMeter(), ParserCache())
 sha = next(iter(result))
-assert set(result[sha].keys()) == {'docling','mineru','olmocr','chandra'}
-print('4 parsers cached for', sha[:12])
+assert set(result[sha].keys()) == {'docling','mineru','chandra','dots','paddle'}
+print('5 parsers cached for', sha[:12])
 "
 ```
-Mocked tests pass. Live invocation produces 4 cached outputs in `cache/<sha>/`.
+Mocked tests pass. Live invocation produces 5 cached outputs in `cache/<sha>/`.
 
 ## Will touch
 - `src/palimpsest/parsers/runner.py` (new)
@@ -72,5 +72,5 @@ Mocked tests pass. Live invocation produces 4 cached outputs in `cache/<sha>/`.
 
 ## Notes / references
 - The exact CLI commands for each parser need to be verified against the running Docker image (T13). For example: `docling /workspace/in/X.pdf --output /workspace/out/X_docling.json --to json`.
-- Live test cost target: < €0.50 on one paper through all four parsers.
-- If a parser fails on a paper, log the error in `parser_runs.run_id` detail and continue with the other three. Do NOT crash the whole pipeline.
+- Live test cost target: < €0.60 on one paper through all five parsers.
+- If a parser fails on a paper, log the error in `parser_runs.run_id` detail and continue with the other four. Do NOT crash the whole pipeline.

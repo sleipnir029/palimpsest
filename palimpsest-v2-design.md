@@ -10,12 +10,12 @@
 
 ## 1. North Star (read every session)
 
-Build the smallest possible agent that turns a folder of PEM electrolyzer / OER catalyst PDFs into a queryable, provenance-tracked, ontology-aligned RDF knowledge graph, with an honest head-to-head comparison of four state-of-the-art parsers as a thesis contribution.
+Build the smallest possible agent that turns a folder of PEM electrolyzer / OER catalyst PDFs into a queryable, provenance-tracked, ontology-aligned RDF knowledge graph, with an honest head-to-head comparison of five state-of-the-art parsers as a thesis contribution.
 
 **Five rules that override everything else:**
 
 1. **Plain Python, no frameworks.** ~400 LOC modeled on Thorsten Ball's "How to Build an Agent" loop. No LangChain, LangGraph, CrewAI, AutoGen, smolagents, pydantic-ai. No MCP. No LiteLLM / OpenRouter.
-2. **Parse once, cache forever.** Each PDF is parsed by each parser exactly once — the corpus runs one parser-pod at a time (the four parsers ship as isolated images) — outputs are stored by SHA-256 content hash in SQLite, and every subsequent need for that paper reads from cache.
+2. **Parse once, cache forever.** Each PDF is parsed by each parser exactly once — the corpus runs one parser-pod at a time (the five parsers ship as isolated images) — outputs are stored by SHA-256 content hash in SQLite, and every subsequent need for that paper reads from cache.
 3. **Provenance is non-negotiable.** Every extracted triple carries `(paper_hash, parser_name, page, bbox, run_id)`. The viewer must let Rahat click any value and see the exact glyph it came from.
 4. **Schema-first, then extraction.** LinkML schema generates Pydantic, JSON-Schema, JSON-LD context, and SHACL shapes. Every slot has an explicit `slot_uri` — EMMO ECHO when possible, palimpsest-local with `skos:closeMatch` when not.
 5. **€50 is a hard wall.** CostMeter refuses to dial any API once spend hits €50. The `/budget` slash command can raise it live, but the default is €50.
@@ -27,8 +27,8 @@ If a session ends with the agent doing something other than (a) building one of 
 ## 2. TL;DR
 
 - **Architecture:** ~400 LOC Python agent loop (direct Anthropic SDK), prompt-cached Claude Sonnet 4.5 as the primary brain, LinkML→Pydantic+SHACL schema, pyoxigraph (RocksDB) for the triple store, FastAPI + vendored PDF.js + HTMX for the bbox-hover viewer, Textual chat TUI, dulwich for git-style versioning of the graph, marimo notebooks spawned on demand.
-- **Parser strategy (thesis contribution):** All four heavyweight parsers — **docling (via `ibm-granite/granite-docling-258M`, released Sept 2025), MinerU 2.5 (1.2B VLM, 75.2 on olmOCR-Bench), olmOCR 2 (checkpoint `olmOCR-2-7B-1025`, 7B VLM, RLVR-trained), and Chandra (v0.1.0 9B at 83.1 ± 0.9%, or Chandra 2 4B at 85.9% — current SOTA)** — each run in its own isolated image on a RunPod RTX 4090 ($0.34/hr community cloud, $0.69/hr secure cloud, verified April 2026), with outputs cached side-by-side in SQLite by content hash. Local CPU keeps `pymupdf4llm` + GROBID for cheap text/bibliographic lookups only; they are **not** part of the comparison.
-- **Budget reality:** 25 papers × 4 parsers ≈ 1–2 GPU-hours ≈ €0.30–0.70 in GPU. Sonnet 4.5 extraction with 1-hour prompt caching (cache write 2× base = $6/MTok, cache read 0.1× base = $0.30/MTok) ≈ €8–25 across the project. **€50 hard cap is comfortable; spend is dominated by re-runs and exploration, not parsing.**
+- **Parser strategy (thesis contribution):** All five heavyweight parsers — **docling (via `ibm-granite/granite-docling-258M`, released Sept 2025), MinerU 2.5 (1.2B VLM, 75.2 on olmOCR-Bench), Chandra (v0.1.0 9B at 83.1 ± 0.9%, or Chandra 2 4B at 85.9% — current SOTA), dots.ocr (~1.7B layout VLM, MIT), and PaddleOCR PP-StructureV3 (classic CV pipeline, Apache-2.0)** — each run in its own isolated image on a RunPod RTX 4090 ($0.34/hr community cloud, $0.69/hr secure cloud, verified April 2026), with outputs cached side-by-side in SQLite by content hash. Local CPU keeps `pymupdf4llm` + GROBID for cheap text/bibliographic lookups only; they are **not** part of the comparison.
+- **Budget reality:** 25 papers × 5 parsers ≈ 1.5–2.5 GPU-hours ≈ €0.40–0.90 in GPU. Sonnet 4.5 extraction with 1-hour prompt caching (cache write 2× base = $6/MTok, cache read 0.1× base = $0.30/MTok) ≈ €8–25 across the project. **€50 hard cap is comfortable; spend is dominated by re-runs and exploration, not parsing.**
 
 ---
 
@@ -74,20 +74,21 @@ That is the entire heartbeat. Everything else is tools + UI + storage.
 - Implementation: `skills/oer-extraction/SKILL.md` describes what an OER extraction looks like (which slots, which heuristics, which units, which traps — e.g. iR-correction, scan-rate sensitivity, Tafel-from-LSV pitfalls). A `read_skill(name)` tool pulls the full body into context when picked.
 - Adding HER later is literally `skills/her-extraction/SKILL.md` — no loop changes.
 
-### F4. Parser orchestration — all four on cloud GPU, one isolated image per parser
-**Verdict:** Promote docling to a first-class remote parser. Eliminate the docling-on-M1 dependency hell. RTX 4090 (24 GB VRAM) is enough for any one of the four.
+### F4. Parser orchestration — all five on cloud GPU, one isolated image per parser
+**Verdict:** Promote docling to a first-class remote parser. Eliminate the docling-on-M1 dependency hell. RTX 4090 (24 GB VRAM) is enough for any one of the five.
 
 VRAM footprints (verified):
 
 - **docling** — runs the docling-ibm-models pipeline (layout + TableFormer) on RTX. As of Sept 2025 IBM ships `ibm-granite/granite-docling-258M` served via vLLM: `vllm serve ibm-granite/granite-docling-258M`, with recommended `page_batch_size = 64` for RTX 4090 (per the official RTX-acceleration docs at `docling-project.github.io/docling/getting_started/rtx/`). VRAM utilization ~90% with `--gpu-memory-utilization 0.9`.
 - **MinerU 2.5** — 1.2B decoupled VLM (`opendatalab/MinerU2.5-2509-1.2B`, arXiv 2509.22186, Sept 30 2025), fits comfortably in 24 GB. Overall olmOCR-Bench score **75.2** (leading in arXiv Math 76.6, Old Scans Math 54.6, Long Tiny Text 83.5).
-- **olmOCR 2** — checkpoint **`olmOCR-2-7B-1025`**, ~7B-param VLM trained with reinforcement learning with verifiable rewards (RLVR), per Poznanski, Soldaini & Lo, arXiv 2510.19817 (22 Oct 2025). FP16 fits in ~14 GB on RTX 4090.
+- **dots.ocr** — `rednote-hilab/dots.ocr`, a single ~1.7B vision-language model (MIT) that does layout detection + OCR + formula/table parsing by switching the prompt; emits per-element bbox + category + text (formulas→LaTeX, tables→HTML). BF16, fits comfortably in ≤24 GB.
+- **PaddleOCR PP-StructureV3** — Baidu's classic CV pipeline (Apache-2.0): layout detector + PP-OCRv5 det/rec + table-structure + formula models, emitting layout boxes + structured table cells + Markdown. The only non-VLM, non-torch parser (PaddlePaddle, CUDA 12.6) — a genuinely different architecture for the comparison.
 - **Chandra OCR** — two model lines: **Chandra v0.1.0 is a 9B-param model scoring 83.1 ± 0.9% on olmOCR-Bench** (release Oct 26 2024, per Datalab); **Chandra OCR 2 is a separate 4B model released March 18 2026 scoring 85.9%** — current state of the art, smaller and more accurate than Chandra 1 across every category (per `datalab-to/chandra` GitHub releases). 8–12 GB VRAM recommended. **Default to Chandra 2 for the thesis comparison; cite v0.1.0 results as the historical baseline.**
 
-Each parser therefore runs comfortably on a single RTX 4090 — one parser per pod, so the four
+Each parser therefore runs comfortably on a single RTX 4090 — one parser per pod, so the five
 24 GB-tight VLMs never have to co-reside. We target **RunPod community cloud** (≈$0.34/hr for a 4090, ≈$0.69/hr secure as fallback when community is unavailable — April 2026 reference points; the CostMeter bills each pod's actual rate read from the RunPod API).
 
-**Local CPU parsers are explicitly out of the comparison.** `pymupdf4llm` and a Dockerised GROBID exist for cheap quick lookups (abstract, references, author list) but are never benchmarked against the four heavy parsers — they live on M1 and never see RunPod.
+**Local CPU parsers are explicitly out of the comparison.** `pymupdf4llm` and a Dockerised GROBID exist for cheap quick lookups (abstract, references, author list) but are never benchmarked against the five heavy parsers — they live on M1 and never see RunPod.
 
 ### F5. Parse-once cache — SQLite table keyed by SHA-256
 **Verdict:** This is the single most important budget lever. See Appendix C for DDL.
@@ -98,7 +99,7 @@ When the agent encounters a new PDF, it computes `sha256(pdf_bytes)`; the batch 
 **Verdict:** `pixi` (not bare conda, not poetry, not uv-alone) because pixi handles the conda-forge binaries (pyoxigraph, dulwich) on macOS arm64 cleanly while still managing pip-only packages.
 
 - `pixi.toml` pins Python 3.11, `pyoxigraph >= 0.5.8`, anthropic SDK, marimo, textual, rich, typer, fastapi, linkml, pyshacl, rdflib, dulwich, httpx, pymupdf4llm.
-- Cloud GPU side runs **four isolated Docker images, one per parser** — `palimpsest/docling`, `palimpsest/mineru`, `palimpsest/chandra` (we build these; weights pre-pulled), plus Allen AI's **upstream** olmOCR image used as-is. They are kept separate because the parsers' `torch`/`vLLM`/`transformers` pins conflict; stacking them in one image risks an unsatisfiable resolver or silent version clobbering that would corrupt the parser comparison.
+- Cloud GPU side runs **five isolated Docker images, one per parser** — `palimpsest/docling`, `palimpsest/mineru`, `palimpsest/chandra`, `palimpsest/dots`, `palimpsest/paddle` (we build all five; weights pre-pulled). They are kept separate because the parsers' `torch`/`vLLM`/`transformers`/Paddle pins conflict; stacking them in one image risks an unsatisfiable resolver or silent version clobbering that would corrupt the parser comparison.
 - M1 Air is the primary dev box; everything except parsing runs locally.
 
 ### F7. Ontology layer — EMMO ECHO + QUDT + PROV-O + palimpsest-local
@@ -189,14 +190,15 @@ def open_notebook_tool(name: str, content: str) -> str:
 ## 4. Details (for the thesis defence)
 
 ### 4.1 Parser comparison as a thesis contribution
-The four parsers represent four different design philosophies as of late 2025 / early 2026:
+The five parsers represent five different design philosophies as of late 2025 / early 2026:
 
 - **docling (IBM)** — traditional layout-detection + TableFormer + OCR pipeline, MIT licensed; recently gained NVIDIA RTX acceleration via the **`granite-docling-258M`** VLM (released Sept 2025) served through vLLM (`vllm serve ibm-granite/granite-docling-258M`).
 - **MinerU 2.5 (OpenDataLab)** — decoupled VLM, 1.2B params, score **75.2** on olmOCR-Bench (arXiv 2509.22186), optimized for high-resolution document parsing with low compute.
-- **olmOCR 2 (AllenAI)** — checkpoint **`olmOCR-2-7B-1025`**, 7B VLM trained with reinforcement learning with verifiable rewards (RLVR), ships training code (arXiv 2510.19817).
+- **dots.ocr (rednote)** — a single ~1.7B layout VLM (MIT) that unifies layout detection + OCR + formula/table parsing via prompt switching; distinct vendor + design from the others.
+- **PaddleOCR PP-StructureV3 (Baidu)** — a classic CV detection+recognition pipeline (Apache-2.0), the only non-VLM/non-torch approach; emits layout boxes + structured table cells + Markdown.
 - **Chandra OCR (Datalab)** — two model lines: v0.1.0 (9B, 83.1 ± 0.9%, Oct 2024) and Chandra 2 (4B, 85.9%, Mar 2026) — current SOTA on olmOCR-Bench, strong on tables/forms/handwriting.
 
-**Thesis contribution:** run all four on the same 25+ paper corpus and report:
+**Thesis contribution:** run all five on the same 25+ paper corpus and report:
 1. text accuracy on a hand-labeled 5-paper subset,
 2. table-cell F1 on key OER tables (Tafel/overpotential/ECSA),
 3. bbox precision (do they tell us *where* a number came from?),
@@ -210,9 +212,9 @@ The four parsers represent four different design philosophies as of late 2025 / 
 ### 4.3 Budget math (25 papers, RTX 4090 community cloud, Sonnet 4.5 + caching)
 
 **Parsing (one-time, amortized):**
-- 25 papers × ~10 pages/paper × 4 parsers
-- Empirical assumption: ~1 s/page docling, ~2 s/page MinerU, ~3 s/page olmOCR, ~2 s/page Chandra → ~8 s/page × 250 pages ≈ 33 min of pure parser time.
-- Batch-by-parser means **4 pod sessions** (one per isolated image), not one. Each pod's steady-state startup is ~90 s and it loads only its single model (~45 s, vs ~3 min for all four together) → ~9 min of startup/load overhead. (The 10–15 GB image pull is a one-time cold cost per image, then cached host-side by RunPod.) With I/O, ~1–1.5 hours wall-clock per *batch* of 25 papers.
+- 25 papers × ~10 pages/paper × 5 parsers
+- Empirical assumption: ~1 s/page docling, ~2 s/page MinerU, ~2 s/page Chandra, ~2 s/page dots, ~3 s/page paddle → ~10 s/page × 250 pages ≈ 42 min of pure parser time.
+- Batch-by-parser means **5 pod sessions** (one per isolated image), not one. Each pod's steady-state startup is ~90 s and it loads only its single model (~45 s, vs ~3 min for all five together) → ~11 min of startup/load overhead. (The 10–15 GB image pull is a one-time cold cost per image, then cached host-side by RunPod.) With I/O, ~1–1.5 hours wall-clock per *batch* of 25 papers.
 - At ~$0.34/hr (illustrative, RTX 4090 community; the CostMeter bills each pod's *actual* rate read from the RunPod API): **~$0.45 (≈ €0.40) to parse the entire 25-paper corpus once** — isolation costs ~€0.10 more than the old single-pod estimate, a price worth paying for non-conflicting parser envs.
 - 5× headroom for re-runs, parser updates, new papers: **€2–4 total parsing cost.**
 
@@ -240,7 +242,7 @@ The four parsers represent four different design philosophies as of late 2025 / 
 4. Add CostMeter with €50 default cap and SQLite persistence.
 
 **Week 2 (parsing & cache):**
-5. Build the four parser images — `docling` / `mineru` / `chandra` (we build, weights pre-pulled) + olmOCR's upstream image — and register one RunPod template per image.
+5. Build the five parser images — `docling` / `mineru` / `chandra` / `dots` / `paddle` (we build all five, weights pre-pulled) — and register one RunPod template per image (with the `PUBLIC_KEY` env, T17).
 6. Implement `gpu_provider` context manager with RunPod REST API (parser-agnostic; caller passes the parser's template).
 7. Implement parser cache (Appendix C). End-to-end: agent receives a PDF, the batch runner sends it through each parser's pod in turn, caches outputs, tears down each pod. Verify SHA-256 hit on second call.
 
@@ -272,7 +274,7 @@ The four parsers represent four different design philosophies as of late 2025 / 
 - **RunPod RTX 4090 community-cloud availability varies by region.** If unavailable, fall back to secure cloud ($0.69/hr) — doubles GPU cost but still trivial against €50.
 - **EMMO Domain Electrochemistry is still evolving.** The OER and Tafel-slope gaps are real as of May 2026 verification; if EMMO ships those classes during the thesis, swap the palimpsest-local IRIs.
 - **Prompt-caching savings depend on prefix stability.** If the system prompt or schema changes mid-session, the cache is invalidated and the next call pays the write cost. Discipline: only edit the system prompt at session boundaries. The `/model` command also invalidates the cache (different provider).
-- **Chandra and olmOCR licenses must be re-verified** before any commercial use; for a thesis they are fine, but the comparison chapter should cite the licenses explicitly. **Chandra v0.1.0 vs Chandra 2 are distinct models** — be explicit which version's numbers you cite.
+- **Chandra's weights license must be re-verified** before any commercial use (dots.ocr is MIT, PaddleOCR Apache-2.0, docling MIT); for a thesis they are fine, but the comparison chapter should cite the licenses explicitly. **Chandra v0.1.0 vs Chandra 2 are distinct models** — be explicit which version's numbers you cite.
 - **The 5 attached Nature OER papers are reference / development data, not the corpus.** Rahat must source 20+ additional PEM electrolyzer / OER catalyst PDFs (open-access preferred) before the thesis defence.
 - **`marimo edit` opens a browser by default**; on a headless dev VM use `--headless` and tunnel the port.
 - **The "downstream extraction accuracy conditional on parser" experiment is the most novel of the F4 contributions** — but it requires hand-labeled ground truth on the 5 reference papers. Budget time for that explicitly.
@@ -334,9 +336,9 @@ The whole agent is ~400 lines of Python. Keep it that way.
 - The Claude Code subscription used to BUILD palimpsest is separate from the
   €50; the €50 is what palimpsest itself spends when it runs.
 
-### Parsers — all four, cloud only
-- docling, MinerU, olmOCR, Chandra all run on RunPod RTX 4090.
-- Each ships as its own isolated image (we build docling/MinerU/Chandra; olmOCR uses upstream); one pod per parser, batch-by-parser across the corpus. Conflicting torch/vLLM pins keep them apart.
+### Parsers — all five, cloud only
+- docling, MinerU, Chandra, dots.ocr, PaddleOCR all run on RunPod; GPU is chosen dynamically from availability.
+- Each ships as its own isolated image (we build all five); one pod per parser, batch-by-parser across the corpus. Conflicting torch/vLLM/Paddle pins keep them apart.
 - Local CPU is pymupdf4llm + GROBID for cheap lookups only, NOT in the comparison.
 - Parse-once cache by SHA-256 of PDF bytes is mandatory. Never re-parse.
 
@@ -437,7 +439,7 @@ CREATE TABLE papers (
 
 CREATE TABLE parser_runs (
   paper_sha256  TEXT NOT NULL REFERENCES papers(sha256),
-  parser_name   TEXT NOT NULL CHECK (parser_name IN ('docling','mineru','olmocr','chandra')),
+  parser_name   TEXT NOT NULL CHECK (parser_name IN ('docling','mineru','chandra','dots','paddle')),
   parser_ver    TEXT NOT NULL,
   parsed_at     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   output_path   TEXT NOT NULL,            -- relative path under cache/
@@ -475,10 +477,12 @@ PARSERS = {
                 "run_cmd": lambda i, o: f"docling {i} --to json --output {o}"},
     "mineru":  {"template_id_env": "RUNPOD_TEMPLATE_MINERU",
                 "run_cmd": lambda i, o: f"mineru -b vlm -p {i} -o {o}"},
-    "olmocr":  {"template_id_env": "RUNPOD_TEMPLATE_OLMOCR",
-                "run_cmd": lambda i, o: f"python -m olmocr.pipeline {i} --output {o}"},
     "chandra": {"template_id_env": "RUNPOD_TEMPLATE_CHANDRA",
                 "run_cmd": lambda i, o: f"chandra {i} --output {o}"},
+    "dots":    {"template_id_env": "RUNPOD_TEMPLATE_DOTS",
+                "run_cmd": lambda i, o: f"python /opt/dots_run.py {i} {o}"},
+    "paddle":  {"template_id_env": "RUNPOD_TEMPLATE_PADDLE",
+                "run_cmd": lambda i, o: f"python /opt/paddle_run.py {i} {o}"},
 }
 
 
@@ -572,7 +576,7 @@ def parse_with_cache(pdf_paths, cost_meter, cache) -> dict[str, dict[str, Path]]
     return results
 ```
 
-**Batch flow rationale:** the four parsers can't share an image (their torch/vLLM pins conflict), so `parse_with_cache` loops **parser-first**: for each parser it spins one pod from that parser's image, runs the whole unseen corpus through it, then tears down before the next parser. That is 4 pod startups per batch instead of 1 — but each pod loads only its single model, and one startup is still amortized across all N papers (not the naïve "one pod per paper"). The 10–15 GB image pull dominates only the *first* cold start of each image; RunPod caches it host-side, so later pods start in ~90 s.
+**Batch flow rationale:** the five parsers can't share an image (their torch/vLLM pins conflict), so `parse_with_cache` loops **parser-first**: for each parser it spins one pod from that parser's image, runs the whole unseen corpus through it, then tears down before the next parser. That is 5 pod startups per batch instead of 1 — but each pod loads only its single model, and one startup is still amortized across all N papers (not the naïve "one pod per paper"). The 10–15 GB image pull dominates only the *first* cold start of each image; RunPod caches it host-side, so later pods start in ~90 s.
 
 ---
 
@@ -583,7 +587,7 @@ def parse_with_cache(pdf_paths, cost_meter, cache) -> dict[str, dict[str, Path]]
 | `/model` | `sonnet \| haiku \| deepseek \| gemini` | Switch active provider for next call. Invalidates prompt cache for this session. |
 | `/cost` | — | Print today's spend, total spend, remaining headroom. Opens the cost dashboard screen. |
 | `/budget` | `N` (EUR, integer) | **Live-update the hard cap to N. Persists to `settings.budget_eur` in SQLite. Prints new cap and `headroom = N − spent`. Effective immediately, no restart.** If `N < spent`, refuses with explanation. |
-| `/parser` | `docling \| mineru \| olmocr \| chandra` | Pin a single parser for the next extraction call (default: agent picks based on skill recommendation). |
+| `/parser` | `docling \| mineru \| chandra \| dots \| paddle` | Pin a single parser for the next extraction call (default: agent picks based on skill recommendation). |
 | `/skill` | `<name> \| list` | Load a skill by name into context, or list available skills. |
 | `/compact` | — | Summarize conversation history into a single system note; reset messages; keeps cache prefix. |
 | `/reset` | — | Drop conversation history entirely. Cache prefix preserved. |
