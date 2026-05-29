@@ -46,21 +46,20 @@ RUN pip install --no-cache-dir paddlepaddle-gpu==3.2.0 \
 # formula + reading order). [VALIDATE IN CI: pin paddleocr version once the build is green.]
 RUN pip install --no-cache-dir "paddleocr[doc-parser]"
 
-# Fail the build (free, in CI) before any paid pod. Paddle is NOT torch, so the other images'
-# `+cu128` torch assert does not apply — assert Paddle was compiled with CUDA (import-checks
-# GPU-free in the no-GPU CI builder; returns True for the GPU wheel even with no device present).
-RUN python -c "import paddle; print('paddle', paddle.__version__); assert paddle.is_compiled_with_cuda()"
+# Build-time guard (free, in CI). We CANNOT `import paddle` here: paddlepaddle-gpu hard-links
+# libcuda.so.1 (the NVIDIA driver lib), which is absent on the no-GPU CI builder (unlike torch,
+# which lazy-loads CUDA). So confirm the GPU wheel (not CPU `paddlepaddle`) is installed via
+# package metadata; the real `import paddle` + is_compiled_with_cuda() check runs on the pod
+# (night verify), where the driver lib exists.
+RUN python -c "from importlib.metadata import version; print('paddlepaddle-gpu', version('paddlepaddle-gpu'))"
 
 COPY paddle_run.py /opt/paddle_run.py
 
-# Bake the PP-StructureV3 model set (layout/det/rec/table/formula → /root/.paddlex) so the first
-# pod run does not download. Trigger the download with one CPU predict on a blank page (the CI
-# builder has no GPU). Non-fatal: if the bake predict fails, models download on first pod run.
-# [VALIDATE IN CI: confirm this populates /root/.paddlex; if CPU predict is too slow, switch to a
-# model-source predownload.]
-RUN python -c "from PIL import Image; Image.new('RGB',(64,64),'white').save('/tmp/blank.png')" \
-    && (python -c "from paddleocr import PPStructureV3; p=PPStructureV3(device='cpu'); list(p.predict('/tmp/blank.png'))" \
-        || echo 'WARN: PP-StructureV3 model bake failed; models will download on first pod run')
+# NOTE: PP-StructureV3 weights are NOT baked into the image. The bake would need to run a predict,
+# which imports paddle → requires libcuda.so.1, absent on the no-GPU CI builder (see the guard
+# above). So the model set (~hundreds of MB: layout/det/rec/table/formula) downloads to
+# /root/.paddlex on the FIRST pod run. Unlike the torch images (whose weights bake via a pure
+# huggingface_hub download), Paddle's models can't be pre-pulled without a GPU at build time.
 
 COPY start.sh /opt/start.sh
 RUN chmod +x /opt/start.sh
