@@ -21,8 +21,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && add-apt-repository -y ppa:deadsnakes/ppa \
     && apt-get update && apt-get install -y --no-install-recommends \
         python3.11 python3.11-venv python3.11-dev \
-        git curl build-essential \
+        git curl build-essential openssh-server \
     && rm -rf /var/lib/apt/lists/*
+
+# sshd (T17): RunPodSession drives this pod over direct TCP SSH, so the image runs an SSH daemon.
+# Key-only root login; RunPod injects the public key via $PUBLIC_KEY, consumed by start.sh.
+RUN mkdir -p /var/run/sshd \
+    && sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin prohibit-password/' /etc/ssh/sshd_config \
+    && sed -i 's/^#\?PubkeyAuthentication.*/PubkeyAuthentication yes/' /etc/ssh/sshd_config \
+    && sed -i 's/^#\?PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config
 
 # Isolated venv so the `chandra` console script is deterministically on PATH.
 RUN python3.11 -m venv /opt/venv
@@ -64,7 +71,8 @@ ENV HF_HOME=/root/.cache/huggingface
 RUN python -c "from huggingface_hub import snapshot_download; \
 snapshot_download('datalab-to/chandra-ocr-2')"
 
-# Keep the container alive so RunPod can exec/SSH into it (a bare `bash` as PID 1
-# exits immediately when the pod starts detached, stopping the container).
+# T17: start sshd (so RunPodSession can ssh/scp in), then idle to keep the container alive.
 # gpu_provider (T14) execs `chandra ... --method hf` in the running container.
-CMD ["sleep", "infinity"]
+COPY start.sh /opt/start.sh
+RUN chmod +x /opt/start.sh
+CMD ["/opt/start.sh"]

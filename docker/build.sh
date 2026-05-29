@@ -1,20 +1,19 @@
 #!/usr/bin/env bash
 # Build one palimpsest parser image. Usage: ./build.sh <parser> [push]
-#   ./build.sh docling          # build palimpsest/docling:0.1.0 locally
-#   ./build.sh mineru push      # build palimpsest/mineru:0.1.0 and push
-# <parser> is one we build ourselves: docling | mineru | chandra.
-# (olmOCR uses Allen AI's upstream image — there is no Dockerfile for it here.)
+#   ./build.sh docling          # build palimpsest/docling:0.2.0 locally
+#   ./build.sh mineru push      # build palimpsest/mineru:0.2.0 and push
+# <parser> is one of the five we build: docling | mineru | chandra | dots | paddle.
 #
 # Build needs an amd64 Docker host with ~40 GB free disk (no GPU required to
 # build; GPU is only needed at runtime). See README.md.
 #
 # Pushing: set PUSH_TAG to a flat Docker Hub repo (Hub has no nested paths); it
-# defaults to docker.io/<your-user>/palimpsest-<parser>:0.1.0 via DOCKERHUB_USERNAME.
+# defaults to docker.io/<your-user>/palimpsest-<parser>:0.2.0 via DOCKERHUB_USERNAME.
 #   DOCKERHUB_USERNAME=<you> ./build.sh mineru push
 set -euo pipefail
 
-PARSER="${1:?usage: ./build.sh <docling|mineru|chandra> [push]}"
-TAG="palimpsest/${PARSER}:0.1.0"     # local build label
+PARSER="${1:?usage: ./build.sh <docling|mineru|chandra|dots|paddle> [push]}"
+TAG="palimpsest/${PARSER}:0.2.0"     # local build label
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DOCKERFILE="${HERE}/palimpsest-${PARSER}.Dockerfile"
 
@@ -25,7 +24,7 @@ DOCKERFILE="${HERE}/palimpsest-${PARSER}.Dockerfile"
 docker build --platform linux/amd64 -f "${DOCKERFILE}" -t "${TAG}" "${HERE}"
 
 if [[ "${2:-}" == "push" ]]; then
-    PUSH_TAG="${PUSH_TAG:-docker.io/${DOCKERHUB_USERNAME:?set DOCKERHUB_USERNAME or PUSH_TAG}/palimpsest-${PARSER}:0.1.0}"
+    PUSH_TAG="${PUSH_TAG:-docker.io/${DOCKERHUB_USERNAME:?set DOCKERHUB_USERNAME or PUSH_TAG}/palimpsest-${PARSER}:0.2.0}"
     docker tag "${TAG}" "${PUSH_TAG}"
     docker push "${PUSH_TAG}"
 fi

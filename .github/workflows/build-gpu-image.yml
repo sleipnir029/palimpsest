@@ -1,6 +1,7 @@
 # Build the palimpsest parser images and push to Docker Hub.
-# One isolated image per parser we build ourselves (docling, mineru, chandra).
-# olmOCR is NOT built here — it uses Allen AI's upstream image (see tasks/T12).
+# One isolated image per parser we build ourselves. T17 5-parser set: docling, mineru, chandra,
+# paddle (PaddleOCR PP-StructureV3), and dots (dots.ocr — added once its Dockerfile lands).
+# olmOCR was dropped in T17 (FP8/Ada-only vendor image; see DEVIATIONS.md, T12 superseded).
 # Manual trigger only — avoids surprise builds and Actions-minute burn.
 # Needs repo secrets: DOCKERHUB_USERNAME, DOCKERHUB_TOKEN.
 name: Build parser images
@@ -15,7 +16,7 @@ jobs:
       # Each image builds independently; one parser failing does not cancel the rest.
       fail-fast: false
       matrix:
-        parser: [docling, mineru, chandra]
+        parser: [docling, mineru, chandra, paddle, dots]
     steps:
       - uses: actions/checkout@v4
 
@@ -43,7 +44,7 @@ jobs:
           file: docker/palimpsest-${{ matrix.parser }}.Dockerfile
           platforms: linux/amd64
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/palimpsest-${{ matrix.parser }}:0.1.0
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/palimpsest-${{ matrix.parser }}:0.2.0
           # Push a plain single-image manifest. Without these, buildx attaches a
           # provenance/SBOM attestation, producing an OCI index that RunPod's
           # image puller rejects: "layers from manifest don't match image

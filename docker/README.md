@@ -3,17 +3,17 @@
 The cloud parser images. Run on a RunPod RTX 4090/3090 pod — never on the M1 dev
 box (running docling locally is a project anti-pattern).
 
-The four parsers ship as **four isolated images**, not one stacked image — their
-torch/vLLM/transformers pins conflict, and a shared environment risks silently
-degrading a parser (which would corrupt the parser comparison). We build three;
-olmOCR uses Allen AI's upstream image as-is:
+The five parsers ship as **five isolated images**, not one stacked image — their
+torch/vLLM/transformers (and Paddle) pins conflict, and a shared environment risks
+silently degrading a parser (which would corrupt the parser comparison). We build all five:
 
-| Parser  | Dockerfile                          | Tag                      | Source         |
-|---------|-------------------------------------|--------------------------|----------------|
-| docling | `palimpsest-docling.Dockerfile`     | `palimpsest/docling:0.1.0` | we build (T10) |
-| mineru  | `palimpsest-mineru.Dockerfile`      | `palimpsest/mineru:0.1.0`  | we build (T11) |
-| olmocr  | — (upstream)                        | `alleninstituteforai/olmocr:<tag>` | upstream (T12) |
-| chandra | `palimpsest-chandra.Dockerfile`     | `palimpsest/chandra:0.1.0` | we build (T13) |
+| Parser  | Dockerfile                          | Tag                        | Source         |
+|---------|-------------------------------------|----------------------------|----------------|
+| docling | `palimpsest-docling.Dockerfile`     | `palimpsest/docling:0.2.0` | we build (T10) |
+| mineru  | `palimpsest-mineru.Dockerfile`      | `palimpsest/mineru:0.2.0`  | we build (T11) |
+| chandra | `palimpsest-chandra.Dockerfile`     | `palimpsest/chandra:0.2.0` | we build (T13) |
+| dots    | `palimpsest-dots.Dockerfile`        | `palimpsest/dots:0.2.0`    | we build (T17) |
+| paddle  | `palimpsest-paddle.Dockerfile`      | `palimpsest/paddle:0.2.0`  | we build (T17) |
 
 Each image is ~10–15 GB. Pulled to the pod once, then cached on RunPod's side.
 
@@ -24,27 +24,28 @@ Each image is ~10–15 GB. Pulled to the pod once, then cached on RunPod's side.
 - `vllm==0.19.1` (cu128 wheels) + `docling` + `docling-ibm-models`.
 - `ibm-granite/granite-docling-258M` weights baked into `/root/.cache/huggingface`
   (default + `untied` revisions), so the first pod run does not download.
-- `CMD ["sleep", "infinity"]` — keeps the container alive so RunPod can exec/SSH
-  in (a bare `bash` exits immediately on a detached pod start). `gpu_provider`
-  (T14) execs the parser's command in the running container.
+- `CMD ["/opt/start.sh"]` (T17) — starts `sshd` (every image runs an SSH daemon so
+  `gpu_provider` (T14) reaches it over direct TCP SSH + scp), injects the pod's
+  `$PUBLIC_KEY` into authorized_keys, then idles (`sleep infinity`) to keep the
+  container alive. `gpu_provider` execs the parser's command in the running container.
 
 The mineru / chandra images follow the same skeleton but install their own parser
 and weights, and do **not** pin vLLM (each image owns its own torch/vLLM).
 
-> **CUDA note (deviation from task card):** the card pins CUDA 12.1.0, but vLLM
-> 0.19.x dropped 12.1. The base is 12.8.1 — the ceiling RunPod's host drivers
-> support, used by every image we build (the upstream olmOCR image is also 12.8).
-> For docling, base/torch/vLLM agreement is asserted at build. See `DEVIATIONS.md`.
+> **CUDA note:** the torch images (docling/mineru/chandra/dots) use base 12.8.1 — the
+> ceiling RunPod's host drivers support; base/torch agreement is asserted at build. The
+> **paddle** image is the exception: CUDA **12.6** (PaddlePaddle publishes no py3.11 cu128
+> wheel), which still runs on ≥12.8 hosts via CUDA backward-compat. See `DEVIATIONS.md`.
 
 ## Build
 
 Build needs an **amd64 Docker host with ~40 GB free disk**. No GPU is needed to
 *build* — the GPU is only used at runtime. Docker Hub repos are flat (`user/repo`),
-so the push target is `<your-user>/palimpsest-<parser>:0.1.0`.
+so the push target is `<your-user>/palimpsest-<parser>:0.2.0`.
 
 **Canonical path (no local Docker): GitHub Actions → Docker Hub.** The workflow
-`.github/workflows/build-gpu-image.yml` builds each image we own (matrix over
-`docling`, `mineru`; `chandra` added in T13) natively on an amd64 runner and pushes.
+`.github/workflows/build-gpu-image.yml` builds each image (matrix over
+`docling`, `mineru`, `chandra`, `paddle`, `dots`) natively on an amd64 runner and pushes.
 Set repo secrets `DOCKERHUB_USERNAME` + `DOCKERHUB_TOKEN`, then run the workflow
 manually (Actions tab → "Build parser images" → Run workflow).
 
@@ -61,9 +62,9 @@ RunPod runs **pre-built images** — it does not build Dockerfiles. After pushin
 register one custom template per parser (see `runpod-template.md`, created in T12, extended in T13):
 
 1. Console → Templates → **New Template** → Custom → Container Image =
-   `docker.io/<your-user>/palimpsest-<parser>:0.1.0` (or the upstream image for olmOCR).
-2. Deploy a pod on that template (RTX 4090 / 3090). Ensure your SSH key is in
-   RunPod Settings *before* deploy (see `notes/runpod-bootstrap.md`).
+   `docker.io/<your-user>/palimpsest-<parser>:0.2.0`, and set env `PUBLIC_KEY` to the
+   contents of your `~/.ssh/id_ed25519.pub` (T17: the images run sshd; this key authenticates SSH).
+2. Deploy a pod on that template (RTX 4090 / 3090). See `runpod-template.md` for per-parser detail.
 3. SSH in and verify the parser, e.g.:
 
    ```bash
