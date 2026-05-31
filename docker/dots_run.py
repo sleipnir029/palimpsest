@@ -59,8 +59,13 @@ def main(pdf: str, out: str) -> None:
             {"type": "image", "image": img}, {"type": "text", "text": PROMPT}]}]
         text = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
         image_inputs, video_inputs = process_vision_info(messages)
-        inputs = processor(text=[text], images=image_inputs, videos=video_inputs,
-                           padding=True, return_tensors="pt").to(model.device)
+        # Newer transformers refuse `videos=None` (TypeError: NoneType for
+        # video_processor). Pages are image-only — omit the kwarg when empty.
+        kwargs = {"text": [text], "images": image_inputs,
+                  "padding": True, "return_tensors": "pt"}
+        if video_inputs:
+            kwargs["videos"] = video_inputs
+        inputs = processor(**kwargs).to(model.device)
         gen = model.generate(**inputs, max_new_tokens=24000)
         trimmed = [o[len(i):] for i, o in zip(inputs.input_ids, gen)]
         raw = processor.batch_decode(trimmed, skip_special_tokens=True)[0]
