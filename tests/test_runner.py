@@ -129,6 +129,32 @@ def test_all_cached_short_circuit(tmp_path, env, fake_pod):
     assert set(result[sha].keys()) == set(PARSERS)
 
 
+def test_one_parser_failure_omits_cell_and_continues(tmp_path, env, fake_pod, monkeypatch):
+    """The card's distinctive spec: if a parser fails on a paper, log + continue with
+    the others; do NOT crash. The failed cell is omitted (no parser_runs row → future
+    retry stays open). All 5 pods still get attempted; only the failing parse breaks."""
+    real_ssh = _FakePodSession.ssh
+
+    def selective_ssh(self, cmd, timeout=600):
+        if "chandra" in cmd:
+            raise RuntimeError("simulated chandra OOM")
+        return real_ssh(self, cmd, timeout)
+
+    monkeypatch.setattr(_FakePodSession, "ssh", selective_ssh)
+
+    cache = ParserCache(str(tmp_path / "cache.db"), tmp_path / "cache")
+    meter = CostMeter(str(tmp_path / "cost.db"))
+    result = runner.parse_with_cache([FIXTURE], meter, cache)
+
+    sha = next(iter(result))
+    # Other 4 succeed; chandra cell omitted, not crashed, not filled with None.
+    assert set(result[sha].keys()) == set(PARSERS) - {"chandra"}
+    # No parser_runs row written for the failed pair → retry stays open.
+    assert cache.get_output(sha, "chandra") is None
+    # All 5 pods still attempted (failure doesn't short-circuit the outer loop).
+    assert len(fake_pod.instances) == len(PARSERS)
+
+
 def test_mixed_per_parser_skip(tmp_path, env, fake_pod):
     """One parser cached → its pod is skipped; the other 4 run; mapping complete."""
     cache = ParserCache(str(tmp_path / "cache.db"), tmp_path / "cache")
