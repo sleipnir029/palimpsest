@@ -38,11 +38,10 @@ RUN pip install --no-cache-dir --upgrade pip
 RUN pip install --no-cache-dir torch==2.7.0 torchvision==0.22.0 \
         --index-url https://download.pytorch.org/whl/cu128
 
-# Pin transformers BEFORE dots.ocr install: dots.ocr's trust_remote_code processor passes
-# video_processor=None; transformers >= 4.52 enforces this via check_argument_for_proper_class
-# and raises TypeError (T17 verify, 2026-05-31). dots.ocr README floor is 4.51.3 — exact-pin
-# so the dots install can't drag in a newer one.
-RUN pip install --no-cache-dir 'transformers==4.51.3'
+# Transformers: pinning before dots.ocr does NOT work — its requirements.txt exact-pins
+# transformers==4.56.1 and pip's resolver promotes it during `pip install -e`. Confirmed live on
+# 0.2.1 (T17 pass 2). The real fix for the video_processor=None TypeError is the monkey-patch in
+# dots_run.py (0.2.2) — see that file. Letting dots.ocr's own install resolve transformers is fine.
 
 # Clone + install dots.ocr (it's `pip install -e .`, not on PyPI); it pulls transformers. Add
 # qwen-vl-utils (process_vision_info), pypdfium2 (PDF->image, used by dots_run.py), huggingface_hub
