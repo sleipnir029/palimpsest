@@ -121,21 +121,31 @@ class RunPodSession:
 
     # -- RunPod REST ---------------------------------------------------------
     def _start_pod(self) -> None:
-        # A list lets RunPod allocate whichever GPU is in stock (availability is
-        # dynamic); a bare str is wrapped to a 1-element list.
+        # RunPod's `gpuTypeIds` is NOT "any of" — a multi-id request is rejected
+        # with 500 "resources to deploy" when no single machine matches the union
+        # (T17 verify finding, 2026-05-31). Iterate the list cheapest-first and
+        # submit each id alone, falling back on an out-of-capacity 500. A bare
+        # str is wrapped to a 1-element list.
         gpu_ids = [self.gpu_type] if isinstance(self.gpu_type, str) else list(self.gpu_type)
-        body = {
-            "cloudType": self.cloud.upper(),  # enum COMMUNITY | SECURE
-            "gpuTypeIds": gpu_ids,
-            "gpuCount": 1,
-            "computeType": "GPU",
-            "ports": ["22/tcp"],  # expose SSH
-        }
-        if self.template_id:
-            body["templateId"] = self.template_id
-        r = self._client.post(f"{RUNPOD_API}/pods", json=body)
-        r.raise_for_status()
-        self.pod_id = r.json()["id"]  # set on self so teardown can always stop it
+        last_err: Exception | None = None
+        for gid in gpu_ids:
+            body = {
+                "cloudType": self.cloud.upper(),  # enum COMMUNITY | SECURE
+                "gpuTypeIds": [gid],
+                "gpuCount": 1,
+                "computeType": "GPU",
+                "ports": ["22/tcp"],  # expose SSH
+            }
+            if self.template_id:
+                body["templateId"] = self.template_id
+            r = self._client.post(f"{RUNPOD_API}/pods", json=body)
+            if r.status_code == 500 and "resources to deploy" in r.text:
+                last_err = httpx.HTTPStatusError(r.text, request=r.request, response=r)
+                continue  # try next gpu id
+            r.raise_for_status()  # any other error → raise loudly
+            self.pod_id = r.json()["id"]  # set on self so teardown can always stop it
+            return
+        raise RuntimeError(f"no capacity for any of {gpu_ids}: {last_err}")
 
     def _await_running(self, tries: int = 60, delay: int = 5) -> dict:
         for _ in range(tries):
