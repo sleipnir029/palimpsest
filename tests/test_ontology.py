@@ -8,7 +8,7 @@ A green-on-first / red-on-second tells you immediately which mode failed.
 import pytest
 from rdflib import OWL, URIRef
 
-from palimpsest.ontology import EMMO_ECHO, KNOWN_IRIS, _echo, emmo_iri
+from palimpsest.ontology import EMMO_ECHO, KNOWN_IRIS, echo_graph, emmo_iri
 
 OVERPOTENTIAL_HASH = f"{EMMO_ECHO}#electrochemistry_1cd1d777_e67b_47eb_81f1_edac35d9f2c6"
 
@@ -23,7 +23,7 @@ def test_overpotential_resolves_to_verified_hash():
 @pytest.mark.parametrize("label,expected_iri", list(KNOWN_IRIS.items()))
 def test_known_hashes_still_declared_as_class(label, expected_iri):
     """Every KNOWN_IRIS hash is still declared as an owl:Class in ECHO."""
-    g = _echo()
+    g = echo_graph()
     assert (URIRef(expected_iri), None, OWL.Class) in g, (
         f"{label}: hash {expected_iri} is not declared as owl:Class in ECHO"
     )
