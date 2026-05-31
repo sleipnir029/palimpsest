@@ -22,6 +22,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get update && apt-get install -y --no-install-recommends \
         python3.11 python3.11-venv python3.11-dev \
         git curl build-essential openssh-server \
+        libxcb1 libxext6 libgl1 libsm6 libglib2.0-0 libxrender1 \
     && rm -rf /var/lib/apt/lists/*
 
 # sshd (T17): RunPodSession drives this pod over direct TCP SSH, so the image runs an SSH daemon.
