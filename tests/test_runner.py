@@ -155,6 +155,37 @@ def test_one_parser_failure_omits_cell_and_continues(tmp_path, env, fake_pod, mo
     assert len(fake_pod.instances) == len(PARSERS)
 
 
+def test_one_parser_pod_create_failure_skips_parser_continues(
+    tmp_path, env, monkeypatch
+):
+    """Pod-level failure (RunPodSession.__enter__ raises) must skip that parser
+    cleanly and let the other 4 still run. T16 live verify surfaced this on a
+    transient RunPod HTTP 500 — paddle's pod-create failed after 4 prior parsers
+    succeeded, and the runner DID crash the whole batch (uncaught). Fixed by
+    wrapping the per-parser block in try/except outside the with-statement."""
+    _FakePodSession.instances = []
+
+    class _FailOnPaddle(_FakePodSession):
+        def __init__(self, cost_meter, template_id=None, **kw):
+            super().__init__(cost_meter, template_id=template_id, **kw)
+            if template_id == "tmpl-paddle":
+                raise RuntimeError("simulated 500 on POST /pods")
+
+    monkeypatch.setattr(runner, "RunPodSession", _FailOnPaddle)
+
+    cache = ParserCache(str(tmp_path / "cache.db"), tmp_path / "cache")
+    meter = CostMeter(str(tmp_path / "cost.db"))
+    result = runner.parse_with_cache([FIXTURE], meter, cache)
+
+    sha = next(iter(result))
+    # paddle cell is omitted (pod-create raised); other 4 fill normally.
+    assert set(result[sha].keys()) == set(PARSERS) - {"paddle"}
+    # cache.get_output stays None for paddle → future retry stays open.
+    assert cache.get_output(sha, "paddle") is None
+    # All 5 pod-creates were ATTEMPTED (each parser tried its own pod).
+    assert len(_FakePodSession.instances) == len(PARSERS)
+
+
 def test_mixed_per_parser_skip(tmp_path, env, fake_pod):
     """One parser cached → its pod is skipped; the other 4 run; mapping complete."""
     cache = ParserCache(str(tmp_path / "cache.db"), tmp_path / "cache")
