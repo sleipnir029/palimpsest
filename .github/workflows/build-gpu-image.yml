@@ -44,7 +44,7 @@ jobs:
           file: docker/palimpsest-${{ matrix.parser }}.Dockerfile
           platforms: linux/amd64
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/palimpsest-${{ matrix.parser }}:0.2.1
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/palimpsest-${{ matrix.parser }}:0.2.2
           # Push a plain single-image manifest. Without these, buildx attaches a
           # provenance/SBOM attestation, producing an OCI index that RunPod's
           # image puller rejects: "layers from manifest don't match image
