@@ -23,7 +23,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get update && apt-get install -y --no-install-recommends \
         python3.11 python3.11-venv python3.11-dev \
         git curl build-essential openssh-server \
-        libgl1 libglib2.0-0 \
+        libxcb1 libxext6 libgl1 libsm6 libglib2.0-0 libxrender1 \
     && rm -rf /var/lib/apt/lists/*
 
 # sshd: key-only root login. RunPod injects the key via $PUBLIC_KEY, consumed by start.sh.

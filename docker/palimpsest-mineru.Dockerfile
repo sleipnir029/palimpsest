@@ -21,6 +21,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get update && apt-get install -y --no-install-recommends \
         python3.11 python3.11-venv python3.11-dev \
         git curl build-essential openssh-server \
+        libxcb1 libxext6 libgl1 libsm6 libglib2.0-0 libxrender1 \
     && rm -rf /var/lib/apt/lists/*
 
 # sshd (T17): RunPodSession drives this pod over direct TCP SSH, so the image runs an SSH daemon.
@@ -48,6 +49,12 @@ RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/wh
 # `-U` could eagerly replace the seeded cu128 torch. huggingface_hub is explicit (not a
 # MinerU transitive dep) because the weight-prefetch RUN below imports it.
 RUN pip install --no-cache-dir "mineru[all]" huggingface_hub \
+        --extra-index-url https://download.pytorch.org/whl/cu128
+
+# vllm is NOT pulled by `mineru[all]` (T17 verify, 2026-05-31): `-b vlm-auto-engine` errors
+# with "Please install vllm to use the vllm-async-engine backend." Pin matches docling's pin
+# so the two VLM images share the same vllm. cu128 stays an EXTRA index.
+RUN pip install --no-cache-dir 'vllm==0.19.1' \
         --extra-index-url https://download.pytorch.org/whl/cu128
 
 # Fail the build (free, in CI) before any paid GPU pod if torch is not a cu128 wheel.

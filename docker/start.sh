@@ -15,5 +15,9 @@ if [ -n "${PUBLIC_KEY:-}" ]; then
 fi
 
 ssh-keygen -A          # generate host keys on first boot
+# sshd parses /etc/environment for every session (login + non-login), so the
+# fabric `Connection.run()` non-login shell still gets /opt/venv/bin on PATH.
+# Without this, T17 verify had to prepend `export PATH=...` to every command.
+echo 'PATH=/opt/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin' > /etc/environment
 /usr/sbin/sshd         # daemonize (sshd_config hardened in the image)
 exec sleep infinity    # keep the container alive (replaces the old CMD ["sleep","infinity"])

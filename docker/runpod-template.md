@@ -6,11 +6,11 @@ file is the template registry: one entry per parser. We build **all five** ourse
 
 | Parser  | Container Image                                  | GPU             | Source         |
 |---------|--------------------------------------------------|-----------------|----------------|
-| docling | `docker.io/<your-user>/palimpsest-docling:0.2.0` | RTX 4090 / 3090 | we build (T10) |
-| mineru  | `docker.io/<your-user>/palimpsest-mineru:0.2.0`  | RTX 4090 / 3090 | we build (T11) |
-| chandra | `docker.io/<your-user>/palimpsest-chandra:0.2.0` | RTX 4090 / 3090 | we build (T13) |
-| dots    | `docker.io/<your-user>/palimpsest-dots:0.2.0`    | RTX 4090 / 3090 | we build (T17) |
-| paddle  | `docker.io/<your-user>/palimpsest-paddle:0.2.0`  | RTX 4090 / 3090 | we build (T17) |
+| docling | `docker.io/<your-user>/palimpsest-docling:0.2.1` | RTX 4090 / 3090 | we build (T10) |
+| mineru  | `docker.io/<your-user>/palimpsest-mineru:0.2.1`  | RTX 4090 / 3090 | we build (T11) |
+| chandra | `docker.io/<your-user>/palimpsest-chandra:0.2.1` | RTX 4090 / 3090 | we build (T13) |
+| dots    | `docker.io/<your-user>/palimpsest-dots:0.2.1`    | RTX 4090 / 3090 | we build (T17) |
+| paddle  | `docker.io/<your-user>/palimpsest-paddle:0.2.1`  | RTX 4090 / 3090 | we build (T17) |
 
 > **`0.2.0` = the sshd era (T17).** Every image now runs an SSH daemon so `gpu_provider`'s (T14)
 > `RunPodSession` reaches it over **direct TCP SSH** (publicIp + mapped port 22) — required for
@@ -43,14 +43,14 @@ file is the template registry: one entry per parser. We build **all five** ourse
 > watchdog's `idle_hard=300s` are both too short for multi-minute parses — pass `timeout=1800` and
 > set `idle_hard=1800` in `RunPodSession`.
 
-### docling — `palimpsest-docling:0.2.0`
+### docling — `palimpsest-docling:0.2.1`
 - Disk ~25 GB (image + `granite-docling-258M` baked). Verify: `docling --version` → `Docling 2.95.0`
   (pod-verified, T10). Run `docling … --to json`.
 - **Pod-verified end-to-end (T17, 2026-05-31, SECURE 3090, €0.0065, 100s):**
   `docling /workspace/in/<pdf> --output /workspace/out --to json` → writes `<stem>.json` (19 MB on
   the 12-page sample paper, 645 text items + tables + pictures).
 
-### mineru — `palimpsest-mineru:0.2.0`
+### mineru — `palimpsest-mineru:0.2.1`
 - Disk ~25 GB (image + `MinerU2.5-2509-1.2B` baked). Verify:
   `python -c "import os; assert os.path.exists(os.path.expanduser('~/.cache/huggingface/hub/models--opendatalab--MinerU2.5-2509-1.2B'))"`.
 - **Pod-verified end-to-end (T17, 2026-05-31, SECURE 3090, €0.0295, 428s):**
@@ -62,7 +62,7 @@ file is the template registry: one entry per parser. We build **all five** ourse
 - **CLI changed**: T11's `-b vlm` is gone in mineru 2.5; use `vlm-auto-engine` (in-process) or
   `vlm-http-client`.
 
-### chandra — `palimpsest-chandra:0.2.0`
+### chandra — `palimpsest-chandra:0.2.1`
 - Disk ~35 GB (image + ~10 GB `chandra-ocr-2`). BF16 → an Ampere 3090 works. Verify:
   `chandra --help` (no `--version` flag) + the `models--datalab-to--chandra-ocr-2` cache path.
 - **Pod-verified parse (T17, 2026-05-31, SECURE 3090, €0.20, 31 min):**
@@ -72,7 +72,7 @@ file is the template registry: one entry per parser. We build **all five** ourse
   the verify script's "newest .json" picker grabbed the metadata stub).
 - Slow on 3090 HF backend (~140s/page on a 12-page paper). Pass `idle_hard=1800` and `timeout=1800`.
 
-### dots — `palimpsest-dots:0.2.0` (T17, new)
+### dots — `palimpsest-dots:0.2.1` (T17, new)
 - dots.ocr (`rednote-hilab/dots.ocr`, ~1.7B VLM, **MIT**), BF16 → 3090/4090. Disk ~25 GB.
 - Weights baked to `/opt/weights/DotsOCR` (no-periods dir — the trust_remote_code module-name
   workaround). Run via the baked wrapper: `python /opt/dots_run.py <pdf> <out.json>` (transformers
@@ -82,7 +82,7 @@ file is the template registry: one entry per parser. We build **all five** ourse
   refuses `video_processor=None`. Wrapper fix `docker/dots_run.py` (skip `videos=` kwarg when None)
   + Dockerfile pin `transformers==4.51.3` (dots README floor) staged for 0.2.1; verify after rebuild.
 
-### paddle — `palimpsest-paddle:0.2.0` (T17, new)
+### paddle — `palimpsest-paddle:0.2.1` (T17, new)
 - PaddleOCR PP-StructureV3 (`paddleocr[doc-parser]`, **Apache-2.0**) — the only **non-torch** image
   (PaddlePaddle on **CUDA 12.6**; the cu128 Paddle index has no py3.11 wheel, and cu126 runs on
   RunPod's ≥12.8 hosts via backward-compat). Disk ~20 GB.
