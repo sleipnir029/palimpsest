@@ -44,9 +44,13 @@ class RunPodSession:
         self.cloud = cloud
         self.idle_soft = idle_soft
         self.idle_hard = idle_hard
+        # 30s used to be enough; T17 verify saw POST /pods take >30s on a slow
+        # SECURE create, which made httpx ReadTimeout *and the server created
+        # the pod anyway* — leaking a billed pod we can't address by id. 120s
+        # is well above RunPod's observed worst case.
         self._client = httpx.Client(
             headers={"Authorization": f"Bearer {os.environ['RUNPOD_API_KEY']}"},
-            timeout=30.0,
+            timeout=120.0,
         )
         # T16's batch runner MUST set this True around any ssh() call that runs
         # longer than idle_soft, else the watchdog tears the pod down mid-command.
@@ -139,7 +143,13 @@ class RunPodSession:
             if self.template_id:
                 body["templateId"] = self.template_id
             r = self._client.post(f"{RUNPOD_API}/pods", json=body)
-            if r.status_code == 500 and "resources to deploy" in r.text:
+            # Two known "no capacity" 500 strings from RunPod (T17 verify, 2026-05-31):
+            #   "resources to deploy"  — no machine matches the union
+            #   "no instances currently available" — that GPU is sold out right now
+            if r.status_code == 500 and (
+                "resources to deploy" in r.text
+                or "no instances currently available" in r.text
+            ):
                 last_err = httpx.HTTPStatusError(r.text, request=r.request, response=r)
                 continue  # try next gpu id
             r.raise_for_status()  # any other error → raise loudly
@@ -147,7 +157,11 @@ class RunPodSession:
             return
         raise RuntimeError(f"no capacity for any of {gpu_ids}: {last_err}")
 
-    def _await_running(self, tries: int = 60, delay: int = 5) -> dict:
+    def _await_running(self, tries: int = 180, delay: int = 5) -> dict:
+        # 180 × 5 = 900s. First-pull on a SECURE pod can take 5–10 min (no shared
+        # image cache); 300s used to be enough on COMMUNITY-only deployments. T17
+        # verify, 2026-05-31: docling :0.2.0 first-pull on a SECURE 3090 exceeded
+        # 5 min before publicIp was assigned.
         for _ in range(tries):
             r = self._client.get(f"{RUNPOD_API}/pods/{self.pod_id}")
             r.raise_for_status()
