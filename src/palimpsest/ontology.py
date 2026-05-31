@@ -33,13 +33,19 @@ KNOWN_IRIS: dict[str, str] = {
 
 
 @cache
-def _echo() -> Graph:
-    """Load the ECHO turtle into an rdflib Graph. Cached to disk on first call."""
+def echo_graph() -> Graph:
+    """Load the ECHO turtle into an rdflib Graph. Cached to disk on first call.
+
+    Atomic write: a Ctrl-C mid-download leaves no truncated .ttl behind that
+    would poison every future call with `rdflib.BadSyntax`.
+    """
     if not _CACHE.exists():
         _CACHE.parent.mkdir(parents=True, exist_ok=True)
         resp = httpx.get(EMMO_ECHO, follow_redirects=True, timeout=60.0)
         resp.raise_for_status()
-        _CACHE.write_bytes(resp.content)
+        tmp = _CACHE.with_suffix(".ttl.tmp")
+        tmp.write_bytes(resp.content)
+        tmp.replace(_CACHE)
     g = Graph()
     g.parse(_CACHE, format="ttl")
     return g
@@ -47,9 +53,17 @@ def _echo() -> Graph:
 
 @cache
 def emmo_iri(class_label: str) -> str | None:
-    """Resolve an EMMO ECHO class by its rdfs:label. Returns full IRI or None."""
-    g = _echo()
-    for s, _, o in g.triples((None, RDFS.label, None)):
-        if str(o) == class_label and (s, None, OWL.Class) in g:
-            return str(s)
-    return None
+    """Resolve an EMMO ECHO class by its rdfs:label. Returns full IRI or None.
+
+    Raises ValueError if the label resolves to more than one owl:Class — ECHO
+    has 16 duplicate-label classes (e.g. "Powder", "C", "Grinding") that would
+    otherwise return non-deterministic IRIs.
+    """
+    g = echo_graph()
+    matches = [
+        str(s) for s, _, o in g.triples((None, RDFS.label, None))
+        if str(o) == class_label and (s, None, OWL.Class) in g
+    ]
+    if len(matches) > 1:
+        raise ValueError(f"ambiguous label {class_label!r}: {matches}")
+    return matches[0] if matches else None

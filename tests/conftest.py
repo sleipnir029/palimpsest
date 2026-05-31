@@ -1,8 +1,9 @@
 """Pytest config: a `--live` opt-in for tests that start real, paid infra.
 
 `@pytest.mark.live` tests (e.g. a real RunPod pod, ~$0.05) are skipped unless
-`--live` is passed, so a normal `pytest` run never spends money. Scoped to the
-`live` marker only — the existing `slow` marker is left untouched.
+`--live` is passed, so a normal `pytest` run never spends money. The `slow`
+marker (network or paid APIs, no infra start) is also registered here — T18
+made it the major marker user, so registering avoids the warning noise.
 """
 
 import pytest
@@ -20,6 +21,9 @@ def pytest_addoption(parser):
 def pytest_configure(config):
     config.addinivalue_line(
         "markers", "live: starts real paid infra; skipped unless --live"
+    )
+    config.addinivalue_line(
+        "markers", "slow: hits the network or paid APIs (no infra start)"
     )
 
 
