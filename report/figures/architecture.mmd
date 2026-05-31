@@ -1,0 +1,36 @@
+flowchart TB
+    PDF["papers/ — PDF corpus"]
+    HASH{{"content hash (SHA-256)<br/>identity + cache key"}}
+    PDF -->|"hash bytes"| HASH
+
+    subgraph PARSERS["Parser pods — cloud GPU, one isolated image each"]
+        direction LR
+        P1["PaddleOCR<br/>PP-StructureV3"]
+        P2["docling"]
+        P3["MinerU 2.5"]
+        P4["dots.ocr"]
+        P5["Chandra"]
+    end
+    HASH --> PARSERS
+    CACHE[("Content-hash cache<br/>frozen, shared inputs")]
+    PARSERS -->|"parse once"| CACHE
+
+    subgraph AGENT["Extraction agent — minimal LLM loop"]
+        direction TB
+        LOOP["think → act → observe"]
+        SKILL["OER extraction skill"]
+        MODELS["swappable backends:<br/>Claude / DeepSeek / Gemini"]
+        METER["cost meter — €50 cap"]
+        SKILL -.-> LOOP
+        MODELS -.-> LOOP
+        METER -.-> LOOP
+    end
+    CACHE --> AGENT
+
+    SCHEMA["LinkML schema<br/>→ Pydantic / SHACL / JSON-LD"]
+    AGENT -->|"extract"| SCHEMA
+    GRAPH[("RDF knowledge graph<br/>EMMO · QUDT · PROV-O<br/>+ per-triple provenance")]
+    SCHEMA -->|"validate, then insert"| GRAPH
+
+    GRAPH --> SPARQL["SPARQL queries"]
+    GRAPH --> VIEWER["Provenance viewer<br/>PDF ↔ data, bbox highlight"]
