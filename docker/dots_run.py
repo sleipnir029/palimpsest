@@ -22,6 +22,22 @@ import pypdfium2 as pdfium
 import torch
 from qwen_vl_utils import process_vision_info
 from transformers import AutoModelForCausalLM, AutoProcessor
+from transformers.processing_utils import ProcessorMixin
+
+# transformers >= 4.56 added check_argument_for_proper_class on ProcessorMixin,
+# which rejects video_processor=None. dots.ocr's trust_remote_code weights have
+# no custom fast processor → AutoProcessor returns the standard slow
+# Qwen2_5_VLProcessor, which passes video_processor=None to the parent init and
+# trips the check. dots.ocr is image-only; allow None for that one attribute.
+# T17 verify pass 2 (2026-05-31): use_fast=True did not avoid this (silently
+# fell back to slow); pinning transformers can't beat dots.ocr's exact-pin in
+# its requirements.txt; monkey-patching the guard is the surgical fix.
+_orig_check = ProcessorMixin.check_argument_for_proper_class
+def _allow_none_video_processor(self, attribute_name, arg):
+    if arg is None and attribute_name == "video_processor":
+        return
+    return _orig_check(self, attribute_name, arg)
+ProcessorMixin.check_argument_for_proper_class = _allow_none_video_processor
 
 MODEL = "/opt/weights/DotsOCR"
 PROMPT = (
@@ -50,7 +66,12 @@ def main(pdf: str, out: str) -> None:
         device_map="auto",
         trust_remote_code=True,
     )
-    processor = AutoProcessor.from_pretrained(MODEL, trust_remote_code=True)
+    # use_fast=True selects the Rust-backed fast processor variant. The slow
+    # variant's Qwen2_5_VLProcessor.__init__ runs `check_argument_for_proper_class`
+    # on `video_processor` and rejects None — see dots.ocr's own _load_hf_model in
+    # /opt/dots_ocr_src/dots_ocr/parser.py, which uses use_fast=True for the same
+    # reason. T17 verify pass 2 (2026-05-31): the missing flag was the entire dots bug.
+    processor = AutoProcessor.from_pretrained(MODEL, trust_remote_code=True, use_fast=True)
 
     pages: list = []
     md_parts: list[str] = []
