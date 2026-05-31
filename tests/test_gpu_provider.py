@@ -18,11 +18,15 @@ from palimpsest.parsers.gpu_provider import RunPodSession
 
 # -- fakes for the dry-run ---------------------------------------------------
 class _Resp:
-    def __init__(self, data):
+    def __init__(self, data, status_code: int = 201, text: str = ""):
         self._data = data
+        self.status_code = status_code
+        self.text = text or (data if isinstance(data, str) else "")
+        self.request = None  # T14 _start_pod only reads it on a 500-capacity branch
 
     def raise_for_status(self):
-        pass
+        if self.status_code >= 400:
+            raise httpx.HTTPStatusError(self.text, request=self.request, response=self)
 
     def json(self):
         return self._data
@@ -138,6 +142,47 @@ def test_bill_written_even_when_stop_fails(tmp_path, monkeypatch):
     assert len(rows) == 1
     assert rows[0][1] == "pod_session"
     assert rows[0][0] > 0
+
+
+def test_start_pod_falls_back_across_gpu_list(tmp_path, monkeypatch):
+    """T14/T17 followup (2026-05-31): RunPod's `gpuTypeIds` is NOT "any of" — a
+    multi-id request is rejected with 500 "resources to deploy". `_start_pod`
+    must iterate the list, submit each id alone, and fall back on that 500."""
+    posts: list[dict] = []
+
+    def _post(self, url, **kw):
+        if url.endswith("/stop"):
+            return _Resp({})
+        body = kw.get("json", {})
+        posts.append(body)
+        # First call: 3090 out of capacity. Second: 4090 succeeds.
+        if body["gpuTypeIds"] == ["NVIDIA GeForce RTX 3090"]:
+            return _Resp("create pod: This machine does not have the resources to deploy your pod",
+                         status_code=500,
+                         text="create pod: This machine does not have the resources to deploy your pod")
+        return _Resp({"id": "fake-pod-4090"})
+
+    monkeypatch.setenv("RUNPOD_API_KEY", "test-key")
+    monkeypatch.setattr(httpx.Client, "post", _post)
+    monkeypatch.setattr(httpx.Client, "get", _fake_get)
+    monkeypatch.setattr(gpu_provider, "Connection", _FakeConn)
+
+    meter = CostMeter(str(tmp_path / "gpu.db"))
+    with RunPodSession(
+        meter,
+        template_id="tmpl-x",
+        gpu_type=["NVIDIA GeForce RTX 3090", "NVIDIA GeForce RTX 4090"],
+        idle_soft=9999,
+        idle_hard=9999,
+    ) as pod:
+        assert pod.pod_id == "fake-pod-4090"
+
+    # Two POSTs to /pods, one per id, each a single-element list (not the union).
+    pods_posts = [p for p in posts]
+    assert [p["gpuTypeIds"] for p in pods_posts] == [
+        ["NVIDIA GeForce RTX 3090"],
+        ["NVIDIA GeForce RTX 4090"],
+    ]
 
 
 @pytest.mark.live
