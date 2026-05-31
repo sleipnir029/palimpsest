@@ -85,55 +85,70 @@ def parse_with_cache(
         template_id = os.environ[spec["template_id_env"]]
         # idle_hard=2400 covers the chandra worst case (≈1700s on a 12-page paper,
         # T17 pod-verify); ssh timeout=2400 matches. Larger corpora need more.
-        with RunPodSession(
-            cost_meter,
-            template_id=template_id,
-            gpu_type=gpus,
-            cloud=cloud,
-            idle_soft=60,
-            idle_hard=2400,
-        ) as pod:
-            pod.ssh("mkdir -p /workspace/in /workspace/out")
-            for sha, pdf in unseen:
-                try:
-                    pod.pending_work = True
-                    pod.scp_up(pdf, f"/workspace/in/{pdf.name}")
-                    cmd = spec["run_cmd"](f"in/{pdf.name}", "out")
-                    t0 = time.monotonic()
-                    pod.ssh(cmd, timeout=2400)
-                    seconds = time.monotonic() - t0
+        # The OUTER try/except guards RunPodSession.__enter__ — pod create or SSH
+        # handshake can fail (T16 live verify saw a transient HTTP 500 on paddle
+        # POST /pods after 4 prior parsers succeeded). A pod-level failure must not
+        # crash the whole batch; this parser's cells are omitted from result and the
+        # loop advances to the next parser.
+        try:
+            with RunPodSession(
+                cost_meter,
+                template_id=template_id,
+                gpu_type=gpus,
+                cloud=cloud,
+                idle_soft=60,
+                idle_hard=2400,
+            ) as pod:
+                pod.ssh("mkdir -p /workspace/in /workspace/out")
+                for sha, pdf in unseen:
+                    try:
+                        pod.pending_work = True
+                        pod.scp_up(pdf, f"/workspace/in/{pdf.name}")
+                        cmd = spec["run_cmd"](f"in/{pdf.name}", "out")
+                        t0 = time.monotonic()
+                        pod.ssh(cmd, timeout=2400)
+                        seconds = time.monotonic() - t0
 
-                    pod_out = spec["pod_output"](f"in/{pdf.name}", "out")
-                    cache_dir = cache.cache_dir / sha
-                    cache_dir.mkdir(parents=True, exist_ok=True)
-                    local_path = cache_dir / f"{parser_name}{Path(pod_out).suffix}"
-                    pod.scp_down(pod_out, local_path)
+                        pod_out = spec["pod_output"](f"in/{pdf.name}", "out")
+                        cache_dir = cache.cache_dir / sha
+                        cache_dir.mkdir(parents=True, exist_ok=True)
+                        local_path = (
+                            cache_dir / f"{parser_name}{Path(pod_out).suffix}"
+                        )
+                        pod.scp_down(pod_out, local_path)
 
-                    # Per-paper cost = share of the pod's hourly rate over this parse's
-                    # wall seconds. cost_ledger (T05) carries the authoritative pod
-                    # total via _flush_bill at teardown; this row is for per-parser
-                    # attribution / analytics.
-                    cost_eur = (
-                        (seconds / 3600) * (pod.usd_per_hour or 0) * _EUR_PER_USD
-                    )
-                    cache.insert_parser_run(
-                        sha256=sha,
-                        parser_name=parser_name,
-                        parser_ver=spec["version"],
-                        output_path=str(local_path.relative_to(cache.cache_dir)),
-                        gpu_seconds=seconds,
-                        gpu_cost_eur=cost_eur,
-                        run_id=str(uuid.uuid4()),
-                    )
-                    result[sha][parser_name] = local_path
-                except Exception as e:
-                    # No parser_runs row → cache.has_all_parsers stays False for
-                    # (sha, parser) → a future call will retry. Log loudly.
-                    logger.error(
-                        "parser=%s sha=%s failed: %s",
-                        parser_name, sha[:12], e,
-                    )
-                finally:
-                    pod.pending_work = False
+                        # Per-paper cost = share of the pod's hourly rate over this
+                        # parse's wall seconds. cost_ledger (T05) carries the
+                        # authoritative pod total via _flush_bill at teardown; this
+                        # row is for per-parser attribution / analytics.
+                        cost_eur = (
+                            (seconds / 3600)
+                            * (pod.usd_per_hour or 0)
+                            * _EUR_PER_USD
+                        )
+                        cache.insert_parser_run(
+                            sha256=sha,
+                            parser_name=parser_name,
+                            parser_ver=spec["version"],
+                            output_path=str(local_path.relative_to(cache.cache_dir)),
+                            gpu_seconds=seconds,
+                            gpu_cost_eur=cost_eur,
+                            run_id=str(uuid.uuid4()),
+                        )
+                        result[sha][parser_name] = local_path
+                    except Exception as e:
+                        # Per-PDF failure: no parser_runs row → cache.has_all_parsers
+                        # stays False for (sha, parser) → future call retries.
+                        logger.error(
+                            "parser=%s sha=%s failed: %s",
+                            parser_name, sha[:12], e,
+                        )
+                    finally:
+                        pod.pending_work = False
+        except Exception as e:
+            # Pod-level failure (create/SSH/teardown raised). All this parser's
+            # unseen cells are left unfilled; loop continues to next parser.
+            logger.error("parser=%s pod failed: %s", parser_name, e)
+            continue
 
     return result
