@@ -38,6 +38,12 @@ RUN pip install --no-cache-dir --upgrade pip
 RUN pip install --no-cache-dir torch==2.7.0 torchvision==0.22.0 \
         --index-url https://download.pytorch.org/whl/cu128
 
+# Pin transformers BEFORE dots.ocr install: dots.ocr's trust_remote_code processor passes
+# video_processor=None; transformers >= 4.52 enforces this via check_argument_for_proper_class
+# and raises TypeError (T17 verify, 2026-05-31). dots.ocr README floor is 4.51.3 — exact-pin
+# so the dots install can't drag in a newer one.
+RUN pip install --no-cache-dir 'transformers==4.51.3'
+
 # Clone + install dots.ocr (it's `pip install -e .`, not on PyPI); it pulls transformers. Add
 # qwen-vl-utils (process_vision_info), pypdfium2 (PDF->image, used by dots_run.py), huggingface_hub
 # (weight bake). cu128 stays an EXTRA index so any torch reresolution keeps cu128 wheels.
