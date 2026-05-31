@@ -1,0 +1,399 @@
+id: https://w3id.org/palimpsest/v1
+name: palimpsest
+title: palimpsest OER extraction schema
+description: >-
+  LinkML schema for structured OER catalyst data extracted from research PDFs.
+  Aligned to EMMO Domain Electrochemistry (ECHO) for concepts, QUDT for units,
+  PROV-O for extraction provenance, and schema.org for bibliographic metadata.
+  palimpsest-local IRIs are used (with skos:closeMatch to nearest EMMO term)
+  where EMMO has not yet minted a concept; each such case carries a
+  TODO_EMMO_UPSTREAM: comment naming the term to request.
+license: MIT
+version: 0.1.0
+
+prefixes:
+  linkml:     https://w3id.org/linkml/
+  palimpsest: https://w3id.org/palimpsest/
+  emmo:       https://w3id.org/emmo/domain/electrochemistry#
+  qudt:       http://qudt.org/vocab/unit/
+  prov:       http://www.w3.org/ns/prov#
+  schema:     http://schema.org/
+  skos:       http://www.w3.org/2004/02/skos/core#
+  xsd:        http://www.w3.org/2001/XMLSchema#
+
+default_prefix: palimpsest
+default_range: string
+
+imports:
+  - linkml:types
+
+
+# ---- classes (14: matches T18 card §Output state) -------------------------
+
+classes:
+
+  Paper:
+    class_uri: schema:ScholarlyArticle
+    description: A research article that palimpsest has parsed.
+    slots:
+      - doi
+      - title
+      - authors
+      - sha256
+
+  Measurement:
+    abstract: true
+    class_uri: palimpsest:Measurement
+    description: Abstract base for any numeric OER metric extracted from a paper.
+    slots:
+      - value
+      - unit_label
+      - condition
+      - evidence
+
+  Overpotential:
+    is_a: Measurement
+    # Verified hash, palimpsest-v2-design.md Appendix E line 651.
+    class_uri: emmo:electrochemistry_1cd1d777_e67b_47eb_81f1_edac35d9f2c6
+    description: Deviation of the electrode potential from its equilibrium value.
+
+  TafelSlope:
+    is_a: Measurement
+    class_uri: palimpsest:TafelSlope
+    # TODO_EMMO_UPSTREAM: request TafelSlope / TafelEquation as siblings of
+    # ButlerVolmerEquation under ElectrochemicalRelation.
+    close_mappings:
+      - emmo:electrochemistry_d48ea516_5cac_4f86_bc88_21b6276c0938  # ButlerVolmerEquation
+    description: Slope of overpotential vs log(current density) in the Tafel region.
+
+  ExchangeCurrentDensity:
+    is_a: Measurement
+    # Hash resolved via emmo_iri("ExchangeCurrentDensity") against ECHO (2026-06-01).
+    class_uri: emmo:electrochemistry_e9fd9ef9_adfe_46cb_b2f9_4558468a25e7
+    description: Current density at zero overpotential; Butler-Volmer i0.
+
+  ChargeTransferCoefficient:
+    is_a: Measurement
+    # Verified hash, palimpsest-v2-design.md Appendix E line 656.
+    class_uri: emmo:electrochemistry_a4dfa5c1_55a9_4285_b71d_90cf6613ca31
+    description: Butler-Volmer alpha; fraction of overpotential affecting forward reaction.
+
+  MassActivity:
+    is_a: Measurement
+    class_uri: palimpsest:MassActivity
+    # TODO_EMMO_UPSTREAM: request MassActivity under Electrocatalyst-related metrics.
+    related_mappings:
+      - emmo:electrochemistry_a3b53904_22b1_42a9_a515_c8a3aed7e841  # Electrocatalyst
+    description: Catalytic current per unit mass of active material (A/g).
+
+  TurnoverFrequency:
+    is_a: Measurement
+    class_uri: palimpsest:TurnoverFrequency
+    # TODO_EMMO_UPSTREAM: request TurnoverFrequency as Electrocatalyst metric.
+    related_mappings:
+      - emmo:electrochemistry_a3b53904_22b1_42a9_a515_c8a3aed7e841  # Electrocatalyst
+    description: Catalytic events per active site per second.
+
+  ECSA:
+    is_a: Measurement
+    # Hash resolved via emmo_iri("ElectrochemicallyActiveSurfaceArea") against ECHO (2026-06-01).
+    class_uri: emmo:electrochemistry_bad1b6f4_1b26_40e2_b552_6d53873e3973
+    description: Electrochemically active surface area.
+
+  Catalyst:
+    # Verified hash (Electrocatalyst), palimpsest-v2-design.md Appendix E line 661.
+    class_uri: emmo:electrochemistry_a3b53904_22b1_42a9_a515_c8a3aed7e841
+    description: An electrocatalyst material under study.
+    slots:
+      - name
+      - composition
+      - support
+
+  Electrolyte:
+    class_uri: palimpsest:Electrolyte
+    # TODO_EMMO_UPSTREAM: request OER-electrolyte qualifier subclasses.
+    related_mappings:
+      - emmo:electrochemistry_6592d8cc_4ce4_42ca_b010_6bfc4a8444d2  # AcidicElectrolyte
+      - emmo:electrochemistry_615cff2a_be95_4e65_9471_98db23f4c878  # AlkalineElectrolyte
+    description: Electrolyte solution used in the electrochemical cell.
+    slots:
+      - formula
+      - concentration
+      - electrolyte_ph
+
+  Condition:
+    class_uri: palimpsest:Condition
+    description: Experimental conditions under which a measurement was taken.
+    slots:
+      - current_density
+      - electrode_potential_vs_rhe
+      - temperature_C
+      - electrolyte
+      - cell_type
+      - scan_rate
+
+  Evidence:
+    class_uri: prov:Entity
+    description: Provenance anchor for an extracted triple, per CLAUDE.md non-negotiable.
+    slots:
+      - paper
+      - page
+      - bbox
+      - source_text
+      - parser_name
+
+  OxygenEvolutionReaction:
+    class_uri: palimpsest:OxygenEvolutionReaction
+    # TODO_EMMO_UPSTREAM: request OxygenEvolutionReaction as subclass of AnodicReaction.
+    close_mappings:
+      - emmo:electrochemistry_a0580fa9_5073_44af_b33e_7adbc83892d0  # AnodicReaction
+    broad_mappings:
+      - emmo:electrochemistry_2e3e14f9_4cb8_45b2_908e_47eec893dec8  # ElectrodeReaction
+    description: The anodic half-reaction producing O2 from water.
+
+
+# ---- slots ---------------------------------------------------------------
+
+slots:
+
+  # --- bibliographic (schema.org) ---
+  doi:
+    range: string
+    slot_uri: schema:identifier
+    description: DOI of the paper.
+  title:
+    range: string
+    slot_uri: schema:name
+  authors:
+    range: string
+    multivalued: true
+    slot_uri: schema:author
+  sha256:
+    range: string
+    slot_uri: palimpsest:sha256
+    description: SHA-256 of the raw PDF bytes (T07 contract).
+
+  # --- Measurement base slots ---
+  value:
+    range: float
+    slot_uri: palimpsest:value
+    description: Numeric value of the measurement, in the unit named by unit_label.
+  unit_label:
+    range: string
+    slot_uri: palimpsest:unitLabel
+    description: Human-readable unit (e.g. "mV", "mA/cm2"); QUDT IRI on the typed class.
+
+  # --- OER metric slots (Appendix E rows 651-664) ---
+  overpotential_at_10mAcm2:
+    range: float
+    slot_uri: palimpsest:overpotentialAt10mAcm2
+    # TODO_EMMO_UPSTREAM: request OverpotentialAtBenchmarkCurrentDensity.
+    close_mappings:
+      - emmo:electrochemistry_1cd1d777_e67b_47eb_81f1_edac35d9f2c6  # Overpotential
+    unit:
+      ucum_code: mV
+      exact_mappings:
+        - qudt:MilliV
+    description: Overpotential required to reach 10 mA/cm2; conventional OER benchmark.
+
+  activation_overpotential:
+    range: float
+    # Verified hash, Appendix E line 652.
+    slot_uri: emmo:electrochemistry_7fa406b0_512a_4d59_9e0c_5d8aba0103ae
+    unit:
+      ucum_code: mV
+      exact_mappings:
+        - qudt:MilliV
+
+  anodic_overpotential:
+    range: float
+    # Verified hash, Appendix E line 653.
+    slot_uri: emmo:electrochemistry_565c0b10_70fe_441a_b76a_b9a8e08ca7b7
+    unit:
+      ucum_code: mV
+      exact_mappings:
+        - qudt:MilliV
+
+  tafel_slope:
+    range: float
+    slot_uri: palimpsest:tafelSlope
+    # TODO_EMMO_UPSTREAM: request TafelSlope / TafelEquation as siblings of ButlerVolmerEquation.
+    close_mappings:
+      - emmo:electrochemistry_d48ea516_5cac_4f86_bc88_21b6276c0938  # ButlerVolmerEquation
+    unit:
+      ucum_code: mV/decade
+      symbol: mV/dec
+    description: No QUDT term for "per decade"; symbol only, no exact_mappings.
+
+  exchange_current_density:
+    range: float
+    # Hash resolved via emmo_iri (2026-06-01).
+    slot_uri: emmo:electrochemistry_e9fd9ef9_adfe_46cb_b2f9_4558468a25e7
+    unit:
+      ucum_code: mA/cm2
+      exact_mappings:
+        - qudt:MilliA-PER-CentiM2
+
+  charge_transfer_coefficient:
+    range: float
+    # Verified hash, Appendix E line 656.
+    slot_uri: emmo:electrochemistry_a4dfa5c1_55a9_4285_b71d_90cf6613ca31
+    description: Dimensionless; no unit block.
+
+  ecsa:
+    range: float
+    # Hash resolved via emmo_iri (2026-06-01).
+    slot_uri: emmo:electrochemistry_bad1b6f4_1b26_40e2_b552_6d53873e3973
+    unit:
+      ucum_code: cm2
+      exact_mappings:
+        - qudt:CentiM2
+
+  mass_activity:
+    range: float
+    slot_uri: palimpsest:massActivity
+    # TODO_EMMO_UPSTREAM: request MassActivity under Electrocatalyst metrics.
+    related_mappings:
+      - emmo:electrochemistry_a3b53904_22b1_42a9_a515_c8a3aed7e841  # Electrocatalyst
+    unit:
+      ucum_code: A/g
+      exact_mappings:
+        - qudt:A-PER-GM
+
+  turnover_frequency:
+    range: float
+    slot_uri: palimpsest:turnoverFrequency
+    # TODO_EMMO_UPSTREAM: request TurnoverFrequency under Electrocatalyst metrics.
+    related_mappings:
+      - emmo:electrochemistry_a3b53904_22b1_42a9_a515_c8a3aed7e841
+    unit:
+      ucum_code: 1/s
+      exact_mappings:
+        - qudt:PER-SEC
+
+  oer_reaction:
+    range: OxygenEvolutionReaction
+    slot_uri: palimpsest:oerReaction
+
+  catalyst:
+    range: Catalyst
+    # Verified hash (Electrocatalyst), Appendix E line 661.
+    slot_uri: emmo:electrochemistry_a3b53904_22b1_42a9_a515_c8a3aed7e841
+
+  electrolyte_ph:
+    range: float
+    slot_uri: palimpsest:electrolytePH
+    related_mappings:
+      - emmo:electrochemistry_6592d8cc_4ce4_42ca_b010_6bfc4a8444d2  # AcidicElectrolyte
+      - emmo:electrochemistry_615cff2a_be95_4e65_9471_98db23f4c878  # AlkalineElectrolyte
+    unit:
+      ucum_code: "[pH]"
+
+  electrode_potential_vs_rhe:
+    range: float
+    slot_uri: palimpsest:potentialVsRHE
+    # TODO_EMMO_UPSTREAM: request reference-electrode-qualified subclasses
+    # (vs RHE, vs SHE, vs Ag/AgCl).
+    close_mappings:
+      - emmo:electrochemistry_f509645f_eb27_470e_9112_7ab828ed40d3  # ElectrodePotential
+    unit:
+      ucum_code: V
+      exact_mappings:
+        - qudt:V
+
+  scan_rate:
+    range: float
+    slot_uri: palimpsest:scanRate
+    related_mappings:
+      - emmo:electrochemistry_29f2a35a_8c09_429d_b9e8_33f3e1fc3671  # LinearPotentialRamp
+    unit:
+      ucum_code: mV/s
+      exact_mappings:
+        - qudt:MilliV-PER-SEC
+
+  # --- PROV-O provenance slots (Appendix E rows 665-667) ---
+  extracted_from:
+    range: Paper
+    slot_uri: prov:wasDerivedFrom
+  extracted_by:
+    range: string
+    slot_uri: prov:wasGeneratedBy
+  parsed_by:
+    range: string
+    slot_uri: prov:wasAttributedTo
+    description: Parser name and version (e.g. "docling@2.95.0").
+
+  # --- Evidence-anchor slots (palimpsest-local) ---
+  paper:
+    range: Paper
+    slot_uri: palimpsest:paper
+  page:
+    range: integer
+    slot_uri: palimpsest:page
+  bbox:
+    range: float
+    multivalued: true
+    minimum_cardinality: 4
+    maximum_cardinality: 4
+    slot_uri: palimpsest:bbox
+    description: Page-relative (x0, y0, x1, y1); exactly 4 floats.
+  source_text:
+    range: string
+    slot_uri: palimpsest:sourceText
+  parser_name:
+    range: string
+    slot_uri: palimpsest:parserName
+
+  # --- Condition cross-reference slots ---
+  condition:
+    range: Condition
+    slot_uri: palimpsest:condition
+  evidence:
+    range: Evidence
+    slot_uri: prov:hadPrimarySource
+
+  # --- Condition-internal slots ---
+  current_density:
+    range: float
+    slot_uri: palimpsest:currentDensity
+    unit:
+      ucum_code: mA/cm2
+      exact_mappings:
+        - qudt:MilliA-PER-CentiM2
+  temperature_C:
+    range: float
+    slot_uri: palimpsest:temperatureC
+    unit:
+      ucum_code: Cel
+      exact_mappings:
+        - qudt:DEG_C
+  electrolyte:
+    range: Electrolyte
+    slot_uri: palimpsest:electrolyte
+  cell_type:
+    range: string
+    slot_uri: palimpsest:cellType
+    description: e.g. "three-electrode half-cell", "MEA", "flow cell".
+
+  # --- Catalyst-internal slots ---
+  name:
+    range: string
+    slot_uri: schema:name
+  composition:
+    range: string
+    slot_uri: palimpsest:composition
+  support:
+    range: string
+    slot_uri: palimpsest:support
+
+  # --- Electrolyte-internal slots ---
+  formula:
+    range: string
+    slot_uri: palimpsest:formula
+  concentration:
+    range: float
+    slot_uri: palimpsest:concentration
+    unit:
+      ucum_code: mol/L
+      exact_mappings:
+        - qudt:MOL-PER-L
