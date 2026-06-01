@@ -12,55 +12,6 @@ emmo:electrochemistry_1cd1d777_e67b_47eb_81f1_edac35d9f2c6 a sh:NodeShape ;
     rdfs:comment "Deviation of the electrode potential from its equilibrium value." ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:class prov:Entity ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:BlankNodeOrIRI ;
-            sh:order 3 ;
-            sh:path prov:hadPrimarySource ],
-        [ sh:datatype xsd:string ;
-            sh:description "Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class." ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 1 ;
-            sh:path palimpsest:unitLabel ],
-        [ sh:class palimpsest:Condition ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:BlankNodeOrIRI ;
-            sh:order 2 ;
-            sh:path palimpsest:condition ],
-        [ sh:datatype xsd:float ;
-            sh:description "Numeric value of the measurement, in the unit named by unit_label." ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 0 ;
-            sh:path palimpsest:value ] ;
-    sh:targetClass emmo:electrochemistry_1cd1d777_e67b_47eb_81f1_edac35d9f2c6 .
-
-emmo:electrochemistry_a3b53904_22b1_42a9_a515_c8a3aed7e841 a sh:NodeShape ;
-    rdfs:comment "An electrocatalyst material under study." ;
-    sh:closed true ;
-    sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 2 ;
-            sh:path palimpsest:support ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 1 ;
-            sh:path palimpsest:composition ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 0 ;
-            sh:path schema1:name ] ;
-    sh:targetClass emmo:electrochemistry_a3b53904_22b1_42a9_a515_c8a3aed7e841 .
-
-emmo:electrochemistry_a4dfa5c1_55a9_4285_b71d_90cf6613ca31 a sh:NodeShape ;
-    rdfs:comment "Butler-Volmer alpha; fraction of overpotential affecting forward reaction." ;
-    sh:closed true ;
-    sh:ignoredProperties ( rdf:type ) ;
     sh:property [ sh:datatype xsd:float ;
             sh:description "Numeric value of the measurement, in the unit named by unit_label." ;
             sh:maxCount 1 ;
@@ -83,38 +34,31 @@ emmo:electrochemistry_a4dfa5c1_55a9_4285_b71d_90cf6613ca31 a sh:NodeShape ;
             sh:nodeKind sh:BlankNodeOrIRI ;
             sh:order 2 ;
             sh:path palimpsest:condition ] ;
-    sh:targetClass emmo:electrochemistry_a4dfa5c1_55a9_4285_b71d_90cf6613ca31 .
+    sh:targetClass emmo:electrochemistry_1cd1d777_e67b_47eb_81f1_edac35d9f2c6 .
 
-emmo:electrochemistry_bad1b6f4_1b26_40e2_b552_6d53873e3973 a sh:NodeShape ;
-    rdfs:comment "Electrochemically active surface area." ;
+emmo:electrochemistry_a3b53904_22b1_42a9_a515_c8a3aed7e841 a sh:NodeShape ;
+    rdfs:comment "An electrocatalyst material under study." ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:class prov:Entity ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:BlankNodeOrIRI ;
-            sh:order 3 ;
-            sh:path prov:hadPrimarySource ],
-        [ sh:datatype xsd:string ;
-            sh:description "Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class." ;
+    sh:property [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 1 ;
-            sh:path palimpsest:unitLabel ],
-        [ sh:class palimpsest:Condition ;
+            sh:path palimpsest:composition ],
+        [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
-            sh:nodeKind sh:BlankNodeOrIRI ;
+            sh:nodeKind sh:Literal ;
             sh:order 2 ;
-            sh:path palimpsest:condition ],
-        [ sh:datatype xsd:float ;
-            sh:description "Numeric value of the measurement, in the unit named by unit_label." ;
+            sh:path palimpsest:support ],
+        [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 0 ;
-            sh:path palimpsest:value ] ;
-    sh:targetClass emmo:electrochemistry_bad1b6f4_1b26_40e2_b552_6d53873e3973 .
+            sh:path schema1:name ] ;
+    sh:targetClass emmo:electrochemistry_a3b53904_22b1_42a9_a515_c8a3aed7e841 .
 
-emmo:electrochemistry_e9fd9ef9_adfe_46cb_b2f9_4558468a25e7 a sh:NodeShape ;
-    rdfs:comment "Current density at zero overpotential; Butler-Volmer i0." ;
+emmo:electrochemistry_a4dfa5c1_55a9_4285_b71d_90cf6613ca31 a sh:NodeShape ;
+    rdfs:comment "Butler-Volmer alpha; fraction of overpotential affecting forward reaction." ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
     sh:property [ sh:class prov:Entity ;
@@ -139,72 +83,10 @@ emmo:electrochemistry_e9fd9ef9_adfe_46cb_b2f9_4558468a25e7 a sh:NodeShape ;
             sh:nodeKind sh:Literal ;
             sh:order 1 ;
             sh:path palimpsest:unitLabel ] ;
-    sh:targetClass emmo:electrochemistry_e9fd9ef9_adfe_46cb_b2f9_4558468a25e7 .
+    sh:targetClass emmo:electrochemistry_a4dfa5c1_55a9_4285_b71d_90cf6613ca31 .
 
-palimpsest:MassActivity a sh:NodeShape ;
-    rdfs:comment "Catalytic current per unit mass of active material (A/g)." ;
-    sh:closed true ;
-    sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:class prov:Entity ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:BlankNodeOrIRI ;
-            sh:order 3 ;
-            sh:path prov:hadPrimarySource ],
-        [ sh:class palimpsest:Condition ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:BlankNodeOrIRI ;
-            sh:order 2 ;
-            sh:path palimpsest:condition ],
-        [ sh:datatype xsd:string ;
-            sh:description "Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class." ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 1 ;
-            sh:path palimpsest:unitLabel ],
-        [ sh:datatype xsd:float ;
-            sh:description "Numeric value of the measurement, in the unit named by unit_label." ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 0 ;
-            sh:path palimpsest:value ] ;
-    sh:targetClass palimpsest:MassActivity .
-
-palimpsest:Measurement a sh:NodeShape ;
-    rdfs:comment "Abstract base for any numeric OER metric extracted from a paper." ;
-    sh:closed false ;
-    sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:class prov:Entity ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:BlankNodeOrIRI ;
-            sh:order 3 ;
-            sh:path prov:hadPrimarySource ],
-        [ sh:datatype xsd:float ;
-            sh:description "Numeric value of the measurement, in the unit named by unit_label." ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 0 ;
-            sh:path palimpsest:value ],
-        [ sh:datatype xsd:string ;
-            sh:description "Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class." ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 1 ;
-            sh:path palimpsest:unitLabel ],
-        [ sh:class palimpsest:Condition ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:BlankNodeOrIRI ;
-            sh:order 2 ;
-            sh:path palimpsest:condition ] ;
-    sh:targetClass palimpsest:Measurement .
-
-palimpsest:OxygenEvolutionReaction a sh:NodeShape ;
-    rdfs:comment "The anodic half-reaction producing O2 from water." ;
-    sh:closed true ;
-    sh:ignoredProperties ( rdf:type ) ;
-    sh:targetClass palimpsest:OxygenEvolutionReaction .
-
-palimpsest:TafelSlope a sh:NodeShape ;
-    rdfs:comment "Slope of overpotential vs log(current density) in the Tafel region." ;
+emmo:electrochemistry_bad1b6f4_1b26_40e2_b552_6d53873e3973 a sh:NodeShape ;
+    rdfs:comment "Electrochemically active surface area." ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
     sh:property [ sh:datatype xsd:float ;
@@ -229,6 +111,124 @@ palimpsest:TafelSlope a sh:NodeShape ;
             sh:nodeKind sh:BlankNodeOrIRI ;
             sh:order 3 ;
             sh:path prov:hadPrimarySource ] ;
+    sh:targetClass emmo:electrochemistry_bad1b6f4_1b26_40e2_b552_6d53873e3973 .
+
+emmo:electrochemistry_e9fd9ef9_adfe_46cb_b2f9_4558468a25e7 a sh:NodeShape ;
+    rdfs:comment "Current density at zero overpotential; Butler-Volmer i0." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:class prov:Entity ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:BlankNodeOrIRI ;
+            sh:order 3 ;
+            sh:path prov:hadPrimarySource ],
+        [ sh:class palimpsest:Condition ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:BlankNodeOrIRI ;
+            sh:order 2 ;
+            sh:path palimpsest:condition ],
+        [ sh:datatype xsd:string ;
+            sh:description "Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class." ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path palimpsest:unitLabel ],
+        [ sh:datatype xsd:float ;
+            sh:description "Numeric value of the measurement, in the unit named by unit_label." ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 0 ;
+            sh:path palimpsest:value ] ;
+    sh:targetClass emmo:electrochemistry_e9fd9ef9_adfe_46cb_b2f9_4558468a25e7 .
+
+palimpsest:MassActivity a sh:NodeShape ;
+    rdfs:comment "Catalytic current per unit mass of active material (A/g)." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:datatype xsd:float ;
+            sh:description "Numeric value of the measurement, in the unit named by unit_label." ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 0 ;
+            sh:path palimpsest:value ],
+        [ sh:datatype xsd:string ;
+            sh:description "Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class." ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path palimpsest:unitLabel ],
+        [ sh:class palimpsest:Condition ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:BlankNodeOrIRI ;
+            sh:order 2 ;
+            sh:path palimpsest:condition ],
+        [ sh:class prov:Entity ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:BlankNodeOrIRI ;
+            sh:order 3 ;
+            sh:path prov:hadPrimarySource ] ;
+    sh:targetClass palimpsest:MassActivity .
+
+palimpsest:Measurement a sh:NodeShape ;
+    rdfs:comment "Abstract base for any numeric OER metric extracted from a paper." ;
+    sh:closed false ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:class palimpsest:Condition ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:BlankNodeOrIRI ;
+            sh:order 2 ;
+            sh:path palimpsest:condition ],
+        [ sh:datatype xsd:float ;
+            sh:description "Numeric value of the measurement, in the unit named by unit_label." ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 0 ;
+            sh:path palimpsest:value ],
+        [ sh:class prov:Entity ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:BlankNodeOrIRI ;
+            sh:order 3 ;
+            sh:path prov:hadPrimarySource ],
+        [ sh:datatype xsd:string ;
+            sh:description "Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class." ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path palimpsest:unitLabel ] ;
+    sh:targetClass palimpsest:Measurement .
+
+palimpsest:OxygenEvolutionReaction a sh:NodeShape ;
+    rdfs:comment "The anodic half-reaction producing O2 from water." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:targetClass palimpsest:OxygenEvolutionReaction .
+
+palimpsest:TafelSlope a sh:NodeShape ;
+    rdfs:comment "Slope of overpotential vs log(current density) in the Tafel region." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:class prov:Entity ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:BlankNodeOrIRI ;
+            sh:order 3 ;
+            sh:path prov:hadPrimarySource ],
+        [ sh:class palimpsest:Condition ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:BlankNodeOrIRI ;
+            sh:order 2 ;
+            sh:path palimpsest:condition ],
+        [ sh:datatype xsd:string ;
+            sh:description "Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class." ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path palimpsest:unitLabel ],
+        [ sh:datatype xsd:float ;
+            sh:description "Numeric value of the measurement, in the unit named by unit_label." ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 0 ;
+            sh:path palimpsest:value ] ;
     sh:targetClass palimpsest:TafelSlope .
 
 palimpsest:TurnoverFrequency a sh:NodeShape ;
@@ -246,17 +246,17 @@ palimpsest:TurnoverFrequency a sh:NodeShape ;
             sh:nodeKind sh:Literal ;
             sh:order 0 ;
             sh:path palimpsest:value ],
+        [ sh:class palimpsest:Condition ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:BlankNodeOrIRI ;
+            sh:order 2 ;
+            sh:path palimpsest:condition ],
         [ sh:datatype xsd:string ;
             sh:description "Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class." ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 1 ;
-            sh:path palimpsest:unitLabel ],
-        [ sh:class palimpsest:Condition ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:BlankNodeOrIRI ;
-            sh:order 2 ;
-            sh:path palimpsest:condition ] ;
+            sh:path palimpsest:unitLabel ] ;
     sh:targetClass palimpsest:TurnoverFrequency .
 
 schema1:ScholarlyArticle a sh:NodeShape ;
@@ -264,38 +264,33 @@ schema1:ScholarlyArticle a sh:NodeShape ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
     sh:property [ sh:datatype xsd:string ;
-            sh:description "DOI of the paper." ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 0 ;
-            sh:path schema1:identifier ],
-        [ sh:datatype xsd:string ;
             sh:description "SHA-256 of the raw PDF bytes (T07 contract)." ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 3 ;
             sh:path palimpsest:sha256 ],
         [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path schema1:author ],
+        [ sh:datatype xsd:string ;
+            sh:description "DOI of the paper." ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 0 ;
+            sh:path schema1:identifier ],
+        [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 1 ;
-            sh:path schema1:name ],
-        [ sh:datatype xsd:string ;
-            sh:nodeKind sh:Literal ;
-            sh:order 2 ;
-            sh:path schema1:author ] ;
+            sh:path schema1:name ] ;
     sh:targetClass schema1:ScholarlyArticle .
 
 palimpsest:Electrolyte a sh:NodeShape ;
     rdfs:comment "Electrolyte solution used in the electrochemical cell." ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 0 ;
-            sh:path palimpsest:formula ],
-        [ sh:datatype xsd:float ;
+    sh:property [ sh:datatype xsd:float ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 1 ;
@@ -304,40 +299,48 @@ palimpsest:Electrolyte a sh:NodeShape ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 2 ;
-            sh:path palimpsest:electrolytePH ] ;
+            sh:path palimpsest:electrolytePH ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 0 ;
+            sh:path palimpsest:formula ] ;
     sh:targetClass palimpsest:Electrolyte .
 
 prov:Entity a sh:NodeShape ;
     rdfs:comment "Provenance anchor for an extracted triple, per CLAUDE.md non-negotiable." ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 4 ;
-            sh:path palimpsest:parserName ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 3 ;
-            sh:path palimpsest:sourceText ],
-        [ sh:datatype xsd:float ;
+    sh:property [ sh:datatype xsd:float ;
             sh:description "Page-relative (x0, y0, x1, y1); exactly 4 floats." ;
             sh:maxCount 4 ;
             sh:minCount 4 ;
             sh:nodeKind sh:Literal ;
             sh:order 2 ;
             sh:path palimpsest:bbox ],
+        [ sh:class schema1:ScholarlyArticle ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:BlankNodeOrIRI ;
+            sh:order 0 ;
+            sh:path palimpsest:paper ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 4 ;
+            sh:path palimpsest:parserName ],
         [ sh:datatype xsd:integer ;
             sh:maxCount 1 ;
+            sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 1 ;
             sh:path palimpsest:page ],
-        [ sh:class schema1:ScholarlyArticle ;
+        [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
-            sh:nodeKind sh:BlankNodeOrIRI ;
-            sh:order 0 ;
-            sh:path palimpsest:paper ] ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path palimpsest:sourceText ] ;
     sh:targetClass prov:Entity .
 
 palimpsest:Condition a sh:NodeShape ;
@@ -347,16 +350,6 @@ palimpsest:Condition a sh:NodeShape ;
     sh:property [ sh:datatype xsd:float ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 2 ;
-            sh:path palimpsest:temperatureC ],
-        [ sh:datatype xsd:float ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 5 ;
-            sh:path palimpsest:scanRate ],
-        [ sh:datatype xsd:float ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
             sh:order 1 ;
             sh:path palimpsest:potentialVsRHE ],
         [ sh:class palimpsest:Electrolyte ;
@@ -364,6 +357,11 @@ palimpsest:Condition a sh:NodeShape ;
             sh:nodeKind sh:BlankNodeOrIRI ;
             sh:order 3 ;
             sh:path palimpsest:electrolyte ],
+        [ sh:datatype xsd:float ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 0 ;
+            sh:path palimpsest:currentDensity ],
         [ sh:datatype xsd:string ;
             sh:description "e.g. \"three-electrode half-cell\", \"MEA\", \"flow cell\"." ;
             sh:maxCount 1 ;
@@ -373,8 +371,13 @@ palimpsest:Condition a sh:NodeShape ;
         [ sh:datatype xsd:float ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 0 ;
-            sh:path palimpsest:currentDensity ] ;
+            sh:order 5 ;
+            sh:path palimpsest:scanRate ],
+        [ sh:datatype xsd:float ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path palimpsest:temperatureC ] ;
     sh:targetClass palimpsest:Condition .
 
 
