@@ -40,7 +40,7 @@ Fitting across both regions blends two physical regimes. Always record:
 
 - `tafel_fit_j_min` (mA cm⁻²)
 - `tafel_fit_j_max` (mA cm⁻²)
-- `iR_correction` (true / false / unknown)
+- `iR_correction` (applied / not_applied / unknown — matches UNIVERSAL_ENUMS in `src/palimpsest/normalize.py`)
 
 If the paper shows the Tafel plot but does not report numeric fit bounds,
 estimate them from the plot and flag them as `extracted_from_figure`.

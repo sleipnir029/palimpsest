@@ -64,9 +64,9 @@ def test_build_normalization_prompt_contains_both_layers():
     [
         # Enum collision (card-literal).
         ("domain: bad-skill\niR_correction: [yes, no]\n", "iR_correction"),
-        # Unit collision (advisor-widened): a domain redefining tafel_slope
+        # Unit collision (advisor-widened): a domain redefining temperature_C
         # would silently contradict the universal "Canonical units" section.
-        ("domain: bad-skill\ntafel_slope: V/decade\n", "tafel_slope"),
+        ("domain: bad-skill\ntemperature_C: F\n", "temperature_C"),
     ],
 )
 def test_overlay_conflict_raises(tmp_path, colliding_yaml, collision_key):
