@@ -32,3 +32,8 @@ palimpsest = { path = ".", editable = true }
 
 [tasks]
 test = "pytest -v"
+schema-pydantic = "gen-pydantic schema/palimpsest.yaml > schema/generated/pydantic.py"
+schema-shacl = "gen-shacl schema/palimpsest.yaml > schema/generated/shacl.ttl"
+schema-jsonld = "gen-jsonld-context schema/palimpsest.yaml > schema/generated/context.jsonld"
+schema-jsonschema = "gen-json-schema schema/palimpsest.yaml > schema/generated/jsonschema.json"
+schema = { depends-on = ["schema-pydantic", "schema-shacl", "schema-jsonld", "schema-jsonschema"] }
