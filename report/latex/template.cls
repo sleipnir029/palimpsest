@@ -1,4 +1,4 @@
-\LoadClass[a4paper,12pt]{article}
+\LoadClass[a4paper,11pt]{article}
 
 %--------------------------------------
 
@@ -23,10 +23,11 @@
 \RequirePackage{fancyhdr}
 \RequirePackage{url}
 \RequirePackage{geometry}
-\geometry{left=2.5cm, right=2.5cm, top=2cm, bottom=5.5cm}
+\geometry{left=3.5cm, right=3.5cm, top=2cm, bottom=4cm, footskip=2.5cm}
 \RequirePackage{tabularx}
 \RequirePackage{longtable}
 \RequirePackage{microtype}
+\RequirePackage{parskip} % block paragraphs: no indent, half-line gap (patches lists/TOC)
 \RequirePackage{listings}
 \RequirePackage[most, breakable, skins, theorems]{tcolorbox}
 \RequirePackage{eurosym}
@@ -47,16 +48,19 @@
 \definecolor{rwth_blue}{RGB}{0, 84, 159}
 
 \newlength{\blasonYshift}
-\setlength{\blasonYshift}{-3cm}
+\setlength{\blasonYshift}{-2.2cm}
 \newlength{\logoYshift}
 \setlength{\logoYshift}{3.1cm}
 
 %--------------------------------------
 
 \renewcommand{\headrulewidth}{0pt} % no header rule
-\setlength{\footskip}{4cm}
+\setlength{\footskip}{2.5cm}
+\setlength{\parskip}{0.6\baselineskip plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em} % avoid rare overfull lines on the narrower measure
 \setlist[itemize]{label=\textbullet}
 \setlist[itemize,2]{label=\textbf{--}}
+\setlist{topsep=2pt, itemsep=2pt, parsep=0pt} % keep lists tight under the new \parskip
 
 %--------------------------------------
 
@@ -123,8 +127,8 @@
         \begin{tikzpicture}[remember picture,overlay]
             \node[inner sep=0pt,anchor=south east] (crest)
                 at ([yshift=\blasonYshift]current page text area.south east)
-                {\includegraphics[height=1.5cm]{logos/blason_blue.png}};
-            \node[text=white,font=\bfseries] at (crest.center) {\thepage};
+                {\includegraphics[height=0.9cm]{logos/blason_blue.png}};
+            \node[text=white,font=\footnotesize\bfseries] at (crest.center) {\thepage};
         \end{tikzpicture}%
     }
 }

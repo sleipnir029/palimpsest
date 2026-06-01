@@ -41,7 +41,7 @@ We use one field as a running demonstrator: energy-materials electrocatalysis, a
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.88\textwidth]{scattered-quantity.png}
+    \includegraphics[width=0.98\textwidth]{scattered-quantity.png}
     \caption{The same logical measurement scattered across a paper's text, a table, and a figure under different names, units, and locations, with no shared machine-actionable record linking them. Values are illustrative.}
     \label{fig:scattered}
 \end{figure}
@@ -131,7 +131,7 @@ This section presents the system design and the planned evaluation methodology. 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{architecture.png}
+    \includegraphics[width=0.58\textwidth]{architecture.png}
     \caption{End-to-end pipeline. A PDF is hashed once, parsed by each of the five parsers on isolated GPU pods, and cached; the extraction agent reads cached output, extracts and validates measurements against the LinkML schema, and writes them, with full provenance, into the ontology-aligned RDF graph, which is then queryable by SPARQL and inspectable in the viewer. The cost meter and interchangeable model backends gate the agent's loop. The agent itself is domain-agnostic: the loaded skill (here, OER extraction) and its schema supply the domain, so substituting the skill retargets the same pipeline at another field.}
     \label{fig:architecture}
 \end{figure}
@@ -180,7 +180,7 @@ These metrics are stated in the future tense deliberately. At the time of writin
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.62\textwidth]{eval-methodology.png}
+    \includegraphics[width=0.72\textwidth]{eval-methodology.png}
     \caption{The parser-evaluation methodology. A development set authors the schema and skill; the held-out evaluation corpus is parsed by all five parsers into a frozen cache, and a fixed extraction model is applied. The accuracy metrics are scored against a hand-labelled subset. The apparatus is shown, not any results.}
     \label{fig:eval}
 \end{figure}
@@ -226,7 +226,7 @@ Authoring a skill for a new field follows the same hybrid path: the agent is dir
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{skill-mechanism.png}
+    \includegraphics[width=0.58\textwidth]{skill-mechanism.png}
     \caption{Schema and skill mechanism, in two phases. A domain is authored once: an authoritative LinkML schema and its SKILL.md, built from domain knowledge and, for a genuinely new field, seeded by exploring a sample of its papers. Per paper, the schema-first core validates and inserts only measurements the schema covers; a value it does not cover is not dropped but drafted into an exploratory file for manual review and promotion back into the schema --- the explore-first escape hatch. The agent loop is unchanged; a new field is a new skill plus schema.}
     \label{fig:skill}
 \end{figure}
@@ -245,7 +245,7 @@ This discipline is what makes the resulting graph suitable to build upon. A quer
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{provenance-model.png}
+    \includegraphics[width=1.0\textwidth]{provenance-model.png}
     \caption{The provenance data model. Each measurement is bound by PROV-O to its source paper and extraction activity (page, bbox, parser, run-id) and to EMMO and QUDT terms. The structure is shown with illustrative values; the graph is not populated here.}
     \label{fig:provenance}
 \end{figure}
@@ -299,7 +299,7 @@ Several limitations bound the claims this study can support. The evaluation corp
 Beyond the limitations on what may be claimed, the project has encountered, and anticipates, a number of engineering and methodological challenges. Table 2 records the principal ones, their current status, and the corresponding mitigation or resolution plan. We distinguish challenges already encountered (\textit{faced}), those expected as the work proceeds (\textit{anticipated}), and those that are continuous (\textit{ongoing}).
 
 {\small
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{4.2cm} >{\raggedright\arraybackslash}p{2.2cm} >{\raggedright\arraybackslash}p{8.0cm}@{}}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{3.5cm} >{\raggedright\arraybackslash}p{2.0cm} >{\raggedright\arraybackslash}p{7.4cm}@{}}
 \caption{Principal risks and challenges, their status, and the corresponding mitigations.}\label{tab:risks}\\
 \toprule
 \textbf{Risk / challenge} & \textbf{Status} & \textbf{Mitigation / resolution plan} \\
