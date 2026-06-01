@@ -50,10 +50,6 @@ This mini thesis makes four contributions, stated here as objectives and develop
 
 Conversion of a scientific PDF into structured text is an active research problem, and several distinct approaches are now available. We group them into three design families, and our comparison set spans all three.
 
-![Three parser design families and the five parsers](figures/parser-taxonomy.png)
-
-**Figure 2.** The three parser design families and the five parsers compared, with olmOCR shown as a related system excluded on practical grounds. See Table 1 for scales and licences.
-
 The first family is the classical computer-vision pipeline: a sequence of specialised, comparatively small models for layout detection, text detection and recognition, table-structure recognition, and formula parsing. PaddleOCR is a mature representative; its PP-StructureV3 solution composes sub-100-million-parameter models for layout analysis, the PP-OCRv5 detector and recogniser, and table-structure recognition, and reports accuracy competitive with substantially larger vision-language models at lower computational cost (PaddleOCR Team, 2025). IBM's docling is adjacent to this family, pairing layout analysis with the TableFormer table-structure model in a self-contained, MIT-licensed pipeline that converts PDFs to structured JSON or Markdown and recovers reading order and table cells (Auer et al., 2024). Recent releases deliver this functionality through the compact granite-docling-258M model, the variant we deploy.
 
 The second family is the decoupled, two-stage vision-language model, which separates global layout analysis from local transcription. MinerU2.5 is representative: a 1.2-billion-parameter model that first analyses layout on a downsampled image and then recognises content on native-resolution crops, confining high-resolution processing to the regions that require it (Niu et al., 2025).
@@ -84,10 +80,6 @@ The one structural convention we adopt is the skill: a folder containing a conci
 
 The motivation for structured extraction is its role in data-driven materials research. The Materials Genome Initiative and subsequent work established computation and shared data as a route to faster materials discovery (de Pablo et al., 2019), and machine-learning methods now use curated property datasets to predict materials behaviour and to guide search (Butler et al., 2018). More recently, autonomous or self-driving laboratories have begun to close the loop between prediction and experiment, selecting and executing the next measurement automatically (Abolhasani & Kumacheva, 2023). A constraint common to these approaches is the supply of trustworthy, machine-readable data: models must be trained, simulations parameterised, and candidates prioritised from property values that are consistent, unit-resolved, and traceable. Much of that data exists only in the prose, tables, and figures of the primary literature, which is the source palimpsest is built to convert.
 
-![palimpsest as the data layer of a materials-design loop](figures/materials-loop.png)
-
-**Figure 3.** palimpsest as the data layer of a data-driven materials-design loop. Extraction and curation are the scope of this work; the downstream stages (greyed) are enabled by the curated data but not performed here.
-
 ### 2.6 Summary of the gap
 
 In summary, existing work provides strong parsers but no task-grounded comparison of them on a scientific subdomain; effective LLM extraction methods that nonetheless assume clean input and rarely treat the parser as a variable; and mature ontologies for electrochemistry, units, and provenance, but limited tooling that binds an end-to-end extraction pipeline to all three while maintaining a complete provenance trail. Tooling that does so in a domain-agnostic manner, where supporting a new field requires authoring a skill rather than rewriting the extractor, is likewise lacking. Palimpsest addresses this gap.
@@ -110,13 +102,19 @@ Each figure of merit is meaningful only in conjunction with its conditions, so t
 
 ## 4. System design and methodology
 
-This section presents the system design and the planned evaluation methodology. Figure 4 shows the end-to-end pipeline, and the subsections that follow describe each component in turn.
+This section presents the system design and the planned evaluation methodology. Figure 2 shows the end-to-end pipeline, and the subsections that follow describe each component in turn.
 
 ![Palimpsest end-to-end architecture](figures/architecture.png)
 
-**Figure 4.** End-to-end pipeline. A PDF is hashed once, parsed by each of the five parsers on isolated GPU pods, and cached; the extraction agent reads cached output, extracts and validates measurements against the LinkML schema, and writes them, with full provenance, into the ontology-aligned RDF graph, which is then queryable by SPARQL and inspectable in the viewer. The cost meter and interchangeable model backends gate the agent's loop. The agent itself is domain-agnostic: the loaded skill (here, OER extraction) and its schema supply the domain, so substituting the skill retargets the same pipeline at another field.
+**Figure 2.** End-to-end pipeline. A PDF is hashed once, parsed by each of the five parsers on isolated GPU pods, and cached; the extraction agent reads cached output, extracts and validates measurements against the LinkML schema, and writes them, with full provenance, into the ontology-aligned RDF graph, which is then queryable by SPARQL and inspectable in the viewer. The cost meter and interchangeable model backends gate the agent's loop. The agent itself is domain-agnostic: the loaded skill (here, OER extraction) and its schema supply the domain, so substituting the skill retargets the same pipeline at another field.
 
-<!-- Figure 4 source: figures/architecture.mmd; vector figures/architecture.svg (for the LaTeX build) -->
+<!-- Figure 2 source: figures/architecture.mmd; vector figures/architecture.svg (for the LaTeX build).
+     Regenerate all figures with mermaid-cli using htmlLabels disabled at BOTH the top level and the
+     flowchart level (the flowchart-level flag alone is not enough), so the SVGs use native <text> rather
+     than <foreignObject> and render outside a browser. Example, with mmdc.json = {"htmlLabels": false,
+     "flowchart": {"htmlLabels": false, "useMaxWidth": false}}:
+       mmdc -i figures/<fig>.mmd -o figures/<fig>.svg -c mmdc.json -b white
+       mmdc -i figures/<fig>.mmd -o figures/<fig>.png -c mmdc.json -b white -w 1600 -s 2 -->
 
 ### 4.1 Agent architecture
 
@@ -154,7 +152,7 @@ These metrics are stated in the future tense deliberately. At the time of writin
 
 ![Parser evaluation methodology](figures/eval-methodology.png)
 
-**Figure 5.** The parser-evaluation methodology. A development set authors the schema and skill; the held-out evaluation corpus is parsed by all five parsers into a frozen cache, and a fixed extraction model is applied. The accuracy metrics are scored against a hand-labelled subset. The apparatus is shown, not any results.
+**Figure 3.** The parser-evaluation methodology. A development set authors the schema and skill; the held-out evaluation corpus is parsed by all five parsers into a frozen cache, and a fixed extraction model is applied. The accuracy metrics are scored against a hand-labelled subset. The apparatus is shown, not any results.
 
 ### 4.3 Schema strategy and skill-based extensibility
 
@@ -197,7 +195,7 @@ Authoring a skill for a new field uses the explore-first path: the agent is dire
 
 ![Skill and schema mechanism](figures/skill-mechanism.png)
 
-**Figure 6.** The schema-first core with an explore-first escape hatch, and how a new domain is packaged into a SKILL.md. The agent loop is unchanged; a new field is a new skill plus schema.
+**Figure 4.** The schema-first core with an explore-first escape hatch, and how a new domain is packaged into a SKILL.md. The agent loop is unchanged; a new field is a new skill plus schema.
 
 ### 4.4 Ontology alignment and the EMMO gap
 
@@ -213,15 +211,11 @@ This discipline is what makes the resulting graph suitable to build upon. A quer
 
 ![Provenance data model](figures/provenance-model.png)
 
-**Figure 7.** The provenance data model. Each measurement is bound by PROV-O to its source paper and extraction activity (page, bbox, parser, run-id) and to EMMO and QUDT terms. The structure is shown with illustrative values; the graph is not populated here.
+**Figure 5.** The provenance data model. Each measurement is bound by PROV-O to its source paper and extraction activity (page, bbox, parser, run-id) and to EMMO and QUDT terms. The structure is shown with illustrative values; the graph is not populated here.
 
 ### 4.6 Provenance viewer
 
 The provenance trail is usable only if it can be inspected directly, which is the function of the viewer: a single web page presenting the rendered PDF on the left and the extracted data on the right. Selecting a value highlights the region of the page from which it was extracted. The implementation is intentionally lightweight: a small server, a vendored PDF renderer, and hypermedia interactions rather than a single-page application. This is consistent with the overall minimalism of the system. Its purpose is verification: it makes provenance directly visible, which reduces the correction of an erroneous extraction to a brief inspection rather than a search through the source.
-
-![Provenance viewer mockup](figures/viewer-mockup.png)
-
-**Figure 8.** Schematic of the provenance viewer. Selecting an extracted value on the right highlights the source region on the rendered PDF on the left. Illustrative; the viewer is under development.
 
 ### 4.7 Cost governance
 
@@ -244,11 +238,6 @@ Several components that convert cached parser output into a validated, ontology-
 The parser comparison is designed to answer a question that practitioners face but that the literature has not addressed for this domain: which document parser best enables a language model to recover electrocatalysis figures of merit, and at what cost and throughput. We state our expectations as two hypotheses, each tested by the metrics of Section 4.2.
 
 **H1.** Transcription accuracy is a weak predictor of downstream extraction accuracy: the parser that maximises downstream accuracy (metric 6) will differ from the parser that maximises transcription accuracy (metric 1). This expectation follows from the second finding of Section 2.2, that extraction quality is bounded by the integrity of structured content rather than by aggregate text fidelity. We test H1 by comparing the two rankings on the hand-labelled subset and reject it if the same parser ranks first on both metrics. As a supporting descriptive measure, we report the Spearman rank correlation between the two orderings, which we expect to be low. Given the small number of parsers (n = 5), this correlation is reported descriptively rather than as a significance test.
-
-![Intuition behind H1](figures/h1-concept.png)
-
-**Figure 9.** The intuition behind H1. A parser that transcribes well but flattens table structure can deliver a value stripped of its column and unit context, so the transcription-accuracy ranking need not match the downstream-accuracy ranking. Conceptual, not a result.
-
 **H2.** Parsers that preserve table structure faithfully will yield higher downstream accuracy on this corpus than parsers with higher aggregate text fidelity but weaker table recovery, because the figures of merit in OER papers are concentrated in tables. We test H2 by relating per-parser table-cell F1 (metric 2) to downstream accuracy (metric 6), expecting a positive rank association, which we report descriptively given n = 5, as for H1. Because metric (6) is computed partly over table-bound quantities, a positive association is in part expected by construction; H2 is therefore informative chiefly through its failure modes, and would be contradicted by a parser with high table-cell F1 but low downstream accuracy, for instance one that recovers table structure yet misreads units or the cells carrying the qualifying conditions.
 
 The magnitude of these effects, if present, is the empirical contribution of the study. The result is also of practical use: it indicates, for this literature, which parser to adopt and on what basis. Because the comparison method is domain-general, the same procedure applied to another field's corpus would address the same question there; the electrocatalysis result, once produced, will be the first such data point rather than a general conclusion.
