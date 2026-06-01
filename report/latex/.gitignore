@@ -1,0 +1,12 @@
+# LaTeX build artifacts (regenerable via pdflatex / VSCode)
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.listing
+*.pdf
