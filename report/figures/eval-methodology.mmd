@@ -1,0 +1,26 @@
+flowchart TB
+    CORP["OER paper collection"]
+    DEV["Development set ~5 papers<br/>(authors schema + OER skill)"]
+    EVAL["Held-out evaluation corpus<br/>~25 papers"]
+    CORP --> DEV
+    CORP --> EVAL
+    subgraph PARSERS["Five parsers"]
+      direction LR
+      P1["docling"]
+      P2["MinerU2.5"]
+      P3["Chandra"]
+      P4["dots.ocr"]
+      P5["PaddleOCR"]
+    end
+    EVAL --> PARSERS
+    PARSERS --> CACHE[("Parse-once<br/>content-hash cache<br/>(frozen outputs)")]
+    CACHE --> EXT["Fixed extraction model"]
+    GT["Hand-labelled<br/>ground-truth subset<br/>~5 to 10 papers"]
+    CACHE --> M45["throughput, cost<br/>(full corpus)"]
+    GT --> M123["text accuracy (1)<br/>table-cell F1 (2)<br/>bbox precision (3)"]
+    EXT --> M6["downstream extraction<br/>accuracy (6): headline"]
+    GT --> M6
+    classDef aside fill:#f4f4f4,stroke:#bbb,color:#888
+    classDef head fill:#dde7ff,stroke:#3355aa,stroke-width:2px
+    class DEV aside
+    class M6 head

@@ -1,0 +1,16 @@
+flowchart TB
+    SRC["Source table cell<br/>η = 290 mV (illustrative)"]
+    SRC --> A["Parser A:<br/>high transcription fidelity,<br/>flattens table structure"]
+    SRC --> B["Parser B:<br/>preserves table structure"]
+    A --> AM["value reaches the model<br/>without column or unit context"]
+    B --> BM["value reaches the model<br/>with header and unit intact"]
+    AM --> AR["mis-binding likely"]
+    BM --> BR["correct extraction likely"]
+    AR -.-> NOTE["H1: the ranking by transcription accuracy<br/>need not match the ranking by<br/>downstream extraction accuracy"]
+    BR -.-> NOTE
+    classDef bad fill:#f7e0e0,stroke:#c77
+    classDef good fill:#e0f0e0,stroke:#7a7
+    classDef note fill:#f4f4f4,stroke:#bbb,color:#555
+    class AR bad
+    class BR good
+    class NOTE note

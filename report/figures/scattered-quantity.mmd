@@ -1,0 +1,14 @@
+flowchart TB
+    T["Running text:<br/>'an overpotential of 290 mV<br/>at 10 mA cm⁻²'"]
+    C["Table cell:<br/>column η / V shows 0.29"]
+    P["Tafel plot:<br/>value read off the axis"]
+    M(["One logical measurement:<br/>overpotential at 10 mA cm⁻²<br/>(illustrative)"])
+    T -->|"named 'overpotential'"| M
+    C -->|"unit V, not mV"| M
+    P -->|"only in the figure"| M
+    N["No shared, machine-actionable<br/>record links these three"]
+    M -.-> N
+    classDef src fill:#eef2ff,stroke:#3355aa
+    classDef note fill:#f4f4f4,stroke:#bbb,color:#555
+    class T,C,P src
+    class N note

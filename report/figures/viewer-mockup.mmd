@@ -1,0 +1,24 @@
+flowchart LR
+    subgraph LEFT["Left pane: rendered PDF page"]
+      direction TB
+      HEAD1["page header and toolbar"]
+      PDF["PDF page body"]
+      BBOX["highlighted region (bbox)<br/>around the source value"]
+      HEAD1 --- PDF
+      PDF --- BBOX
+    end
+    subgraph RIGHT["Right pane: extracted data"]
+      direction TB
+      HEAD2["extracted records for this paper"]
+      REC["overpotential = 290 mV at 10 mA cm⁻²<br/>(illustrative)<br/>conditions: 0.5 M H2SO4, RDE, scan rate<br/>provenance: paper hash, parser, page, bbox, run-id"]
+      ACT["click a value to highlight its source region"]
+      HEAD2 --- REC
+      REC --- ACT
+    end
+    BBOX <-->|"select and highlight"| REC
+    classDef pane fill:#f8f8f8,stroke:#999
+    classDef head fill:#eef2ff,stroke:#3355aa
+    class PDF,REC,ACT pane
+    class HEAD1,HEAD2 head
+    classDef hl fill:#fff3bf,stroke:#e0b400
+    class BBOX hl

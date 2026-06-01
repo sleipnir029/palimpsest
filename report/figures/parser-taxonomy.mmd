@@ -1,0 +1,18 @@
+flowchart TB
+    R["PDF document parsers"]
+    F1["Classical CV pipeline"]
+    F2["Decoupled two-stage VLM"]
+    F3["Unified single-model VLM"]
+    R --> F1
+    R --> F2
+    R --> F3
+    F1 --> P1["PaddleOCR PP-StructureV3"]
+    F1 --> P2["docling (granite-docling)"]
+    F2 --> P3["MinerU2.5"]
+    F3 --> P4["dots.ocr"]
+    F3 --> P5["Chandra"]
+    F3 -.-> P6["olmOCR<br/>(related, excluded)"]
+    classDef fam fill:#eef2ff,stroke:#3355aa,stroke-width:2px
+    classDef excl fill:#f0f0f0,stroke:#bbb,color:#888
+    class F1,F2,F3 fam
+    class P6 excl

@@ -21,6 +21,10 @@ Across the experimental sciences, the quantitative content of a paper is present
 
 We use one field as a running demonstrator: energy-materials electrocatalysis, and specifically the oxygen evolution reaction (OER) and PEM water electrolysis. We take it as representative rather than special. A single OER study reports a cluster of figures of merit such as the overpotential required to reach a current density of 10 mA cm⁻², the Tafel slope in millivolts per decade, the exchange current density, the electrochemically active surface area (ECSA), the mass activity, the turnover frequency, and a stability figure in hours, each qualified by its measurement conditions: the electrolyte and its pH, the potential referenced to the reversible hydrogen electrode, the scan rate, whether the data were *iR*-corrected, and whether a rotating-disc electrode or a full membrane-electrode assembly was used. The same quantity may be named differently across papers and located variously in running text, in a table cell, or only in a plotted Tafel curve. Consequently, a question as routine as which iridium-oxide catalyst reaches the lowest overpotential at 10 mA cm⁻² in acid cannot be answered without reading each paper individually. This difficulty is not specific to electrocatalysis; it characterises the quantitative literature of most experimental fields, which motivates a design that is not tied to a single domain.
 
+![Same quantity scattered across text, table, and figure](figures/scattered-quantity.png)
+
+**Figure 1.** The same logical measurement scattered across a paper's text, a table, and a figure under different names, units, and locations, with no shared machine-actionable record linking them. Values are illustrative.
+
 These characteristics correspond to the gap addressed by the FAIR principles, under which data should be Findable, Accessible, Interoperable, and Reusable, including reusable by machines and not only by human readers (Wilkinson et al., 2016). Measured against this standard, the quantitative content of the primary literature is largely non-compliant: the measurements are findable as PDFs but not as data, are not interoperable because they lack a shared vocabulary, and are not reusable without human intervention for each value.
 
 This deficiency matters because quantitative data are the input to data-driven materials research. Accelerated materials design is the use of computation, machine learning, and high-throughput methods to shorten the discovery and optimisation of materials. It depends on large, consistent, machine-readable property datasets to train models, parameterise simulations, and prioritise experiments (de Pablo et al., 2019; Butler et al., 2018), and the largest underused source of such data is the published literature itself. A pipeline that converts papers into curated, unit-normalised, ontology-aligned, provenance-bearing data therefore sits at the front of this workflow, supplying the data layer on which later analysis, simulation, and experiment depend. This need is not specific to materials: extraction, curation, and reuse with full traceback are foundational to any data-driven scientific system.
@@ -31,7 +35,7 @@ Palimpsest aims to render this content FAIR retrospectively, one corpus at a tim
 
 ### 1.3 Contributions
 
-This thesis makes four contributions, stated here as objectives and developed in Section 4:
+This mini thesis makes four contributions, stated here as objectives and developed in Section 4:
 
 1. A general, skill-extensible agentic workflow for extracting structured data from research papers: a minimal tool-using loop with interchangeable model backends and a fixed cost ceiling, in which each scientific domain is supplied by a self-contained skill and an ontology-aligned schema rather than by additional code.
 2. A parser comparison: a domain-general evaluation method, demonstrated first on the electrocatalysis corpus. Its principal metric is downstream extraction accuracy conditional on the parser, the accuracy with which a fixed language model recovers the target measurements from each parser's output, as distinct from transcription fidelity.
@@ -45,6 +49,10 @@ This thesis makes four contributions, stated here as objectives and developed in
 ### 2.1 Document parsing
 
 Conversion of a scientific PDF into structured text is an active research problem, and several distinct approaches are now available. We group them into three design families, and our comparison set spans all three.
+
+![Three parser design families and the five parsers](figures/parser-taxonomy.png)
+
+**Figure 2.** The three parser design families and the five parsers compared, with olmOCR shown as a related system excluded on practical grounds. See Table 1 for scales and licences.
 
 The first family is the classical computer-vision pipeline: a sequence of specialised, comparatively small models for layout detection, text detection and recognition, table-structure recognition, and formula parsing. PaddleOCR is a mature representative; its PP-StructureV3 solution composes sub-100-million-parameter models for layout analysis, the PP-OCRv5 detector and recogniser, and table-structure recognition, and reports accuracy competitive with substantially larger vision-language models at lower computational cost (PaddleOCR Team, 2025). IBM's docling is adjacent to this family, pairing layout analysis with the TableFormer table-structure model in a self-contained, MIT-licensed pipeline that converts PDFs to structured JSON or Markdown and recovers reading order and table cells (Auer et al., 2024). Recent releases deliver this functionality through the compact granite-docling-258M model, the variant we deploy.
 
@@ -76,6 +84,10 @@ The one structural convention we adopt is the skill: a folder containing a conci
 
 The motivation for structured extraction is its role in data-driven materials research. The Materials Genome Initiative and subsequent work established computation and shared data as a route to faster materials discovery (de Pablo et al., 2019), and machine-learning methods now use curated property datasets to predict materials behaviour and to guide search (Butler et al., 2018). More recently, autonomous or self-driving laboratories have begun to close the loop between prediction and experiment, selecting and executing the next measurement automatically (Abolhasani & Kumacheva, 2023). A constraint common to these approaches is the supply of trustworthy, machine-readable data: models must be trained, simulations parameterised, and candidates prioritised from property values that are consistent, unit-resolved, and traceable. Much of that data exists only in the prose, tables, and figures of the primary literature, which is the source palimpsest is built to convert.
 
+![palimpsest as the data layer of a materials-design loop](figures/materials-loop.png)
+
+**Figure 3.** palimpsest as the data layer of a data-driven materials-design loop. Extraction and curation are the scope of this work; the downstream stages (greyed) are enabled by the curated data but not performed here.
+
 ### 2.6 Summary of the gap
 
 In summary, existing work provides strong parsers but no task-grounded comparison of them on a scientific subdomain; effective LLM extraction methods that nonetheless assume clean input and rarely treat the parser as a variable; and mature ontologies for electrochemistry, units, and provenance, but limited tooling that binds an end-to-end extraction pipeline to all three while maintaining a complete provenance trail. Tooling that does so in a domain-agnostic manner, where supporting a new field requires authoring a skill rather than rewriting the extractor, is likewise lacking. Palimpsest addresses this gap.
@@ -92,25 +104,25 @@ The system is general but must be evaluated on a concrete corpus. Our demonstrat
 - **ECSA**, **mass activity**, and **turnover frequency**;
 - **Stability**, in hours, at a stated current density and cell type.
 
-Each figure of merit is meaningful only in conjunction with its conditions, so the data model treats a measurement and its conditions as a single unit (Section 4.3). The demonstrator vocabulary is deliberately narrow: a tightly scoped set of quantities makes reliable extraction and a meaningful ontology alignment achievable within a 10-credit project. This narrowness reflects the scope of a single skill, the unit from which further fields are added, rather than a constraint built into the agent.
+Each figure of merit is meaningful only in conjunction with its conditions, so the data model treats a measurement and its conditions as a single unit (Section 4.3). The demonstrator vocabulary is deliberately narrow: a tightly scoped set of quantities makes reliable extraction and a meaningful ontology alignment achievable within our mini thesis. This narrowness reflects the scope of a single skill, the unit from which further fields are added, rather than a constraint built into the agent.
 
 ---
 
 ## 4. System design and methodology
 
-This section presents the system design and the planned evaluation methodology. Figure 1 shows the end-to-end pipeline, and the subsections that follow describe each component in turn.
+This section presents the system design and the planned evaluation methodology. Figure 4 shows the end-to-end pipeline, and the subsections that follow describe each component in turn.
 
 ![Palimpsest end-to-end architecture](figures/architecture.png)
 
-**Figure 1.** End-to-end pipeline. A PDF is hashed once, parsed by each of the five parsers on isolated GPU pods, and cached; the extraction agent reads cached output, extracts and validates measurements against the LinkML schema, and writes them, with full provenance, into the ontology-aligned RDF graph, which is then queryable by SPARQL and inspectable in the viewer. The cost meter and interchangeable model backends gate the agent's loop. The agent itself is domain-agnostic: the loaded skill (here, OER extraction) and its schema supply the domain, so substituting the skill retargets the same pipeline at another field.
+**Figure 4.** End-to-end pipeline. A PDF is hashed once, parsed by each of the five parsers on isolated GPU pods, and cached; the extraction agent reads cached output, extracts and validates measurements against the LinkML schema, and writes them, with full provenance, into the ontology-aligned RDF graph, which is then queryable by SPARQL and inspectable in the viewer. The cost meter and interchangeable model backends gate the agent's loop. The agent itself is domain-agnostic: the loaded skill (here, OER extraction) and its schema supply the domain, so substituting the skill retargets the same pipeline at another field.
 
-<!-- Figure 1 source: figures/architecture.mmd; vector figures/architecture.svg (for the LaTeX build) -->
+<!-- Figure 4 source: figures/architecture.mmd; vector figures/architecture.svg (for the LaTeX build) -->
 
 ### 4.1 Agent architecture
 
 At its core, palimpsest is a single loop. The agent reads user input; a slash command (`/cost`, `/budget`, `/model`) is dispatched directly, while any other input is appended to the conversation and sent to the language model together with a cached system prompt and a set of tool definitions. The model responds, the agent records the cost of the call, and any tool calls in the response are executed and their results returned to the model. The loop repeats until the model issues no further tool calls. This constitutes the entire control flow.
 
-The remaining components are tools, storage, and the user interface. The primary model backend is a prompt-cached Claude model; the long-lived prefix, comprising the system prompt, schema, and active skill, is cached, so the marginal cost per paper is dominated by the small variable portion of each request. Fallback backends (a lower-cost Claude tier, and DeepSeek and Gemini models) are selectable at run time through `/model`, each implemented as a thin provider class exposing a single `complete(messages, tools)` method. No gateway or abstraction layer is interposed between the agent and the provider SDKs, so provider-specific features such as prompt-cache breakpoints are used directly.
+The remaining components are tools, storage, and the user interface. The primary model backend is a prompt-cached Claude (or Gemini, Deepseek) model; the long-lived prefix, comprising the system prompt, schema, and active skill, is cached, so the marginal cost per paper is dominated by the small variable portion of each request. Fallback backends (a lower-cost Claude tier, and DeepSeek and Gemini models) are selectable at run time through `/model`, each implemented as a thin provider class exposing a single `complete(messages, tools)` method. No gateway or abstraction layer is interposed between the agent and the provider SDKs, so provider-specific features such as prompt-cache breakpoints are used directly.
 
 We avoid an agent-orchestration framework deliberately. Such frameworks add abstractions, such as executors, graphs, and routers, that are heavier than the loop above and obscure the properties most relevant to a thesis: which operations the agent performed, in what order, and at what cost. The minimal loop keeps these properties explicit (Ball, 2025), is straightforward to reason about, and is small enough to be reviewed in full. Tools are implemented as plain Python functions registered in a dictionary rather than as services behind a protocol, which keeps the agent to a few hundred lines.
 
@@ -139,6 +151,10 @@ The set is intentionally heterogeneous: a non-VLM pipeline of small specialised 
 **Scoring of the downstream metric.** We score metric (6) as precision, recall, and F1 over extracted measurement records. A record is a tuple of figure-of-merit type, value, unit, and qualifying conditions. Each extracted record is matched to a ground-truth record on a key comprising the catalyst or system, the quantity type, and the defining condition of that quantity, for example the current density at which an overpotential is reported. Where the model emits more than one record for the same key, we retain a single record before scoring: the highest-confidence record, or the first in reading order where confidence is unavailable. At most one true positive is then credited per ground-truth record. A matched record is counted as correct when its value agrees with the ground-truth value within a fixed tolerance and its remaining qualifying conditions also agree, after unit normalisation through the QUDT alignment so that, for example, 310 mV and 0.31 V are treated as equal. A record whose conditions agree only in part is counted as incorrect. Tolerances are set per quantity to absorb unit-rounding and reporting precision when the same source is re-read, for example ±5 mV for overpotential and ±5 mV decade⁻¹ for the Tafel slope. Where no absolute tolerance is specified, the default is a ±5% relative band. Tolerances are fixed before scoring and are not intended to absorb inter-laboratory variation. Ground-truth records with no correctly matching extraction are false negatives and reduce recall. Extracted records that do not match, or that fall outside tolerance, are false positives and reduce precision. The headline metric-(6) score is the F1 over these records. An analogous record-matching rule, with cell-value equality after normalisation, defines the table-cell metric (2). Metric (1) is a text-similarity score, the normalised character-level edit similarity over the reference snippets, where higher is better, and does not use the value-tolerance rule.
 
 These metrics are stated in the future tense deliberately. At the time of writing, the parsing infrastructure is operational and the comparison is in progress; ground-truth labelling and metric computation are ongoing. No scores are reported in this document.
+
+![Parser evaluation methodology](figures/eval-methodology.png)
+
+**Figure 5.** The parser-evaluation methodology. A development set authors the schema and skill; the held-out evaluation corpus is parsed by all five parsers into a frozen cache, and a fixed extraction model is applied. The accuracy metrics are scored against a hand-labelled subset. The apparatus is shown, not any results.
 
 ### 4.3 Schema strategy and skill-based extensibility
 
@@ -179,6 +195,10 @@ description: Extract OER / PEM-electrolysis figures of merit (overpotential,
 
 Authoring a skill for a new field uses the explore-first path: the agent is directed at a sample of that field's papers, surfaces candidate quantities and conditions, consolidates them into a derived schema with ontology mappings, and writes the resulting heuristics and error cases into a new `SKILL.md`. The agent loop is unchanged; only the corpus, the schema, and one Markdown file differ. The durable output of this work is therefore not only an electrocatalysis knowledge graph but a documented method for converting a domain into a skill. The electrocatalysis skill is the first instance; the hydrogen-evolution reaction, CO₂ reduction, and other quantitative literatures would be added in the same manner, each as a separate skill rather than as a modification to the program. Extending the system therefore changes only the schema and the skill folder, never the agent loop.
 
+![Skill and schema mechanism](figures/skill-mechanism.png)
+
+**Figure 6.** The schema-first core with an explore-first escape hatch, and how a new domain is packaged into a SKILL.md. The agent loop is unchanged; a new field is a new skill plus schema.
+
 ### 4.4 Ontology alignment and the EMMO gap
 
 Ontology alignment is a per-domain task performed at the schema level: each field binds its quantities to the established vocabularies that cover it, so a new domain reuses the same machinery against a different ontology without changes to the agent. For the electrocatalysis demonstrator, these vocabularies are the EMMO electrochemistry domain together with QUDT and PROV-O. Every slot in the schema carries an explicit ontology IRI. Where the EMMO electrochemistry domain defines a concept, such as overpotential, electrocatalyst, charge-transfer coefficient, the Butler–Volmer relation, or anodic reaction, we bind directly to the EMMO term (Del Nostro et al., 2024). Units bind to QUDT (QUDT, n.d.), and provenance binds to PROV-O (Lebo et al., 2013). Because units are resolved to QUDT and quantities to shared IRIs, a stored value can be consumed directly as a numerical parameter and compared across papers, rather than re-interpreted by hand at each downstream use.
@@ -191,9 +211,17 @@ Provenance in palimpsest is a precondition for inserting a datum, not metadata a
 
 This discipline is what makes the resulting graph suitable to build upon. A query returns not only that a catalyst reaches a given overpotential at a given current density, but also which paper reported the value, which parser read it, and the location on the page from which it was extracted. This traceability is what allows a researcher to validate a value against its source before relying on it in a downstream decision, such as parameterising a simulation or selecting a candidate for synthesis, a check that matters because the extraction is automated and therefore fallible.
 
+![Provenance data model](figures/provenance-model.png)
+
+**Figure 7.** The provenance data model. Each measurement is bound by PROV-O to its source paper and extraction activity (page, bbox, parser, run-id) and to EMMO and QUDT terms. The structure is shown with illustrative values; the graph is not populated here.
+
 ### 4.6 Provenance viewer
 
 The provenance trail is usable only if it can be inspected directly, which is the function of the viewer: a single web page presenting the rendered PDF on the left and the extracted data on the right. Selecting a value highlights the region of the page from which it was extracted. The implementation is intentionally lightweight: a small server, a vendored PDF renderer, and hypermedia interactions rather than a single-page application. This is consistent with the overall minimalism of the system. Its purpose is verification: it makes provenance directly visible, which reduces the correction of an erroneous extraction to a brief inspection rather than a search through the source.
+
+![Provenance viewer mockup](figures/viewer-mockup.png)
+
+**Figure 8.** Schematic of the provenance viewer. Selecting an extracted value on the right highlights the source region on the rendered PDF on the left. Illustrative; the viewer is under development.
 
 ### 4.7 Cost governance
 
@@ -216,6 +244,10 @@ Several components that convert cached parser output into a validated, ontology-
 The parser comparison is designed to answer a question that practitioners face but that the literature has not addressed for this domain: which document parser best enables a language model to recover electrocatalysis figures of merit, and at what cost and throughput. We state our expectations as two hypotheses, each tested by the metrics of Section 4.2.
 
 **H1.** Transcription accuracy is a weak predictor of downstream extraction accuracy: the parser that maximises downstream accuracy (metric 6) will differ from the parser that maximises transcription accuracy (metric 1). This expectation follows from the second finding of Section 2.2, that extraction quality is bounded by the integrity of structured content rather than by aggregate text fidelity. We test H1 by comparing the two rankings on the hand-labelled subset and reject it if the same parser ranks first on both metrics. As a supporting descriptive measure, we report the Spearman rank correlation between the two orderings, which we expect to be low. Given the small number of parsers (n = 5), this correlation is reported descriptively rather than as a significance test.
+
+![Intuition behind H1](figures/h1-concept.png)
+
+**Figure 9.** The intuition behind H1. A parser that transcribes well but flattens table structure can deliver a value stripped of its column and unit context, so the transcription-accuracy ranking need not match the downstream-accuracy ranking. Conceptual, not a result.
 
 **H2.** Parsers that preserve table structure faithfully will yield higher downstream accuracy on this corpus than parsers with higher aggregate text fidelity but weaker table recovery, because the figures of merit in OER papers are concentrated in tables. We test H2 by relating per-parser table-cell F1 (metric 2) to downstream accuracy (metric 6), expecting a positive rank association, which we report descriptively given n = 5, as for H1. Because metric (6) is computed partly over table-bound quantities, a positive association is in part expected by construction; H2 is therefore informative chiefly through its failure modes, and would be contradicted by a parser with high table-cell F1 but low downstream accuracy, for instance one that recovers table structure yet misreads units or the cells carrying the qualifying conditions.
 
