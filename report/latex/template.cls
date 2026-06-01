@@ -82,7 +82,6 @@
   \end{tikzpicture}%
 }
 
-\lfoot{\raisebox{-0.75cm}{\hspace{-8.5cm}\includegraphics[height=4cm]{logos/motif_blue.png}}}
 
 \newcommand{\fairepagedegarde}{
     \rfoot{} % no page number on cover
