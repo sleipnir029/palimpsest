@@ -1,0 +1,76 @@
+"""Central normalization layer + per-skill overlay loader (T20.5).
+
+Universal canonical units + enums apply to every electrochemistry domain.
+Per-skill `normalization.yaml` overlays add domain-specific buckets
+(operating points, mechanisms, active metals, …).
+
+Conflict policy: if a domain overlay tries to redefine a UNIVERSAL_ENUMS
+key, ``build_normalization_prompt`` raises ValueError loudly. Universal is
+the source of truth.
+"""
+from pathlib import Path
+
+import pytest
+
+from palimpsest.normalize import (
+    UNIVERSAL_ENUMS,
+    UNIVERSAL_UNITS,
+    build_normalization_prompt,
+    load_skill_normalization,
+)
+
+OER_DIR = Path(__file__).parent.parent / "skills" / "oer-extraction"
+
+
+def test_universal_constants_well_formed():
+    """Every UNIVERSAL_UNITS value is a non-empty str; every UNIVERSAL_ENUMS
+    value is a non-empty list of non-empty strs."""
+    assert UNIVERSAL_UNITS, "UNIVERSAL_UNITS must not be empty"
+    for slot, unit in UNIVERSAL_UNITS.items():
+        assert isinstance(slot, str) and slot, f"bad slot key: {slot!r}"
+        assert isinstance(unit, str) and unit, f"bad unit for {slot}: {unit!r}"
+
+    assert UNIVERSAL_ENUMS, "UNIVERSAL_ENUMS must not be empty"
+    for name, values in UNIVERSAL_ENUMS.items():
+        assert isinstance(name, str) and name, f"bad enum name: {name!r}"
+        assert isinstance(values, list) and values, f"bad values for {name}: {values!r}"
+        for v in values:
+            assert isinstance(v, str) and v, f"bad enum value in {name}: {v!r}"
+
+
+def test_load_skill_normalization_oer():
+    """The OER overlay has the four domain-specific keys the card promises."""
+    overlay = load_skill_normalization(OER_DIR)
+    assert overlay["domain"] == "oer-extraction"
+    for key in ("operating_points", "mechanisms", "active_metals", "electrolytes"):
+        assert key in overlay, f"OER overlay missing {key!r}"
+
+
+def test_load_skill_normalization_missing_file(tmp_path):
+    """An empty dir returns {} (no normalization.yaml) — never raises."""
+    assert load_skill_normalization(tmp_path) == {}
+
+
+def test_build_normalization_prompt_contains_both_layers():
+    """The merged prompt block contains a universal enum AND an OER bucket."""
+    block = build_normalization_prompt([OER_DIR])
+    assert "iR_correction" in block, "universal enum missing from merged prompt"
+    assert "RDE_10mA" in block, "OER operating-point bucket missing from merged prompt"
+    assert "LOM" in block, "OER mechanism enum missing from merged prompt"
+
+
+@pytest.mark.parametrize(
+    "colliding_yaml,collision_key",
+    [
+        # Enum collision (card-literal).
+        ("domain: bad-skill\niR_correction: [yes, no]\n", "iR_correction"),
+        # Unit collision (advisor-widened): a domain redefining tafel_slope
+        # would silently contradict the universal "Canonical units" section.
+        ("domain: bad-skill\ntafel_slope: V/decade\n", "tafel_slope"),
+    ],
+)
+def test_overlay_conflict_raises(tmp_path, colliding_yaml, collision_key):
+    """A domain overlay that redefines a universal enum OR unit raises."""
+    (tmp_path / "normalization.yaml").write_text(colliding_yaml)
+    with pytest.raises(ValueError, match=collision_key):
+        build_normalization_prompt([tmp_path])
