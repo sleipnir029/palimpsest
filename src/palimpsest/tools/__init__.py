@@ -29,3 +29,4 @@ def register(name: str, schema: dict) -> Callable:
 
 from . import read_first_page_text  # noqa: E402,F401 — import for @register side effect
 from . import read_paper  # noqa: E402,F401 — import for @register side effect
+from . import read_skill  # noqa: E402,F401 — import for @register side effect
