@@ -19,17 +19,30 @@ from pathlib import Path
 
 import yaml
 
+# Canonical units per schema entity in schema/palimpsest.yaml. Keys are either:
+#   * a Measurement subclass name (CamelCase, lines 54-101 of the schema) — the
+#     LLM emits an instance and sets unit_label to the canonical unit below.
+#   * a Condition slot name (snake_case, lines 365-385) — populated on the
+#     embedded Condition block of a Measurement.
+# Disjoint namespaces by capitalization; mixing in one dict keeps lookup simple.
+# Variables not yet modeled (Stability hours, PEMWE Vcell, Pressure, specific
+# ECSA in m2/g) are tracked in tasks/T18a-schema-cleanups.md Finding F3 and
+# deliberately omitted here until the schema declares them.
 UNIVERSAL_UNITS: dict[str, str] = {
-    "overpotential": "mV",
-    "tafel_slope": "mV/decade",
-    "mass_activity": "A/g",  # per active metal; domain overlay names which
-    "ecsa": "m2/g",
-    "exchange_current_density": "mA/cm2",
-    "stability_hours": "h",
-    "pemwe_cell_voltage": "V",
-    "current_density": "mA/cm2",  # canonical; A/cm2 also accepted in PEMWE prose
-    "temperature": "C",
-    "pressure": "bar",
+    # Measurement subclasses:
+    "Overpotential": "mV",
+    "TafelSlope": "mV/decade",
+    "ExchangeCurrentDensity": "mA/cm2",
+    "ChargeTransferCoefficient": "dimensionless",
+    "MassActivity": "A/g",
+    "TurnoverFrequency": "1/s",
+    "ECSA": "cm2",  # geometric ECSA; specific ECSA (m2/g) is T18a F3
+    # Condition slots:
+    "current_density": "mA/cm2",
+    "temperature_C": "Cel",
+    "scan_rate": "mV/s",
+    "electrolyte_ph": "[pH]",
+    "electrode_potential_vs_rhe": "V",
 }
 
 UNIVERSAL_ENUMS: dict[str, list[str]] = {

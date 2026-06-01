@@ -18,16 +18,16 @@ variable — emit a missing-condition note instead.
 Every performance variable below MUST carry the conditions in parentheses or
 it is meaningless. If the conditions are absent, skip the slot.
 
-| Schema slot | Required conditions |
-|---|---|
-| `overpotential` (η, mV vs RHE) | current density `j` (mA cm⁻² or A cm⁻²); electrolyte; iR-correction status |
-| `tafel_slope` (mV/decade) | fit current-density range; iR-correction status |
-| `mass_activity` (A g⁻¹ of active metal, e.g. A g⁻¹Ir) | potential vs RHE at which it is reported |
-| `turnover_frequency` (TOF, s⁻¹) | potential vs RHE; site-counting method (assumed all-metal-surface vs ECSA-derived vs in-operando) |
-| `ecsa` (cm² or m² g⁻¹) | method (Cdl from CV at non-faradaic potentials; Pb-UPD; surface-redox integration) |
-| `exchange_current_density` (j₀, A cm⁻² or mA cm⁻²) | Tafel extrapolation range; electrolyte |
-| `stability_hours` (h) | hold current density (mA cm⁻² for RDE, A cm⁻² for PEMWE); cell type (RDE vs single-cell PEMWE); degradation rate if reported (µV h⁻¹) |
-| `pemwe_cell_voltage` (V) | current density (A cm⁻²); temperature; anode and cathode catalyst loadings (mg cm⁻²); membrane (e.g. Nafion 117/115/212) |
+| Reported variable | Schema target (`schema/palimpsest.yaml`) | Required conditions |
+|---|---|---|
+| Overpotential (η, mV vs RHE) | `Overpotential` class — emit under one of `overpotential_at_10mAcm2`, `activation_overpotential`, or `anodic_overpotential` per kind | `current_density` (mA/cm² or A/cm²); `electrolyte`; `iR_correction` ∈ {applied, not_applied, unknown} |
+| Tafel slope (mV/decade) | `TafelSlope` class | fit-range `current_density` min/max; `iR_correction` |
+| Mass activity (A g⁻¹ of active metal, e.g. A g⁻¹Ir) | `MassActivity` class (canonical unit `A/g`) | `electrode_potential_vs_rhe` at which it is reported |
+| Turnover frequency (TOF, s⁻¹) | `TurnoverFrequency` class | `electrode_potential_vs_rhe`; site-counting method (all-metal-surface / ECSA-derived / in-operando — free-text annotation; no dedicated slot) |
+| ECSA (cm² geometric) | `ECSA` class (canonical unit `cm2`; specific ECSA in m²/g is **not yet modeled** — see T18a F3) | method (Cdl from CV at non-faradaic potentials; Pb-UPD; surface-redox integration) |
+| Exchange current density (j₀, mA/cm²) | `ExchangeCurrentDensity` class | Tafel extrapolation range; `electrolyte` |
+| Stability (h) | **No schema class yet — see T18a Finding F3**. Record as free-text annotation on the relevant Measurement until added. | hold `current_density` (mA/cm² for RDE; A/cm² for PEMWE); cell type (RDE vs single-cell PEMWE); degradation rate if reported (µV/h) |
+| PEMWE cell voltage (V) | **No schema class yet — see T18a Finding F3**. Record as free-text annotation until added. | `current_density` (A/cm²); `temperature_C`; anode/cathode catalyst loadings (mg/cm²); membrane (e.g. Nafion 117/115/212) |
 
 ## Default operating points
 
@@ -39,9 +39,10 @@ explicit, never as **assumptions** when it is not.
   electrocatalyst comparison (Jaramillo / McCrory convention).
 - **η@100 mA cm⁻²** — high-performing acidic OER catalysts; emerging RDE
   benchmark for state-of-the-art Ir / Ru oxides.
-- **η@1 A cm⁻² or η@2 A cm⁻²** — PEMWE single-cell operating points.
-  Industrial-relevant; almost always with iR-correction *not* applied (full
-  cell voltage is what matters).
+- **Vcell @ 1 A cm⁻² or Vcell @ 2 A cm⁻²** — PEMWE single-cell operating
+  points. These are **cell voltages**, not overpotentials; industrial-relevant.
+  Almost always with iR-correction *not* applied (full cell voltage is what
+  matters).
 - **Tafel fit range** — typically the low-overpotential linear region
   (50–150 mV above the OER onset). If the paper fits across a wide range that
   spans transport-limited current, flag it.
@@ -95,9 +96,10 @@ These cause the **same number to mean different things** across papers.
 Always record the disambiguating field.
 
 1. **iR-correction**: RDE η values are commonly iR-corrected (cell
-   resistance subtracted). PEMWE Vcell values almost never are. If the paper
-   does not state correction status, record it as `iR_correction = unknown`,
-   not as `false`.
+   resistance subtracted). PEMWE Vcell values almost never are. The
+   `iR_correction` enum has three values — `applied`, `not_applied`,
+   `unknown`. If the paper does not state correction status, record it as
+   `unknown`, not as `not_applied`.
 2. **Scan rate**: η extracted from a fast CV (50–100 mV s⁻¹) differs from
    η extracted from a slow LSV (1–10 mV s⁻¹) or steady-state staircase.
    Record the scan rate or the technique.

@@ -36,6 +36,30 @@ first three (overpotential variants) look like Appendix E rows that didn't
 make it into any class's slot list. `catalyst` and `oer_reaction` look like
 relationship slots a future Paper class would use.
 
+### F3. Missing Measurement subclasses (surfaced by T20/T20.5 review, 2026-06-01)
+The schema models metrics as Measurement subclasses (`Overpotential`,
+`TafelSlope`, `ExchangeCurrentDensity`, `ChargeTransferCoefficient`,
+`MassActivity`, `TurnoverFrequency`, `ECSA`) but does NOT yet declare:
+
+- **`Stability`** — hours (h). Required conditions: hold `current_density`,
+  `cell_type`; optional degradation rate (µV/h or mV per 1000 h).
+- **`PEMWECellVoltage`** — V. Required conditions: `current_density` (A/cm²),
+  `temperature_C`, anode/cathode catalyst loadings (mg/cm²), membrane id.
+- (optional) **`SpecificECSA`** — m²/g. Distinguishes from geometric `ECSA`
+  (cm²) which is already modeled.
+- (optional) **`Pressure`** — bar. Condition slot, not a Measurement
+  subclass, if cell-pressure ever matters for an experiment.
+
+T20 SKILL.md teaches the LLM about these variables; T20.5 `normalize.py`
+deliberately omits them from `UNIVERSAL_UNITS` until the schema declares
+them. Until F3 lands, the LLM records these in free-text annotations only,
+not as typed Measurement instances.
+
+**Decide:** add classes inheriting from `Measurement` (mirror how
+`Overpotential` / `TafelSlope` are declared), with `close_mappings` to EMMO
+terms if any exist (otherwise palimpsest-local CURIEs). Add corresponding
+entries to `UNIVERSAL_UNITS` in `normalize.py` in the same change.
+
 ## Output state
 - `schema/palimpsest.yaml` no longer carries unreachable slots OR every slot has a clear class home.
 - `OxygenEvolutionReaction` either gains slots or a `# intentionally slot-less` comment.
