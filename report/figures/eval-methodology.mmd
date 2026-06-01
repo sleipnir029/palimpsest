@@ -16,7 +16,8 @@ flowchart TB
     PARSERS --> CACHE[("Parse-once<br/>content-hash cache<br/>(frozen outputs)")]
     CACHE --> EXT["Fixed extraction model"]
     GT["Hand-labelled<br/>ground-truth subset<br/>~5 to 10 papers"]
-    CACHE --> M45["throughput, cost<br/>(full corpus)"]
+    EVAL -->|"hand-label ~5–10"| GT
+    CACHE --> M45["throughput (4), cost (5)<br/>(full corpus)"]
     GT --> M123["text accuracy (1)<br/>table-cell F1 (2)<br/>bbox precision (3)"]
     EXT --> M6["downstream extraction<br/>accuracy (6): headline"]
     GT --> M6

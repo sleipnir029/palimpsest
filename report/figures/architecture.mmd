@@ -18,7 +18,7 @@ flowchart TB
     subgraph AGENT["Extraction agent — minimal LLM loop"]
         direction TB
         LOOP["think → act → observe"]
-        SKILL["OER extraction skill"]
+        SKILL["OER skill (header cached,<br/>body on demand)"]
         MODELS["swappable backends:<br/>Claude / DeepSeek / Gemini"]
         METER["cost meter — €50 cap"]
         SKILL -.-> LOOP

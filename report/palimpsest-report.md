@@ -88,7 +88,7 @@ In summary, existing work provides strong parsers but no task-grounded compariso
 
 ## 3. The demonstrator domain and its target quantities
 
-The system is general but must be evaluated on a concrete corpus. Our demonstrator is energy-materials electrocatalysis: a reference corpus of PEM-electrolyser and acidic-OER catalyst papers, covering the chemistry of iridium- and ruthenium-oxide anodes and related materials, a field surveyed by Carmo et al. (2013). A development set of about 5 papers is used to author the schema and the OER skill, through the explore-first process of Section 4.3. The parser comparison is then run on a held-out evaluation corpus of about 25 papers from the same domain. We selected this corpus because it is dense, table-heavy, and quantitatively demanding, and therefore a stringent test of the pipeline. The same machinery applies to other fields once each is described by its own skill and schema (Section 4.3). For the electrocatalysis demonstrator, the system targets a defined set of figures of merit and their qualifying conditions:
+The system is general but must be evaluated on a concrete corpus. Our demonstrator is energy-materials electrocatalysis: a reference corpus of PEM-electrolyser and acidic-OER catalyst papers, covering the chemistry of iridium- and ruthenium-oxide anodes and related materials, a field surveyed by Carmo et al. (2013). A development set of about 5 papers is used to author the schema and the OER skill, through the hybrid process of Section 4.3. The parser comparison is then run on a held-out evaluation corpus of about 25 papers from the same domain. We selected this corpus because it is dense, table-heavy, and quantitatively demanding, and therefore a stringent test of the pipeline. The same machinery applies to other fields once each is described by its own skill and schema (Section 4.3). For the electrocatalysis demonstrator, the system targets a defined set of figures of merit and their qualifying conditions:
 
 - **Overpotential**, typically at a stated current density, following the 10 mA cm⁻² benchmarking convention for rotating-disc measurements (McCrory et al., 2013) or 1–2 A cm⁻² for full cells;
 - **Tafel slope**, in mV per decade, with the current-density range used for the fit;
@@ -191,11 +191,11 @@ description: Extract OER / PEM-electrolysis figures of merit (overpotential,
 - A Tafel slope read off an LSV is not the same as one fitted over a stated range.
 ```
 
-Authoring a skill for a new field uses the explore-first path: the agent is directed at a sample of that field's papers, surfaces candidate quantities and conditions, consolidates them into a derived schema with ontology mappings, and writes the resulting heuristics and error cases into a new `SKILL.md`. The agent loop is unchanged; only the corpus, the schema, and one Markdown file differ. The durable output of this work is therefore not only an electrocatalysis knowledge graph but a documented method for converting a domain into a skill. The electrocatalysis skill is the first instance; the hydrogen-evolution reaction, CO₂ reduction, and other quantitative literatures would be added in the same manner, each as a separate skill rather than as a modification to the program. Extending the system therefore changes only the schema and the skill folder, never the agent loop.
+Authoring a skill for a new field follows the same hybrid path: the agent is directed at a sample of that field's papers, surfaces candidate quantities and conditions, consolidates them into a derived schema with ontology mappings, and writes the resulting heuristics and error cases into a new `SKILL.md`. The agent loop is unchanged; only the corpus, the schema, and one Markdown file differ. The durable output of this work is therefore not only an electrocatalysis knowledge graph but a documented method for converting a domain into a skill. The electrocatalysis skill is the first instance; the hydrogen-evolution reaction, CO₂ reduction, and other quantitative literatures would be added in the same manner, each as a separate skill rather than as a modification to the program. Extending the system therefore changes only the schema and the skill folder, never the agent loop.
 
 ![Skill and schema mechanism](figures/skill-mechanism.png)
 
-**Figure 4.** The schema-first core with an explore-first escape hatch, and how a new domain is packaged into a SKILL.md. The agent loop is unchanged; a new field is a new skill plus schema.
+**Figure 4.** Schema and skill mechanism, in two phases. A domain is authored once: an authoritative LinkML schema and its SKILL.md, built from domain knowledge and, for a genuinely new field, seeded by exploring a sample of its papers. Per paper, the schema-first core validates and inserts only measurements the schema covers; a value it does not cover is not dropped but drafted into an exploratory file for manual review and promotion back into the schema — the explore-first escape hatch. The agent loop is unchanged; a new field is a new skill plus schema.
 
 ### 4.4 Ontology alignment and the EMMO gap
 
@@ -225,7 +225,7 @@ The agent incurs direct costs, for language-model calls and cloud GPUs, so cost 
 
 ## 5. Current status
 
-The project is at an intermediate stage, and we state its status explicitly. The foundational infrastructure is implemented and has been exercised on real hardware: the five parsers are packaged and run on cloud GPUs, the GPU lifecycle and its cost accounting are implemented and verified, the parse-once content-hash cache is in place, and the agent loop, the primary model backend, and the cost meter are operational. The parser comparison is in progress on this foundation.
+The project is at an intermediate stage, and we state its status explicitly. The foundational infrastructure is implemented and has been exercised on real hardware: the five parsers are packaged and run on cloud GPUs, the GPU lifecycle and its cost accounting are implemented and verified, the parse-once content-hash cache is in place, and the agent loop, the primary model backend, and the cost meter are being implemented. The parser comparison is in progress on this foundation.
 
 Several components that convert cached parser output into a validated, ontology-aligned graph are specified and under active development: the LinkML schema and its generated artefacts, the first domain skill (electrocatalysis), the extraction-and-validation step, the triple store with its provenance writes, and the viewer. Hand-labelled ground truth and the six evaluation metrics are the immediate next milestone. The apparatus that collects the raw material for the comparison is complete; the apparatus that scores it is under construction. No comparative results exist yet, and none are claimed.
 
@@ -264,7 +264,7 @@ Beyond the limitations on what may be claimed, the project has encountered, and 
 
 | Risk / challenge | Status | Mitigation / resolution plan |
 |---|---|---|
-| GPU-capacity scarcity and price variability on community cloud | Faced | Request GPU types cheapest-first with automatic fallback; use secure-cloud instances when community capacity is unavailable; retain a third-party provider (Vast.ai) as a further fallback. |
+| GPU-capacity scarcity and price variability on community cloud | Faced | Request GPU types cheapest-first with automatic fallback; use RunPod.io secure-cloud instances when community capacity is unavailable; retain a third-party provider (Vast.ai) as a further fallback. |
 | Conflicting dependency stacks across parsers (runtime and framework pins) | Faced | Package each parser in its own isolated container image; do not co-locate parsers in a single environment. |
 | Vendor parser image not self-controllable (olmOCR: FP8/Ada-only, no SSH access) | Faced | Exclude olmOCR; add dots.ocr and PaddleOCR to preserve five parsers across three design families. |
 | Ground-truth labelling cost and subjectivity | Ongoing | Label a small reference subset under a documented protocol; record annotator decisions; report the study as a controlled case study rather than a benchmark. |
@@ -274,7 +274,7 @@ Beyond the limitations on what may be claimed, the project has encountered, and 
 | Values without traceable provenance entering the graph | Faced (by design) | Enforce the rule that a triple lacking complete provenance is not inserted and the failure is reported. |
 | Parsers that do not emit element-level bounding boxes | Anticipated | Score bounding-box availability and precision as an explicit metric; have the viewer highlight at coarser granularity where element boxes are absent. |
 | Missing EMMO terms for OER and Tafel concepts | Faced | Mint local IRIs with `skos:closeMatch` to the nearest EMMO concept; document the proposed additions for the ontology maintainers. |
-| Fixed €50 operating budget | Faced | Check the cost meter before each paid call; rely on the parse-once cache to avoid repeated costs; apply graduated warnings and a hard stop at the ceiling. |
+| Fixed €50 operating budget (for parsing only)| Faced | Check the cost meter before each paid call; rely on the parse-once cache to avoid repeated costs; apply graduated warnings and a hard stop at the ceiling. |
 
 ---
 
