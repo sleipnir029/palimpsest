@@ -1,18 +1,23 @@
 flowchart TB
-    CORP["New-domain corpus"]
-    EXP["Explore-first: agent surfaces<br/>candidate quantities and conditions"]
-    CORP --> EXP
+    A0(["Authoring — once per domain"]):::phase
+    DK["Domain knowledge<br/>+ explore a sample of papers"]
+    SCH["Authoritative LinkML schema<br/>generates Pydantic / SHACL / JSON-LD,<br/>bound to EMMO / QUDT"]
+    SKILL["SKILL.md (header + instructions),<br/>loaded by progressive disclosure"]
+    A0 --> DK --> SCH --> SKILL
+
+    B0(["Extraction — per paper · schema-first core"]):::phase
+    PAPER["Paper"]
     DEC{"Covered by the<br/>authoritative schema?"}
-    EXP --> DEC
-    DEC -->|yes| VAL["Validate (LinkML / SHACL)"]
-    VAL --> INS["Insert into RDF graph"]
-    DEC -->|no| EXPL["Exploratory schema file"]
-    EXPL --> REV["Manual review"]
-    REV -->|promote| SCH["Authoritative LinkML schema<br/>generates Pydantic / SHACL / JSON-LD,<br/>bound to EMMO / QUDT"]
-    SCH -.-> VAL
-    SCH --> SKILL["SKILL.md (header + instructions),<br/>loaded by progressive disclosure"]
-    SKILL -.-> NOTE["Agent loop unchanged:<br/>new domain = new skill + schema"]
+    VAL["Validate (LinkML / SHACL)"]
+    INS["Insert into RDF graph"]
+    EXPL["Draft candidate field<br/>→ exploratory schema file"]
+    REV["Manual review"]
+    SKILL --> B0
+    B0 --> PAPER --> DEC
+    DEC -->|yes| VAL --> INS
+    DEC -->|"no · explore-first escape hatch"| EXPL --> REV
+    REV -->|promote| SCH
+
+    classDef phase fill:#eef0ff,stroke:#3355aa,stroke-width:2px
     classDef hi fill:#dde7ff,stroke:#3355aa,stroke-width:2px
-    classDef note fill:#f4f4f4,stroke:#bbb,color:#555
     class SCH,SKILL hi
-    class NOTE note
