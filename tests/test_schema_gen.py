@@ -102,3 +102,25 @@ def test_evidence_requires_provenance_fields():
     assert ev.parser_name == "docling"
     assert len(ev.bbox) == 4
     assert ev.source_text is None
+
+
+def test_paper_requires_sha256():
+    """T15 cache-key contract + provenance non-negotiable.
+
+    Without sha256 the Paper has no identity, and Evidence.paper (required by
+    the T19 audit patch) would point at an identity-less object — that's the
+    "paper_hash" half of CLAUDE.md's provenance triple. The audit caught the
+    hole; the patch + this test close it.
+    """
+    from pydantic import ValidationError
+
+    from schema.generated.pydantic import Paper
+
+    # No sha256 → reject. doi/title/authors stay optional.
+    with pytest.raises(ValidationError):
+        Paper()
+
+    p = Paper(sha256="deadbeef")
+    assert p.sha256 == "deadbeef"
+    assert p.doi is None
+    assert p.title is None
