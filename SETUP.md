@@ -57,7 +57,7 @@ Open a fresh conversation. **Do not paste a long task description.** Instead, pa
 You're working on palimpsest. Read these files in order and STOP:
 
 1. CLAUDE.md
-2. tasks/T18-linkml-schema.md
+2. tasks/T19-schema-generation.md
 3. PROGRESS.md
 
 After reading:
