@@ -419,11 +419,8 @@
                     ]
                 },
                 "sha256": {
-                    "description": "SHA-256 of the raw PDF bytes (T07 contract).",
-                    "type": [
-                        "string",
-                        "null"
-                    ]
+                    "description": "SHA-256 of the raw PDF bytes (T07 contract); identity key for the Paper, completes the \"paper_hash\" half of the provenance non-negotiable on Evidence.paper.",
+                    "type": "string"
                 },
                 "title": {
                     "type": [
@@ -432,6 +429,9 @@
                     ]
                 }
             },
+            "required": [
+                "sha256"
+            ],
             "title": "Paper",
             "type": "object"
         },

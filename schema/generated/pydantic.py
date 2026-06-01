@@ -111,7 +111,7 @@ class Paper(ConfiguredBaseModel):
     doi: Optional[str] = Field(default=None, description="""DOI of the paper.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Paper'], 'slot_uri': 'schema:identifier'} })
     title: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Paper'], 'slot_uri': 'schema:name'} })
     authors: Optional[list[str]] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Paper'], 'slot_uri': 'schema:author'} })
-    sha256: Optional[str] = Field(default=None, description="""SHA-256 of the raw PDF bytes (T07 contract).""", json_schema_extra = { "linkml_meta": {'domain_of': ['Paper'], 'slot_uri': 'palimpsest:sha256'} })
+    sha256: str = Field(default=..., description="""SHA-256 of the raw PDF bytes (T07 contract); identity key for the Paper, completes the \"paper_hash\" half of the provenance non-negotiable on Evidence.paper.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Paper'], 'slot_uri': 'palimpsest:sha256'} })
 
 
 class Measurement(ConfiguredBaseModel):

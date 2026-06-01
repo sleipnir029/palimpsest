@@ -170,8 +170,9 @@ slots:
     slot_uri: schema:author
   sha256:
     range: string
+    required: true
     slot_uri: palimpsest:sha256
-    description: SHA-256 of the raw PDF bytes (T07 contract).
+    description: SHA-256 of the raw PDF bytes (T07 contract); identity key for the Paper, completes the "paper_hash" half of the provenance non-negotiable on Evidence.paper.
 
   # --- Measurement base slots ---
   value:
