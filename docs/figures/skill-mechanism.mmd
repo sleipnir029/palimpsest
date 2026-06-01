@@ -1,0 +1,18 @@
+flowchart TB
+    CORP["New-domain corpus"]
+    EXP["Explore-first: agent surfaces<br/>candidate quantities and conditions"]
+    CORP --> EXP
+    DEC{"Covered by the<br/>authoritative schema?"}
+    EXP --> DEC
+    DEC -->|yes| VAL["Validate (LinkML / SHACL)"]
+    VAL --> INS["Insert into RDF graph"]
+    DEC -->|no| EXPL["Exploratory schema file"]
+    EXPL --> REV["Manual review"]
+    REV -->|promote| SCH["Authoritative LinkML schema<br/>generates Pydantic / SHACL / JSON-LD,<br/>bound to EMMO / QUDT"]
+    SCH -.-> VAL
+    SCH --> SKILL["SKILL.md (header + instructions),<br/>loaded by progressive disclosure"]
+    SKILL -.-> NOTE["Agent loop unchanged:<br/>new domain = new skill + schema"]
+    classDef hi fill:#dde7ff,stroke:#3355aa,stroke-width:2px
+    classDef note fill:#f4f4f4,stroke:#bbb,color:#555
+    class SCH,SKILL hi
+    class NOTE note

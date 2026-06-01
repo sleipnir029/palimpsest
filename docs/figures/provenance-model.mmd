@@ -1,0 +1,17 @@
+flowchart LR
+    M["a Measurement<br/>overpotential = 290 mV<br/>(illustrative)"]
+    PAP["a Paper<br/>(sha-256 hash)"]
+    ACT["an ExtractionActivity<br/>parser, run-id, page, bbox"]
+    EMMO["EMMO IRI<br/>emmo:Overpotential"]
+    QUDT["QUDT unit<br/>qudt:MilliV"]
+    COND["Conditions<br/>current density, electrolyte,<br/>pH, cell type"]
+    M -->|"prov:wasDerivedFrom"| PAP
+    M -->|"prov:wasGeneratedBy"| ACT
+    M -->|"rdf:type"| EMMO
+    M -->|"unit"| QUDT
+    M -->|"qualified by"| COND
+    ACT -.-> RULE["Rule: no provenance, no triple"]
+    classDef meas fill:#dde7ff,stroke:#3355aa,stroke-width:2px
+    classDef rule fill:#f4f4f4,stroke:#bbb,color:#555
+    class M meas
+    class RULE rule
