@@ -1,0 +1,45 @@
+# OER-specific normalization overlay (T20.5).
+#
+# Universal enums + canonical units live in src/palimpsest/normalize.py.
+# This file adds ONLY domain-specific buckets for acidic OER / PEMWE papers.
+# `build_normalization_prompt` merges both layers at extraction time.
+
+domain: oer-extraction
+
+# Community-default operating points for OER. Lets downstream group
+# "all η@10 mA cm⁻²" measurements without numeric matching.
+operating_points:
+  - id: RDE_10mA
+    description: "RDE benchmark (Jaramillo/McCrory convention)"
+    current_density: { value: 10, unit: "mA/cm2" }
+    cell_type_family: RDE
+  - id: RDE_100mA
+    description: "High-performing acidic OER catalyst benchmark"
+    current_density: { value: 100, unit: "mA/cm2" }
+    cell_type_family: RDE
+  - id: PEMWE_1A
+    description: "PEMWE entry-level operating point"
+    current_density: { value: 1, unit: "A/cm2" }
+    cell_type_family: single_cell_MEA
+  - id: PEMWE_2A
+    description: "PEMWE high-current operating point; SOA targets <= 1.75 V"
+    current_density: { value: 2, unit: "A/cm2" }
+    cell_type_family: single_cell_MEA
+
+# OER mechanism enum + the evidence type that justifies a claim.
+mechanisms:
+  values: [AEM, LOM, WNA, mixed, unspecified]
+  evidence_types: [DFT, isotope_18O, operando_spectroscopy, pH_dependence, kinetic_isotope_effect]
+
+# Active metals seen in acidic OER literature.
+active_metals: [Ir, Ru, IrRu, IrO2, RuO2, Co, Ni, Fe, Mn]
+
+# Common acidic electrolytes (specializes UNIVERSAL_ENUMS.electrolyte_family).
+electrolytes:
+  - { id: H2SO4_0.5M, family: acid, formula: H2SO4, concentration_M: 0.5 }
+  - { id: HClO4_0.1M, family: acid, formula: HClO4, concentration_M: 0.1 }
+  - { id: HClO4_1M,   family: acid, formula: HClO4, concentration_M: 1.0 }
+  - { id: H2SO4_1M,   family: acid, formula: H2SO4, concentration_M: 1.0 }
+
+# Typical PEMWE membrane families.
+pemwe_membranes: [Nafion_117, Nafion_115, Nafion_212, Aquivion, Gore, reinforced_other]
