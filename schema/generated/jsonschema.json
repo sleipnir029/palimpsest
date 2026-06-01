@@ -197,32 +197,16 @@
                     },
                     "maxItems": 4,
                     "minItems": 4,
-                    "type": [
-                        "array",
-                        "null"
-                    ]
+                    "type": "array"
                 },
                 "page": {
-                    "type": [
-                        "integer",
-                        "null"
-                    ]
+                    "type": "integer"
                 },
                 "paper": {
-                    "anyOf": [
-                        {
-                            "$ref": "#/$defs/Paper"
-                        },
-                        {
-                            "type": "null"
-                        }
-                    ]
+                    "$ref": "#/$defs/Paper"
                 },
                 "parser_name": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
+                    "type": "string"
                 },
                 "source_text": {
                     "type": [
@@ -231,6 +215,12 @@
                     ]
                 }
             },
+            "required": [
+                "paper",
+                "page",
+                "bbox",
+                "parser_name"
+            ],
             "title": "Evidence",
             "type": "object"
         },

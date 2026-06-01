@@ -324,15 +324,22 @@ slots:
     description: Parser name and version (e.g. "docling@2.95.0").
 
   # --- Evidence-anchor slots (palimpsest-local) ---
+  # paper / page / bbox / parser_name are REQUIRED per CLAUDE.md provenance
+  # non-negotiable: "every triple … carries (paper_hash, parser, page, bbox,
+  # run_id)". source_text is the optional snippet quote. run_id is tracked
+  # outside the schema (CostMeter ledger) and gets stitched onto triples in T24.
   paper:
     range: Paper
+    required: true
     slot_uri: palimpsest:paper
   page:
     range: integer
+    required: true
     slot_uri: palimpsest:page
   bbox:
     range: float
     multivalued: true
+    required: true
     minimum_cardinality: 4
     maximum_cardinality: 4
     slot_uri: palimpsest:bbox
@@ -342,6 +349,7 @@ slots:
     slot_uri: palimpsest:sourceText
   parser_name:
     range: string
+    required: true
     slot_uri: palimpsest:parserName
 
   # --- Condition cross-reference slots ---
