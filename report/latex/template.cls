@@ -15,7 +15,7 @@
 \RequirePackage{enumitem}
 \RequirePackage{float}
 \RequirePackage{graphicx}
-\RequirePackage[justification=centering]{caption}
+\RequirePackage[justification=centering,font=small,labelfont=bf,skip=4pt]{caption}
 \RequirePackage{subcaption}
 \RequirePackage{tikz}
 \RequirePackage{tikzpagenodes}
@@ -93,7 +93,7 @@
 
         \vspace*{3cm}
 
-        {\Huge \textbf{\textcolor{rwth_blue}{\titre}} \par}
+        {\LARGE \textbf{\textcolor{rwth_blue}{\titre}} \par}
 
         \vspace{1cm}
 
@@ -128,7 +128,7 @@
             \node[inner sep=0pt,anchor=south east] (crest)
                 at ([yshift=\blasonYshift]current page text area.south east)
                 {\includegraphics[height=0.9cm]{logos/blason_blue.png}};
-            \node[text=white,font=\footnotesize\bfseries] at (crest.center) {\thepage};
+            \node[text=white,font=\footnotesize\bfseries] at ([yshift=0.16cm]crest.center) {\thepage};
         \end{tikzpicture}%
     }
 }
@@ -145,7 +145,7 @@
 
 % Code box: tcolorbox + listings (no minted, no shell-escape)
 \lstdefinestyle{rwthcode}{
-  basicstyle=\small\ttfamily,
+  basicstyle=\footnotesize\ttfamily,
   breaklines=true,
   columns=fullflexible,
   keepspaces=true,
@@ -156,7 +156,6 @@
 
 \newtcblisting[auto counter]{codebox}[3][]{%
   enhanced,
-  breakable,
   listing only,
   listing style=rwthcode,
   title={%
