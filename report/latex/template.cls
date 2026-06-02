@@ -15,7 +15,7 @@
 \RequirePackage{enumitem}
 \RequirePackage{float}
 \RequirePackage{graphicx}
-\RequirePackage[justification=centering,font=small,labelfont=bf,skip=4pt]{caption}
+\RequirePackage[justification=centering,font=footnotesize,labelfont=bf,skip=4pt]{caption}
 \RequirePackage{subcaption}
 \RequirePackage{tikz}
 \RequirePackage{tikzpagenodes}
