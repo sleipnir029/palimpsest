@@ -65,6 +65,10 @@ class SkillLoader:
             for s in self._skills.values()
         )
 
+    def names(self) -> list[str]:
+        """Sorted list of registered skill names — for error messages and discovery."""
+        return sorted(self._skills)
+
     def load(self, name: str) -> str:
         """Return the body of the named SKILL.md (frontmatter stripped)."""
         if name not in self._skills:

@@ -16,6 +16,7 @@ must come from the parsed content (LLM-owned). Either side missing → error.
 
 from __future__ import annotations
 
+import copy
 import inspect
 import json
 import re
@@ -26,11 +27,14 @@ from pydantic import BaseModel, ValidationError
 
 from palimpsest.normalize import build_normalization_prompt
 from palimpsest.providers import AnthropicProvider
-from palimpsest.skills import SkillLoader
 
 from schema.generated import pydantic as _schema  # PEP 420 namespace pkg
 
 from . import register
+# Reuse read_skill's loader rather than constructing our own — Python's import
+# machinery loads read_skill on demand here, so both tools share one
+# process-wide SkillLoader instance and skip a duplicate `skills/` scan.
+from .read_skill import _LOADER
 
 # `palimpsest.cache` and `palimpsest.agent` are imported lazily inside extract()
 # below — both transitively re-import `palimpsest.tools`, so importing them at
@@ -38,8 +42,7 @@ from . import register
 # module's own load (`tools/__init__.py` -> extract -> cache -> tools).
 
 # Module-level singletons. Tests override via kwargs; production calls reuse them
-# so the skill scan and class-map introspection happen once per process.
-_LOADER = SkillLoader()
+# so the class-map introspection happens once per process.
 _PROVIDER: AnthropicProvider | None = None  # lazy: needs ANTHROPIC_API_KEY
 _JSONSCHEMA_PATH = Path("schema/generated/jsonschema.json")
 
@@ -76,10 +79,6 @@ _CLASS_MAP = _build_class_map()
 _MEASUREMENT_NAMES = frozenset(
     n for n, c in _CLASS_MAP.items() if issubclass(c, _schema.Measurement)
 )
-
-
-def _load_skill_dir(skill_name: str) -> Path:
-    return Path("skills") / skill_name
 
 
 def _build_system_prompt(skill_body: str, jsonschema_str: str, norm: str) -> str:
@@ -226,8 +225,14 @@ def extract(
         )
     parser_text = parser_path.read_text(encoding="utf-8")
 
-    skill_body = _LOADER.load(skill_name)
-    norm = build_normalization_prompt([_load_skill_dir(skill_name)])
+    try:
+        skill_body = _LOADER.load(skill_name)
+    except KeyError:
+        # Wrap the bare KeyError so the agent's _dispatch surfaces a friendly,
+        # re-promptable message (mirrors read_skill.py's fallback format).
+        avail = ", ".join(_LOADER.names()) or "(none)"
+        raise ValueError(f"unknown skill: {skill_name!r}. Available: {avail}") from None
+    norm = build_normalization_prompt([Path("skills") / skill_name])
     jsonschema_str = _JSONSCHEMA_PATH.read_text(encoding="utf-8")
     system = _build_system_prompt(skill_body, jsonschema_str, norm)
 
@@ -267,7 +272,11 @@ def extract(
         if not isinstance(item, dict):
             errors.append((TypeError(f"item is {type(item).__name__}, expected dict"), {"raw": item}))
             continue
-        raw = dict(item)  # snapshot before _instantiate pops `type`
+        # Deep-copy so error-replay shows the exact state _instantiate saw,
+        # not a snapshot whose nested `evidence` dict still aliases the live
+        # one (a shallow copy is safe today but fragile if any future fix
+        # mutates nested keys).
+        raw = copy.deepcopy(item)
         # Provenance non-negotiable (CLAUDE.md): a Measurement subclass MUST
         # carry an evidence dict so the (paper_hash, parser, page, bbox) tuple
         # is recoverable downstream. Catching this here lets the agent re-prompt

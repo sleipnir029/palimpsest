@@ -13,6 +13,8 @@ from . import register
 
 # One loader per process — `Path("skills")` is relative to CWD (repo root,
 # the project convention for pytest / `pixi run` / `python -m palimpsest`).
+# Sibling tools (e.g. `extract`) import this; do not construct another
+# SkillLoader elsewhere or `skills/` is scanned twice for no extra information.
 _LOADER = SkillLoader()
 
 
@@ -28,5 +30,5 @@ def read_skill(name: str) -> str:
     try:
         return _LOADER.load(name)
     except KeyError:
-        avail = ", ".join(sorted(_LOADER._skills)) or "(none)"
+        avail = ", ".join(_LOADER.names()) or "(none)"
         return f"unknown skill: {name!r}. Available: {avail}"

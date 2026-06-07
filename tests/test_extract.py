@@ -336,6 +336,29 @@ def test_items_not_a_list_raises(tmp_path):
         )
 
 
+def test_unknown_skill_name_friendly_error(tmp_path):
+    """Unknown `skill_name` raises ValueError with the available list, NOT a
+    bare KeyError.
+
+    Agent's `_dispatch` (agent.py:102) catches any Exception and surfaces
+    `f"error: {exc}"` as the tool_result content the LLM reads back. A bare
+    `KeyError("nope")` stringifies as `'nope'` — opaque, no recovery path.
+    The wrapped ValueError gives the LLM the actual available skill names
+    so it can re-prompt with a correct one. The "Available: ..." substring
+    is the LLM's only recovery signal — if a future maintainer reworks the
+    message format, this test pins the consumer-facing shape.
+    """
+    sha = "9" * 64
+    cache = _seed_cache(tmp_path, sha)
+    with pytest.raises(ValueError, match="unknown skill: 'nope'.*Available"):
+        extract(
+            paper_sha=sha,
+            skill_name="nope",
+            provider=_StubProvider("{}"),
+            cache=cache,
+        )
+
+
 def test_cache_miss_raises(tmp_path):
     """No cached parser output → loud FileNotFoundError, not a silent empty extract."""
     sha = "e" * 64
