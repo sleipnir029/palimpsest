@@ -96,24 +96,13 @@ def test_closed_shape_rejects_unknown_property():
     assert not ok, f"expected closed-shape violation; report:\n{report}"
 
 
-def test_batch_returns_failure_in_place():
-    """The wrapper must preserve order when one item fails. Hand-crafted bad
-    Evidence routed through ``_validate_jsonld`` directly is the cheapest way
-    to surface a SHACL-failing case; ``validate_batch`` itself is exercised
-    above with the all-pass case.
-    """
-    good = _good_overpotential()
-    ok_good, _ = validate_instance(good)
-    assert ok_good
-    # Failure side: hand-build the JSON-LD path mirroring what `_to_jsonld`
-    # would emit, but drop parser_name.
-    ctx = json.loads(Path("schema/generated/context.jsonld").read_text())["@context"]
-    bad = {
-        "@context": ctx,
-        "@type": "Evidence",
-        "paper": {"@type": "Paper", "sha256": "x"},
-        "page": 1,
-        "bbox": [0.0, 0.1, 0.2, 0.3],
-    }
-    ok_bad, _ = _validate_jsonld(bad)
-    assert not ok_bad
+# Note: a meaningful `validate_batch` mixed-pass/fail test requires a
+# Pydantic-valid + SHACL-fail input. The current schema has none — every
+# SHACL `sh:minCount 1` slot is also a Pydantic required field, so any
+# SHACL-fail item is rejected by Pydantic at construction. The only
+# Pydantic-valid + SHACL-fail input today is the degenerate-bbox dedup
+# case logged as T18a F4 (bbox=[0,0,1,1] collapses to 2 literals), but
+# writing a test against a known schema bug is wrong — it would have to
+# be deleted once F4 lands. Once F4 is fixed or T24 introduces an
+# external JSON-LD path that bypasses Pydantic, add a real mixed-batch
+# test here.
