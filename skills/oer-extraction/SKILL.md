@@ -20,7 +20,7 @@ it is meaningless. If the conditions are absent, skip the slot.
 
 | Reported variable | Schema target (`schema/palimpsest.yaml`) | Required conditions |
 |---|---|---|
-| Overpotential (η, mV vs RHE) | `Overpotential` class — emit under one of `overpotential_at_10mAcm2`, `activation_overpotential`, or `anodic_overpotential` per kind | `current_density` (mA/cm² or A/cm²); `electrolyte`; `iR_correction` ∈ {applied, not_applied, unknown} |
+| Overpotential (η, mV vs RHE) | `Overpotential` class — emit one item per kind (η@10 mA/cm², activation, anodic) with `value` + `unit_label="mV"`; disambiguate the kind via `condition.current_density` (10 mA/cm² for the benchmark) and/or the `evidence.source_text` quote (F2 dropped the typed sub-slots `overpotential_at_10mAcm2`/`activation_overpotential`/`anodic_overpotential` 2026-06-08) | `current_density` (mA/cm² or A/cm²); `electrolyte`; `iR_correction` ∈ {applied, not_applied, unknown} |
 | Tafel slope (mV/decade) | `TafelSlope` class | fit-range `current_density` min/max; `iR_correction` |
 | Mass activity (A g⁻¹ of active metal, e.g. A g⁻¹Ir) | `MassActivity` class (canonical unit `A/g`) | `electrode_potential_vs_rhe` at which it is reported |
 | Turnover frequency (TOF, s⁻¹) | `TurnoverFrequency` class | `electrode_potential_vs_rhe`; site-counting method (all-metal-surface / ECSA-derived / in-operando — free-text annotation; no dedicated slot) |
