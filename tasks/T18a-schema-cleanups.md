@@ -36,6 +36,18 @@ first three (overpotential variants) look like Appendix E rows that didn't
 make it into any class's slot list. `catalyst` and `oer_reaction` look like
 relationship slots a future Paper class would use.
 
+### F4. `bbox` as a repeated predicate is fragile to RDF literal dedup (surfaced by T23 review, 2026-06-08)
+
+The SHACL Evidence shape declares `bbox` as `sh:datatype xsd:float ; sh:minCount 4 ; sh:maxCount 4` — i.e. the 4 floats are 4 separate triples on the same `palimpsest:bbox` predicate. RDF deduplicates identical literals on the same (subject, predicate), so a degenerate bbox like `[0.0, 0.0, 1.0, 1.0]` (which Pydantic's `min_length=4, max_length=4` accepts) serializes to **2 distinct literals**, tripping `sh:minCount 4`. Empirically reproduced in the T23 reviewer pass.
+
+This is a SHACL-modeling issue, not a validator bug. Fix options:
+
+- **(a)** Model `bbox` as an `rdf:List` (ordered, dedup-safe). LinkML supports `multivalued: true` + an ordering hint; the generator currently emits a repeated predicate. Investigate `inlined_as_list` or a custom shape post-processor.
+- **(b)** Replace the 4-float predicate with 4 typed predicates (`bbox_x0, bbox_y0, bbox_x1, bbox_y1`). Verbose but unambiguous; matches the schema's per-corner semantics anyway.
+- **(c)** Accept the modeling limitation, document it, and forbid degenerate bboxes via a Pydantic validator. Cheapest, but means SHACL is no longer authoritative for bbox cardinality.
+
+Until F4 lands, `validate_instance` reports a false positive for any instance whose bbox has 2+ identical corner coordinates. Downstream code in T24 should be aware.
+
 ### F3. Missing Measurement subclasses (surfaced by T20/T20.5 review, 2026-06-01)
 The schema models metrics as Measurement subclasses (`Overpotential`,
 `TafelSlope`, `ExchangeCurrentDensity`, `ChargeTransferCoefficient`,
