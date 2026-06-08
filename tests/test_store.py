@@ -51,8 +51,10 @@ def test_insert_yields_measurement_and_provenance():
     # Concrete: 3 m-side (type, value, unit_label) + 4 paper-side (type,
     # sha256, identifier, name) + 2 PROV links (wasDerivedFrom, wasGeneratedBy)
     # + 9 activity-side (used, page, 4×bbox, parserName, runId, sourceText)
-    # = 18 triples for the populated fixture.
-    assert len(store) >= 15
+    # = 18 triples for the populated fixture. Pin the exact count so a
+    # regression that silently omits an optional triple (e.g. DOI on Paper,
+    # sourceText on the activity) is caught loudly.
+    assert len(store) == 18
 
 
 def test_sparql_roundtrips_value():
