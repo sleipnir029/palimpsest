@@ -287,7 +287,10 @@ class Evidence(ConfiguredBaseModel):
 
     paper: Paper = Field(default=..., json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence'], 'slot_uri': 'palimpsest:paper'} })
     page: int = Field(default=..., json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence'], 'slot_uri': 'palimpsest:page'} })
-    bbox: list[float] = Field(default=..., description="""Page-relative (x0, y0, x1, y1); exactly 4 floats.""", min_length=4, max_length=4, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence'], 'slot_uri': 'palimpsest:bbox'} })
+    bbox_x0: float = Field(default=..., description="""Page-relative left edge (x0) of the source region.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence'], 'slot_uri': 'palimpsest:bboxX0'} })
+    bbox_y0: float = Field(default=..., description="""Page-relative top edge (y0) of the source region.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence'], 'slot_uri': 'palimpsest:bboxY0'} })
+    bbox_x1: float = Field(default=..., description="""Page-relative right edge (x1) of the source region.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence'], 'slot_uri': 'palimpsest:bboxX1'} })
+    bbox_y1: float = Field(default=..., description="""Page-relative bottom edge (y1) of the source region.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence'], 'slot_uri': 'palimpsest:bboxY1'} })
     source_text: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence'], 'slot_uri': 'palimpsest:sourceText'} })
     parser_name: str = Field(default=..., json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence'], 'slot_uri': 'palimpsest:parserName'} })
 

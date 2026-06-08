@@ -55,7 +55,10 @@ def _evidence(sha: str) -> dict:
     return {
         "paper": {"sha256": sha},
         "page": 3,
-        "bbox": [10.0, 20.0, 30.0, 40.0],
+        "bbox_x0": 10.0,
+        "bbox_y0": 20.0,
+        "bbox_x1": 30.0,
+        "bbox_y1": 40.0,
         "parser_name": "mineru",
     }
 
@@ -177,9 +180,9 @@ def test_unknown_class(tmp_path):
 
 
 def test_partial_evidence_fails(tmp_path):
-    """T19 audit made Evidence.{paper,page,bbox,parser_name} all required.
+    """T19 audit + F4 split made Evidence.{paper,page,bbox_*,parser_name} required.
 
-    Provenance is CLAUDE.md's non-negotiable; missing any of the four MUST
+    Provenance is CLAUDE.md's non-negotiable; missing any required slot MUST
     surface as a ValidationError so the agent can re-prompt rather than ship
     an identity-less Evidence into the graph.
     """
@@ -187,7 +190,7 @@ def test_partial_evidence_fails(tmp_path):
     cache = _seed_cache(tmp_path, sha)
     bad_evidence = {
         "paper": {"sha256": sha},
-        "bbox": [1.0, 2.0, 3.0, 4.0],
+        "bbox_x0": 1.0, "bbox_y0": 2.0, "bbox_x1": 3.0, "bbox_y1": 4.0,
         "parser_name": "mineru",
         # `page` deliberately omitted
     }
@@ -224,7 +227,7 @@ def test_provenance_sha_is_overwritten(tmp_path):
     bad_evidence = {
         "paper": {"sha256": "WRONG_HALLUCINATED_SHA"},
         "page": 3,
-        "bbox": [10.0, 20.0, 30.0, 40.0],
+        "bbox_x0": 10.0, "bbox_y0": 20.0, "bbox_x1": 30.0, "bbox_y1": 40.0,
         "parser_name": "GUESSED",
     }
     response = {

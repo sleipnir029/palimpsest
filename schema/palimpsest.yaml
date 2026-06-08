@@ -138,10 +138,17 @@ classes:
     slots:
       - paper
       - page
-      - bbox
+      - bbox_x0
+      - bbox_y0
+      - bbox_x1
+      - bbox_y1
       - source_text
       - parser_name
 
+  # F1: intentionally slot-less. Acts as an IRI placeholder so a Paper can
+  # carry an "this paper studies OER" type assertion without forcing slots
+  # we don't yet model (catalyst-of-this-reaction, product, equation). If a
+  # future card needs those, add slots and drop this comment.
   OxygenEvolutionReaction:
     class_uri: palimpsest:OxygenEvolutionReaction
     # TODO_EMMO_UPSTREAM: request OxygenEvolutionReaction as subclass of AnodicReaction.
@@ -185,35 +192,11 @@ slots:
     description: Human-readable unit (e.g. "mV", "mA/cm2"); QUDT IRI on the typed class.
 
   # --- OER metric slots (Appendix E rows 651-664) ---
-  overpotential_at_10mAcm2:
-    range: float
-    slot_uri: palimpsest:overpotentialAt10mAcm2
-    # TODO_EMMO_UPSTREAM: request OverpotentialAtBenchmarkCurrentDensity.
-    close_mappings:
-      - emmo:electrochemistry_1cd1d777_e67b_47eb_81f1_edac35d9f2c6  # Overpotential
-    unit:
-      ucum_code: mV
-      exact_mappings:
-        - qudt:MilliV
-    description: Overpotential required to reach 10 mA/cm2; conventional OER benchmark.
-
-  activation_overpotential:
-    range: float
-    # Verified hash, Appendix E line 652.
-    slot_uri: emmo:electrochemistry_7fa406b0_512a_4d59_9e0c_5d8aba0103ae
-    unit:
-      ucum_code: mV
-      exact_mappings:
-        - qudt:MilliV
-
-  anodic_overpotential:
-    range: float
-    # Verified hash, Appendix E line 653.
-    slot_uri: emmo:electrochemistry_565c0b10_70fe_441a_b76a_b9a8e08ca7b7
-    unit:
-      ucum_code: mV
-      exact_mappings:
-        - qudt:MilliV
+  # F2 (2026-06-08): overpotential_at_10mAcm2, activation_overpotential,
+  # anodic_overpotential removed — they were defined as slots but no class
+  # listed them, so LinkML emitted them into context.jsonld as orphan IRIs.
+  # The benchmark-current variants live in `value`+`unit_label`+`condition`
+  # instances of Overpotential; the typed sub-slots aren't needed.
 
   tafel_slope:
     range: float
@@ -272,14 +255,9 @@ slots:
       exact_mappings:
         - qudt:PER-SEC
 
-  oer_reaction:
-    range: OxygenEvolutionReaction
-    slot_uri: palimpsest:oerReaction
-
-  catalyst:
-    range: Catalyst
-    # Verified hash (Electrocatalyst), Appendix E line 661.
-    slot_uri: emmo:electrochemistry_a3b53904_22b1_42a9_a515_c8a3aed7e841
+  # F2 (2026-06-08): oer_reaction + catalyst removed — defined as relationship
+  # slots but no class listed them (would-be Paper→OER and Measurement→Catalyst
+  # links). Re-add when a class actually needs the relationship.
 
   electrolyte_ph:
     range: float
@@ -325,10 +303,11 @@ slots:
     description: Parser name and version (e.g. "docling@2.95.0").
 
   # --- Evidence-anchor slots (palimpsest-local) ---
-  # paper / page / bbox / parser_name are REQUIRED per CLAUDE.md provenance
-  # non-negotiable: "every triple … carries (paper_hash, parser, page, bbox,
-  # run_id)". source_text is the optional snippet quote. run_id is tracked
-  # outside the schema (CostMeter ledger) and gets stitched onto triples in T24.
+  # paper / page / bbox_{x0,y0,x1,y1} / parser_name are REQUIRED per CLAUDE.md
+  # provenance non-negotiable: "every triple … carries (paper_hash, parser,
+  # page, bbox, run_id)". source_text is the optional snippet quote. run_id is
+  # tracked outside the schema (CostMeter ledger) and gets stitched onto
+  # triples in T24.
   paper:
     range: Paper
     required: true
@@ -337,14 +316,32 @@ slots:
     range: integer
     required: true
     slot_uri: palimpsest:page
-  bbox:
+  # F4 (2026-06-08): bbox split from list[float] into 4 typed slots so SHACL
+  # cardinality is per-corner. The previous `multivalued: true` + min/max 4
+  # design generated `sh:minCount 4` on a single `palimpsest:bbox` predicate,
+  # which RDF dedups when corner coordinates repeat (axis-aligned regions,
+  # single-line text spans). Four typed predicates make the constraint
+  # unambiguous and dedup-safe.
+  bbox_x0:
     range: float
-    multivalued: true
     required: true
-    minimum_cardinality: 4
-    maximum_cardinality: 4
-    slot_uri: palimpsest:bbox
-    description: Page-relative (x0, y0, x1, y1); exactly 4 floats.
+    slot_uri: palimpsest:bboxX0
+    description: Page-relative left edge (x0) of the source region.
+  bbox_y0:
+    range: float
+    required: true
+    slot_uri: palimpsest:bboxY0
+    description: Page-relative top edge (y0) of the source region.
+  bbox_x1:
+    range: float
+    required: true
+    slot_uri: palimpsest:bboxX1
+    description: Page-relative right edge (x1) of the source region.
+  bbox_y1:
+    range: float
+    required: true
+    slot_uri: palimpsest:bboxY1
+    description: Page-relative bottom edge (y1) of the source region.
   source_text:
     range: string
     slot_uri: palimpsest:sourceText
