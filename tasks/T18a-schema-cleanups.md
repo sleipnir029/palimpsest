@@ -36,17 +36,19 @@ first three (overpotential variants) look like Appendix E rows that didn't
 make it into any class's slot list. `catalyst` and `oer_reaction` look like
 relationship slots a future Paper class would use.
 
-### F4. `bbox` as a repeated predicate is fragile to RDF literal dedup (surfaced by T23 review, 2026-06-08)
+### F4. `bbox` as a repeated predicate is fragile to RDF literal dedup — **blocks T24** (surfaced by T23 review, 2026-06-08)
 
 The SHACL Evidence shape declares `bbox` as `sh:datatype xsd:float ; sh:minCount 4 ; sh:maxCount 4` — i.e. the 4 floats are 4 separate triples on the same `palimpsest:bbox` predicate. RDF deduplicates identical literals on the same (subject, predicate), so a degenerate bbox like `[0.0, 0.0, 1.0, 1.0]` (which Pydantic's `min_length=4, max_length=4` accepts) serializes to **2 distinct literals**, tripping `sh:minCount 4`. Empirically reproduced in the T23 reviewer pass.
 
-This is a SHACL-modeling issue, not a validator bug. Fix options:
+**Why this blocks T24, not just a follow-up:** T24 routes real extraction outputs through `validate_instance`. Real bboxes regularly have repeated coordinates — single-line text spans share `y0 == y1` after rounding, axis-aligned figure captions can share `x0 == x1`, any zero-area or degenerate region produces 2–3 distinct floats instead of 4. T24 will refuse a non-trivial fraction of Pydantic-valid extractions until F4 lands.
+
+Fix options:
 
 - **(a)** Model `bbox` as an `rdf:List` (ordered, dedup-safe). LinkML supports `multivalued: true` + an ordering hint; the generator currently emits a repeated predicate. Investigate `inlined_as_list` or a custom shape post-processor.
 - **(b)** Replace the 4-float predicate with 4 typed predicates (`bbox_x0, bbox_y0, bbox_x1, bbox_y1`). Verbose but unambiguous; matches the schema's per-corner semantics anyway.
 - **(c)** Accept the modeling limitation, document it, and forbid degenerate bboxes via a Pydantic validator. Cheapest, but means SHACL is no longer authoritative for bbox cardinality.
 
-Until F4 lands, `validate_instance` reports a false positive for any instance whose bbox has 2+ identical corner coordinates. Downstream code in T24 should be aware.
+Recommendation: **(b)** — explicit per-corner predicates remove the ambiguity at the schema level and don't require a custom post-processor. Schema regen + validator regression test covers it. T24 should not start until this lands.
 
 ### F3. Missing Measurement subclasses (surfaced by T20/T20.5 review, 2026-06-01)
 The schema models metrics as Measurement subclasses (`Overpotential`,
