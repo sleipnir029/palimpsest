@@ -190,14 +190,21 @@
             "additionalProperties": false,
             "description": "Provenance anchor for an extracted triple, per CLAUDE.md non-negotiable.",
             "properties": {
-                "bbox": {
-                    "description": "Page-relative (x0, y0, x1, y1); exactly 4 floats.",
-                    "items": {
-                        "type": "number"
-                    },
-                    "maxItems": 4,
-                    "minItems": 4,
-                    "type": "array"
+                "bbox_x0": {
+                    "description": "Page-relative left edge (x0) of the source region.",
+                    "type": "number"
+                },
+                "bbox_x1": {
+                    "description": "Page-relative right edge (x1) of the source region.",
+                    "type": "number"
+                },
+                "bbox_y0": {
+                    "description": "Page-relative top edge (y0) of the source region.",
+                    "type": "number"
+                },
+                "bbox_y1": {
+                    "description": "Page-relative bottom edge (y1) of the source region.",
+                    "type": "number"
                 },
                 "page": {
                     "type": "integer"
@@ -218,7 +225,10 @@
             "required": [
                 "paper",
                 "page",
-                "bbox",
+                "bbox_x0",
+                "bbox_y0",
+                "bbox_x1",
+                "bbox_y1",
                 "parser_name"
             ],
             "title": "Evidence",
@@ -528,4 +538,3 @@
     "type": "object",
     "version": "0.1.0"
 }
-

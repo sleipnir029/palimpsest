@@ -117,7 +117,9 @@ Always record the disambiguating field.
 - One `Measurement` per (variable, conditions) tuple. Do not collapse two
   values reported under different conditions into one slot.
 - Every `Measurement` MUST carry `Evidence` with `paper.sha256`, `page`,
-  `bbox`, and `parser_name` (T18 schema required fields). Without all four,
+  the four per-corner bbox floats (`bbox_x0`, `bbox_y0`, `bbox_x1`, `bbox_y1`,
+  page-relative; F4 split bbox into 4 typed slots so SHACL cardinality is
+  dedup-safe), and `parser_name` (T18 schema required fields). Without all,
   do not emit the triple.
 - Free-text `unit_label` on `Measurement` is for the unit as printed in the
   paper (e.g. `"mV"`, `"A g⁻¹_Ir"`); the canonical unit lives on the slot

@@ -33,7 +33,7 @@ def _good_overpotential(value: float = 236.0) -> Overpotential:
         evidence=Evidence(
             paper=Paper(sha256="abc123", doi="10.1000/x"),
             page=3,
-            bbox=[0.1, 0.2, 0.3, 0.4],
+            bbox_x0=0.1, bbox_y0=0.2, bbox_x1=0.3, bbox_y1=0.4,
             parser_name="mineru",
         ),
     )
@@ -56,7 +56,7 @@ def test_evidence_missing_parser_name_fails():
         "@type": "Evidence",
         "paper": {"@type": "Paper", "sha256": "abc"},
         "page": 3,
-        "bbox": [0.1, 0.2, 0.3, 0.4],
+        "bbox_x0": 0.1, "bbox_y0": 0.2, "bbox_x1": 0.3, "bbox_y1": 0.4,
         # parser_name intentionally omitted
     }
     ok, report = _validate_jsonld(bad)
@@ -99,10 +99,8 @@ def test_closed_shape_rejects_unknown_property():
 # Note: a meaningful `validate_batch` mixed-pass/fail test requires a
 # Pydantic-valid + SHACL-fail input. The current schema has none — every
 # SHACL `sh:minCount 1` slot is also a Pydantic required field, so any
-# SHACL-fail item is rejected by Pydantic at construction. The only
-# Pydantic-valid + SHACL-fail input today is the degenerate-bbox dedup
-# case logged as T18a F4 (bbox=[0,0,1,1] collapses to 2 literals), but
-# writing a test against a known schema bug is wrong — it would have to
-# be deleted once F4 lands. Once F4 is fixed or T24 introduces an
-# external JSON-LD path that bypasses Pydantic, add a real mixed-batch
-# test here.
+# SHACL-fail item is rejected by Pydantic at construction. (F4 closed
+# the previous Pydantic-valid + SHACL-fail bbox-dedup gap by splitting
+# bbox into 4 typed slots; no replacement input has surfaced.) Add a
+# real mixed-batch test here if T24 introduces an external JSON-LD path
+# that bypasses Pydantic.

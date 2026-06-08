@@ -36,7 +36,7 @@ first three (overpotential variants) look like Appendix E rows that didn't
 make it into any class's slot list. `catalyst` and `oer_reaction` look like
 relationship slots a future Paper class would use.
 
-### F4. `bbox` as a repeated predicate is fragile to RDF literal dedup — **blocks T24** (surfaced by T23 review, 2026-06-08)
+### F4. `bbox` as a repeated predicate is fragile to RDF literal dedup — ✓ resolved 2026-06-08 (applied option b)
 
 The SHACL Evidence shape declares `bbox` as `sh:datatype xsd:float ; sh:minCount 4 ; sh:maxCount 4` — i.e. the 4 floats are 4 separate triples on the same `palimpsest:bbox` predicate. RDF deduplicates identical literals on the same (subject, predicate), so a degenerate bbox like `[0.0, 0.0, 1.0, 1.0]` (which Pydantic's `min_length=4, max_length=4` accepts) serializes to **2 distinct literals**, tripping `sh:minCount 4`. Empirically reproduced in the T23 reviewer pass.
 
@@ -49,6 +49,8 @@ Fix options:
 - **(c)** Accept the modeling limitation, document it, and forbid degenerate bboxes via a Pydantic validator. Cheapest, but means SHACL is no longer authoritative for bbox cardinality.
 
 Recommendation: **(b)** — explicit per-corner predicates remove the ambiguity at the schema level and don't require a custom post-processor. Schema regen + validator regression test covers it. T24 should not start until this lands.
+
+**Landed 2026-06-08 (option b applied):** `schema/palimpsest.yaml` splits `bbox` into 4 typed slots `bbox_x0`/`bbox_y0`/`bbox_x1`/`bbox_y1` on Evidence; each `range: float, required: true`, with `slot_uri: palimpsest:bboxX0` (etc). Regenerated 4 artifacts. Cascade in same commit: `src/palimpsest/tools/extract.py` system prompt mentions the 4 slots; `tests/test_schema_gen.py`, `tests/test_extract.py`, `tests/test_validation.py` fixtures all switched from `bbox=[a,b,c,d]` to `bbox_x0=a, bbox_y0=b, bbox_x1=c, bbox_y1=d`; `skills/oer-extraction/SKILL.md` output-discipline section updated. Sanity confirmed: `Evidence(..., bbox_x0=0.0, bbox_y0=0.0, bbox_x1=1.0, bbox_y1=1.0, ...)` (degenerate, was the dedup case) now passes SHACL. Suite still 82 passed / 3 live skipped, zero regressions.
 
 ### F3. Missing Measurement subclasses (surfaced by T20/T20.5 review, 2026-06-01)
 The schema models metrics as Measurement subclasses (`Overpotential`,
