@@ -127,3 +127,54 @@ def test_paper_requires_sha256():
     assert p.sha256 == "deadbeef"
     assert p.doi is None
     assert p.title is None
+
+
+# --- T47: H2KG skos alignment ---
+
+H2KG_NS = "https://w3id.org/h2kg/hydrogen-ontology#"
+
+# Each metric class → the H2KG term it close-matches. ECSA's H2KG fragment is the
+# spelled-out name (altLabel "ECSA"), verified against ViMiLabs/AIMWORKS@main 2026-06-10.
+H2KG_CLOSE_MAPPINGS = {
+    "Overpotential": "h2kg:Overpotential",
+    "TafelSlope": "h2kg:TafelSlope",
+    "ExchangeCurrentDensity": "h2kg:ExchangeCurrentDensity",
+    "ChargeTransferCoefficient": "h2kg:ChargeTransferCoefficient",
+    "MassActivity": "h2kg:MassActivity",
+    "TurnoverFrequency": "h2kg:TurnoverFrequency",
+    "ECSA": "h2kg:ElectrochemicallyActiveSurfaceArea",
+}
+
+
+def test_h2kg_prefix_in_jsonld_context():
+    """T47: the h2kg prefix resolves to the H2KG namespace in the generated context."""
+    p = GEN / "context.jsonld"
+    data = json.loads(p.read_text())
+    assert data["@context"]["h2kg"] == H2KG_NS
+
+
+def test_h2kg_close_mappings_on_classes():
+    """T47: each metric class carries its expected h2kg: CURIE in close_mappings.
+
+    context.jsonld only proves the prefix map; this parses the source schema to
+    prove the mappings landed on the right classes, then confirms each CURIE
+    survived regeneration into pydantic.py's linkml_meta (the one generated
+    artifact that actually carries the feature) — so a regen that drops a
+    mapping fails here, not silently.
+    """
+    import yaml
+
+    schema = yaml.safe_load(
+        (Path(__file__).resolve().parent.parent / "schema" / "palimpsest.yaml").read_text()
+    )
+    assert schema["prefixes"]["h2kg"] == H2KG_NS
+
+    classes = schema["classes"]
+    pydantic_src = (GEN / "pydantic.py").read_text()
+    for cls, curie in H2KG_CLOSE_MAPPINGS.items():
+        assert curie in classes[cls].get("close_mappings", []), (
+            f"{cls} missing close_mapping {curie} in schema/palimpsest.yaml"
+        )
+        assert curie in pydantic_src, (
+            f"{curie} missing from generated pydantic.py — stale regen?"
+        )

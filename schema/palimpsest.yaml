@@ -20,6 +20,9 @@ prefixes:
   schema:     http://schema.org/
   skos:       http://www.w3.org/2004/02/skos/core#
   xsd:        http://www.w3.org/2001/XMLSchema#
+  # H2KG v1.0.0 (owl:versionIRI .../releases/1.0.0); terms verified against
+  # ViMiLabs/AIMWORKS@main 2026-06-10 (the bare release IRI does not yet resolve).
+  h2kg:       https://w3id.org/h2kg/hydrogen-ontology#
 
 default_prefix: palimpsest
 default_range: string
@@ -55,6 +58,9 @@ classes:
     is_a: Measurement
     # Verified hash, palimpsest-v2-design.md Appendix E line 651.
     class_uri: emmo:electrochemistry_1cd1d777_e67b_47eb_81f1_edac35d9f2c6
+    # Dual-anchor: ECHO class_uri kept; h2kg:Overpotential (a h2kg:Property) added for H2KG discoverability.
+    close_mappings:
+      - h2kg:Overpotential
     description: Deviation of the electrode potential from its equilibrium value.
 
   TafelSlope:
@@ -64,18 +70,25 @@ classes:
     # ButlerVolmerEquation under ElectrochemicalRelation.
     close_mappings:
       - emmo:electrochemistry_d48ea516_5cac_4f86_bc88_21b6276c0938  # ButlerVolmerEquation
+      - h2kg:TafelSlope  # official H2KG home (a h2kg:Property) for this local class
     description: Slope of overpotential vs log(current density) in the Tafel region.
 
   ExchangeCurrentDensity:
     is_a: Measurement
     # Hash resolved via emmo_iri("ExchangeCurrentDensity") against ECHO (2026-06-01).
     class_uri: emmo:electrochemistry_e9fd9ef9_adfe_46cb_b2f9_4558468a25e7
+    # Dual-anchor: ECHO class_uri kept; H2KG models this as a h2kg:Parameter (simulation input).
+    close_mappings:
+      - h2kg:ExchangeCurrentDensity
     description: Current density at zero overpotential; Butler-Volmer i0.
 
   ChargeTransferCoefficient:
     is_a: Measurement
     # Verified hash, palimpsest-v2-design.md Appendix E line 656.
     class_uri: emmo:electrochemistry_a4dfa5c1_55a9_4285_b71d_90cf6613ca31
+    # Dual-anchor: ECHO class_uri kept; H2KG models this as a h2kg:Parameter (simulation input).
+    close_mappings:
+      - h2kg:ChargeTransferCoefficient
     description: Butler-Volmer alpha; fraction of overpotential affecting forward reaction.
 
   MassActivity:
@@ -84,6 +97,8 @@ classes:
     # TODO_EMMO_UPSTREAM: request MassActivity under Electrocatalyst-related metrics.
     related_mappings:
       - emmo:electrochemistry_a3b53904_22b1_42a9_a515_c8a3aed7e841  # Electrocatalyst
+    close_mappings:
+      - h2kg:MassActivity  # official H2KG home (a h2kg:Property) for this local class
     description: Catalytic current per unit mass of active material (A/g).
 
   TurnoverFrequency:
@@ -92,12 +107,17 @@ classes:
     # TODO_EMMO_UPSTREAM: request TurnoverFrequency as Electrocatalyst metric.
     related_mappings:
       - emmo:electrochemistry_a3b53904_22b1_42a9_a515_c8a3aed7e841  # Electrocatalyst
+    close_mappings:
+      - h2kg:TurnoverFrequency  # official H2KG home (a h2kg:Property) for this local class
     description: Catalytic events per active site per second.
 
   ECSA:
     is_a: Measurement
     # Hash resolved via emmo_iri("ElectrochemicallyActiveSurfaceArea") against ECHO (2026-06-01).
     class_uri: emmo:electrochemistry_bad1b6f4_1b26_40e2_b552_6d53873e3973
+    # Dual-anchor: ECHO class_uri kept; H2KG fragment is the spelled-out name (altLabel "ECSA").
+    close_mappings:
+      - h2kg:ElectrochemicallyActiveSurfaceArea
     description: Electrochemically active surface area.
 
   Catalyst:
@@ -152,6 +172,8 @@ classes:
   OxygenEvolutionReaction:
     class_uri: palimpsest:OxygenEvolutionReaction
     # TODO_EMMO_UPSTREAM: request OxygenEvolutionReaction as subclass of AnodicReaction.
+    # H2KG also lacks a native OER reaction class (only h2kg:OERPerformanceDataset) —
+    # shared-upstream gap, not a one-sided palimpsest gap; see T43.
     close_mappings:
       - emmo:electrochemistry_a0580fa9_5073_44af_b33e_7adbc83892d0  # AnodicReaction
     broad_mappings:
