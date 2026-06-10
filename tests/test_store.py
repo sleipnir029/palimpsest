@@ -1,8 +1,8 @@
 """T24 — RDF store tests.
 
 Covers:
-- Insert one Overpotential: measurement node + paper node + activity triples
-  land; provenance non-negotiable expressed (≥10 provenance-side triples).
+- Insert one Overpotential: measurement node + Evidence node + Paper node land
+  in the data graph; run-provenance lands in a per-run named graph.
 - SPARQL roundtrip for the inserted value.
 - Refusal to insert a measurement without Evidence (CLAUDE.md).
 - Two-run_id handling: parse_run_id stored separately when provided.
@@ -21,7 +21,7 @@ from schema.generated.pydantic import (
     Paper,
 )
 
-from palimpsest.store import PALIM, PROV, RDFStore
+from palimpsest.store import PALIM, RDFStore
 
 
 def _evidence() -> Evidence:
@@ -48,16 +48,17 @@ def test_insert_yields_measurement_and_provenance():
     iri = store.insert_extraction(_overpotential(), run_id="r1")
     assert iri.startswith(f"{PALIM}measurement/")
 
-    # Per-card expectation: ≥1 measurement triple + ≥5 provenance triples.
-    # Concrete: 4 m-side (type, value, unit_label, condition-edge) + 4 paper-side
-    # (type, sha256, identifier, name) + 2 PROV links (wasDerivedFrom,
-    # wasGeneratedBy) + 9 activity-side (used, page, 4×bbox, parserName, runId,
-    # sourceText) + 3 condition-side (type, currentDensity, temperatureC)
-    # = 22 triples for the populated fixture. Pin the exact count so a regression
-    # that silently omits a triple is caught loudly.
-    # NOTE: was 18 before T46/C1; +4 are the now-persisted Condition triples
-    # (the fixture carries current_density=10, temperature_C=25). Conditions used
-    # to be dropped — see test_condition_written_to_graph.
+    # Exact count pins the whole quad set (data graph + run-provenance graph)
+    # so a regression that silently omits a triple is caught loudly. Post-T46b
+    # structure (21 data-graph + 1 run-graph = 22):
+    #   5 measurement-side: type, value, unitLabel, condition-edge,
+    #                       prov:hadPrimarySource-edge
+    #   9 evidence-side:    type, paper-edge, page, 4×bbox, parserName, sourceText
+    #   4 paper-side:       type, sha256, identifier, name
+    #   3 condition-side:   type, currentDensity, temperatureC
+    #   1 run-graph:        palimpsest:runId  (named graph palimpsest:run/r1)
+    # (T46b moved provenance from a prov:wasGeneratedBy activity to an Evidence
+    # node + a run-provenance named graph; the total is coincidentally still 22.)
     assert len(store) == 22
 
 
@@ -129,7 +130,8 @@ def test_electrolyte_written_to_graph():
 
 def test_no_condition_adds_no_condition_triples():
     """A measurement without a Condition must add zero condition triples
-    (guard path). Baseline count stays at the pre-C1 18."""
+    (guard path). Baseline: 4 measurement + 9 evidence + 4 paper + 1 run-graph
+    = 18 (no condition node)."""
     op = Overpotential(value=1.0, unit_label="mV", evidence=_evidence())
     store = RDFStore()
     store.insert_extraction(op, run_id="r1")
@@ -166,25 +168,56 @@ def test_refuses_without_evidence():
     assert len(store) == 0
 
 
-def test_two_run_ids_distinct_predicates():
-    """Extraction run_id and parse_run_id land on separate predicates so
-    the parse → triple chain is recoverable without joining parser_runs.
+def _conforms(store: RDFStore) -> tuple[bool, str]:
+    """Run the shipped SHACL shapes against the store's default (data) graph.
+
+    The C4 acceptance bar: what is persisted must pass the same shapes that
+    `validate_instance` runs pre-insert. Named graphs (run-provenance) are
+    excluded by `dump_default_graph`, so only the data view is validated.
+    """
+    import pyshacl
+    from rdflib import Graph as RDFGraph
+
+    from palimpsest.validation import _shapes
+
+    g = RDFGraph().parse(data=store.dump_default_graph().decode(), format="turtle")
+    conforms, _, report = pyshacl.validate(g, shacl_graph=_shapes(), inference="none")
+    return conforms, report
+
+
+def test_stored_data_graph_conforms_to_shacl():
+    """C4 (T46b): the persisted measurement subgraph must pass the shipped
+    closed SHACL shapes — measurement via prov:hadPrimarySource→Evidence and
+    palimpsest:condition→Condition, no stray prov:wasDerivedFrom/wasGeneratedBy.
     """
     store = RDFStore()
-    store.insert_extraction(
+    store.insert_extraction(_overpotential(), run_id="r1")
+    conforms, report = _conforms(store)
+    assert conforms, report
+
+
+def test_run_ids_in_named_graph():
+    """C4/Option A: run_id and parse_run_id live in a per-run named graph keyed
+    to the measurement IRI — out of the SHACL-validated data graph, but still
+    recoverable per measurement via a GRAPH-clause query.
+    """
+    store = RDFStore()
+    iri = store.insert_extraction(
         _overpotential(),
         run_id="extract-2026-06-08",
         parse_run_id="parse-2026-05-31",
     )
 
+    # Subject must be the returned measurement IRI (the "keyed to the measurement
+    # IRI" guarantee), not merely some node in some named graph.
     rows = store.sparql(
         f"PREFIX palim: <{PALIM}> "
-        f"PREFIX prov: <{PROV}> "
-        "SELECT ?rid ?prid WHERE { "
-        "?m prov:wasGeneratedBy ?a . "
-        "?a palim:runId ?rid ; palim:parseRunId ?prid . }"
+        "SELECT ?m ?rid ?prid WHERE { GRAPH ?g { "
+        "?m palim:runId ?rid ; palim:parseRunId ?prid . } }"
     )
-    assert rows == [{"rid": "extract-2026-06-08", "prid": "parse-2026-05-31"}]
+    assert rows == [
+        {"m": iri, "rid": "extract-2026-06-08", "prid": "parse-2026-05-31"}
+    ]
 
 
 def test_rocksdb_path_persists(tmp_path):

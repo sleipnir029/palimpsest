@@ -15,13 +15,17 @@ pulled from the instance; ``run_id`` and ``parse_run_id`` stay explicit
 because they live outside the schema (CostMeter ledger concern per T24 card
 line 16).
 
-**Two run_ids, two predicates (card line 16 decision):**
-- ``palimpsest:runId`` = extraction run_id (the PROV-O ``prov:wasGeneratedBy``
-  activity that produced the triple).
+**Two run_ids, two predicates — in a named graph (T46b/C4 Option A):**
+Run metadata is NOT a schema slot, so it would break the closed SHACL shapes if
+placed on the measurement/Evidence nodes. It lives instead in a per-run named
+graph ``palimpsest:run/<run_id>`` keyed to the measurement IRI, OUT of the
+SHACL-validated default graph:
+- ``palimpsest:runId`` = extraction run_id (the run that produced the triple).
 - ``palimpsest:parseRunId`` (optional) = the parse run_id whose cached output
-  this extraction read. Stored separately so a parse → triple chain is
-  recoverable without joining through ``parser_runs``; reproducibility is
-  CLAUDE.md-aligned (per-triple traceability beats reconstructable).
+  this extraction read.
+Both are recoverable per measurement via a ``GRAPH``-clause query on ``m_iri``;
+reproducibility is CLAUDE.md-aligned (per-triple traceability beats
+reconstructable) and the link is now a stable IRI, not an anonymous activity.
 """
 
 from __future__ import annotations
@@ -30,7 +34,16 @@ import uuid
 from typing import Any
 
 from pydantic import BaseModel
-from pyoxigraph import BlankNode, Literal, NamedNode, Quad, Store, Variable
+from pyoxigraph import (
+    BlankNode,
+    DefaultGraph,
+    Literal,
+    NamedNode,
+    Quad,
+    RdfFormat,
+    Store,
+    Variable,
+)
 
 PALIM = "https://w3id.org/palimpsest/"
 PROV = "http://www.w3.org/ns/prov#"
@@ -114,9 +127,12 @@ class RDFStore:
 
         m_iri = NamedNode(f"{PALIM}measurement/{uuid.uuid4()}")
         paper_iri = NamedNode(f"{PALIM}paper/{ev.paper.sha256}")
-        activity = BlankNode()
+        evidence = BlankNode()
 
-        # Measurement node ----------------------------------------------------
+        # Measurement node — schema-shaped: value, unitLabel, condition (C1),
+        # prov:hadPrimarySource → Evidence. Matches the closed SHACL shape so the
+        # stored graph passes the same shapes validate_instance runs pre-insert
+        # (T46b/C4); no stray prov:wasDerivedFrom / prov:wasGeneratedBy.
         self._add(m_iri, NamedNode(f"{RDF}type"), _class_iri(instance))
         if instance.value is not None:
             self._add(m_iri, NamedNode(f"{PALIM}value"),
@@ -124,6 +140,26 @@ class RDFStore:
         if instance.unit_label is not None:
             self._add(m_iri, NamedNode(f"{PALIM}unitLabel"),
                       Literal(instance.unit_label))
+        self._add(m_iri, NamedNode(f"{PROV}hadPrimarySource"), evidence)
+
+        # Evidence node (prov:Entity) — the source anchor, mirroring the closed
+        # Evidence shape (paper, page, 4×bbox, parserName, sourceText).
+        self._add(evidence, NamedNode(f"{RDF}type"), NamedNode(f"{PROV}Entity"))
+        self._add(evidence, NamedNode(f"{PALIM}paper"), paper_iri)
+        self._add(evidence, NamedNode(f"{PALIM}page"),
+                  Literal(str(ev.page), datatype=XSD_INT))
+        # F4: 4 typed per-corner bbox predicates (no dedup vulnerability)
+        for slot, pred in (
+            ("bbox_x0", "bboxX0"), ("bbox_y0", "bboxY0"),
+            ("bbox_x1", "bboxX1"), ("bbox_y1", "bboxY1"),
+        ):
+            self._add(evidence, NamedNode(f"{PALIM}{pred}"),
+                      Literal(str(getattr(ev, slot)), datatype=XSD_FLOAT))
+        self._add(evidence, NamedNode(f"{PALIM}parserName"),
+                  Literal(ev.parser_name))
+        if ev.source_text:
+            self._add(evidence, NamedNode(f"{PALIM}sourceText"),
+                      Literal(ev.source_text))
 
         # Paper node (deduped on IRI; pyoxigraph store is set-semantic) ------
         self._add(paper_iri, NamedNode(f"{RDF}type"),
@@ -137,28 +173,15 @@ class RDFStore:
             self._add(paper_iri, NamedNode(f"{SCHEMA_ORG}name"),
                       Literal(ev.paper.title))
 
-        # PROV-O links --------------------------------------------------------
-        self._add(m_iri, NamedNode(f"{PROV}wasDerivedFrom"), paper_iri)
-        self._add(m_iri, NamedNode(f"{PROV}wasGeneratedBy"), activity)
-        self._add(activity, NamedNode(f"{PROV}used"), paper_iri)
-        self._add(activity, NamedNode(f"{PALIM}page"),
-                  Literal(str(ev.page), datatype=XSD_INT))
-        # F4: 4 typed per-corner bbox predicates (no dedup vulnerability)
-        for slot, pred in (
-            ("bbox_x0", "bboxX0"), ("bbox_y0", "bboxY0"),
-            ("bbox_x1", "bboxX1"), ("bbox_y1", "bboxY1"),
-        ):
-            self._add(activity, NamedNode(f"{PALIM}{pred}"),
-                      Literal(str(getattr(ev, slot)), datatype=XSD_FLOAT))
-        self._add(activity, NamedNode(f"{PALIM}parserName"),
-                  Literal(ev.parser_name))
-        self._add(activity, NamedNode(f"{PALIM}runId"), Literal(run_id))
+        # Run-provenance — per-run named graph keyed to the measurement IRI
+        # (T46b/C4 Option A). run_id is not a schema slot; keeping it out of the
+        # data graph preserves the closed-shape conformance above while staying
+        # per-measurement recoverable via a GRAPH-clause query.
+        run_graph = NamedNode(f"{PALIM}run/{run_id}")
+        self._add(m_iri, NamedNode(f"{PALIM}runId"), Literal(run_id), run_graph)
         if parse_run_id is not None:
-            self._add(activity, NamedNode(f"{PALIM}parseRunId"),
-                      Literal(parse_run_id))
-        if ev.source_text:
-            self._add(activity, NamedNode(f"{PALIM}sourceText"),
-                      Literal(ev.source_text))
+            self._add(m_iri, NamedNode(f"{PALIM}parseRunId"),
+                      Literal(parse_run_id), run_graph)
 
         # Condition node (C1/T46) — experimental context; dropping it makes the
         # measurement uncomparable ("236 mV" means nothing without "at 10 mA/cm²").
@@ -246,5 +269,13 @@ class RDFStore:
     def __len__(self) -> int:
         return len(self._store)
 
-    def _add(self, s: Any, p: Any, o: Any) -> None:
-        self._store.add(Quad(s, p, o))
+    def dump_default_graph(self) -> bytes:
+        """Serialize the default (data) graph as Turtle, excluding named graphs.
+
+        Run-provenance lives in per-run named graphs (T46b/C4 Option A); this
+        returns only the SHACL-validated data view.
+        """
+        return self._store.dump(format=RdfFormat.TURTLE, from_graph=DefaultGraph())
+
+    def _add(self, s: Any, p: Any, o: Any, graph: Any = None) -> None:
+        self._store.add(Quad(s, p, o) if graph is None else Quad(s, p, o, graph))
