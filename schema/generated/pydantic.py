@@ -83,6 +83,8 @@ linkml_meta = LinkMLMeta({'default_prefix': 'palimpsest',
      'name': 'palimpsest',
      'prefixes': {'emmo': {'prefix_prefix': 'emmo',
                            'prefix_reference': 'https://w3id.org/emmo/domain/electrochemistry#'},
+                  'h2kg': {'prefix_prefix': 'h2kg',
+                           'prefix_reference': 'https://w3id.org/h2kg/hydrogen-ontology#'},
                   'linkml': {'prefix_prefix': 'linkml',
                              'prefix_reference': 'https://w3id.org/linkml/'},
                   'palimpsest': {'prefix_prefix': 'palimpsest',
@@ -133,6 +135,7 @@ class Overpotential(Measurement):
     Deviation of the electrode potential from its equilibrium value.
     """
     linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta({'class_uri': 'emmo:electrochemistry_1cd1d777_e67b_47eb_81f1_edac35d9f2c6',
+         'close_mappings': ['h2kg:Overpotential'],
          'from_schema': 'https://w3id.org/palimpsest/v1'})
 
     value: Optional[float] = Field(default=None, description="""Numeric value of the measurement, in the unit named by unit_label.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:value'} })
@@ -146,7 +149,8 @@ class TafelSlope(Measurement):
     Slope of overpotential vs log(current density) in the Tafel region.
     """
     linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta({'class_uri': 'palimpsest:TafelSlope',
-         'close_mappings': ['emmo:electrochemistry_d48ea516_5cac_4f86_bc88_21b6276c0938'],
+         'close_mappings': ['emmo:electrochemistry_d48ea516_5cac_4f86_bc88_21b6276c0938',
+                            'h2kg:TafelSlope'],
          'from_schema': 'https://w3id.org/palimpsest/v1'})
 
     value: Optional[float] = Field(default=None, description="""Numeric value of the measurement, in the unit named by unit_label.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:value'} })
@@ -160,6 +164,7 @@ class ExchangeCurrentDensity(Measurement):
     Current density at zero overpotential; Butler-Volmer i0.
     """
     linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta({'class_uri': 'emmo:electrochemistry_e9fd9ef9_adfe_46cb_b2f9_4558468a25e7',
+         'close_mappings': ['h2kg:ExchangeCurrentDensity'],
          'from_schema': 'https://w3id.org/palimpsest/v1'})
 
     value: Optional[float] = Field(default=None, description="""Numeric value of the measurement, in the unit named by unit_label.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:value'} })
@@ -173,6 +178,7 @@ class ChargeTransferCoefficient(Measurement):
     Butler-Volmer alpha; fraction of overpotential affecting forward reaction.
     """
     linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta({'class_uri': 'emmo:electrochemistry_a4dfa5c1_55a9_4285_b71d_90cf6613ca31',
+         'close_mappings': ['h2kg:ChargeTransferCoefficient'],
          'from_schema': 'https://w3id.org/palimpsest/v1'})
 
     value: Optional[float] = Field(default=None, description="""Numeric value of the measurement, in the unit named by unit_label.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:value'} })
@@ -186,6 +192,7 @@ class MassActivity(Measurement):
     Catalytic current per unit mass of active material (A/g).
     """
     linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta({'class_uri': 'palimpsest:MassActivity',
+         'close_mappings': ['h2kg:MassActivity'],
          'from_schema': 'https://w3id.org/palimpsest/v1',
          'related_mappings': ['emmo:electrochemistry_a3b53904_22b1_42a9_a515_c8a3aed7e841']})
 
@@ -200,6 +207,7 @@ class TurnoverFrequency(Measurement):
     Catalytic events per active site per second.
     """
     linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta({'class_uri': 'palimpsest:TurnoverFrequency',
+         'close_mappings': ['h2kg:TurnoverFrequency'],
          'from_schema': 'https://w3id.org/palimpsest/v1',
          'related_mappings': ['emmo:electrochemistry_a3b53904_22b1_42a9_a515_c8a3aed7e841']})
 
@@ -214,6 +222,7 @@ class ECSA(Measurement):
     Electrochemically active surface area.
     """
     linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta({'class_uri': 'emmo:electrochemistry_bad1b6f4_1b26_40e2_b552_6d53873e3973',
+         'close_mappings': ['h2kg:ElectrochemicallyActiveSurfaceArea'],
          'from_schema': 'https://w3id.org/palimpsest/v1'})
 
     value: Optional[float] = Field(default=None, description="""Numeric value of the measurement, in the unit named by unit_label.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:value'} })
