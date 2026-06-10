@@ -15,6 +15,7 @@ import pytest
 
 from schema.generated.pydantic import (
     Condition,
+    Electrolyte,
     Evidence,
     Overpotential,
     Paper,
@@ -48,13 +49,16 @@ def test_insert_yields_measurement_and_provenance():
     assert iri.startswith(f"{PALIM}measurement/")
 
     # Per-card expectation: ≥1 measurement triple + ≥5 provenance triples.
-    # Concrete: 3 m-side (type, value, unit_label) + 4 paper-side (type,
-    # sha256, identifier, name) + 2 PROV links (wasDerivedFrom, wasGeneratedBy)
-    # + 9 activity-side (used, page, 4×bbox, parserName, runId, sourceText)
-    # = 18 triples for the populated fixture. Pin the exact count so a
-    # regression that silently omits an optional triple (e.g. DOI on Paper,
-    # sourceText on the activity) is caught loudly.
-    assert len(store) == 18
+    # Concrete: 4 m-side (type, value, unit_label, condition-edge) + 4 paper-side
+    # (type, sha256, identifier, name) + 2 PROV links (wasDerivedFrom,
+    # wasGeneratedBy) + 9 activity-side (used, page, 4×bbox, parserName, runId,
+    # sourceText) + 3 condition-side (type, currentDensity, temperatureC)
+    # = 22 triples for the populated fixture. Pin the exact count so a regression
+    # that silently omits a triple is caught loudly.
+    # NOTE: was 18 before T46/C1; +4 are the now-persisted Condition triples
+    # (the fixture carries current_density=10, temperature_C=25). Conditions used
+    # to be dropped — see test_condition_written_to_graph.
+    assert len(store) == 22
 
 
 def test_sparql_roundtrips_value():
@@ -73,6 +77,84 @@ def test_sparql_roundtrips_value():
     # numerically rather than pinning the textual form.
     assert len(rows) == 1
     assert float(rows[0]["v"]) == 236.0
+
+
+def test_condition_written_to_graph():
+    """C1 (T46): a measurement's experimental conditions must land in the graph,
+    not be dropped. An overpotential without its current density / temperature is
+    not a comparable datum. The fixture carries current_density=10, temperature_C=25.
+    """
+    store = RDFStore()
+    store.insert_extraction(_overpotential(), run_id="r1")
+
+    rows = store.sparql(
+        f"PREFIX palim: <{PALIM}> "
+        "SELECT ?cd ?t WHERE { "
+        "?m palim:condition ?c . "
+        "?c a palim:Condition ; palim:currentDensity ?cd ; palim:temperatureC ?t . }"
+    )
+    assert len(rows) == 1
+    assert float(rows[0]["cd"]) == 10.0
+    assert float(rows[0]["t"]) == 25.0
+
+
+def test_electrolyte_written_to_graph():
+    """C1 (T46): a Condition's electrolyte (formula, concentration, pH) is a
+    sub-node and must also be persisted."""
+    op = Overpotential(
+        value=300.0,
+        unit_label="mV",
+        condition=Condition(
+            current_density=10.0,
+            electrolyte=Electrolyte(formula="KOH", concentration=1.0, electrolyte_ph=14.0),
+        ),
+        evidence=_evidence(),
+    )
+    store = RDFStore()
+    store.insert_extraction(op, run_id="r1")
+
+    rows = store.sparql(
+        f"PREFIX palim: <{PALIM}> "
+        "SELECT ?f ?c ?ph WHERE { "
+        "?m palim:condition ?cond . "
+        "?cond palim:electrolyte ?e . "
+        "?e a palim:Electrolyte ; palim:formula ?f ; "
+        "palim:concentration ?c ; palim:electrolytePH ?ph . }"
+    )
+    assert len(rows) == 1
+    assert rows[0]["f"] == "KOH"
+    assert float(rows[0]["c"]) == 1.0
+    assert float(rows[0]["ph"]) == 14.0
+
+
+def test_no_condition_adds_no_condition_triples():
+    """A measurement without a Condition must add zero condition triples
+    (guard path). Baseline count stays at the pre-C1 18."""
+    op = Overpotential(value=1.0, unit_label="mV", evidence=_evidence())
+    store = RDFStore()
+    store.insert_extraction(op, run_id="r1")
+
+    rows = store.sparql(
+        f"PREFIX palim: <{PALIM}> SELECT ?c WHERE {{ ?m palim:condition ?c . }}"
+    )
+    assert rows == []
+    assert len(store) == 18
+
+
+def test_empty_condition_emits_no_edge():
+    """A Condition with no populated fields is vacuous — skip it rather than
+    writing a contentless blank node (and likewise an all-None Electrolyte)."""
+    op = Overpotential(
+        value=1.0, unit_label="mV", condition=Condition(), evidence=_evidence()
+    )
+    store = RDFStore()
+    store.insert_extraction(op, run_id="r1")
+
+    rows = store.sparql(
+        f"PREFIX palim: <{PALIM}> SELECT ?c WHERE {{ ?m palim:condition ?c . }}"
+    )
+    assert rows == []
+    assert len(store) == 18
 
 
 def test_refuses_without_evidence():
