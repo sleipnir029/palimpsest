@@ -46,7 +46,14 @@ conform to the shipped shapes.
   assumptions, and `test_two_run_ids_distinct_predicates` change shape — update them deliberately
   to the new model, with documentation, not by bandaiding.
 
-## DECIDE before coding — where do `run_id` / `parse_run_id` live?
+## DECISION (2026-06-10): Option A — run-provenance in a named graph
+**Decided with Rahat.** The data graph (measurement + condition + evidence + paper) is
+SHACL-validated; `run_id`/`parse_run_id` are stored as quads in a `palimpsest:run/<run_id>` named
+graph keyed to the measurement IRI. Rationale: keeps per-triple traceability, gives provenance a
+stable IRI (review §4), and keeps the data graph SHACL-clean without changing the schema contract.
+Options B and C are retained below for historical context; **implement Option A.**
+
+## DECIDE before coding — where do `run_id` / `parse_run_id` live? (resolved → A)
 T24 deliberately stores both per-measurement (`palimpsest:runId` on the activity; optional
 `palimpsest:parseRunId`) for per-triple reproducibility. But both closed shapes (Measurement,
 Evidence) reject any predicate not in their allowlist, and neither lists a run id. The activity
@@ -83,9 +90,9 @@ blank node that currently hosts them is being removed. Pick ONE:
   survives. This is the strongest case against Option C; it directly weakens the provenance
   non-negotiable.
 
-**Recommendation:** Option A — keeps the provenance guarantee intact and SHACL-cleanly separates
-data from run-bookkeeping, at the cost of named-graph handling. Confirm with Rahat/supervisor
-before coding (this touches the "non-negotiable" provenance model).
+**Chosen: Option A** (see DECISION block above). Verification must include a `GRAPH`-clause SPARQL
+query proving `run_id`/`parse_run_id` are recoverable per measurement from the named graph, and the
+post-insert SHACL check must validate the **default (data) graph only**.
 
 ## Verification
 ```bash
