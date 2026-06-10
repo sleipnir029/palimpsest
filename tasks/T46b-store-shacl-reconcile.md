@@ -1,5 +1,13 @@
 # T46b — reconcile store↔schema so the stored graph passes its own SHACL (C4)
 
+> **Status: ✓ landed 2026-06-10.** Implemented Option A (run-provenance named graph).
+> `insert_extraction` now emits the schema-shaped data graph (measurement →
+> `prov:hadPrimarySource` → Evidence node, `palimpsest:condition` → Condition) and writes
+> `runId`/`parseRunId` to a `palimpsest:run/<run_id>` named graph keyed to the measurement IRI.
+> New `dump_default_graph()` + a `pyshacl` test prove the data graph conforms to the shipped
+> closed shapes. `test_refuses_without_evidence` retained as the Evidence-presence enforcer.
+> Independently reviewed (no blocking issues). The spec below is the original card.
+
 ## Why
 After T46 (C1), the store writes Conditions, but the **stored graph still does not match
 the schema it validates against** — the review's C4 gap. SHACL runs only on the *pre-insert*
