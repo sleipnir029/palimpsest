@@ -74,6 +74,12 @@ def _class_iri(instance: BaseModel) -> NamedNode:
     return NamedNode(f"{PALIM}{type(instance).__name__}")
 
 
+def _has_content(obj: BaseModel, table: tuple) -> bool:
+    """True if any scalar slot in ``table`` is set on ``obj`` — used to skip
+    writing a vacuous (all-None) Condition/Electrolyte node."""
+    return any(getattr(obj, slot, None) is not None for slot, _, _ in table)
+
+
 class RDFStore:
     """pyoxigraph store with provenance-anchored measurement insert.
 
@@ -154,7 +160,62 @@ class RDFStore:
             self._add(activity, NamedNode(f"{PALIM}sourceText"),
                       Literal(ev.source_text))
 
+        # Condition node (C1/T46) — experimental context; dropping it makes the
+        # measurement uncomparable ("236 mV" means nothing without "at 10 mA/cm²").
+        cond = getattr(instance, "condition", None)
+        if cond is not None:
+            self._add_condition(m_iri, cond)
+
         return m_iri.value
+
+    # ------------------------------------------------------------- condition
+
+    # (slot, predicate, datatype-or-None-for-plain-string)
+    _COND_SCALARS = (
+        ("current_density", "currentDensity", XSD_FLOAT),
+        ("electrode_potential_vs_rhe", "potentialVsRHE", XSD_FLOAT),
+        ("temperature_C", "temperatureC", XSD_FLOAT),
+        ("scan_rate", "scanRate", XSD_FLOAT),
+        ("cell_type", "cellType", None),
+    )
+    _ELECTROLYTE_SCALARS = (
+        ("formula", "formula", None),
+        ("concentration", "concentration", XSD_FLOAT),
+        ("electrolyte_ph", "electrolytePH", XSD_FLOAT),
+    )
+
+    def _add_condition(self, m_iri: NamedNode, cond: BaseModel) -> None:
+        """Attach a Condition node (and its Electrolyte sub-node) to a measurement.
+
+        Predicates mirror the schema slot_uris (palimpsest:currentDensity, …) so
+        the stored shape lines up with `schema/palimpsest.yaml`. Only set slots are
+        emitted; absent optionals add no triples. A Condition (or Electrolyte) with
+        no populated fields is vacuous and is skipped — no contentless blank node.
+        """
+        el = getattr(cond, "electrolyte", None)
+        el_has = el is not None and _has_content(el, self._ELECTROLYTE_SCALARS)
+        if not (_has_content(cond, self._COND_SCALARS) or el_has):
+            return
+
+        cond_iri = BlankNode()
+        self._add(m_iri, NamedNode(f"{PALIM}condition"), cond_iri)
+        self._add(cond_iri, NamedNode(f"{RDF}type"), _class_iri(cond))
+        self._add_scalars(cond_iri, cond, self._COND_SCALARS)
+
+        if el_has:
+            el_iri = BlankNode()
+            self._add(cond_iri, NamedNode(f"{PALIM}electrolyte"), el_iri)
+            self._add(el_iri, NamedNode(f"{RDF}type"), _class_iri(el))
+            self._add_scalars(el_iri, el, self._ELECTROLYTE_SCALARS)
+
+    def _add_scalars(self, subj: BlankNode, obj: BaseModel,
+                     table: tuple) -> None:
+        for slot, pred, dt in table:
+            val = getattr(obj, slot, None)
+            if val is None:
+                continue
+            lit = Literal(str(val), datatype=dt) if dt else Literal(str(val))
+            self._add(subj, NamedNode(f"{PALIM}{pred}"), lit)
 
     # ----------------------------------------------------------------- query
 
