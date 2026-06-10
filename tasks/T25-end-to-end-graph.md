@@ -1,11 +1,18 @@
 # T25 — end-to-end: 1 paper → graph + SHACL pass
 
+> **Amended 2026-06-10:** now **depends on T46** (store writes Condition nodes + schema↔store
+> reconciliation). Acceptance is strengthened: the pipeline must insert ≥1 measurement that
+> carries a `palimpsest:condition` edge, and a SPARQL query must retrieve a condition value
+> (e.g. current density) — not just the bare measurement value. This guards against regressing to
+> the condition-dropping bug (review C1).
+
 ## Why
-First complete vertical slice. Proves: PDF → 4 parsers cached → extraction → validation → graph insert → SPARQL query returns the expected value.
+First complete vertical slice. Proves: PDF → parsers cached → extraction → validation → graph
+insert (with conditions) → SPARQL query returns the expected value **and its conditions**.
 
 ## Input state
-- T16, T22, T23, T24 merged.
-- At least one paper has all 4 cached parser outputs.
+- T16, T22, T23, T24, **T46** merged.
+- At least one paper has all 5 cached parser outputs.
 - Ground truth: Rahat has read the sample paper and knows that the headline overpotential is, say, 236 mV @ 10 mA/cm² (verify against actual paper).
 
 ## Output state
@@ -19,6 +26,7 @@ First complete vertical slice. Proves: PDF → 4 parsers cached → extraction �
 - File `tests/test_pipeline.py` runs against the sample paper, asserts:
   - `n_inserted >= 5`.
   - SPARQL query `SELECT ?val WHERE {?m a palim:Overpotential; palim:value ?val.}` returns at least one row with value close to ground-truth (within 10%).
+  - **(T46 dependency)** SPARQL query `SELECT ?cd WHERE {?m a palim:Overpotential; palim:condition ?c. ?c palim:currentDensity ?cd.}` returns at least one row — i.e. the measurement landed *with* its experimental conditions, not stripped.
 - Update `__main__.py` so `pixi run python -m palimpsest demo papers/<sample>.pdf` runs the pipeline and prints a summary.
 
 ## Verification
