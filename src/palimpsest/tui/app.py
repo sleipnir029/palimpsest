@@ -2,7 +2,7 @@
 
 Chat-first: Rahat types natural language, the agent (DeepSeek by default, T50)
 does the work. One screen — a cost-meter bar, a scrollable message log, an input
-box. Slash commands are stubbed here; the dispatcher lands in T27.
+box. ``/``-prefixed input is routed to the T27 slash dispatcher (see slash.py).
 
 Concurrency: ``agent.run()`` makes a multi-second network call and writes to the
 CostMeter, so it runs in a Textual thread worker to keep the UI live. Only one
@@ -23,6 +23,7 @@ from ..agent import Agent
 from ..cost import CostMeter
 from ..providers import DeepSeekProvider
 from ..tools import TOOLS
+from .slash import dispatch
 
 SYSTEM_PROMPT = (
     "You are palimpsest, an agent that extracts data from research papers. "
@@ -76,7 +77,7 @@ class PalimpsestApp(App):
         event.input.value = ""
 
         if text.startswith("/"):
-            log.write("[dim]slash commands land in T27[/]")
+            log.write(escape(dispatch(self, text)))  # T27: intercepted before the agent
             return
 
         # Disable the input for the duration of the call: this is what guarantees a
