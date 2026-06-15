@@ -35,7 +35,12 @@ class BudgetExceeded(Exception):
 
 class CostMeter:
     def __init__(self, db_path: str = "palimpsest.db"):
-        self.conn = sqlite3.connect(db_path)
+        # check_same_thread=False so the TUI's thread worker (T26) can record from
+        # off the main thread. The caller MUST serialize access — the TUI relies on
+        # single-in-flight (input disabled while running) + call_from_thread, so the
+        # connection is never touched concurrently. Add a threading.Lock here if a
+        # concurrent reader is ever introduced (e.g. a timer-based live cost bar).
+        self.conn = sqlite3.connect(db_path, check_same_thread=False)
         self.conn.executescript(_DDL)
         self.conn.execute(
             "INSERT OR IGNORE INTO settings (key, value) VALUES ('budget_eur', '50')"

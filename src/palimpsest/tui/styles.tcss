@@ -1,0 +1,19 @@
+/* T26 chat TUI layout: cost bar on top, message log fills, input docked bottom. */
+
+#costbar {
+    dock: top;
+    height: 1;
+    background: $accent;
+    color: $text;
+    text-align: right;
+    padding: 0 1;
+}
+
+#log {
+    height: 1fr;
+    padding: 0 1;
+}
+
+#prompt {
+    dock: bottom;
+}
