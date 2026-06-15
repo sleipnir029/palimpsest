@@ -32,7 +32,13 @@ class DeepSeekProvider(AnthropicProvider):
     # (so the JSON answer gets truncated unpredictably) and costs ~10x more output.
     # Structured extraction + simple tool calls don't need it. Verified the
     # /anthropic endpoint honors this param (returns text-only, no thinking block).
-    extra_request = {"thinking": {"type": "disabled"}}
+    #
+    # temperature=0: reduce sampling variance (extraction feeds a thesis metric).
+    # At the default 1.0 yield swung wildly run-to-run; temp=0 removes the wild swing
+    # but is NOT fully deterministic — DeepSeek (MoE) still varies modestly at temp=0
+    # (observed flash extraction yield ranged ~16-20 across runs). Endpoint honors
+    # temperature (probe-confirmed).
+    extra_request = {"thinking": {"type": "disabled"}, "temperature": 0}
 
     def __init__(
         self,

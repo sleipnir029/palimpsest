@@ -120,6 +120,24 @@ classes:
       - h2kg:ElectrochemicallyActiveSurfaceArea
     description: Electrochemically active surface area.
 
+  # T52 (closes T18a F3, ground-truth-driven): two metric classes this corpus
+  # reports but the schema lacked. palimpsest-local IRIs (no clean ECHO/H2KG term).
+  SpecificActivity:
+    is_a: Measurement
+    class_uri: palimpsest:SpecificActivity
+    # TODO_EMMO_UPSTREAM: request SpecificActivity (ECSA-normalized current) as an Electrocatalyst metric.
+    related_mappings:
+      - emmo:electrochemistry_a3b53904_22b1_42a9_a515_c8a3aed7e841  # Electrocatalyst
+    description: OER current normalized to electrochemically active surface area (mA/cm2_ECSA).
+
+  Stability:
+    is_a: Measurement
+    class_uri: palimpsest:Stability
+    # TODO_EMMO_UPSTREAM: request Stability/Durability as an Electrocatalyst performance metric.
+    related_mappings:
+      - emmo:electrochemistry_a3b53904_22b1_42a9_a515_c8a3aed7e841  # Electrocatalyst
+    description: Duration a catalyst sustains OER at a held current density (hours).
+
   Catalyst:
     # Verified hash (Electrocatalyst), palimpsest-v2-design.md Appendix E line 661.
     class_uri: emmo:electrochemistry_a3b53904_22b1_42a9_a515_c8a3aed7e841

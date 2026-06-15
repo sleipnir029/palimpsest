@@ -264,6 +264,34 @@ class ECSA(Measurement):
     evidence: Optional[Evidence] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'prov:hadPrimarySource'} })
 
 
+class SpecificActivity(Measurement):
+    """
+    OER current normalized to electrochemically active surface area (mA/cm2_ECSA).
+    """
+    linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta({'class_uri': 'palimpsest:SpecificActivity',
+         'from_schema': 'https://w3id.org/palimpsest/v1',
+         'related_mappings': ['emmo:electrochemistry_a3b53904_22b1_42a9_a515_c8a3aed7e841']})
+
+    value: Optional[float] = Field(default=None, description="""Numeric value of the measurement, in the unit named by unit_label.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:value'} })
+    unit_label: Optional[str] = Field(default=None, description="""Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:unitLabel'} })
+    condition: Optional[Condition] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:condition'} })
+    evidence: Optional[Evidence] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'prov:hadPrimarySource'} })
+
+
+class Stability(Measurement):
+    """
+    Duration a catalyst sustains OER at a held current density (hours).
+    """
+    linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta({'class_uri': 'palimpsest:Stability',
+         'from_schema': 'https://w3id.org/palimpsest/v1',
+         'related_mappings': ['emmo:electrochemistry_a3b53904_22b1_42a9_a515_c8a3aed7e841']})
+
+    value: Optional[float] = Field(default=None, description="""Numeric value of the measurement, in the unit named by unit_label.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:value'} })
+    unit_label: Optional[str] = Field(default=None, description="""Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:unitLabel'} })
+    condition: Optional[Condition] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:condition'} })
+    evidence: Optional[Evidence] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'prov:hadPrimarySource'} })
+
+
 class Catalyst(ConfiguredBaseModel):
     """
     An electrocatalyst material under study.
@@ -365,6 +393,8 @@ ChargeTransferCoefficient.model_rebuild()
 MassActivity.model_rebuild()
 TurnoverFrequency.model_rebuild()
 ECSA.model_rebuild()
+SpecificActivity.model_rebuild()
+Stability.model_rebuild()
 Catalyst.model_rebuild()
 Electrolyte.model_rebuild()
 Condition.model_rebuild()

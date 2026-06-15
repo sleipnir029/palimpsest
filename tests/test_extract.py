@@ -379,6 +379,25 @@ def test_mineru_equation_captured():
     assert "ECSA" in spans[0][1]
 
 
+def test_f3_classes_modeled():
+    """T52 (closes T18a F3): SpecificActivity + Stability are Measurement classes
+    with canonical units, so the extractor recognizes and validates them."""
+    from palimpsest.tools.extract import _MEASUREMENT_NAMES
+    from palimpsest.normalize import canonical_unit
+
+    assert {"SpecificActivity", "Stability"} <= _MEASUREMENT_NAMES
+    assert canonical_unit("SpecificActivity") == "mA/cm2"
+    assert canonical_unit("Stability") == "h"
+
+
+def test_deepseek_deterministic_config():
+    """T52: extraction runs at temperature=0 with thinking disabled (lower variance)."""
+    from palimpsest.providers import DeepSeekProvider
+
+    assert DeepSeekProvider.extra_request["temperature"] == 0
+    assert DeepSeekProvider.extra_request["thinking"] == {"type": "disabled"}
+
+
 # ----- live test ------------------------------------------------------------
 
 

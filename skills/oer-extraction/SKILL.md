@@ -26,7 +26,8 @@ it is meaningless. If the conditions are absent, skip the slot.
 | Turnover frequency (TOF, s⁻¹) | `TurnoverFrequency` class | `electrode_potential_vs_rhe`; site-counting method (all-metal-surface / ECSA-derived / in-operando — free-text annotation; no dedicated slot) |
 | ECSA (cm² geometric) | `ECSA` class (canonical unit `cm2`; specific ECSA in m²/g is **not yet modeled** — see T18a F3) | method (Cdl from CV at non-faradaic potentials; Pb-UPD; surface-redox integration) |
 | Exchange current density (j₀, mA/cm²) | `ExchangeCurrentDensity` class | Tafel extrapolation range; `electrolyte` |
-| Stability (h) | **No schema class yet — see T18a Finding F3**. Record as free-text annotation on the relevant Measurement until added. | hold `current_density` (mA/cm² for RDE; A/cm² for PEMWE); cell type (RDE vs single-cell PEMWE); degradation rate if reported (µV/h) |
+| Specific activity (mA cm⁻²_ECSA) | `SpecificActivity` class (canonical unit `mA/cm2`; T52) — OER current normalized to ECSA | `electrode_potential_vs_rhe` at which it is reported (e.g. η=300 mV) |
+| Stability (h) | `Stability` class (canonical unit `h`; T52, closes T18a F3) | hold `current_density` (mA/cm² for RDE; A/cm² for PEMWE); cell type (RDE vs single-cell PEMWE); degradation rate if reported (µV/h) |
 | PEMWE cell voltage (V) | **No schema class yet — see T18a Finding F3**. Record as free-text annotation until added. | `current_density` (A/cm²); `temperature_C`; anode/cathode catalyst loadings (mg/cm²); membrane (e.g. Nafion 117/115/212) |
 
 ## Default operating points

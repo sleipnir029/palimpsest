@@ -26,9 +26,9 @@ import yaml
 #   * a Condition slot name (snake_case, lines 365-385) — populated on the
 #     embedded Condition block of a Measurement.
 # Disjoint namespaces by capitalization; mixing in one dict keeps lookup simple.
-# Variables not yet modeled (Stability hours, PEMWE Vcell, Pressure, specific
-# ECSA in m2/g) are tracked in tasks/T18a-schema-cleanups.md Finding F3 and
-# deliberately omitted here until the schema declares them.
+# T52 added SpecificActivity + Stability (T18a F3, ground-truth-driven). Still NOT
+# modeled (no available paper reports them): PEMWE Vcell, Pressure, specific ECSA
+# (m2/g) — tracked in tasks/T18a-schema-cleanups.md F3, omitted until a paper needs them.
 UNIVERSAL_UNITS: dict[str, str] = {
     # Measurement subclasses:
     "Overpotential": "mV",
@@ -38,6 +38,8 @@ UNIVERSAL_UNITS: dict[str, str] = {
     "MassActivity": "A/g",
     "TurnoverFrequency": "1/s",
     "ECSA": "cm2",  # geometric ECSA; specific ECSA (m2/g) is T18a F3
+    "SpecificActivity": "mA/cm2",  # T52: ECSA-normalized current
+    "Stability": "h",  # T52: hours sustained at a held current density
     # Condition slots:
     "current_density": "mA/cm2",
     "temperature_C": "Cel",
