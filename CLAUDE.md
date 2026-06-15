@@ -35,7 +35,7 @@ The whole agent is ~400 lines of Python. Keep it that way.
 
 ### Stack — locked
 - Python 3.11, pixi. macOS arm64 primary dev.
-- Direct Anthropic SDK. Direct DeepSeek / Gemini SDKs for fallback only.
+- LLM access via the Anthropic SDK. **Default runtime model: DeepSeek `deepseek-v4-flash`** (T50, 2026-06), called through DeepSeek's Anthropic-compatible endpoint (`https://api.deepseek.com/anthropic`) for cost — Anthropic (Sonnet) is too expensive for iterative runs. `AnthropicProvider` is kept as the fallback; Gemini SDK fallback also allowed. No third-party SDKs beyond these.
 - No agent frameworks (LangChain, LangGraph, CrewAI, AutoGen, smolagents, pydantic-ai).
 - No MCP servers. Python function calls only.
 - No LLM gateways (LiteLLM, OpenRouter).
