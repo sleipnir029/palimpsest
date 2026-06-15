@@ -32,6 +32,14 @@ def test_pydantic_import():
     from schema.generated.pydantic import Overpotential  # noqa: F401
 
 
+def test_f3_classes_generated():
+    """T52: the two F3 classes regenerate into the Pydantic module."""
+    from schema.generated.pydantic import SpecificActivity, Stability  # noqa: F401
+
+    assert SpecificActivity(value=0.098, unit_label="mA/cm2").value == 0.098
+    assert Stability(value=30.0, unit_label="h").value == 30.0
+
+
 def test_pydantic_instantiation():
     from schema.generated.pydantic import Overpotential
 

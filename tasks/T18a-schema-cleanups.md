@@ -76,6 +76,15 @@ not as typed Measurement instances.
 terms if any exist (otherwise palimpsest-local CURIEs). Add corresponding
 entries to `UNIVERSAL_UNITS` in `normalize.py` in the same change.
 
+**Partially closed by T52 (2026-06-15), ground-truth-driven.** Added the two classes the
+demonstrator paper actually reports: **`SpecificActivity`** (mA/cm2, ECSA-normalized current — note
+this was NOT in the original F3 list, which named SpecificECSA m²/g; the paper reports specific
+*activity*, not specific *ECSA*) and **`Stability`** (h). Both as palimpsest-local `Measurement`
+subclasses + `UNIVERSAL_UNITS` entries; live recall on the cached paper rose 12→19. **Still open**
+(no available paper reports them — deferred per CLAUDE.md "nothing speculative"): `PEMWECellVoltage`
+(needs a PEMWE single-cell paper), `SpecificECSA` (m²/g), `Pressure` (condition slot). Also surfaced
+but unmodeled: `ChargeTransferResistance` (Ω, EIS) and Faradaic efficiency (%).
+
 ## Output state
 - `schema/palimpsest.yaml` no longer carries unreachable slots OR every slot has a clear class home.
 - `OxygenEvolutionReaction` either gains slots or a `# intentionally slot-less` comment.

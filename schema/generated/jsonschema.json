@@ -518,6 +518,90 @@
       "title": "ScanRateRegimeEnum",
       "type": "string"
     },
+    "SpecificActivity": {
+      "additionalProperties": false,
+      "description": "OER current normalized to electrochemically active surface area (mA/cm2_ECSA).",
+      "properties": {
+        "condition": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Condition"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidence": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Evidence"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unit_label": {
+          "description": "Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "value": {
+          "description": "Numeric value of the measurement, in the unit named by unit_label.",
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      },
+      "title": "SpecificActivity",
+      "type": "object"
+    },
+    "Stability": {
+      "additionalProperties": false,
+      "description": "Duration a catalyst sustains OER at a held current density (hours).",
+      "properties": {
+        "condition": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Condition"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidence": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Evidence"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unit_label": {
+          "description": "Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "value": {
+          "description": "Numeric value of the measurement, in the unit named by unit_label.",
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      },
+      "title": "Stability",
+      "type": "object"
+    },
     "TafelSlope": {
       "additionalProperties": false,
       "description": "Slope of overpotential vs log(current density) in the Tafel region.",
