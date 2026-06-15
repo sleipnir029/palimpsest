@@ -26,9 +26,9 @@ If a session ends with the agent doing something other than (a) building one of 
 
 ## 2. TL;DR
 
-- **Architecture:** ~400 LOC Python agent loop (direct Anthropic SDK), prompt-cached Claude Sonnet 4.5 as the primary brain, LinkML→Pydantic+SHACL schema, pyoxigraph (RocksDB) for the triple store, FastAPI + vendored PDF.js + HTMX for the bbox-hover viewer, Textual chat TUI, dulwich for git-style versioning of the graph, marimo notebooks spawned on demand.
+- **Architecture:** ~400 LOC Python agent loop (direct Anthropic SDK), prompt-cached Claude Sonnet 4.5 as the primary brain _(runtime default switched to DeepSeek `deepseek-v4-flash` in T50, 2026-06, for cost; Sonnet retained as fallback — see F1)_, LinkML→Pydantic+SHACL schema, pyoxigraph (RocksDB) for the triple store, FastAPI + vendored PDF.js + HTMX for the bbox-hover viewer, Textual chat TUI, dulwich for git-style versioning of the graph, marimo notebooks spawned on demand.
 - **Parser strategy (thesis contribution):** All five heavyweight parsers — **docling (via `ibm-granite/granite-docling-258M`, released Sept 2025), MinerU 2.5 (1.2B VLM, 75.2 on olmOCR-Bench), Chandra (v0.1.0 9B at 83.1 ± 0.9%, or Chandra 2 4B at 85.9% — current SOTA), dots.ocr (~1.7B layout VLM, MIT), and PaddleOCR PP-StructureV3 (classic CV pipeline, Apache-2.0)** — each run in its own isolated image on a RunPod RTX 4090 ($0.34/hr community cloud, $0.69/hr secure cloud, verified April 2026), with outputs cached side-by-side in SQLite by content hash. Local CPU keeps `pymupdf4llm` + GROBID for cheap text/bibliographic lookups only; they are **not** part of the comparison.
-- **Budget reality:** 25 papers × 5 parsers ≈ 1.5–2.5 GPU-hours ≈ €0.40–0.90 in GPU. Sonnet 4.5 extraction with 1-hour prompt caching (cache write 2× base = $6/MTok, cache read 0.1× base = $0.30/MTok) ≈ €8–25 across the project. **€50 hard cap is comfortable; spend is dominated by re-runs and exploration, not parsing.**
+- **Budget reality:** 25 papers × 5 parsers ≈ 1.5–2.5 GPU-hours ≈ €0.40–0.90 in GPU. Sonnet 4.5 extraction with 1-hour prompt caching (cache write 2× base = $6/MTok, cache read 0.1× base = $0.30/MTok) ≈ €8–25 across the project. **€50 hard cap is comfortable; spend is dominated by re-runs and exploration, not parsing.** _(Update T50, 2026-06: the runtime default is now DeepSeek-flash at ~€0.0084/paper, or ~€0.027/paper on DeepSeek-pro — far below the Sonnet estimate above. The Sonnet figures remain as the original selection rationale.)_
 
 ---
 
@@ -36,6 +36,12 @@ If a session ends with the agent doing something other than (a) building one of 
 
 ### F1. LLM selection — Claude Sonnet 4.5 with prompt caching, three explicit fallbacks
 **Verdict:** Sonnet 4.5 is the right default. Use prompt caching aggressively.
+
+> **Update (T50, 2026-06):** runtime default switched to DeepSeek `deepseek-v4-flash`
+> (called through DeepSeek's Anthropic-compatible endpoint `https://api.deepseek.com/anthropic`,
+> reusing the `anthropic` SDK) for cost — ~€0.0084/paper vs Sonnet's ~€0.29. `AnthropicProvider`
+> is kept as the fallback; `deepseek-v4-pro` is the recommended model for final/thesis runs (T52).
+> The Sonnet analysis below remains the original selection rationale.
 
 - Sonnet 4.5 API pricing (Anthropic official pricing page, `platform.claude.com/docs/en/about-claude/pricing`): **$3.00 / MTok input, $15.00 / MTok output**, 200K context. **5-min cache writes 1.25× input = $3.75/MTok; 1-hour cache writes 2× input = $6/MTok**; cache reads 0.1× input = **$0.30/MTok**. Minimum cache checkpoint for Sonnet 4.5 is **4,096 tokens**, easily met by a ~12K-token system+schema+skill prefix.
 - The 1-hour TTL is the right choice for palimpsest's bursty extraction sessions; the 5-min TTL is fine for a tight inner loop.
