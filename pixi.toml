@@ -32,6 +32,7 @@ palimpsest = { path = ".", editable = true }
 
 [tasks]
 test = "pytest -v"
+tui = "python -m palimpsest.tui"
 # `schema` regenerates the 4 artifacts in schema/generated/. Their "DO NOT EDIT"
 # headers are hand-added (not pipeline-injected) — re-add them after every regen;
 # tests/test_schema_gen.py will fail loudly if you forget. See PROGRESS T19 line.
