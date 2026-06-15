@@ -36,6 +36,7 @@ _skip_no_key = pytest.mark.skipif(
 )
 
 
+@pytest.mark.live
 @_skip_no_key
 def test_smoke():
     provider = AnthropicProvider()
@@ -47,6 +48,7 @@ def test_smoke():
     assert response.text.strip() == "ok"
 
 
+@pytest.mark.live
 @_skip_no_key
 def test_cache_control():
     provider = AnthropicProvider()

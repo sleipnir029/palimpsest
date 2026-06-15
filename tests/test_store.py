@@ -238,3 +238,27 @@ def test_rocksdb_path_persists(tmp_path):
     )
     assert len(rows) == 1
     assert float(rows[0]["v"]) == 236.0
+
+
+def test_condition_enums_reach_graph():
+    """T50: the universal categorical enums modeled on Condition (iR_correction
+    etc.) must actually persist as triples — not just validate in Pydantic and
+    get dropped at insertion. Stored as their bare permissible value, not
+    "EnumName.member".
+    """
+    cond = Condition(
+        current_density=10.0,
+        iR_correction="applied",
+        cell_type_family="RDE",
+        scan_rate_regime="slow_LSV",
+    )
+    m = Overpotential(value=236.0, unit_label="mV", condition=cond, evidence=_evidence())
+    store = RDFStore()
+    store.insert_extraction(m, run_id="r1")
+    rows = store.sparql(
+        f"PREFIX palim: <{PALIM}> "
+        "SELECT ?ir ?fam ?reg WHERE { "
+        "?c palim:iRCorrection ?ir ; palim:cellTypeFamily ?fam ; palim:scanRateRegime ?reg . }"
+    )
+    assert len(rows) == 1
+    assert rows[0] == {"ir": "applied", "fam": "RDE", "reg": "slow_LSV"}

@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 
 from .agent import Agent
 from .cost import CostMeter
-from .providers import AnthropicProvider
+from .providers import DeepSeekProvider
 from .tools import TOOLS
 
 SYSTEM_PROMPT = (
@@ -32,7 +32,7 @@ def main() -> None:
         sys.exit('usage: python -m palimpsest "<message>"')
 
     agent = Agent(
-        provider=AnthropicProvider(),
+        provider=DeepSeekProvider(),
         cost_meter=CostMeter("palimpsest.db"),
         # Agent advertises tool schemas to the API; it dispatches by name via the
         # module-level TOOLS registry. So pass {name: schema}, not the callables.

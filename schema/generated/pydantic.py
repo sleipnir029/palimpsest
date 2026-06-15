@@ -102,6 +102,39 @@ linkml_meta = LinkMLMeta({'default_prefix': 'palimpsest',
      'source_file': 'schema/palimpsest.yaml',
      'title': 'palimpsest OER extraction schema'} )
 
+class IRCorrectionEnum(str, Enum):
+    applied = "applied"
+    not_applied = "not_applied"
+    unknown = "unknown"
+
+
+class NormalizationBasisEnum(str, Enum):
+    geometric = "geometric"
+    ECSA = "ECSA"
+    BET = "BET"
+    mass = "mass"
+
+
+class CellTypeFamilyEnum(str, Enum):
+    RDE = "RDE"
+    three_electrode_flow = "three_electrode_flow"
+    single_cell_MEA = "single_cell_MEA"
+    stack = "stack"
+
+
+class ElectrolyteFamilyEnum(str, Enum):
+    acid = "acid"
+    alkaline = "alkaline"
+    neutral = "neutral"
+
+
+class ScanRateRegimeEnum(str, Enum):
+    steady_state = "steady_state"
+    slow_LSV = "slow_LSV"
+    fast_LSV = "fast_LSV"
+    fast_CV = "fast_CV"
+
+
 
 class Paper(ConfiguredBaseModel):
     """
@@ -286,6 +319,11 @@ class Condition(ConfiguredBaseModel):
          'related_mappings': ['emmo:electrochemistry_29f2a35a_8c09_429d_b9e8_33f3e1fc3671'],
          'slot_uri': 'palimpsest:scanRate',
          'unit': {'exact_mappings': ['qudt:MilliV-PER-SEC'], 'ucum_code': 'mV/s'}} })
+    iR_correction: Optional[IRCorrectionEnum] = Field(default=None, description="""Whether the reported value is iR-corrected.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Condition'], 'slot_uri': 'palimpsest:iRCorrection'} })
+    normalization_basis: Optional[NormalizationBasisEnum] = Field(default=None, description="""Surface-area/mass basis the value is normalized to.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Condition'], 'slot_uri': 'palimpsest:normalizationBasis'} })
+    cell_type_family: Optional[CellTypeFamilyEnum] = Field(default=None, description="""Coarse cell-architecture family (machine-readable peer of cell_type).""", json_schema_extra = { "linkml_meta": {'domain_of': ['Condition'], 'slot_uri': 'palimpsest:cellTypeFamily'} })
+    electrolyte_family: Optional[ElectrolyteFamilyEnum] = Field(default=None, description="""Coarse electrolyte pH family.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Condition'], 'slot_uri': 'palimpsest:electrolyteFamily'} })
+    scan_rate_regime: Optional[ScanRateRegimeEnum] = Field(default=None, description="""Coarse scan-rate regime.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Condition'], 'slot_uri': 'palimpsest:scanRateRegime'} })
 
 
 class Evidence(ConfiguredBaseModel):

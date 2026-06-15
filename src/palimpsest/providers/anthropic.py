@@ -18,16 +18,29 @@ class LLMResponse:
 
 class AnthropicProvider:
     name = "claude-sonnet-4-6"
+    # Extra request kwargs merged into every messages.create() call. Subclasses
+    # override (e.g. DeepSeekProvider disables extended thinking). Anthropic's
+    # default is no thinking, so the base leaves this empty.
+    extra_request: dict = {}
 
     def __init__(
         self,
         api_key: str | None = None,
         model: str = "claude-sonnet-4-6",
+        base_url: str | None = None,
+        name: str | None = None,
+        max_tokens: int = 4096,
     ) -> None:
         self.model = model
-        self.client = anthropic.Anthropic(
-            api_key=api_key or os.environ.get("ANTHROPIC_API_KEY")
-        )
+        self.max_tokens = max_tokens
+        if name is not None:
+            self.name = name
+        client_kwargs: dict = {"api_key": api_key or os.environ.get("ANTHROPIC_API_KEY")}
+        if base_url is not None:
+            # Repoint the SDK at an Anthropic-wire-compatible endpoint (DeepSeek
+            # serves one at /anthropic — see DeepSeekProvider).
+            client_kwargs["base_url"] = base_url
+        self.client = anthropic.Anthropic(**client_kwargs)
 
     def complete(
         self,
@@ -51,7 +64,7 @@ class AnthropicProvider:
 
         kwargs: dict = {
             "model": self.model,
-            "max_tokens": 4096,
+            "max_tokens": self.max_tokens,
             "system": system_arg,
             "messages": messages,
         }
@@ -62,8 +75,11 @@ class AnthropicProvider:
                 tools[-1]["cache_control"] = {"type": "ephemeral"}
             kwargs["tools"] = tools
 
+        kwargs.update(self.extra_request)
         response = self.client.messages.create(**kwargs)
 
+        # Only "text" blocks are the answer; a provider may also return "thinking"
+        # blocks (extended reasoning) which we neither surface nor thread back.
         text = "".join(b.text for b in response.content if b.type == "text")
         tool_calls = [
             b.model_dump() for b in response.content if b.type == "tool_use"

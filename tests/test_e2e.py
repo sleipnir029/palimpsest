@@ -1,8 +1,9 @@
-"""T08 end-to-end smoke. Makes a real Anthropic call (~€0.001-0.01); slow.
+"""T08 end-to-end smoke. Makes a real DeepSeek call (~€0.001); slow.
 
 Run explicitly with `-m slow`; the offline suite uses `-m "not slow"`. Proves
 the full slice works: the agent calls read_paper, answers, and the paid call
-lands on the budget ledger.
+lands on the budget ledger. T50: repointed from Anthropic to DeepSeek — this
+also confirms tool-calling works through DeepSeek's Anthropic-compatible endpoint.
 """
 
 import os
@@ -12,14 +13,14 @@ from dotenv import load_dotenv
 
 from palimpsest.agent import Agent
 from palimpsest.cost import CostMeter
-from palimpsest.providers import AnthropicProvider
+from palimpsest.providers import DeepSeekProvider
 from palimpsest.tools import TOOLS
 
 load_dotenv()
 
 _skip_no_key = pytest.mark.skipif(
-    not os.environ.get("ANTHROPIC_API_KEY"),
-    reason="ANTHROPIC_API_KEY not set (.env missing or empty)",
+    not os.environ.get("DEEPSEEK_API_KEY"),
+    reason="DEEPSEEK_API_KEY not set (.env missing or empty)",
 )
 
 
@@ -28,7 +29,7 @@ _skip_no_key = pytest.mark.skipif(
 def test_title_query_spends_budget(tmp_path):
     meter = CostMeter(str(tmp_path / "e2e.db"))
     agent = Agent(
-        provider=AnthropicProvider(),
+        provider=DeepSeekProvider(),
         cost_meter=meter,
         tools={name: fn.tool_schema for name, fn in TOOLS.items()},
         system_prompt=(
