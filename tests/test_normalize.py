@@ -16,7 +16,9 @@ from palimpsest.normalize import (
     UNIVERSAL_ENUMS,
     UNIVERSAL_UNITS,
     build_normalization_prompt,
+    canonical_unit,
     load_skill_normalization,
+    units_match,
 )
 
 OER_DIR = Path(__file__).parent.parent / "skills" / "oer-extraction"
@@ -74,3 +76,53 @@ def test_overlay_conflict_raises(tmp_path, colliding_yaml, collision_key):
     (tmp_path / "normalization.yaml").write_text(colliding_yaml)
     with pytest.raises(ValueError, match=collision_key):
         build_normalization_prompt([tmp_path])
+
+
+# ----- T49: canonical_unit + units_match (C2) -------------------------------
+
+
+def test_universal_enums_match_schema():
+    """T50: the universal enums are advertised to the LLM by normalize.py AND
+    modeled as schema enums on Condition. If the two drift, the LLM is told
+    values the schema rejects (or vice-versa) — the exact bug T50 fixed. This
+    pins them in sync against the generated Pydantic enums.
+    """
+    from schema.generated import pydantic as s
+
+    mapping = {
+        "iR_correction": s.IRCorrectionEnum,
+        "normalization_basis": s.NormalizationBasisEnum,
+        "cell_type_family": s.CellTypeFamilyEnum,
+        "electrolyte_family": s.ElectrolyteFamilyEnum,
+        "scan_rate_regime": s.ScanRateRegimeEnum,
+    }
+    for key, enum_cls in mapping.items():
+        assert set(UNIVERSAL_ENUMS[key]) == {e.value for e in enum_cls}, key
+
+
+def test_canonical_unit_lookup():
+    assert canonical_unit("Overpotential") == "mV"
+    assert canonical_unit("TurnoverFrequency") == "1/s"
+    assert canonical_unit("NotAMeasurement") is None
+
+
+@pytest.mark.parametrize(
+    "emitted,canonical,expected",
+    [
+        # Correct unit, paper-faithful spelling — MUST pass (the live-run cases).
+        ("s⁻¹", "1/s", True),
+        ("A g⁻¹_Ir", "A/g", True),
+        (r"A g^{-1}_{Ir}", "A/g", True),   # the LaTeX form mineru actually emits
+        ("cm²", "cm2", True),
+        ("mA cm⁻²", "mA/cm2", True),
+        ("mV/dec", "mV/decade", True),     # dec/decade synonym
+        ("mV", "mV", True),
+        ("", "dimensionless", True),       # blank label == dimensionless
+        # Genuine errors — MUST fail.
+        ("V", "mV", False),                # 1000× magnitude error
+        ("A", "mV/decade", False),
+        (None, "mV", False),
+    ],
+)
+def test_units_match(emitted, canonical, expected):
+    assert units_match(emitted, canonical) is expected

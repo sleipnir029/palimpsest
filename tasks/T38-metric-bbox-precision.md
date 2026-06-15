@@ -32,3 +32,18 @@ test -f experiments/bbox_precision.csv
 ## Notes / references
 - IoU formula: `intersection_area / (area_a + area_b - intersection_area)`.
 - Some parsers don't emit bboxes at all (or only at the page level) — those score 0 on this metric. That's important data: low-bbox-precision parsers are worse for the viewer use case.
+- **T49 (2026-06-12) — what this metric now measures.** Bboxes on `Evidence` are no
+  longer LLM-transcribed; T49 resolves them from each parser's native geometry by
+  matching the LLM's `source_text` quote against parser spans (union of matched spans).
+  So this metric scores **parser localization**, as intended. Two consequences T38 MUST
+  handle:
+  - **Coordinate conventions differ per parser** and are stored NATIVE (un-normalized):
+    docling uses a BOTTOMLEFT origin in points (bbox dict `l,t,r,b` → stored as
+    `x0,y0,x1,y1` with `y0>y1`); mineru/dots/paddle use a TOPLEFT-ish origin in pixels.
+    Normalize per-parser by page width/height (and flip docling's y-axis) before computing
+    IoU against ground truth, or scores will be meaningless.
+  - **Chandra has no geometry** → under the T49 B-scope decision its measurements never
+    reach the graph (they route to `errors`), so there are no Chandra bboxes to score.
+    Exclude Chandra from this metric explicitly and report it as "no geometry," not IoU 0.
+  - Invariant T49 guarantees: every bbox present in the graph is parser-native, so any
+    `Evidence` you read here already has a real parser bbox (no fabricated ones to filter).
