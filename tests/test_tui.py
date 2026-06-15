@@ -81,8 +81,9 @@ def test_agent_error_surfaces_and_reenables_input(tmp_path):
     asyncio.run(_drive())
 
 
-def test_slash_command_stubbed(tmp_path):
-    """A `/`-prefixed line is stubbed (T27), never sent to the agent."""
+def test_slash_command_dispatched(tmp_path):
+    """A `/`-prefixed line goes to the T27 dispatcher, never to the agent.
+    `/budget` is deferred to T28, so it's an unknown command for now."""
     meter = CostMeter(str(tmp_path / "t.db"))
     agent = _StubAgent(meter)
     app = PalimpsestApp(agent=agent, cost_meter=meter)
@@ -94,6 +95,45 @@ def test_slash_command_stubbed(tmp_path):
             await pilot.pause()
             assert agent.last is None  # agent not called for slash commands
             log_text = "\n".join(strip.text for strip in app.query_one("#log", RichLog).lines)
-            assert "T27" in log_text
+            assert "unknown command: /budget" in log_text
+
+    asyncio.run(_drive())
+
+
+def test_slash_help_lists_commands_in_app(tmp_path):
+    """`/help` renders the command list into the log (card's manual step)."""
+    meter = CostMeter(str(tmp_path / "t.db"))
+    agent = _StubAgent(meter)
+    app = PalimpsestApp(agent=agent, cost_meter=meter)
+
+    async def _drive() -> None:
+        async with app.run_test() as pilot:
+            app.query_one("#prompt", Input).value = "/help"
+            await pilot.press("enter")
+            await pilot.pause()
+            assert agent.last is None
+            log_text = "\n".join(strip.text for strip in app.query_one("#log", RichLog).lines)
+            assert "/help" in log_text and "/quit" in log_text
+
+    asyncio.run(_drive())
+
+
+def test_slash_quit_exits_the_app(tmp_path):
+    """`/quit` exits the real app — and the write-after-exit("bye") doesn't crash."""
+    meter = CostMeter(str(tmp_path / "t.db"))
+    agent = _StubAgent(meter)
+    app = PalimpsestApp(agent=agent, cost_meter=meter)
+
+    async def _drive() -> None:
+        async with app.run_test() as pilot:
+            app.query_one("#prompt", Input).value = "/quit"
+            await pilot.press("enter")
+            await pilot.pause()
+            assert agent.last is None  # agent not called
+            # "bye" rendered == the write-after-exit() ran without crashing,
+            # and _exit is set == app.exit() was actually invoked by the handler
+            log_text = "\n".join(strip.text for strip in app.query_one("#log", RichLog).lines)
+            assert "bye" in log_text
+            assert app._exit is True
 
     asyncio.run(_drive())
