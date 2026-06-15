@@ -31,6 +31,17 @@ def main() -> None:
     if len(sys.argv) < 2:
         sys.exit('usage: python -m palimpsest "<message>"')
 
+    # T25: `demo <pdf>` runs the end-to-end pipeline and prints a summary.
+    if sys.argv[1] == "demo":
+        if len(sys.argv) < 3:
+            sys.exit("usage: python -m palimpsest demo <pdf>")
+        from pathlib import Path
+
+        from .pipeline import run_paper  # lazy: avoid import-time coupling
+
+        print(run_paper(Path(sys.argv[2])))
+        return
+
     agent = Agent(
         provider=DeepSeekProvider(),
         cost_meter=CostMeter("palimpsest.db"),
