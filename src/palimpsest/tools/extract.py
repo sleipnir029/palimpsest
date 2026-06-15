@@ -1,27 +1,30 @@
-"""T22 — schema-first extraction tool: parser output → Sonnet → Pydantic.
+"""T22/T51 — schema-first extraction: parser output → LLM → Pydantic.
 
-Pulls cached parser output (T15/T17), composes a cached system prompt (skill body
-T20–T21, generated JSON schema T19, normalization overlay T20.5), calls Sonnet,
-and validates the JSON items into Pydantic instances (T18/T19).
+Pulls cached parser output (T15/T17), projects it to numbered text spans, and
+runs ONE LLM call over the full projection (per-page batching only as a fallback
+for projections too large to fit): the model is shown the numbered spans and
+returns measurements, each citing the span id(s) that state it. The runtime
+maps cited ids → bbox / page / source_text directly (no fuzzy matching).
 
 Returns ``(valid, errors)`` where ``errors`` is a list of ``(exc, raw_item)``
 tuples — the agent (T23/T24) inspects ``errors`` to decide whether to re-prompt.
 
-Provenance non-negotiable (CLAUDE.md): a Measurement subclass without an
-``evidence`` dict is routed to ``errors`` here, not silently passed on as
-``valid`` with ``evidence=None``. ``paper.sha256`` and ``parser_name`` are
-injected from the caller args (knowable at this layer); ``page`` comes from the
-LLM. Either missing → error.
+Design (T51, supersedes the T49 fuzzy matcher):
+- **Span projection (S2):** each parser's native geometry → ``(page, text, bbox)``
+  spans via the per-parser adapters. The LLM sees ``[id] <text>`` lines, never the
+  raw JSON — so the input is small and parser-agnostic (any LLM, any size).
+- **ID citation (S3):** the model returns ``evidence: {"spans": [id, ...]}``; the
+  runtime resolves ids → union bbox, page, concatenated ``source_text``. No quote
+  matching, so LaTeX/whitespace differences and equation-sourced values can't break
+  resolution. Invalid/empty ids → routed to ``errors`` (provenance non-negotiable).
+- **Per-page (S4) + no-strip:** one call per page keeps each call tiny, so span text
+  is shown and stored VERBATIM — we never strip LaTeX/subscripts (``_{Ir}``,
+  ``^{-1}``, ``Co_{3}O_{4}``) that carry chemical/unit meaning.
 
-T49 (C3): the ``bbox`` is NOT LLM-owned — the model emits a verbatim
-``source_text`` quote, and the runtime resolves the four ``bbox_*`` corners by
-matching that quote against the parser's native geometry. A measurement whose
-quote matches no parser span (or whose parser has no geometry, i.e. Chandra
-markdown) is routed to ``errors`` rather than carrying a fabricated bbox into the
-graph. Invariant: every bbox inserted downstream is parser-native by construction.
-
-T49 (C2): ``unit_label`` is validated against the slot's canonical unit
-(``normalize.canonical_unit``); a mismatch is routed to ``errors``, never inserted.
+``paper.sha256`` + ``parser_name`` are injected by the runtime (not LLM-owned).
+``unit_label`` is validated against the canonical unit (``normalize.units_match``);
+mismatches route to ``errors`` (C2). Chandra has no geometry → no spans → nothing
+extractable.
 """
 
 from __future__ import annotations
@@ -90,39 +93,38 @@ _MEASUREMENT_NAMES = frozenset(
     n for n, c in _CLASS_MAP.items() if issubclass(c, _schema.Measurement)
 )
 
+# Evidence fields the RUNTIME fills (from cited spans + caller args), so the LLM
+# must not be asked for them. They're stripped from the schema shown to the model;
+# the prose contract tells it to emit only `evidence: {"spans": [id, ...]}`.
+_EVIDENCE_RUNTIME_SLOTS = (
+    "paper", "page", "bbox_x0", "bbox_y0", "bbox_x1", "bbox_y1",
+    "source_text", "parser_name",
+)
 
-_BBOX_SLOTS = ("bbox_x0", "bbox_y0", "bbox_x1", "bbox_y1")
 
+def _schema_for_prompt(jsonschema_str: str) -> str:
+    """Strip the runtime-filled Evidence fields from the schema shown to the LLM.
 
-def _schema_without_bbox(jsonschema_str: str) -> str:
-    """Drop the four bbox_* slots from the Evidence definition shown to the LLM.
-
-    The runtime resolves bbox from parser geometry (T49), so the model must not be
-    asked for it. Leaving bbox in the embedded schema as `required` while the
-    instructions say "don't emit bbox" is a contradictory signal; stripping it makes
-    the contract coherent. This affects ONLY the prompt text — validation/store use
-    the real generated schema unchanged.
+    The model cites span ids; the runtime derives page/bbox/source_text/parser/paper
+    from those spans. Showing Evidence's real (required) fields would invite the model
+    to emit them — a contradictory contract. This affects ONLY the prompt text;
+    validation/store use the real generated schema unchanged.
     """
     schema = json.loads(jsonschema_str)
     ev = schema.get("$defs", {}).get("Evidence", {})
-    for k in _BBOX_SLOTS:
+    for k in _EVIDENCE_RUNTIME_SLOTS:
         ev.get("properties", {}).pop(k, None)
-    if "required" in ev:
-        ev["required"] = [r for r in ev["required"] if r not in _BBOX_SLOTS]
+    ev["required"] = []
     return json.dumps(schema, indent=2)
 
 
 def _build_system_prompt(skill_body: str, jsonschema_str: str, norm: str) -> str:
     """Compose the cached system block (~7K tokens for OER + full schema)."""
-    # Advertise only the concrete Measurement subclasses as valid `type` values.
-    # _CLASS_MAP also holds Evidence/Paper/Catalyst/etc. for _instantiate's use,
-    # but those are not top-level emissions — the output contract is one item per
-    # measurement, each with an embedded Evidence block.
     type_list = ", ".join(sorted(_MEASUREMENT_NAMES))
     return (
-        "You are palimpsest's extraction agent. Given parsed text from an OER "
-        "research paper, return one JSON object listing every reported "
-        "measurement and its provenance.\n\n"
+        "You are palimpsest's extraction agent. You are given the NUMBERED text "
+        "spans of ONE page of an OER research paper. Return every reported "
+        "measurement that those spans state, citing the span id(s) for each.\n\n"
         "## Skill\n\n"
         + skill_body
         + "\n\n"
@@ -134,21 +136,20 @@ def _build_system_prompt(skill_body: str, jsonschema_str: str, norm: str) -> str
         + "\n```\n\n## Output contract\n\n"
         "Return EXACTLY ONE JSON object of the form:\n\n"
         '```\n{"items": [\n'
-        '  {"type": "<MeasurementSubclass>", "<slot>": <value>, ..., "evidence": {...}},\n'
+        '  {"type": "<MeasurementSubclass>", "value": <float>, "unit_label": "<unit>",\n'
+        '   "condition": {...}, "evidence": {"spans": [<id>, ...]}},\n'
         '  ...\n]}\n```\n\n'
-        f"- `type` must be one of: {type_list}.\n"
-        "- Do NOT emit `type: Measurement` — it is the abstract base; always "
-        "pick a concrete subclass.\n"
-        "- Each item takes `value` (float), `unit_label` (string, the canonical "
-        "unit per Normalization rules — convert before emitting), optional "
-        "`condition`, and `evidence`.\n"
-        "- `evidence` MUST carry `page` (int) and `source_text`: a VERBATIM quote "
-        "(an exact substring) of the parsed text that states this measurement. Do "
-        "NOT emit bbox coordinates, `paper.sha256`, or `parser_name` — the runtime "
-        "resolves the bbox from the parser's native geometry by matching your "
-        "`source_text`, and injects sha256/parser_name after parsing. Omit a "
-        "measurement entirely rather than ship it without `page` + a verbatim "
-        "`source_text`.\n"
+        f"- `type` must be one of: {type_list}. Never emit `type: Measurement` "
+        "(it is the abstract base).\n"
+        "- `value` (float) + `unit_label` (string, the canonical unit per the "
+        "Normalization rules — convert before emitting). `condition` is optional.\n"
+        "- `evidence.spans` MUST list the id(s) of the span(s) on THIS page that "
+        "state the measurement (the span(s) containing the value). Cite the "
+        "smallest set that covers it — usually one id. Do NOT invent ids, and do "
+        "NOT emit page/bbox/source_text/paper/parser_name; the runtime fills those "
+        "from the spans you cite.\n"
+        "- Only emit a measurement if a span on this page actually states it. If "
+        "no measurement is stated on this page, return `{\"items\": []}`.\n"
         "- One item per (variable, conditions) tuple.\n"
         "- Return JSON only — no prose, no commentary, no markdown fence around "
         "the outer object."
@@ -163,10 +164,6 @@ def _parse_response(text: str) -> list[dict]:
 
     Tries strict JSON first; falls back to a fenced ```json``` block; raises
     ``ValueError`` if neither yields a dict with a list-typed ``items`` key.
-    The fallback exists because models occasionally wrap JSON in a fence
-    despite the contract; raising on missing/malformed ``items`` is per
-    CLAUDE.md §1 (loud failure). Returning a non-list to the caller would
-    crash the iteration loop with ``AttributeError``, so we reject it here.
     """
     candidates: list[str] = [text]
     fence = _FENCED.search(text)
@@ -184,55 +181,27 @@ def _parse_response(text: str) -> list[dict]:
     )
 
 
-def _inject_provenance(items: list[dict], paper_sha: str, parser_name: str) -> None:
-    """Overwrite the provenance fields the caller owns, not the LLM.
-
-    ``paper.sha256`` and ``parser_name`` are knowable at the tool layer (T07
-    hash + caller's parser arg); letting the LLM emit them invites hallucinated
-    hashes that would silently violate CLAUDE.md's "every triple carries
-    paper_hash" non-negotiable. ``page`` stays LLM-owned; ``bbox`` is resolved
-    separately from parser geometry (see ``_resolve_bbox``), not from the LLM.
-
-    Mutates each item's ``evidence`` block in place. An item without an
-    ``evidence`` dict at all is left alone here — the calling loop in
-    ``extract()`` catches missing-evidence on Measurement subclasses and
-    routes the item to ``errors`` so the agent can re-prompt.
-    """
-    for item in items:
-        ev = item.get("evidence")
-        if not isinstance(ev, dict):
-            continue
-        ev["parser_name"] = parser_name
-        paper = ev.get("paper")
-        if isinstance(paper, dict):
-            paper["sha256"] = paper_sha
-        else:
-            ev["paper"] = {"sha256": paper_sha}
-
-
-# --- T49: parser-native bbox resolution --------------------------------------
-# Each adapter turns one parser's cached output into a flat list of
-# (page:int, text:str, bbox:(x0,y0,x1,y1)) spans in the parser's NATIVE
-# coordinates (no cross-parser normalization — that is T38's job, which must also
-# account for docling's BOTTOMLEFT/point origin vs the others' TOPLEFT/pixel one).
-# Chandra is markdown with no geometry → no adapter; its measurements route to
-# errors. Page numbering: mineru/dots/paddle are 0-based list/index → +1;
-# docling's prov.page_no is already 1-based.
+# --- span projection: parser-native geometry → (page, text, bbox) -------------
+# Each adapter turns one parser's cached output into spans in the parser's NATIVE
+# coordinates (no cross-parser normalization — that is T38's job). Span text is
+# kept VERBATIM (no LaTeX/whitespace stripping). Chandra is markdown with no
+# geometry → no adapter → no spans. Page numbering: mineru/dots/paddle are 0-based
+# list/index → +1; docling's prov.page_no is already 1-based.
 
 Span = tuple[int, str, tuple[float, float, float, float]]
 
+# Keys whose string values are visible block text. mineru nests running text under
+# "content" and equation LaTeX under "math_content"; both must be projected or the
+# values they carry become uncitable.
+_TEXT_KEYS = {"content", "math_content"}
+
 
 def _content_strings(node: Any) -> list[str]:
-    """Collect every string under a ``"content"`` key, recursing dicts/lists.
-
-    mineru nests block text as ``content`` leaves (``title_content`` →
-    ``{"type": ..., "content": "..."}``, inline equations, etc.); this flattens
-    one block into its visible text without dragging in ``type``/``level`` keys.
-    """
+    """Collect every string under a text-bearing key, recursing dicts/lists."""
     out: list[str] = []
     if isinstance(node, dict):
         for k, v in node.items():
-            if k == "content" and isinstance(v, str):
+            if k in _TEXT_KEYS and isinstance(v, str):
                 out.append(v)
             else:
                 out.extend(_content_strings(v))
@@ -286,6 +255,12 @@ def _spans_paddle(data: Any) -> list[Span]:
     return spans
 
 
+def _docling_bbox(b: Any) -> tuple[float, float, float, float] | None:
+    if isinstance(b, dict) and all(k in b for k in ("l", "t", "r", "b")):
+        return (float(b["l"]), float(b["t"]), float(b["r"]), float(b["b"]))
+    return None
+
+
 def _spans_docling(data: Any) -> list[Span]:
     spans: list[Span] = []
     for t in data.get("texts", []):
@@ -293,12 +268,38 @@ def _spans_docling(data: Any) -> list[Span]:
         if not (isinstance(text, str) and text.strip()):
             continue
         for prov in t.get("prov", []):
+            bbox = _docling_bbox(prov.get("bbox"))
             page_no = prov.get("page_no")
-            b = prov.get("bbox", {})
-            if isinstance(page_no, int) and all(k in b for k in ("l", "t", "r", "b")):
-                spans.append((page_no, text,
-                              (float(b["l"]), float(b["t"]), float(b["r"]), float(b["b"]))))
+            if isinstance(page_no, int) and bbox:
+                spans.append((page_no, text, bbox))
+    # Tables live in a separate array, not in `texts`. Project their cell text so
+    # table-sourced values stay citable. (Verified against a synthetic structure;
+    # the sample corpus has no tables — see PROGRESS.)
+    for tbl in data.get("tables", []):
+        cell_text = " ".join(_docling_table_text(tbl.get("data")))
+        if not cell_text.strip():
+            continue
+        for prov in tbl.get("prov", []):
+            bbox = _docling_bbox(prov.get("bbox"))
+            page_no = prov.get("page_no")
+            if isinstance(page_no, int) and bbox:
+                spans.append((page_no, cell_text, bbox))
     return spans
+
+
+def _docling_table_text(node: Any) -> list[str]:
+    """Collect cell ``text`` strings from a docling table's ``data`` block."""
+    out: list[str] = []
+    if isinstance(node, dict):
+        for k, v in node.items():
+            if k == "text" and isinstance(v, str):
+                out.append(v)
+            else:
+                out.extend(_docling_table_text(v))
+    elif isinstance(node, list):
+        for item in node:
+            out.extend(_docling_table_text(item))
+    return out
 
 
 _GEOMETRY = {
@@ -313,8 +314,7 @@ def _load_spans(parser_name: str, parser_text: str) -> list[Span]:
     """Parse cached parser output into spans; ``[]`` for no-geometry parsers.
 
     Chandra emits markdown (no geometry) and an unknown/unparseable parser also
-    yields ``[]`` — both cases leave every measurement's bbox unresolved, so the
-    extract loop routes them to ``errors`` (never a fabricated bbox).
+    yields ``[]`` — nothing citable, so no measurements are extracted.
     """
     fn = _GEOMETRY.get(parser_name)
     if fn is None:
@@ -326,81 +326,94 @@ def _load_spans(parser_name: str, parser_text: str) -> list[Span]:
     return fn(data)
 
 
-def _norm(s: str) -> str:
-    # Remove ALL whitespace (not just collapse) and lowercase. Parsers pad inline
-    # equations and tokens with spaces the LLM's continuous quote doesn't have
-    # (mineru: "Ir- Co_{3}O_{4}" vs the quote's "Ir-Co_{3}O_{4}"); dropping
-    # whitespace entirely makes substring matching robust to that.
-    return re.sub(r"\s+", "", s).lower()
+# One call over the full projection unless its text exceeds this (~chars/4 tokens),
+# in which case we fall back to per-page batching. A single paper's projection is
+# ~20-25K tokens, so this only triggers for very large inputs (generality safety net).
+_MAX_PROJECTION_TOKENS = 120_000
 
 
-# Minimum normalized length for a span to match by being *contained in* the quote
-# (the multi-span union direction). Without it, trivially short parser spans —
-# docling emits single-char spans like "h", mineru emits "Materials" — are a
-# substring of almost any quote and would pollute the union bbox, stretching it
-# to wherever that fragment sits on the page. The other direction (quote ⊆ span)
-# is unaffected: the quote is the long string there.
-_MIN_SPAN_MATCH_CHARS = 4
+def _render_projection(spans: list[Span], ids: list[int] | None = None) -> str:
+    """Numbered span listing with GLOBAL ids. ``ids`` selects a subset (a page batch)."""
+    sel = range(len(spans)) if ids is None else ids
+    lines = ["Numbered text spans (cite the [id] of the span stating each measurement):", ""]
+    for i in sel:
+        page, text, _bbox = spans[i]
+        lines.append(f"[{i}] (p{page}) {text}")
+    return "\n".join(lines)
 
 
-def _bbox_area(b: tuple[float, float, float, float]) -> float:
-    return abs((b[2] - b[0]) * (b[3] - b[1]))
+# Condition/Electrolyte slots typed `float` in the schema. The LLM intermittently
+# emits these as unit-bearing strings ("10 mA/cm2", "1.53 V"); left as-is they fail
+# Pydantic and discard the ENTIRE (otherwise valid) measurement. Coerce string →
+# leading float so a malformed OPTIONAL field never costs the measurement.
+_COND_NUMERIC = frozenset({"current_density", "electrode_potential_vs_rhe", "temperature_C", "scan_rate"})
+_ELECTROLYTE_NUMERIC = frozenset({"concentration", "electrolyte_ph"})
 
 
-def _resolve_bbox(items: list[dict], spans: list[Span]) -> None:
-    """Replace each evidence's bbox with the parser-native one matching its quote.
+def _coerce_floats(d: dict, numeric: frozenset) -> None:
+    """Coerce stringy numeric fields to float in place; drop if no number present."""
+    for k in numeric:
+        v = d.get(k)
+        if isinstance(v, str):
+            m = re.search(r"[-+]?\d*\.?\d+", v)
+            if m:
+                d[k] = float(m.group())
+            else:
+                d.pop(k, None)
 
-    Mutates each item's ``evidence`` in place: the LLM-emitted ``bbox_*`` (if any)
-    are dropped, then resolved from the spans on the stated ``page``:
 
-    1. If any span fully CONTAINS the quote, use the TIGHTEST such span (smallest
-       area). This is the common case (a paragraph/line span holding the quote)
-       and gives the most precise bbox.
-    2. Otherwise the quote is split across spans — union the span chunks that are
-       part of it (``ntext in snippet``), guarded by ``_MIN_SPAN_MATCH_CHARS``.
+def _coerce_condition(item: dict) -> None:
+    cond = item.get("condition")
+    if not isinstance(cond, dict):
+        return
+    _coerce_floats(cond, _COND_NUMERIC)
+    el = cond.get("electrolyte")
+    if isinstance(el, dict):
+        _coerce_floats(el, _ELECTROLYTE_NUMERIC)
 
-    Doing (1) before (2) avoids unioning a correct containing span with an
-    unrelated short fragment elsewhere on the page (which inflates the bbox — the
-    opposite of what T38 needs). No match (or no ``source_text`` / no spans) →
-    bbox left UNSET, so the extract loop sends the measurement to ``errors``.
+
+def _value_digits(value: Any) -> str:
+    """Significant digits of a numeric value, for the mis-citation guard."""
+    try:
+        return re.sub(r"\D", "", "%g" % float(value))
+    except (TypeError, ValueError):
+        return ""
+
+
+def _resolve_spans(
+    ev: Any,
+    spans: list[Span],
+    paper_sha: str,
+    parser_name: str,
+) -> dict | None:
+    """Build a full Evidence dict from the cited GLOBAL span ids, or ``None`` if invalid.
+
+    ``page``/``bbox``/``source_text`` come from the cited spans (page of the first
+    cited span, union bbox, concatenated verbatim text); ``paper.sha256`` +
+    ``parser_name`` are injected. Returns ``None`` when ``ev`` has no usable
+    ``spans`` (caller routes to ``errors``).
     """
-    by_page: dict[Any, list[tuple[str, tuple[float, float, float, float]]]] = {}
-    for page_no, text, bbox in spans:
-        by_page.setdefault(page_no, []).append((_norm(text), bbox))
-
-    for item in items:
-        ev = item.get("evidence")
-        if not isinstance(ev, dict):
-            continue
-        for k in ("bbox_x0", "bbox_y0", "bbox_x1", "bbox_y1"):
-            ev.pop(k, None)  # runtime owns bbox now; discard whatever the LLM sent
-        src = ev.get("source_text")
-        if not (isinstance(src, str) and src.strip()):
-            continue
-        snippet = _norm(src)
-        # Spans are keyed by int page; tolerate a stringified page from the LLM
-        # so a "3" vs 3 mismatch isn't a spurious resolution failure.
-        try:
-            page = int(ev.get("page"))
-        except (TypeError, ValueError):
-            continue
-        page_spans = [(ntext, bbox) for ntext, bbox in by_page.get(page, []) if ntext]
-        # (1) tightest single span that fully contains the quote.
-        containing = [bbox for ntext, bbox in page_spans if snippet in ntext]
-        if containing:
-            matched = [min(containing, key=_bbox_area)]
-        else:
-            # (2) quote split across spans: union the chunks that are part of it.
-            matched = [
-                bbox for ntext, bbox in page_spans
-                if len(ntext) >= _MIN_SPAN_MATCH_CHARS and ntext in snippet
-            ]
-        if not matched:
-            continue
-        ev["bbox_x0"] = min(b[0] for b in matched)
-        ev["bbox_y0"] = min(b[1] for b in matched)
-        ev["bbox_x1"] = max(b[2] for b in matched)
-        ev["bbox_y1"] = max(b[3] for b in matched)
+    if not isinstance(ev, dict):
+        return None
+    ids = ev.get("spans")
+    if isinstance(ids, int):
+        ids = [ids]
+    if not isinstance(ids, list):
+        return None
+    cited = [spans[i] for i in ids if isinstance(i, int) and 0 <= i < len(spans)]
+    if not cited:
+        return None
+    bboxes = [b for _p, _t, b in cited]
+    return {
+        "paper": {"sha256": paper_sha},
+        "page": cited[0][0],
+        "bbox_x0": min(b[0] for b in bboxes),
+        "bbox_y0": min(b[1] for b in bboxes),
+        "bbox_x1": max(b[2] for b in bboxes),
+        "bbox_y1": max(b[3] for b in bboxes),
+        "source_text": " ".join(t for _p, t, _b in cited),  # verbatim, never stripped
+        "parser_name": parser_name,
+    }
 
 
 def _instantiate(item: dict) -> BaseModel:
@@ -416,8 +429,98 @@ def _instantiate(item: dict) -> BaseModel:
     return cls(**item)
 
 
+def _process_items(
+    items: list,
+    spans: list[Span],
+    paper_sha: str,
+    parser_name: str,
+    valid: list[BaseModel],
+    errors: list[tuple[Exception, dict]],
+) -> None:
+    """Resolve GLOBAL span citations, validate, and route each item to valid/errors."""
+    for item in items:
+        if not isinstance(item, dict):
+            errors.append((TypeError(f"item is {type(item).__name__}, expected dict"), {"raw": item}))
+            continue
+        raw = copy.deepcopy(item)
+        type_name = item.get("type")
+
+        if type_name in _MEASUREMENT_NAMES:
+            evidence = _resolve_spans(item.get("evidence"), spans, paper_sha, parser_name)
+            if evidence is None:
+                errors.append((
+                    ValueError(
+                        f"no valid span citation for {type_name}; "
+                        f"evidence={item.get('evidence')!r}"
+                    ),
+                    raw,
+                ))
+                continue
+            # Mis-citation guard: the cited span(s) should contain the value's
+            # digits. If not, the model likely cited the wrong span → refuse rather
+            # than attach a wrong bbox. Lenient (skips trivially short digit runs).
+            vd = _value_digits(item.get("value"))
+            if len(vd) >= 2 and vd not in re.sub(r"\D", "", evidence["source_text"]):
+                errors.append((
+                    ValueError(
+                        f"likely mis-citation for {type_name}: value {item.get('value')!r} "
+                        f"not found in cited span(s)"
+                    ),
+                    raw,
+                ))
+                continue
+            item["evidence"] = evidence
+
+        _coerce_condition(item)  # salvage stringy numeric condition fields
+        try:
+            inst = _instantiate(item)
+        except (ValidationError, KeyError, TypeError) as exc:
+            errors.append((exc, raw))
+            continue
+
+        # C2: reject a unit_label that disagrees with the slot's canonical unit
+        # (by unit signature, so paper-faithful spellings pass; `V` for an mV slot
+        # fails). Only Measurement subclasses carry unit_label.
+        if type_name in _MEASUREMENT_NAMES:
+            canon = canonical_unit(type_name)
+            if canon is not None and not units_match(inst.unit_label, canon):
+                errors.append((
+                    ValueError(
+                        f"unit_label {inst.unit_label!r} != canonical {canon!r} for {type_name}"
+                    ),
+                    raw,
+                ))
+                continue
+        valid.append(inst)
+
+
+def _dedup(valid: list[BaseModel]) -> list[BaseModel]:
+    """Drop only TRUE duplicates — same type/value/unit AND same source span.
+
+    Keying on ``source_text`` (not just value) keeps two distinct catalysts that
+    happen to report the same value (e.g. 236 mV for A and B) as separate rows;
+    only a measurement cited from the identical span (e.g. the same item surfaced
+    in two per-page batches of the large-paper fallback) collapses.
+    """
+    seen: set = set()
+    out: list[BaseModel] = []
+    for inst in valid:
+        ev = getattr(inst, "evidence", None)
+        key = (
+            type(inst).__name__,
+            getattr(inst, "value", None),
+            getattr(inst, "unit_label", None),
+            getattr(ev, "source_text", None),
+        )
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(inst)
+    return out
+
+
 @register("extract", {
-    "description": "Schema-first extraction: cached parser output -> Sonnet -> Pydantic instances.",
+    "description": "Schema-first extraction: cached parser output -> LLM -> Pydantic instances.",
     "input_schema": {
         "type": "object",
         "properties": {
@@ -437,11 +540,10 @@ def extract(
     provider: Any = None,
     cache: Any = None,
 ) -> tuple[list[BaseModel], list[tuple[Exception, dict]]]:
-    """Run one extraction over one cached parser output.
+    """Run extraction over one cached parser output, ONE LLM call per page.
 
     The ``provider`` and ``cache`` kwargs exist for test injection; ``cost_meter``
-    is optional so direct calls (the live snippet) can keep budget tracking
-    honest without forcing the tool to construct a meter when none is wired.
+    is optional so direct calls can keep budget tracking honest.
     """
     if cache is None:
         from palimpsest.cache import ParserCache  # lazy: break import cycle
@@ -456,106 +558,56 @@ def extract(
     try:
         skill_body = _LOADER.load(skill_name)
     except KeyError:
-        # Wrap the bare KeyError so the agent's _dispatch surfaces a friendly,
-        # re-promptable message (mirrors read_skill.py's fallback format).
         avail = ", ".join(_LOADER.names()) or "(none)"
         raise ValueError(f"unknown skill: {skill_name!r}. Available: {avail}") from None
     norm = build_normalization_prompt([Path("skills") / skill_name])
-    jsonschema_str = _schema_without_bbox(_JSONSCHEMA_PATH.read_text(encoding="utf-8"))
+    jsonschema_str = _schema_for_prompt(_JSONSCHEMA_PATH.read_text(encoding="utf-8"))
     system = _build_system_prompt(skill_body, jsonschema_str, norm)
-
-    messages = [
-        {
-            "role": "user",
-            "content": f"Parser output:\n\n{parser_text}\n\nReturn the JSON now.",
-        }
-    ]
 
     global _PROVIDER
     if provider is None:
         if _PROVIDER is None:
             _PROVIDER = DeepSeekProvider()  # T50: DeepSeek is the default LLM
         provider = _PROVIDER
-    resp = provider.complete(
-        system=system,
-        messages=messages,
-        tools=None,
-        cache_breakpoints=["system"],
-    )
-    if cost_meter is not None:
-        # `_cost_eur` is the canonical Sonnet pricing table (agent.py T06);
-        # reuse it so a future price tweak lands in one place. Lazy import
-        # for the same import-cycle reason as ParserCache above.
-        from palimpsest.agent import _cost_eur
-        cost_meter.record_llm(
-            provider.name,
-            _cost_eur(resp.usage, getattr(provider, "prices", None)),
-            detail="extract",
-        )
 
-    items = _parse_response(resp.text)
-    # Caller owns paper.sha256 and parser_name; overwrite whatever the LLM
-    # emitted there. Done BEFORE the raw snapshot so failed-item replay
-    # reflects what _instantiate actually saw.
-    _inject_provenance(items, paper_sha, parser_name)
-    # T49 (C3): resolve each bbox from the parser's native geometry by matching
-    # the LLM's verbatim source_text quote. Done BEFORE the raw snapshot so a
-    # failed item's replay shows the resolved (or unresolved) bbox state.
-    _resolve_bbox(items, _load_spans(parser_name, parser_text))
+    spans = _load_spans(parser_name, parser_text)
     valid: list[BaseModel] = []
     errors: list[tuple[Exception, dict]] = []
-    for item in items:
-        if not isinstance(item, dict):
-            errors.append((TypeError(f"item is {type(item).__name__}, expected dict"), {"raw": item}))
-            continue
-        # Deep-copy so error-replay shows the exact state _instantiate saw,
-        # not a snapshot whose nested `evidence` dict still aliases the live
-        # one (a shallow copy is safe today but fragile if any future fix
-        # mutates nested keys).
-        raw = copy.deepcopy(item)
-        # Provenance non-negotiable (CLAUDE.md): a Measurement subclass MUST
-        # carry an evidence dict so the (paper_hash, parser, page, bbox) tuple
-        # is recoverable downstream. Catching this here lets the agent re-prompt
-        # cheaply before T24's expensive insertion gate.
-        type_name = item.get("type")
-        if type_name in _MEASUREMENT_NAMES:
-            ev = item.get("evidence")
-            if not isinstance(ev, dict):
-                errors.append((ValueError(f"missing evidence for {type_name}"), raw))
-                continue
-            # T49 (C3): no parser-native bbox matched the quote (no match, no
-            # source_text, or a no-geometry parser like Chandra). Refuse rather
-            # than carry a fabricated bbox into the graph.
-            if not all(k in ev for k in ("bbox_x0", "bbox_y0", "bbox_x1", "bbox_y1")):
-                errors.append((
-                    ValueError(
-                        f"no parser-native bbox for {type_name}; "
-                        f"source_text={ev.get('source_text')!r} did not match a "
-                        f"{parser_name} span on page {ev.get('page')}"
-                    ),
-                    raw,
-                ))
-                continue
+    if not spans:  # no geometry (e.g. Chandra) → nothing citable
+        return valid, errors
+
+    # One call over the full projection (consistent + cheap); fall back to per-page
+    # batching only if the projection is too large to fit. Span ids are GLOBAL, so
+    # citations resolve against `spans` regardless of how calls are batched.
+    full = _render_projection(spans)
+    if len(full) // 4 <= _MAX_PROJECTION_TOKENS:
+        batches: list[list[int] | None] = [None]
+    else:
+        by_page: dict[int, list[int]] = {}
+        for i, (page, _t, _b) in enumerate(spans):
+            by_page.setdefault(page, []).append(i)
+        batches = [ids for _p, ids in sorted(by_page.items())]
+
+    for batch in batches:
+        content = full if batch is None else _render_projection(spans, batch)
+        resp = provider.complete(
+            system=system,
+            messages=[{"role": "user", "content": content + "\n\nReturn the measurements."}],
+            tools=None,
+            cache_breakpoints=["system"],
+        )
+        if cost_meter is not None:
+            from palimpsest.agent import _cost_eur  # lazy: import cycle
+            cost_meter.record_llm(
+                provider.name,
+                _cost_eur(resp.usage, getattr(provider, "prices", None)),
+                detail="extract",
+            )
         try:
-            inst = _instantiate(item)
-        except (ValidationError, KeyError, TypeError) as exc:
-            errors.append((exc, raw))
+            items = _parse_response(resp.text)
+        except ValueError as exc:
+            errors.append((exc, {"batch": batch}))
             continue
-        # T49 (C2): reject a unit_label that disagrees with the slot's canonical
-        # unit. Comparison is by unit signature (normalize.units_match), so a
-        # correct unit in paper-faithful spelling (`s⁻¹`, `A g⁻¹_Ir`) passes while
-        # a genuine error (`V` for an mV slot) still fails. Only Measurement
-        # subclasses carry unit_label; canonical_unit returns None when untracked.
-        if type_name in _MEASUREMENT_NAMES:
-            canon = canonical_unit(type_name)
-            if canon is not None and not units_match(inst.unit_label, canon):
-                errors.append((
-                    ValueError(
-                        f"unit_label {inst.unit_label!r} != canonical {canon!r} "
-                        f"for {type_name}"
-                    ),
-                    raw,
-                ))
-                continue
-        valid.append(inst)
-    return valid, errors
+        _process_items(items, spans, paper_sha, parser_name, valid, errors)
+
+    return _dedup(valid), errors

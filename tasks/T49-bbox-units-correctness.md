@@ -123,3 +123,11 @@ The iteration that got there: run 1 = 0 valid (units too strict) → run 2 = 8 v
 (units fixed, TafelSlope inline-equation spacing missed) → final = 14/0 (whitespace-insensitive
 matcher). NOTE: the live verification runs drained the palimpsest Anthropic account's credit
 balance — top up before the next live run; offline suite is unaffected.
+
+## Superseded by T51 (2026-06-15)
+The fuzzy bbox matcher introduced here (`_resolve_bbox`/`_norm`/`_bbox_area`/
+`_MIN_SPAN_MATCH_CHARS`, matching the LLM's `source_text` quote against parser spans) was
+**replaced by T51's span-projection + ID-citation** design. The brittleness this card fought
+(whitespace/LaTeX in quotes) is the reason: T51 has the LLM cite span ids instead of quoting, so
+there is no text match to fail. The unit validation (C2: `units_match`) and the parser-native-bbox
+invariant (C3) are retained. The per-parser geometry adapters (`_spans_*`) are reused by T51.
