@@ -31,6 +31,7 @@ def always_fails() -> str:
     raise RuntimeError("boom")
 
 
+@pytest.mark.live
 @_skip_no_key
 def test_no_tools(tmp_path):
     meter = CostMeter(str(tmp_path / "c.db"))
@@ -44,6 +45,7 @@ def test_no_tools(tmp_path):
     assert n_llm == 1
 
 
+@pytest.mark.live
 @_skip_no_key
 def test_cache_hit_on_second_run(tmp_path):
     meter = CostMeter(str(tmp_path / "c.db"))

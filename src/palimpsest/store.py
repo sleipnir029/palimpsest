@@ -31,6 +31,7 @@ reconstructable) and the link is now a stable IRI, not an anonymous activity.
 from __future__ import annotations
 
 import uuid
+from enum import Enum
 from typing import Any
 
 from pydantic import BaseModel
@@ -200,6 +201,12 @@ class RDFStore:
         ("temperature_C", "temperatureC", XSD_FLOAT),
         ("scan_rate", "scanRate", XSD_FLOAT),
         ("cell_type", "cellType", None),
+        # T50: universal categorical enums (stored as their bare string value)
+        ("iR_correction", "iRCorrection", None),
+        ("normalization_basis", "normalizationBasis", None),
+        ("cell_type_family", "cellTypeFamily", None),
+        ("electrolyte_family", "electrolyteFamily", None),
+        ("scan_rate_regime", "scanRateRegime", None),
     )
     _ELECTROLYTE_SCALARS = (
         ("formula", "formula", None),
@@ -237,6 +244,10 @@ class RDFStore:
             val = getattr(obj, slot, None)
             if val is None:
                 continue
+            # Enum slots (T50: iR_correction etc.) stringify to "EnumName.member"
+            # via str(); store the bare permissible value instead.
+            if isinstance(val, Enum):
+                val = val.value
             lit = Literal(str(val), datatype=dt) if dt else Literal(str(val))
             self._add(subj, NamedNode(f"{PALIM}{pred}"), lit)
 

@@ -151,6 +151,14 @@ classes:
       - electrolyte
       - cell_type
       - scan_rate
+      # T50: the universal categorical enums advertised by normalize.py
+      # (build_normalization_prompt) are modeled here so the LLM's emitted
+      # values validate instead of tripping `extra="forbid"`.
+      - iR_correction
+      - normalization_basis
+      - cell_type_family
+      - electrolyte_family
+      - scan_rate_regime
 
   Evidence:
     class_uri: prov:Entity
@@ -403,6 +411,28 @@ slots:
     slot_uri: palimpsest:cellType
     description: e.g. "three-electrode half-cell", "MEA", "flow cell".
 
+  # --- Universal categorical enums (T50; advertised by normalize.py) ---
+  iR_correction:
+    range: IRCorrectionEnum
+    slot_uri: palimpsest:iRCorrection
+    description: Whether the reported value is iR-corrected.
+  normalization_basis:
+    range: NormalizationBasisEnum
+    slot_uri: palimpsest:normalizationBasis
+    description: Surface-area/mass basis the value is normalized to.
+  cell_type_family:
+    range: CellTypeFamilyEnum
+    slot_uri: palimpsest:cellTypeFamily
+    description: Coarse cell-architecture family (machine-readable peer of cell_type).
+  electrolyte_family:
+    range: ElectrolyteFamilyEnum
+    slot_uri: palimpsest:electrolyteFamily
+    description: Coarse electrolyte pH family.
+  scan_rate_regime:
+    range: ScanRateRegimeEnum
+    slot_uri: palimpsest:scanRateRegime
+    description: Coarse scan-rate regime.
+
   # --- Catalyst-internal slots ---
   name:
     range: string
@@ -425,3 +455,37 @@ slots:
       ucum_code: mol/L
       exact_mappings:
         - qudt:MOL-PER-L
+
+
+# ---- enums -----------------------------------------------------------------
+# T50: the single source of truth for these values is normalize.UNIVERSAL_ENUMS,
+# which advertises them to the LLM; keep the permissible values in sync.
+enums:
+  IRCorrectionEnum:
+    permissible_values:
+      applied:
+      not_applied:
+      unknown:
+  NormalizationBasisEnum:
+    permissible_values:
+      geometric:
+      ECSA:
+      BET:
+      mass:
+  CellTypeFamilyEnum:
+    permissible_values:
+      RDE:
+      three_electrode_flow:
+      single_cell_MEA:
+      stack:
+  ElectrolyteFamilyEnum:
+    permissible_values:
+      acid:
+      alkaline:
+      neutral:
+  ScanRateRegimeEnum:
+    permissible_values:
+      steady_state:
+      slow_LSV:
+      fast_LSV:
+      fast_CV:

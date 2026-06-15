@@ -26,8 +26,11 @@ class MaxTurnsExceeded(Exception):
     pass
 
 
-def _cost_eur(usage: dict) -> float:
-    usd = sum(usage.get(key, 0) * rate for key, rate in _PRICE_USD.items())
+def _cost_eur(usage: dict, prices: dict | None = None) -> float:
+    # `prices` is the provider's USD/token table (DeepSeekProvider.prices etc.);
+    # defaults to the Sonnet table so callers/stubs without one keep working.
+    table = prices or _PRICE_USD
+    usd = sum(usage.get(key, 0) * rate for key, rate in table.items())
     return usd * _USD_TO_EUR
 
 
@@ -68,7 +71,9 @@ class Agent:
             )
             self.last_usage = resp.usage
             self.cost_meter.record_llm(
-                self.provider.name, _cost_eur(resp.usage), detail=f"turn {turn}"
+                self.provider.name,
+                _cost_eur(resp.usage, getattr(self.provider, "prices", None)),
+                detail=f"turn {turn}",
             )
             # Append the assistant turn verbatim: the API needs the original
             # content blocks (text + tool_use) back to continue the conversation.
