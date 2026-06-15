@@ -33,5 +33,6 @@ def test_quit_exits_the_app():
 
 
 def test_unknown_command_returns_help_hint():
-    out = dispatch(_FakeApp(), "/budget 75")
-    assert out == "unknown command: /budget. type /help for available commands."
+    # /parser is out of scope (T28 card) so it stays unknown; /budget is now wired.
+    out = dispatch(_FakeApp(), "/parser docling")
+    assert out == "unknown command: /parser. type /help for available commands."

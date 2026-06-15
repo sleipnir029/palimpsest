@@ -5,13 +5,24 @@ agent loop — they never reach the LLM and cost nothing. Dead simple: string
 match on the first token, no regex. Each handler's one-line ``__doc__`` is what
 ``/help`` lists, so the registry stays a plain ``dict[str, callable]``.
 
-Scope (T27): only ``/help`` and ``/quit``. ``/budget``, ``/cost``, ``/model``
-land in T28; viewer/notebook commands are deferred until needed.
+Scope (T28): ``/help``, ``/quit`` (T27) plus ``/budget``, ``/cost``, ``/model``;
+viewer/notebook commands are deferred until needed.
 """
 
 from __future__ import annotations
 
 from collections.abc import Callable
+
+from ..providers import AnthropicProvider, DeepSeekProvider
+
+# /model X -> provider class. Only the two real classes are wired (DeepSeek is the
+# T50 runtime default; Anthropic is the kept fallback). haiku/gemini are named but
+# unbuilt — handled explicitly so the message is clearer than "unknown model".
+_PROVIDERS: dict[str, Callable] = {
+    "deepseek": DeepSeekProvider,
+    "sonnet": AnthropicProvider,
+}
+_NOT_IMPLEMENTED = {"haiku", "gemini"}
 
 
 def _help(app, args: list[str]) -> str:
@@ -28,9 +39,66 @@ def _quit(app, args: list[str]) -> str:
     return "bye"
 
 
+def _budget(app, args: list[str]) -> str:
+    """raise the budget cap, e.g. /budget 75"""
+    try:
+        n = int(args[0])
+    except (IndexError, ValueError):
+        return "usage: /budget <int euros>"
+    result = app.cost_meter.set_budget(n)  # T05: writes the DB, refuses below spend
+    if result.startswith("refused"):
+        return result
+    spent = app.cost_meter.total_eur()
+    return f"budget cap → €{n} (spent €{spent:.2f}, headroom €{n - spent:.2f})"
+
+
+def _cost(app, args: list[str]) -> str:
+    """show spend: total, LLM vs GPU, last 10 ledger entries"""
+    # cost.py has no aggregation method and is off-limits (T28 card), so read the
+    # ledger directly off its connection — read-only, no cost.py edit.
+    conn = app.cost_meter.conn
+    lines = [f"total spent: €{app.cost_meter.total_eur():.4f}"]
+    by_kind = {
+        kind: total
+        for kind, total in conn.execute(
+            "SELECT kind, COALESCE(SUM(amount_eur), 0) FROM cost_ledger GROUP BY kind"
+        )
+    }
+    lines.append(f"  llm €{by_kind.get('llm', 0):.4f} / gpu €{by_kind.get('gpu', 0):.4f}")
+    rows = conn.execute(
+        "SELECT ts, kind, provider, amount_eur, detail FROM cost_ledger "
+        "ORDER BY rowid DESC LIMIT 10"  # rowid, not ts: ts is 1s-resolution and ties
+    ).fetchall()
+    if rows:
+        lines.append("last entries:")
+        for ts, kind, provider, amount, detail in rows:
+            lines.append(f"  €{amount:.4f}  {kind}  {provider or '-'}  {detail or ''}")
+    return "\n".join(lines)
+
+
+def _model(app, args: list[str]) -> str:
+    """switch LLM provider: /model sonnet|deepseek"""
+    x = args[0] if args else ""
+    if x in _NOT_IMPLEMENTED:
+        return f"provider '{x}' not implemented yet"
+    cls = _PROVIDERS.get(x)
+    if cls is None:
+        return f"unknown model: {x}. options: sonnet, deepseek"
+    try:
+        provider = cls()
+    except Exception as exc:  # noqa: BLE001 — e.g. missing API key; surface, don't crash
+        return f"could not switch to {x}: {exc}"
+    app.agent.provider = provider
+    # New model ⇒ the prompt cache built for the old one no longer applies.
+    return f"switched to {provider.name} (prompt cache reset)"
+
+
 SLASH_COMMANDS: dict[str, Callable] = {
     "help": _help,
     "quit": _quit,
+    "budget": _budget,
+    "cost": _cost,
+    "model": _model,
 }
 
 

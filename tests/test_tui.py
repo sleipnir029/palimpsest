@@ -82,20 +82,20 @@ def test_agent_error_surfaces_and_reenables_input(tmp_path):
 
 
 def test_slash_command_dispatched(tmp_path):
-    """A `/`-prefixed line goes to the T27 dispatcher, never to the agent.
-    `/budget` is deferred to T28, so it's an unknown command for now."""
+    """A `/`-prefixed line goes to the slash dispatcher, never to the agent.
+    `/parser` is out of scope (T28 card), so it stays an unknown command."""
     meter = CostMeter(str(tmp_path / "t.db"))
     agent = _StubAgent(meter)
     app = PalimpsestApp(agent=agent, cost_meter=meter)
 
     async def _drive() -> None:
         async with app.run_test() as pilot:
-            app.query_one("#prompt", Input).value = "/budget 100"
+            app.query_one("#prompt", Input).value = "/parser docling"
             await pilot.press("enter")
             await pilot.pause()
             assert agent.last is None  # agent not called for slash commands
             log_text = "\n".join(strip.text for strip in app.query_one("#log", RichLog).lines)
-            assert "unknown command: /budget" in log_text
+            assert "unknown command: /parser" in log_text
 
     asyncio.run(_drive())
 
