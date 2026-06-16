@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>palimpsest — {{ filename }}</title>
+  <!-- HTMX for T30's data-pane loads (CDN per T29 card) -->
+  <script src="https://unpkg.com/htmx.org@latest"></script>
+  <style>
+    html, body { margin: 0; height: 100%; font-family: system-ui, sans-serif; }
+    #layout { display: grid; grid-template-columns: 1fr 1fr; height: 100vh; }
+    #pdf-pane { overflow-y: auto; background: #525659; padding: 1rem; }
+    #pdf-pane canvas { display: block; margin: 0 auto 1rem;
+                       box-shadow: 0 2px 8px rgba(0, 0, 0, .4); }
+    #data-pane { overflow-y: auto; padding: 1rem; border-left: 1px solid #ddd; }
+    header { font-size: .85rem; color: #888; margin-bottom: .75rem; }
+    #data-pane header { color: #666; }
+  </style>
+</head>
+<body>
+  <div id="layout">
+    <div id="pdf-pane">
+      <header>{{ filename }}{% if page_count %} · {{ page_count }} pages{% endif %} · {{ sha[:12] }}…</header>
+      <div id="pdf-canvases"></div>
+    </div>
+    <div id="data-pane">
+      <header>extracted data</header>
+      <!-- T30 populates this div; T31 wires hover -> bbox highlight. -->
+    </div>
+  </div>
+
+  <script type="module">
+    import * as pdfjsLib from "/static/pdfjs/pdf.min.mjs";
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "/static/pdfjs/pdf.worker.min.mjs";
+
+    const url = "/paper/{{ sha }}/pdf";
+    const container = document.getElementById("pdf-canvases");
+
+    (async () => {
+      // cMapUrl/standardFontDataUrl let PDF.js render CID/CJK-encoded PDFs and
+      // PDFs that don't embed their fonts — both vendored under /static/pdfjs/.
+      const pdf = await pdfjsLib.getDocument({
+        url,
+        cMapUrl: "/static/pdfjs/cmaps/",
+        cMapPacked: true,
+        standardFontDataUrl: "/static/pdfjs/standard_fonts/",
+      }).promise;
+      for (let n = 1; n <= pdf.numPages; n++) {
+        const page = await pdf.getPage(n);
+        const viewport = page.getViewport({ scale: 1.4 });
+        const canvas = document.createElement("canvas");
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+        container.appendChild(canvas);
+        await page.render({ canvasContext: canvas.getContext("2d"), viewport }).promise;
+      }
+    })();
+  </script>
+</body>
+</html>
