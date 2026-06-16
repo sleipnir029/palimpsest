@@ -86,6 +86,37 @@ def test_pipeline_wiring_empty_extraction(tmp_path):
     assert len(store) == 0  # nothing inserted → empty graph
 
 
+def test_demo_cli_persists_to_disk_store(monkeypatch):
+    """`demo <pdf>` must construct a path-backed RDFStore (the on-disk graph the
+    viewer reads), not fall back to run_paper's discarded in-memory default.
+
+    Guards the T30 persistence fix without LLM/network: run_paper + RDFStore are
+    faked to record how the CLI calls them.
+    """
+    import sys
+
+    import palimpsest.__main__ as cli
+
+    captured: dict = {}
+
+    class _FakeStore:
+        def __init__(self, path=None):
+            captured["path"] = path
+
+    def _fake_run_paper(pdf, *args, store=None, **kw):
+        captured["store"] = store
+        return {"paper_sha": "x", "n_extracted": 0, "n_validated": 0, "n_inserted": 0}
+
+    monkeypatch.setattr("palimpsest.store.RDFStore", _FakeStore)
+    monkeypatch.setattr("palimpsest.pipeline.run_paper", _fake_run_paper)
+    monkeypatch.setattr(sys, "argv", ["palimpsest", "demo", "papers/x.pdf"])
+
+    cli.main()
+
+    assert captured["path"] == "store"  # matches viewer.app.STORE_PATH
+    assert isinstance(captured["store"], _FakeStore)  # explicit store, not None
+
+
 @pytest.mark.live
 @needs_cache
 def test_pipeline_end_to_end_live(tmp_path):
