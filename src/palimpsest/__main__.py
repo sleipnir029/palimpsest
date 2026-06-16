@@ -38,8 +38,13 @@ def main() -> None:
         from pathlib import Path
 
         from .pipeline import run_paper  # lazy: avoid import-time coupling
+        from .store import RDFStore
 
-        print(run_paper(Path(sys.argv[2])))
+        # Persist to the on-disk RocksDB graph the viewer reads (RDFStore's own
+        # default is in-memory, fine for tests/embedders but discarded on exit).
+        # "store" matches viewer.app.STORE_PATH; RocksDB is single-writer, so run
+        # this with the viewer stopped, then (re)start the viewer to read it.
+        print(run_paper(Path(sys.argv[2]), store=RDFStore("store")))
         return
 
     agent = Agent(
