@@ -127,6 +127,13 @@ class ParserCache:
         )
         self.conn.commit()
 
+    def list_all_papers(self) -> list[str]:
+        # Every registered paper's sha256, regardless of parse completeness.
+        return [
+            row[0]
+            for row in self.conn.execute("SELECT sha256 FROM papers").fetchall()
+        ]
+
     def list_unseen(self, pdfs: list[Path]) -> list[tuple[Path, str]]:
         # Use T07's read_paper so the cache key agrees with the rest of the
         # pipeline by construction (single hashing path).
