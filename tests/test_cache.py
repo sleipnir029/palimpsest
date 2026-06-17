@@ -114,6 +114,15 @@ def test_list_unseen_filters_cached(tmp_path):
     assert len(sha) == 64
 
 
+def test_list_all_papers_returns_every_registered_sha(tmp_path):
+    cache = _mk(tmp_path)
+    assert cache.list_all_papers() == []
+    cache.add_paper(SHA_A, "a.pdf", page_count=1)
+    cache.add_paper(SHA_B, "b.pdf", page_count=2)
+    # Independent of parse completeness — neither paper has any parser_runs yet.
+    assert set(cache.list_all_papers()) == {SHA_A, SHA_B}
+
+
 def test_check_constraint_rejects_unknown_parser(tmp_path):
     cache = _mk(tmp_path)
     cache.add_paper(SHA_A, "foo.pdf", page_count=1)
