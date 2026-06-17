@@ -57,7 +57,7 @@ Open a fresh conversation. **Do not paste a long task description.** Instead, pa
 You're working on palimpsest. Read these files in order and STOP:
 
 1. CLAUDE.md
-2. tasks/T31-htmx-bbox-highlight.md
+2. tasks/T32-open-notebook-tool.md
 3. PROGRESS.md
 
 After reading:
