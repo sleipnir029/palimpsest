@@ -20,6 +20,7 @@ from pathlib import Path
 from .cache import ParserCache
 from .cost import CostMeter
 from .parsers.runner import parse_with_cache
+from .runs import ExtractionRunLog
 from .store import RDFStore
 from .tools.extract import extract
 from .validation import validate_instance
@@ -37,6 +38,7 @@ def run_paper(
     cost_meter: CostMeter | None = None,
     provider=None,
     run_id: str | None = None,
+    run_log: ExtractionRunLog | None = None,
 ) -> dict:
     """Run one paper end-to-end and return a summary of counts.
 
@@ -55,6 +57,7 @@ def run_paper(
     cache = cache or ParserCache()
     cost_meter = cost_meter or CostMeter("palimpsest.db")  # honors the €50 cap
     store = store if store is not None else RDFStore()
+    run_log = run_log or ExtractionRunLog()  # records the run for workspace_status (T57)
     run_id = run_id or f"run-{uuid.uuid4()}"
 
     # 1. Parse via the cache. All-5-cached → short-circuit, no pod, no spend.
@@ -88,6 +91,17 @@ def run_paper(
             n_inserted += 1
         except ValueError as e:
             log.warning("insert refused: %s", e)
+
+    # 5. Record the run (counts only — T57). Captures n_errors, the dropped
+    #    extract-level count run_paper otherwise discards, so a read-only
+    #    workspace_status can report a real "dropped M" without re-running. T58
+    #    extends this with the per-item reasons.
+    run_log.record(
+        paper_sha256=sha, run_id=run_id,
+        parser_name=parser_name, skill_name=skill_name,
+        n_errors=len(_errors), n_extracted=len(valid),
+        n_validated=len(validated), n_inserted=n_inserted,
+    )
 
     return {
         "paper_sha": sha,
