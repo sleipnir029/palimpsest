@@ -13,7 +13,6 @@ DEVIATIONS.md.
 
 from __future__ import annotations
 
-from dotenv import load_dotenv
 from rich.markup import escape
 from textual import work
 from textual.app import App, ComposeResult
@@ -97,11 +96,14 @@ class PalimpsestApp(App):
 
 
 def main() -> None:
-    load_dotenv()
-    # Init the workspace git repo so every agent action is logged + undoable.
+    from ..config import ensure_llm_credentials, load
     from ..versioning import ensure_repo
 
+    load()
     ensure_repo()
+    # Prompt (terminal getpass) for a missing provider key before the Textual loop
+    # takes the screen — so no modal is needed and the agent never invents secrets.
+    ensure_llm_credentials()
     # Share one CostMeter between the agent and the cost bar (same wiring as the
     # CLI, via build_agent); the bar reads the same on-disk ledger the agent meters.
     cost_meter = CostMeter("palimpsest.db")

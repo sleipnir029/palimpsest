@@ -9,13 +9,12 @@ from __future__ import annotations
 
 import sys
 
-from dotenv import load_dotenv
-
 from .agent import build_agent
+from .config import ensure_llm_credentials, load
 
 
 def main() -> None:
-    load_dotenv()
+    load()
     if len(sys.argv) < 2:
         sys.exit('usage: python -m palimpsest "<message>"')
 
@@ -39,6 +38,7 @@ def main() -> None:
     from .versioning import ensure_repo
 
     ensure_repo()
+    ensure_llm_credentials()  # prompt + save the provider key if missing (never invent)
     # One factory builds the agent (tools + dynamic system prompt) for CLI and TUI.
     print(build_agent().run(sys.argv[1]))
 

@@ -57,7 +57,7 @@ def _within(path: Path, root: Path) -> bool:
 # would slip through; a deployment that relocates these should derive the protected
 # paths from config rather than these literals.
 _PROTECTED_DIRS = {"store", "cache"}
-_PROTECTED_NAMES = {"config.txt"}
+_PROTECTED_NAMES = {"config.txt", ".env"}  # secrets — set via config.set_value, not write_file
 
 
 def assert_writable(path: str) -> Path:
@@ -80,7 +80,7 @@ def assert_writable(path: str) -> Path:
             f"protected: {rel.parts[0]}/ is written only via the pipeline "
             "(provenance/cache), never by direct file edits"
         )
-    if p.name in _PROTECTED_NAMES or p.suffix == ".db":
+    if p.name in _PROTECTED_NAMES or p.suffix in (".db", ".key"):
         raise PolicyViolation(
             f"protected: {p.name} — secrets/ledger are not agent-writable"
         )

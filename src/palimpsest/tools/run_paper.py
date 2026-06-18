@@ -42,11 +42,21 @@ def extract_paper(pdf_path: str, parser_name: str = "mineru", skill_name: str = 
     from palimpsest.pipeline import run_paper
     from palimpsest.store import RDFStore
 
-    summary = run_paper(
-        pdf_path,
-        parser_name,
-        skill_name,
-        store=RDFStore("store"),          # on-disk graph the viewer reads
-        cost_meter=CostMeter("palimpsest.db"),  # shared €50 ledger
-    )
+    try:
+        summary = run_paper(
+            pdf_path,
+            parser_name,
+            skill_name,
+            store=RDFStore("store"),          # on-disk graph the viewer reads
+            cost_meter=CostMeter("palimpsest.db"),  # shared €50 ledger
+        )
+    except KeyError as exc:
+        # A fresh (uncached) parse spins a RunPod pod, which reads RUNPOD_API_KEY
+        # (gpu_provider.py) and raises KeyError('RUNPOD_API_KEY') if unset. Match
+        # only that — turn it into an actionable ask — and re-raise any other
+        # KeyError so a genuine bug isn't mislabeled as missing config.
+        if "RUNPOD_API_KEY" in str(exc):
+            return ("missing config: RUNPOD_API_KEY — a fresh parse needs RunPod. "
+                    "Ask the user to set it via /config set RUNPOD_API_KEY <key>.")
+        raise
     return json.dumps(summary, indent=2)

@@ -11,9 +11,14 @@ viewer/notebook commands are deferred until needed.
 
 from __future__ import annotations
 
+import os
 from collections.abc import Callable
 
 from ..providers import AnthropicProvider, DeepSeekProvider
+
+# Config keys surfaced by /config, and which provider each one (re)builds.
+_CONFIG_KEYS = ("DEEPSEEK_API_KEY", "ANTHROPIC_API_KEY", "RUNPOD_API_KEY")
+_KEY_PROVIDER = {"DEEPSEEK_API_KEY": "deepseek", "ANTHROPIC_API_KEY": "sonnet"}
 
 # /model X -> provider class. Only the two real classes are wired (DeepSeek is the
 # T50 runtime default; Anthropic is the kept fallback). haiku/gemini are named but
@@ -93,12 +98,36 @@ def _model(app, args: list[str]) -> str:
     return f"switched to {provider.name} (prompt cache reset)"
 
 
+def _config(app, args: list[str]) -> str:
+    """show config keys (masked), or set one: /config set KEY VALUE"""
+    from .. import config
+
+    if not args:
+        return "\n".join(
+            f"  {k}={'set' if os.environ.get(k) else '(unset)'}" for k in _CONFIG_KEYS
+        )
+    if args[0] != "set" or len(args) < 3:
+        return "usage: /config | /config set KEY VALUE"
+    key, value = args[1], " ".join(args[2:])
+    note = config.set_value(key, value)  # writes workspace .env + os.environ
+    # If it's the active provider's key, rebuild the provider so it takes effect now.
+    name = _KEY_PROVIDER.get(key)
+    if name:
+        try:
+            app.agent.provider = _PROVIDERS[name]()
+            note += f" — provider {name} reloaded"
+        except Exception as exc:  # noqa: BLE001 — surface, don't crash the TUI
+            note += f" (provider reload failed: {exc})"
+    return note
+
+
 SLASH_COMMANDS: dict[str, Callable] = {
     "help": _help,
     "quit": _quit,
     "budget": _budget,
     "cost": _cost,
     "model": _model,
+    "config": _config,
 }
 
 
