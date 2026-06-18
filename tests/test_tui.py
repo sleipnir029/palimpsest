@@ -166,6 +166,52 @@ def test_tool_error_result_renders_failure_marker(tmp_path):
     asyncio.run(_drive())
 
 
+def test_escape_requests_cancellation_when_in_flight(tmp_path):
+    """T65: the app shares one cancel event with the agent; Esc sets it only while a
+    turn is in flight (input disabled), so an idle Esc can't poison the next run."""
+    meter = CostMeter(str(tmp_path / "t.db"))
+    agent = _StubAgent(meter)
+    app = PalimpsestApp(agent=agent, cost_meter=meter)
+
+    async def _drive() -> None:
+        async with app.run_test() as pilot:
+            # the agent checks the very event the app sets (one shared Event)
+            assert app.agent.cancel_event is app.cancel_event
+
+            # nothing in flight (input enabled) → Esc is a no-op
+            await pilot.press("escape")
+            assert app.cancel_event.is_set() is False
+
+            # simulate a turn in flight, then Esc requests cancellation
+            app.query_one("#prompt", Input).disabled = True
+            await pilot.press("escape")
+            assert app.cancel_event.is_set() is True
+            log_text = "\n".join(strip.text for strip in app.query_one("#log", RichLog).lines)
+            assert "cancel" in log_text.lower()
+
+    asyncio.run(_drive())
+
+
+def test_submit_clears_stale_cancel_before_running(tmp_path):
+    """T65 race-avoidance: the app clears a stale cancel on the main thread at submit
+    (before arming the in-flight guard), so a leftover Esc can't abort the new turn."""
+    meter = CostMeter(str(tmp_path / "t.db"))
+    agent = _StubAgent(meter)
+    app = PalimpsestApp(agent=agent, cost_meter=meter)
+
+    async def _drive() -> None:
+        async with app.run_test() as pilot:
+            app.cancel_event.set()  # stale, as if left set from before
+            app.query_one("#prompt", Input).value = "hello"
+            await pilot.press("enter")
+            await app.workers.wait_for_complete()
+            await pilot.pause()
+            assert app.cancel_event.is_set() is False  # cleared at submit
+            assert agent.last == "hello"  # the run proceeded normally
+
+    asyncio.run(_drive())
+
+
 def test_slash_command_dispatched(tmp_path):
     """A `/`-prefixed line goes to the slash dispatcher, never to the agent.
     `/parser` is out of scope (T28 card), so it stays an unknown command."""
