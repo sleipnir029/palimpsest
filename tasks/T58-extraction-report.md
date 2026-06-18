@@ -11,13 +11,24 @@
   reasons (mis-citation digit guard, unit mismatch, missing evidence, unknown class, Pydantic) are
   already computed.
 - `pipeline.run_paper` additionally logs SHACL drops + insert refusals via `log.warning`.
-- None of this reaches the agent or the TUI; it goes to a log file.
+- None of the *reasons* reaches the agent or the TUI; it goes to a log file.
+- **T57 already built the persistence + count layer** you would otherwise have to add here:
+  `src/palimpsest/runs.py` (`ExtractionRunLog`, the `extraction_runs` table in `palimpsest.db`) and a
+  `run_log.record(...)` call at the end of `pipeline.run_paper` that stores `n_errors`/`n_extracted`/
+  `n_validated`/`n_inserted` per run. So the *count* of drops is already persisted and surfaced
+  (`workspace_status` shows "N found · M inserted · K dropped"). **What's still missing is the
+  per-item reasons** — `extract()`'s `errors` list (and run_paper's SHACL/insert drop reasons) are
+  still discarded after the counts are taken.
 
 ## What to build
-Expose the drops with reasons. Either a tool `extraction_report(pdf, parser)` that returns the last
-run's (or a fresh dry-run's) dropped items + human-readable reasons, or have `run_paper` return/persist
-the `errors` and a tool to read them. Output: "extracted N, dropped M: [value 236 not in cited span;
-unit V≠mV; …]".
+Expose the drops **with reasons** — the count is done (T57), this adds the *why*. Recommended path now
+that the run log exists: persist the per-item reasons alongside the counts (e.g. an `errors_json` /
+drop-reasons column or a sibling `extraction_drops` table keyed by `(paper_sha256, run_id)`), written
+from `run_paper` where `extract()`'s `errors` + the SHACL/insert drops are already in scope; then a tool
+`extraction_report(pdf|sha, parser)` reads the latest run's dropped items + human-readable reasons.
+Reuse `ExtractionRunLog` (extend it) rather than adding a parallel store. Output: "extracted N, dropped
+M: [value 236 not in cited span; unit V≠mV; …]". (T57 deliberately stopped at counts and left this seam;
+`workspace_status` already points the user to `extraction_report (T58)`.)
 
 ## Verification
 ```bash
@@ -26,8 +37,8 @@ ANTHROPIC_API_KEY="" pixi run pytest tests/test_extraction_report.py -q
 ```
 
 ## Will touch
-- `tools/` (new), possibly `pipeline.run_paper` (return/persist `errors`), `tests/`
-- Reuse: the `(valid, errors)` tuple `extract()` already produces
+- `tools/extraction_report.py` (new), `src/palimpsest/runs.py` (extend `ExtractionRunLog` to store/read reasons), `pipeline.run_paper` (persist the reasons it already logs), `tests/`
+- Reuse: the `(valid, errors)` tuple `extract()` already produces; `ExtractionRunLog` + the `extraction_runs` table (T57) — extend, don't duplicate
 
 ## Out of scope / notes
 - Auto-correcting drops or two-pass re-extraction — the agent re-runs; correction is a later concern.

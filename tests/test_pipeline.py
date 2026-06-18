@@ -26,6 +26,7 @@ from palimpsest.cache import ParserCache
 from palimpsest.cost import CostMeter
 from palimpsest.parsers.commands import PARSERS
 from palimpsest.pipeline import run_paper
+from palimpsest.runs import ExtractionRunLog
 from palimpsest.providers.anthropic import LLMResponse
 from palimpsest.store import PALIM, RDFStore, _class_iri
 from schema.generated.pydantic import Overpotential
@@ -76,14 +77,38 @@ def test_pipeline_wiring_empty_extraction(tmp_path):
     """
     store = RDFStore()
     meter = CostMeter(str(tmp_path / "smoke.db"))
+    # Inject a tmp run_log so the recorded run lands in a throwaway DB, not the
+    # repo's palimpsest.db (run_paper's default target).
+    run_log = ExtractionRunLog(str(tmp_path / "runs.db"))
     summary = run_paper(
         _PDF, store=store, cache=ParserCache(), cost_meter=meter,
-        provider=_StubProvider(json.dumps({"items": []})),
+        provider=_StubProvider(json.dumps({"items": []})), run_log=run_log,
     )
     assert summary == {
         "paper_sha": _SHA, "n_extracted": 0, "n_validated": 0, "n_inserted": 0,
     }
     assert len(store) == 0  # nothing inserted → empty graph
+
+
+@needs_cache
+def test_pipeline_records_extraction_run(tmp_path):
+    """run_paper persists the run's counts (incl. the dropped `errors` count it
+    used to discard) so a later read-only workspace_status (T57) can report them.
+    """
+    run_log = ExtractionRunLog(str(tmp_path / "runs.db"))
+    summary = run_paper(
+        _PDF, store=RDFStore(), cache=ParserCache(),
+        cost_meter=CostMeter(str(tmp_path / "smoke.db")),
+        provider=_StubProvider(json.dumps({"items": []})), run_log=run_log,
+    )
+    latest = run_log.latest_per_paper()
+    assert summary["paper_sha"] in latest
+    row = latest[summary["paper_sha"]]
+    # Monotonic funnel recorded; the stub yields nothing so every count is 0.
+    assert row["n_extracted"] == summary["n_extracted"] == 0
+    assert row["n_inserted"] == summary["n_inserted"] == 0
+    assert row["n_errors"] == 0
+    assert row["parser_name"] == "mineru"  # run_paper's default parser
 
 
 def test_demo_cli_persists_to_disk_store(monkeypatch):

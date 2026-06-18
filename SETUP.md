@@ -57,7 +57,7 @@ Open a fresh conversation. **Do not paste a long task description.** Instead, pa
 You're working on palimpsest. Read these files in order and STOP:
 
 1. CLAUDE.md
-2. tasks/T34-parse-full-corpus.md
+2. tasks/T58-extraction-report.md
 3. PROGRESS.md
 
 After reading:
