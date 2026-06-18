@@ -11,19 +11,7 @@ import sys
 
 from dotenv import load_dotenv
 
-from .agent import Agent
-from .cost import CostMeter
-from .providers import DeepSeekProvider
-from .tools import TOOLS
-
-SYSTEM_PROMPT = (
-    "You are palimpsest, an agent that extracts data from research papers. "
-    "You have two tools: read_paper(path) returns a PDF's SHA-256, page count, "
-    "and byte size; read_first_page_text(path) returns the text of its first "
-    "page. When the user mentions a PDF path, call the tool that answers their "
-    "question (use read_first_page_text for the title or authors), then answer "
-    "concisely."
-)
+from .agent import build_agent
 
 
 def main() -> None:
@@ -47,15 +35,12 @@ def main() -> None:
         print(run_paper(Path(sys.argv[2]), store=RDFStore("store")))
         return
 
-    agent = Agent(
-        provider=DeepSeekProvider(),
-        cost_meter=CostMeter("palimpsest.db"),
-        # Agent advertises tool schemas to the API; it dispatches by name via the
-        # module-level TOOLS registry. So pass {name: schema}, not the callables.
-        tools={name: fn.tool_schema for name, fn in TOOLS.items()},
-        system_prompt=SYSTEM_PROMPT,
-    )
-    print(agent.run(sys.argv[1]))
+    # Init the workspace git repo so the agent's actions are logged + undoable.
+    from .versioning import ensure_repo
+
+    ensure_repo()
+    # One factory builds the agent (tools + dynamic system prompt) for CLI and TUI.
+    print(build_agent().run(sys.argv[1]))
 
 
 if __name__ == "__main__":
