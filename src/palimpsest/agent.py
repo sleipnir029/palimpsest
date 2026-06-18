@@ -164,6 +164,8 @@ def build_system_prompt(cost_meter) -> str:
         "inside the workspace, and never use it to touch the engine, the graph store, or the ledger.\n"
         "- Populate the RDF graph ONLY via extract_paper (it attaches provenance) and let spend "
         "be metered; never hand-edit the graph store or the cost ledger.\n"
+        "- If a tool reports missing config (e.g. an API key), ask the user to provide it via "
+        "/config — never invent, guess, or fabricate secrets or values.\n"
         "- The human supervises and verifies (viewer + git), so say what you did."
     )
 

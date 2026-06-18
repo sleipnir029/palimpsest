@@ -34,7 +34,9 @@ _last_tagged: bytes | None = None
 
 _GITIGNORE = (
     "# palimpsest workspace — secrets + bulk/provenance state are never committed\n"
+    ".env\n"
     "config.txt\n"
+    "*.key\n"
     "*.db\n"
     "store/\n"
     "cache/\n"
@@ -48,8 +50,13 @@ def ensure_repo(root: Path | None = None) -> None:
     root = workspace_root() if root is None else root
     root.mkdir(parents=True, exist_ok=True)
     gi = root / ".gitignore"
-    if not gi.exists():
+    existing = gi.read_text(encoding="utf-8") if gi.exists() else ""
+    if not existing:
         gi.write_text(_GITIGNORE, encoding="utf-8")
+    elif ".env" not in existing.splitlines():
+        # An older workspace's .gitignore predates the secret-exclusion lines;
+        # append them so .env / *.key can never be auto-committed (no leak).
+        gi.write_text(existing.rstrip("\n") + "\n.env\n*.key\n", encoding="utf-8")
     if not (root / ".git").exists():
         porcelain.init(str(root))
 
