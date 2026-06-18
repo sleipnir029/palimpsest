@@ -13,6 +13,7 @@ cached parses for free — no pod, no spend — so the pipeline is cheap to re-r
 
 from __future__ import annotations
 
+import json
 import logging
 import uuid
 from pathlib import Path
@@ -73,6 +74,14 @@ def run_paper(
         cost_meter=cost_meter, provider=provider, cache=cache,
     )
 
+    # Collect the per-item drop reasons as the funnel runs (T58). These were all
+    # computed already and thrown away after the counts; we keep them so
+    # extraction_report can answer *why* a measurement is missing.
+    drops: list[dict] = [
+        {"stage": "extract", "reason": str(exc), "item": str(raw)[:200]}
+        for exc, raw in _errors
+    ]
+
     # 3. SHACL gate. Belt-and-suspenders over Pydantic (T23); drop + log failures.
     validated = []
     for inst in valid:
@@ -81,6 +90,8 @@ def run_paper(
             validated.append(inst)
         else:
             log.warning("SHACL drop %s: %s", type(inst).__name__, report)
+            drops.append({"stage": "shacl", "reason": report,
+                          "type": type(inst).__name__})
 
     # 4. Insert with provenance. insert_extraction refuses (ValueError) any
     #    instance whose Evidence is None — CLAUDE.md provenance non-negotiable.
@@ -91,16 +102,19 @@ def run_paper(
             n_inserted += 1
         except ValueError as e:
             log.warning("insert refused: %s", e)
+            drops.append({"stage": "insert", "reason": str(e),
+                          "type": type(inst).__name__})
 
-    # 5. Record the run (counts only — T57). Captures n_errors, the dropped
-    #    extract-level count run_paper otherwise discards, so a read-only
-    #    workspace_status can report a real "dropped M" without re-running. T58
-    #    extends this with the per-item reasons.
+    # 5. Record the run (T57 counts + T58 reasons). n_errors is the dropped
+    #    extract-level count run_paper otherwise discards; errors_json carries the
+    #    per-item reasons across all three stages so a read-only extraction_report
+    #    can list each dropped item and why.
     run_log.record(
         paper_sha256=sha, run_id=run_id,
         parser_name=parser_name, skill_name=skill_name,
         n_errors=len(_errors), n_extracted=len(valid),
         n_validated=len(validated), n_inserted=n_inserted,
+        errors_json=json.dumps(drops),
     )
 
     return {

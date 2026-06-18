@@ -32,13 +32,14 @@ CREATE TABLE IF NOT EXISTS extraction_runs (
     n_extracted  INTEGER NOT NULL,
     n_validated  INTEGER NOT NULL,
     n_inserted   INTEGER NOT NULL,
+    errors_json  TEXT,
     PRIMARY KEY (paper_sha256, run_id)
 );
 """
 
 _COLS = (
     "run_id", "extracted_at", "parser_name", "skill_name",
-    "n_errors", "n_extracted", "n_validated", "n_inserted",
+    "n_errors", "n_extracted", "n_validated", "n_inserted", "errors_json",
 )
 
 
@@ -52,7 +53,16 @@ class ExtractionRunLog:
         # thus run_paper) on a worker thread. Access is serialized the same way.
         self.conn = sqlite3.connect(db_path, check_same_thread=False)
         self.conn.executescript(_DDL)
+        self._migrate()
         self.conn.commit()
+
+    def _migrate(self) -> None:
+        # T58: add errors_json to a T57-era table that predates the column.
+        # nullable, no default → ALTER backfills existing rows with NULL. Guarded
+        # by table_info so reopening an already-migrated DB is a no-op.
+        cols = {r[1] for r in self.conn.execute("PRAGMA table_info(extraction_runs)")}
+        if "errors_json" not in cols:
+            self.conn.execute("ALTER TABLE extraction_runs ADD COLUMN errors_json TEXT")
 
     def record(
         self,
@@ -65,17 +75,20 @@ class ExtractionRunLog:
         n_extracted: int,
         n_validated: int,
         n_inserted: int,
+        errors_json: str | None = None,
     ) -> None:
         # INSERT OR REPLACE: a re-run with the same run_id overwrites in place
-        # (matches parser_runs' idempotent re-run semantics).
+        # (matches parser_runs' idempotent re-run semantics). errors_json is the
+        # T58 per-item drop reasons (a JSON list); None for callers that only
+        # track counts (T57) — kept optional so those callers are unaffected.
         self.conn.execute(
             "INSERT OR REPLACE INTO extraction_runs "
             "(paper_sha256, run_id, extracted_at, parser_name, skill_name, "
-            " n_errors, n_extracted, n_validated, n_inserted) "
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            " n_errors, n_extracted, n_validated, n_inserted, errors_json) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             (
                 paper_sha256, run_id, _now(), parser_name, skill_name,
-                n_errors, n_extracted, n_validated, n_inserted,
+                n_errors, n_extracted, n_validated, n_inserted, errors_json,
             ),
         )
         self.conn.commit()
@@ -92,3 +105,19 @@ class ExtractionRunLog:
             "                GROUP BY paper_sha256)"
         ).fetchall()
         return {row[0]: dict(zip(_COLS, row[1:])) for row in rows}
+
+    def latest_run(self, paper_sha256: str, parser_name: str) -> dict | None:
+        """Most recent run for one (paper, parser) as ``{col: value}``, or None.
+
+        Parser-scoped (unlike ``latest_per_paper``) because T58's
+        ``extraction_report`` asks "what dropped for THIS paper under THIS
+        parser" — a docling run must not shadow the mineru one. "Most recent" =
+        max rowid (insertion order), matching ``latest_per_paper``.
+        """
+        row = self.conn.execute(
+            f"SELECT {', '.join(_COLS)} FROM extraction_runs "
+            "WHERE paper_sha256 = ? AND parser_name = ? "
+            "ORDER BY rowid DESC LIMIT 1",
+            (paper_sha256, parser_name),
+        ).fetchone()
+        return dict(zip(_COLS, row)) if row is not None else None

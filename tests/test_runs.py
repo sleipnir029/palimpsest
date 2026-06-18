@@ -9,6 +9,7 @@ the per-item reasons — instead of re-running the LLM or fabricating a proxy.
 
 from __future__ import annotations
 
+import sqlite3
 from pathlib import Path
 
 from palimpsest.runs import ExtractionRunLog
@@ -79,3 +80,88 @@ def test_record_persists_across_reopen(tmp_path):
     del log1
     log2 = ExtractionRunLog(db_path=db)
     assert log2.latest_per_paper()[SHA_A]["n_inserted"] == 6
+
+
+# --- T58: per-item drop reasons (errors_json) --------------------------------
+
+_REASONS = '[{"stage": "extract", "reason": "value 236 not in cited span"}, ' \
+           '{"stage": "extract", "reason": "unit V != mV"}]'
+
+
+def test_errors_json_defaults_to_none(tmp_path):
+    """Existing callers that don't pass errors_json get NULL, not a crash."""
+    log = _mk(tmp_path)
+    _record(log, SHA_A, "run-1")
+    assert log.latest_per_paper()[SHA_A]["errors_json"] is None
+
+
+def test_errors_json_round_trips(tmp_path):
+    log = _mk(tmp_path)
+    _record(log, SHA_A, "run-1", errors_json=_REASONS)
+    assert log.latest_per_paper()[SHA_A]["errors_json"] == _REASONS
+
+
+def test_latest_run_returns_row_for_paper_and_parser(tmp_path):
+    log = _mk(tmp_path)
+    _record(log, SHA_A, "run-1", parser_name="mineru", n_extracted=12,
+            n_inserted=10, errors_json=_REASONS)
+    row = log.latest_run(SHA_A, "mineru")
+    assert row is not None
+    assert row["run_id"] == "run-1"
+    assert row["n_extracted"] == 12
+    assert row["errors_json"] == _REASONS
+
+
+def test_latest_run_unknown_returns_none(tmp_path):
+    log = _mk(tmp_path)
+    _record(log, SHA_A, "run-1", parser_name="mineru")
+    assert log.latest_run(SHA_B, "mineru") is None       # unknown paper
+    assert log.latest_run(SHA_A, "docling") is None       # paper present, other parser
+
+
+def test_latest_run_filters_by_parser(tmp_path):
+    """A run with a different parser must not shadow the requested one."""
+    log = _mk(tmp_path)
+    _record(log, SHA_A, "run-mineru", parser_name="mineru", n_extracted=12)
+    _record(log, SHA_A, "run-docling", parser_name="docling", n_extracted=6)
+    assert log.latest_run(SHA_A, "mineru")["n_extracted"] == 12
+    assert log.latest_run(SHA_A, "docling")["n_extracted"] == 6
+
+
+def test_latest_run_takes_most_recent(tmp_path):
+    log = _mk(tmp_path)
+    _record(log, SHA_A, "run-old", parser_name="mineru", n_extracted=5)
+    _record(log, SHA_A, "run-new", parser_name="mineru", n_extracted=14)
+    assert log.latest_run(SHA_A, "mineru")["run_id"] == "run-new"
+
+
+def test_migration_adds_errors_json_to_pre_t58_table(tmp_path):
+    """A T57 DB (extraction_runs without errors_json) gains the column on open,
+    without losing existing rows."""
+    db = str(tmp_path / "runs.db")
+    # Hand-build the pre-T58 table shape (no errors_json) and seed a row.
+    conn = sqlite3.connect(db)
+    conn.executescript(
+        "CREATE TABLE extraction_runs ("
+        " paper_sha256 TEXT NOT NULL, run_id TEXT NOT NULL, extracted_at TEXT NOT NULL,"
+        " parser_name TEXT NOT NULL, skill_name TEXT NOT NULL,"
+        " n_errors INTEGER NOT NULL, n_extracted INTEGER NOT NULL,"
+        " n_validated INTEGER NOT NULL, n_inserted INTEGER NOT NULL,"
+        " PRIMARY KEY (paper_sha256, run_id));"
+    )
+    conn.execute(
+        "INSERT INTO extraction_runs VALUES (?,?,?,?,?,?,?,?,?)",
+        (SHA_A, "run-old", "2026-06-18T00:00:00+00:00", "mineru",
+         "oer-extraction", 0, 8, 8, 8),
+    )
+    conn.commit()
+    conn.close()
+
+    log = ExtractionRunLog(db_path=db)  # must migrate, not raise
+    # Old row survives and reads back with errors_json = NULL.
+    old = log.latest_run(SHA_A, "mineru")
+    assert old["n_extracted"] == 8
+    assert old["errors_json"] is None
+    # New writes can use the column.
+    _record(log, SHA_B, "run-new", parser_name="mineru", errors_json=_REASONS)
+    assert log.latest_run(SHA_B, "mineru")["errors_json"] == _REASONS
