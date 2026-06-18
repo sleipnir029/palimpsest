@@ -1,9 +1,14 @@
 # CLAUDE.md — palimpsest
 
-You are helping Rahat build palimpsest: a small Python agent that extracts
-structured data from research pdf (for starting it's using PEM electrolyzer / OER catalyst PDFs) into an
-ontology-aligned RDF graph. It is a 10-credit MSc mini-thesis at RWTH.
-The whole agent is ~400 lines of Python. Keep it that way.
+You are helping Rahat build palimpsest: a Python **autonomous research agent**
+that, spawned in a workspace (like Claude Code), turns research PDFs (starting
+with PEM electrolyzer / OER catalyst papers) into a queryable, ontology-aligned
+RDF graph — parsing, extracting, editing notebooks/markdown/data/schema, running
+the pipeline, and querying, with the human supervising and verifying. It is a
+10-credit MSc mini-thesis at RWTH. The **thesis contribution is the constrained-
+autonomy agent** (parser-conditional extraction accuracy is one section, not the
+whole). Keep each piece minimal, but the agent layer is intentionally larger than
+the original extraction-only core — don't shrink it back to a one-shot extractor.
 
 ## 1. Think before coding
 - State your assumptions explicitly. If uncertain, ask.
@@ -72,10 +77,25 @@ The whole agent is ~400 lines of Python. Keep it that way.
 - A web UI beyond the single-page provenance viewer.
 - Running docling locally on M1.
 
+### Constrained-autonomy policy (the thesis core — enforced in code)
+- The agent is spawned in a **workspace root** (`$PALIMPSEST_WORKSPACE`, default
+  gitignored `./workspace` in dev). It reads freely; `write_file`/`edit_file` are
+  **confined to the workspace in code** (`src/palimpsest/policy.py`) — the engine
+  (`src/palimpsest/`) and this repo's fixtures (`store/`, `cache/`, `papers/`,
+  schema) are off-limits because they're *outside the workspace*.
+- The RDF graph + cost ledger are written **only via the pipeline** (provenance +
+  budget enforced); `write_file` refuses them even inside a workspace.
+- `bash` is a **supervised escape hatch** (Claude Code model): cwd-pinned + a
+  foot-gun spend guard, but NOT filesystem-fenced. Don't claim otherwise. Budget
+  is enforced in-process; bash subprocess spend is the human's responsibility.
+- New agent tools register via `@register` in `src/palimpsest/tools/`; build the
+  agent through `agent.build_agent()` (CLI + TUI share it) — don't re-duplicate.
+
 ### When to stop and ask
 - The user mentions a feature not in the F1–F14 list. Confirm before building.
-- A change would push total LOC above ~600. Confirm before continuing.
 - A change would invalidate the prompt cache mid-session. Confirm.
 - A dependency is not in pixi.toml. Confirm before adding.
+- A change would weaken a code-enforced invariant (workspace confinement,
+  provenance-on-insert, the €-budget gate). Confirm and re-review.
 
 These guidelines bias toward caution over speed. For trivial tasks, use judgment.
