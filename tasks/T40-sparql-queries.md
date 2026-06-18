@@ -1,5 +1,10 @@
 # T40 — SPARQL queries for thesis chapters
 
+> **Partial (2026-06-18):** the agent-facing half is DONE — the `sparql_query` tool (T53) lets the
+> agent/user run any SELECT over the graph conversationally. What remains here is the *thesis-figure*
+> half: the canned `queries/*.rq` library + `experiments/run_queries.py` runner that emit CSVs for
+> chapters. That remainder is **deferred with the thesis** (corpus + metrics not yet built).
+
 ## Why
 Demonstrate the value of the triple store. Each query is a thesis figure or table.
 
