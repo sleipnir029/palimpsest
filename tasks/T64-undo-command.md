@@ -1,6 +1,6 @@
 # T64 — /undo (revert the last turn)
 
-**Status:** planned · **Group:** general agent · **Priority:** high
+**Status:** done · **Group:** general agent · **Priority:** high
 
 ## Why
 "No, undo that." Leverage the dulwich layer (T55) for one-command rollback of the last turn's file
