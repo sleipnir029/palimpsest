@@ -19,20 +19,9 @@ from textual import work
 from textual.app import App, ComposeResult
 from textual.widgets import Input, RichLog, Static
 
-from ..agent import Agent
+from ..agent import Agent, build_agent
 from ..cost import CostMeter
-from ..providers import DeepSeekProvider
-from ..tools import TOOLS
 from .slash import dispatch
-
-SYSTEM_PROMPT = (
-    "You are palimpsest, an agent that extracts data from research papers. "
-    "You have two tools: read_paper(path) returns a PDF's SHA-256, page count, "
-    "and byte size; read_first_page_text(path) returns the text of its first "
-    "page. When the user mentions a PDF path, call the tool that answers their "
-    "question (use read_first_page_text for the title or authors), then answer "
-    "concisely."
-)
 
 
 class PalimpsestApp(App):
@@ -109,13 +98,12 @@ class PalimpsestApp(App):
 
 def main() -> None:
     load_dotenv()
+    # Init the workspace git repo so every agent action is logged + undoable.
+    from ..versioning import ensure_repo
+
+    ensure_repo()
+    # Share one CostMeter between the agent and the cost bar (same wiring as the
+    # CLI, via build_agent); the bar reads the same on-disk ledger the agent meters.
     cost_meter = CostMeter("palimpsest.db")
-    agent = Agent(
-        provider=DeepSeekProvider(),
-        cost_meter=cost_meter,
-        # Agent advertises tool schemas to the API and dispatches by name via the
-        # TOOLS registry (same wiring as __main__.py); pass {name: schema}.
-        tools={name: fn.tool_schema for name, fn in TOOLS.items()},
-        system_prompt=SYSTEM_PROMPT,
-    )
+    agent = build_agent(cost_meter=cost_meter)
     PalimpsestApp(agent=agent, cost_meter=cost_meter).run()
