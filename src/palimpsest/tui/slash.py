@@ -121,6 +121,20 @@ def _config(app, args: list[str]) -> str:
     return note
 
 
+def _undo(app, args: list[str]) -> str:
+    """revert the workspace to the previous turn (records a revert commit)"""
+    from .. import versioning
+
+    r = versioning.undo_last_turn()
+    if not r.undone:
+        return r.detail
+    if not r.changed:  # already at the previous turn — nothing to restore
+        return r.detail
+    files = ", ".join(r.changed[:8]) + ("…" if len(r.changed) > 8 else "")
+    tail = f" [{r.revert_sha[:8]}]" if r.revert_sha else ""
+    return f"{r.detail}{tail}: restored {len(r.changed)} file(s): {files}"
+
+
 SLASH_COMMANDS: dict[str, Callable] = {
     "help": _help,
     "quit": _quit,
@@ -128,6 +142,7 @@ SLASH_COMMANDS: dict[str, Callable] = {
     "cost": _cost,
     "model": _model,
     "config": _config,
+    "undo": _undo,
 }
 
 

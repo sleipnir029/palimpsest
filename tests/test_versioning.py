@@ -17,6 +17,12 @@ from palimpsest import versioning
 @pytest.fixture
 def ws(tmp_path, monkeypatch):
     monkeypatch.setenv("PALIMPSEST_WORKSPACE", str(tmp_path))
+    # Reset versioning's per-process tag state so each test's repo starts clean.
+    # Without this, identical commits across tests collide on sha (same tree +
+    # message + second + no parent) and tag_turn's `_last_tagged` skip suppresses
+    # a turn tag, making turn-dependent tests order-sensitive.
+    monkeypatch.setattr(versioning, "_last_tagged", None)
+    monkeypatch.setattr(versioning, "_turn", 0)
     versioning.ensure_repo()
     return tmp_path
 
@@ -138,3 +144,131 @@ def test_agent_run_checkpoints_per_action_and_tags_turn(ws):
     repo = Repo(str(ws))
     assert len(list(repo.get_walker())) >= 1                      # per-action commit landed
     assert any(r.startswith(b"refs/tags/turn-") for r in repo.refs.keys())  # turn tagged
+
+
+# --- /undo: single-step revert to the previous turn (T64) -------------------
+
+def _turn(ws, writes=(), deletes=(), msg="turn"):
+    """Simulate one agent turn: apply file changes, checkpoint, tag the turn."""
+    for name, content in writes:
+        (ws / name).write_text(content, encoding="utf-8")
+    for name in deletes:
+        (ws / name).unlink()
+    versioning.checkpoint(msg)
+    return versioning.tag_turn()
+
+
+def test_undo_removes_files_added_by_last_turn(ws):
+    target = _turn(ws, writes=[("a.txt", "one")])   # turn 1 — the state we revert TO
+    _turn(ws, writes=[("b.txt", "two")])            # turn 2 — the turn we undo
+    r = versioning.undo_last_turn()
+    assert r.undone is True
+    assert r.target_tag == target
+    assert not (ws / "b.txt").exists()              # added file physically gone
+    assert (ws / "a.txt").read_text() == "one"      # prior-turn file untouched
+    assert "b.txt" in r.changed
+
+
+def test_undo_restores_modified_file(ws):
+    _turn(ws, writes=[("a.txt", "v1")])
+    _turn(ws, writes=[("a.txt", "v2")])
+    r = versioning.undo_last_turn()
+    assert r.undone is True
+    assert (ws / "a.txt").read_text() == "v1"
+    assert "a.txt" in r.changed
+
+
+def test_undo_restores_deleted_file(ws):
+    _turn(ws, writes=[("a.txt", "keep me"), ("b.txt", "stay")])
+    _turn(ws, deletes=["a.txt"])
+    r = versioning.undo_last_turn()
+    assert r.undone is True
+    assert (ws / "a.txt").read_text() == "keep me"
+
+
+def test_undo_is_append_only(ws):
+    _turn(ws, writes=[("a.txt", "one")])
+    _turn(ws, writes=[("b.txt", "two")])
+    repo = Repo(str(ws))
+    head_before = repo.head()
+    n_before = len(list(repo.get_walker()))
+    tags_before = {x for x in repo.refs.keys() if x.startswith(b"refs/tags/turn-")}
+
+    r = versioning.undo_last_turn()
+
+    repo = Repo(str(ws))
+    assert len(list(repo.get_walker())) == n_before + 1   # a NEW commit, not a rewrite
+    assert repo[repo.head()].parents == [head_before]     # revert sits ON TOP of HEAD
+    assert r.revert_sha == repo.head().decode()
+    after = {x for x in repo.refs.keys() if x.startswith(b"refs/tags/turn-")}
+    assert tags_before <= after                           # turn tags preserved
+
+
+def test_undo_first_turn_refuses(ws):
+    _turn(ws, writes=[("a.txt", "one")])   # only one turn — no prior turn-state exists
+    n_before = len(list(Repo(str(ws)).get_walker()))
+    r = versioning.undo_last_turn()
+    assert r.undone is False
+    assert "first turn" in r.detail.lower()
+    assert (ws / "a.txt").read_text() == "one"                   # nothing destroyed
+    assert len(list(Repo(str(ws)).get_walker())) == n_before     # no commit added
+
+
+def test_undo_discards_incomplete_untagged_turn(ws):
+    # A turn that committed work but never tagged a boundary (e.g. MaxTurnsExceeded
+    # skips tag_turn): /undo should discard it back to the last *completed* turn,
+    # not revert two turns at once.
+    target = _turn(ws, writes=[("a.txt", "one")])      # completed, tagged
+    (ws / "b.txt").write_text("partial", encoding="utf-8")
+    versioning.checkpoint("write_file: b.txt")          # committed, NOT tagged
+    r = versioning.undo_last_turn()
+    assert r.undone is True
+    assert r.target_tag == target                       # back to the last completed turn
+    assert not (ws / "b.txt").exists()                  # incomplete work discarded
+    assert (ws / "a.txt").read_text() == "one"          # completed turn preserved
+    assert "b.txt" in r.changed
+
+
+def test_undo_preserves_untracked_files(ws):
+    # No data loss: an untracked, non-ignored file the human dropped in the
+    # workspace must survive undo (it is in neither tree, so reset must not touch it).
+    _turn(ws, writes=[("a.txt", "one")])
+    _turn(ws, writes=[("b.txt", "two")])
+    (ws / "scratch.txt").write_text("mine", encoding="utf-8")  # untracked
+    r = versioning.undo_last_turn()
+    assert r.undone is True
+    assert not (ws / "b.txt").exists()                    # undone turn's file gone
+    assert (ws / "scratch.txt").read_text() == "mine"     # untracked file preserved
+
+
+def test_undo_without_repo_is_safe(tmp_path, monkeypatch):
+    monkeypatch.setenv("PALIMPSEST_WORKSPACE", str(tmp_path / "bare"))
+    r = versioning.undo_last_turn()
+    assert r.undone is False
+
+
+def test_undo_twice_is_idempotent(ws):
+    _turn(ws, writes=[("a.txt", "one")])
+    _turn(ws, writes=[("b.txt", "two")])
+    versioning.undo_last_turn()
+    n_after_first = len(list(Repo(str(ws)).get_walker()))
+    r2 = versioning.undo_last_turn()        # already at target → no new commit
+    assert r2.undone is True
+    assert r2.revert_sha is None
+    assert len(list(Repo(str(ws)).get_walker())) == n_after_first
+
+
+def test_undo_raises_if_reset_moves_head(ws, monkeypatch):
+    # Append-only invariant guard: if a future dulwich ever made porcelain.reset
+    # move HEAD, undo must fail loudly rather than silently rewind the branch.
+    _turn(ws, writes=[("a.txt", "one")])
+    _turn(ws, writes=[("b.txt", "two")])
+    real_reset = versioning.porcelain.reset
+
+    def reset_then_rewind(repo, mode, treeish):
+        real_reset(repo, mode, treeish)
+        repo.refs[b"HEAD"] = repo[repo.head()].parents[0]  # simulate a HEAD rewind
+
+    monkeypatch.setattr(versioning.porcelain, "reset", reset_then_rewind)
+    with pytest.raises(RuntimeError, match="append-only invariant broken"):
+        versioning.undo_last_turn()
