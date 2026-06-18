@@ -42,6 +42,7 @@ class Agent:
         tools: dict | None = None,
         system_prompt: str = "",
         max_turns: int = 40,
+        on_event=None,
     ) -> None:
         self.provider = provider
         self.cost_meter = cost_meter
@@ -50,6 +51,9 @@ class Agent:
         self.max_turns = max_turns
         self.messages: list[dict] = []
         self.last_usage: dict = {}  # usage block of the most recent LLM call
+        # Passive observer (T63): fires per tool call + result so a supervisor (the
+        # TUI) can watch the loop live. Default None = no-op; never alters dispatch.
+        self.on_event = on_event
 
     def run(self, user_msg: str) -> str:
         self.messages.append({"role": "user", "content": user_msg})
@@ -83,10 +87,35 @@ class Agent:
                 self._tag_turn()  # mark this turn's boundary in the workspace git log
                 return resp.text
 
-            results = [self._dispatch(call) for call in resp.tool_calls]
+            results = []
+            for call in resp.tool_calls:
+                self._emit({"type": "tool_call", "name": call["name"], "input": call["input"]})
+                result = self._dispatch(call)
+                self._emit({
+                    "type": "tool_result",
+                    "name": call["name"],
+                    # every _dispatch path returns a dict with "content"; .get just
+                    # avoids a KeyError if a future branch omits the key.
+                    "content": result.get("content", ""),
+                    "is_error": result.get("is_error", False),
+                })
+                results.append(result)
             self.messages.append({"role": "user", "content": results})
 
         raise MaxTurnsExceeded(f"no final answer in {self.max_turns} turns")
+
+    def _emit(self, event: dict) -> None:
+        """Notify the passive observer of a tool event (best-effort, T63).
+
+        A faulty observer must never alter the agent loop, so failures are
+        swallowed — same contract as `_tag_turn`/`_checkpoint`.
+        """
+        if self.on_event is None:
+            return
+        try:
+            self.on_event(event)
+        except Exception:  # noqa: BLE001 — observation must never break a turn
+            pass
 
     @staticmethod
     def _tag_turn() -> None:

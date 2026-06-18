@@ -36,6 +36,9 @@ class PalimpsestApp(App):
         super().__init__()
         self.agent = agent
         self.cost_meter = cost_meter
+        # T63: subscribe to the agent's tool events so the supervisor sees the
+        # loop live. The agent fires these on the worker thread (see below).
+        self.agent.on_event = self._on_agent_event
 
     def compose(self) -> ComposeResult:
         yield Static(self._cost_text(), id="costbar")
@@ -83,6 +86,24 @@ class PalimpsestApp(App):
         # Hop back to the main thread to touch widgets + the cost bar. This also
         # acts as the sync barrier that keeps CostMeter access non-concurrent.
         self.call_from_thread(self._show_reply, reply)
+
+    # live tool trace (T63) -------------------------------------------------
+    def _on_agent_event(self, event: dict) -> None:
+        # Fires on the worker thread (inside agent.run). Hop to the main thread
+        # to touch the log — same marshalling the reply uses, so no widget is
+        # touched off-thread.
+        self.call_from_thread(self._show_event, event)
+
+    def _show_event(self, event: dict) -> None:
+        log = self.query_one("#log", RichLog)
+        if event["type"] == "tool_call":
+            args = ", ".join(str(v) for v in (event["input"] or {}).values())
+            log.write(f"[dim]→ {event['name']}({escape(args)})[/]")
+        else:
+            content = str(event["content"])
+            snippet = content if len(content) <= 200 else content[:200] + "…"
+            marker = "✗" if event.get("is_error") else "←"
+            log.write(f"[dim]{marker} {escape(snippet)}[/]")
 
     def _show_reply(self, reply: str) -> None:
         self.query_one("#log", RichLog).write(f"[bold green]palimpsest[/] {escape(reply)}")
