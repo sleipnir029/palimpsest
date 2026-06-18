@@ -111,6 +111,77 @@ def test_pipeline_records_extraction_run(tmp_path):
     assert row["parser_name"] == "mineru"  # run_paper's default parser
 
 
+def test_run_paper_persists_drop_reasons(monkeypatch):
+    """run_paper records the per-item drop REASONS (T58), one entry per stage:
+    extract errors, SHACL drops, and insert refusals.
+
+    Fully hermetic — parse/extract/validate are faked so the test controls
+    exactly what drops at each stage, with no cache, LLM, or network.
+    """
+    import palimpsest.pipeline as pl
+
+    class _M:  # stand-in measurement; only its class name is read for the reason
+        pass
+
+    class OverpotentialA(_M):
+        pass
+
+    class TafelSlopeB(_M):
+        pass
+
+    class MassActivityC(_M):
+        pass
+
+    a, b, c = OverpotentialA(), TafelSlopeB(), MassActivityC()
+
+    monkeypatch.setattr(pl, "parse_with_cache", lambda pdfs, cm, cache: {"sha-x": {}})
+    # extract: 3 Pydantic-valid instances + 2 pre-validation errors.
+    monkeypatch.setattr(pl, "extract", lambda *a_, **k_: (
+        [a, b, c],
+        [(ValueError("value 236 not in cited span"), {"value": 236}),
+         (ValueError("unit V != mV"), {"value": 1.7})],
+    ))
+    # SHACL: a ok, b fails (dropped), c ok.
+    monkeypatch.setattr(pl, "validate_instance", lambda inst: (
+        (True, "") if inst is not b else (False, "missing palimpsest:parserName")
+    ))
+
+    class _FakeStore:
+        def insert_extraction(self, inst, *, run_id, parse_run_id=None):
+            if inst is c:  # insert refusal on the last survivor
+                raise ValueError("refuse to insert without Evidence")
+            return "iri"
+
+    class _FakeRunLog:
+        def __init__(self):
+            self.kw = None
+
+        def record(self, **kw):
+            self.kw = kw
+
+    run_log = _FakeRunLog()
+    summary = run_paper(
+        "papers/x.pdf", store=_FakeStore(), cache=object(),
+        cost_meter=object(), provider=object(), run_log=run_log,
+    )
+
+    # Return dict unchanged (T57 contract): 3 extracted, 2 validated, 1 inserted.
+    assert summary == {
+        "paper_sha": "sha-x", "n_extracted": 3, "n_validated": 2, "n_inserted": 1,
+    }
+    # Counts still recorded as before.
+    assert run_log.kw["n_errors"] == 2
+    # T58: reasons persisted, one per drop, tagged by stage.
+    drops = json.loads(run_log.kw["errors_json"])
+    by_stage = sorted((d["stage"], d["reason"]) for d in drops)
+    assert by_stage == sorted([
+        ("extract", "value 236 not in cited span"),
+        ("extract", "unit V != mV"),
+        ("shacl", "missing palimpsest:parserName"),
+        ("insert", "refuse to insert without Evidence"),
+    ])
+
+
 def test_demo_cli_persists_to_disk_store(monkeypatch):
     """`demo <pdf>` must construct a path-backed RDFStore (the on-disk graph the
     viewer reads), not fall back to run_paper's discarded in-memory default.

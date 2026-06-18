@@ -1,6 +1,6 @@
 # T58 — extraction_report (surface drops + reasons)
 
-**Status:** planned · **Group:** custom agent · **Priority:** high
+**Status:** done (2026-06-18) · **Group:** custom agent · **Priority:** high
 
 ## Why
 `extract()` silently drops measurements that fail validation — the human and the agent never learn
