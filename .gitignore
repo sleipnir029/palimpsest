@@ -222,6 +222,7 @@ palimpsest.db
 cache/
 store/
 notes/
+workspace/
 
 # macOS
 .DS_Store
