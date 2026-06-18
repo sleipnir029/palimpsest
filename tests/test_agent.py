@@ -95,3 +95,45 @@ def test_max_turns(tmp_path):
     )
     with pytest.raises(MaxTurnsExceeded):
         agent.run("Do the task.")
+
+
+def test_on_event_emits_call_then_result(tmp_path):
+    """T63: the loop fires a tool_call event then a tool_result event per dispatch,
+    the result carries content + is_error (always_fails raises → is_error=True)."""
+    meter = CostMeter(str(tmp_path / "c.db"))
+    events: list[dict] = []
+    agent = Agent(
+        _AlwaysCallsToolProvider(),
+        meter,
+        tools={"always_fails": always_fails.tool_schema},
+        max_turns=1,
+        on_event=events.append,
+    )
+    with pytest.raises(MaxTurnsExceeded):
+        agent.run("Do the task.")
+
+    assert [e["type"] for e in events] == ["tool_call", "tool_result"]
+    call, result = events
+    assert call["name"] == "always_fails" and call["input"] == {}
+    assert result["name"] == "always_fails"
+    assert result["is_error"] is True
+    assert "boom" in result["content"]  # the tool's RuntimeError, surfaced
+
+
+def test_faulty_observer_does_not_break_the_turn(tmp_path):
+    """T63 invariant: a raising on_event must not change the loop — the turn still
+    proceeds to MaxTurnsExceeded, not the observer's RuntimeError."""
+    meter = CostMeter(str(tmp_path / "c.db"))
+
+    def boom(_event):
+        raise RuntimeError("observer exploded")
+
+    agent = Agent(
+        _AlwaysCallsToolProvider(),
+        meter,
+        tools={"always_fails": always_fails.tool_schema},
+        max_turns=1,
+        on_event=boom,
+    )
+    with pytest.raises(MaxTurnsExceeded):  # not RuntimeError("observer exploded")
+        agent.run("Do the task.")
