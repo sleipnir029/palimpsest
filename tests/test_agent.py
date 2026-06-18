@@ -4,6 +4,7 @@ Each test uses a throwaway SQLite ledger (tmp_path) so the budget starts fresh.
 """
 
 import os
+import threading
 
 import pytest
 from dotenv import load_dotenv
@@ -137,3 +138,55 @@ def test_faulty_observer_does_not_break_the_turn(tmp_path):
     )
     with pytest.raises(MaxTurnsExceeded):  # not RuntimeError("observer exploded")
         agent.run("Do the task.")
+
+
+class _CancelsOnFirstCall(_AlwaysCallsToolProvider):
+    """Loops forever like the parent, but sets a cancel event the first time it is
+    called — simulating the supervisor hitting Esc while a turn is in flight."""
+
+    def __init__(self, cancel: threading.Event) -> None:
+        self._cancel = cancel
+        self.calls = 0
+
+    def complete(self, system, messages, tools, cache_breakpoints):
+        self.calls += 1
+        self._cancel.set()
+        return super().complete(system, messages, tools, cache_breakpoints)
+
+
+def test_cancel_event_exits_before_max_turns(tmp_path):
+    """T65: a cancel event set mid-run ends run() at the NEXT turn boundary with a
+    'cancelled' note instead of looping to MaxTurnsExceeded — and no further paid
+    call is made once the flag is seen (stops a runaway before more spend)."""
+    meter = CostMeter(str(tmp_path / "c.db"))
+    cancel = threading.Event()
+    provider = _CancelsOnFirstCall(cancel)
+    agent = Agent(
+        provider,
+        meter,
+        tools={"always_fails": always_fails.tool_schema},
+        max_turns=40,
+        cancel_event=cancel,
+    )
+    out = agent.run("Do the task.")  # must NOT raise MaxTurnsExceeded
+    assert "cancel" in out.lower()
+    assert provider.calls == 1  # turn 1's boundary check returned before a 2nd call
+
+
+def test_preset_cancel_returns_immediately_without_a_paid_call(tmp_path):
+    """The caller owns the cancel flag's lifecycle — run() does NOT auto-clear it
+    (that would race the cross-thread set, T65). So an already-set event makes run()
+    return the cancelled note at turn 0, before the provider is ever called."""
+    meter = CostMeter(str(tmp_path / "c.db"))
+    cancel = threading.Event()
+    cancel.set()  # supervisor requested a stop before this run even begins
+
+    class _NeverCalled:
+        name = "stub"
+
+        def complete(self, system, messages, tools, cache_breakpoints):
+            raise AssertionError("provider must not be called when cancel is preset")
+
+    agent = Agent(_NeverCalled(), meter, tools={}, cancel_event=cancel)
+    out = agent.run("hi")
+    assert "cancel" in out.lower()

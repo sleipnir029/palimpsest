@@ -43,6 +43,7 @@ class Agent:
         system_prompt: str = "",
         max_turns: int = 40,
         on_event=None,
+        cancel_event=None,
     ) -> None:
         self.provider = provider
         self.cost_meter = cost_meter
@@ -54,6 +55,12 @@ class Agent:
         # Passive observer (T63): fires per tool call + result so a supervisor (the
         # TUI) can watch the loop live. Default None = no-op; never alters dispatch.
         self.on_event = on_event
+        # Cancellation (T65): a threading.Event the supervisor sets (TUI Esc key) to
+        # stop a wrong-direction or runaway turn. Checked at each turn boundary; takes
+        # effect before the next paid call. The caller owns the flag's lifecycle and
+        # must clear it before each run (the TUI does, on its own thread) — run() does
+        # NOT auto-clear, which would race the cross-thread set. Default None = off.
+        self.cancel_event = cancel_event
 
     def run(self, user_msg: str) -> str:
         self.messages.append({"role": "user", "content": user_msg})
@@ -66,6 +73,10 @@ class Agent:
         ]
 
         for turn in range(self.max_turns):
+            # Turn boundary: bail before the next paid call if cancellation was
+            # requested (T65). Stops a runaway without raising MaxTurnsExceeded.
+            if self.cancel_event is not None and self.cancel_event.is_set():
+                return f"[cancelled] stopped at turn {turn} (no final answer)"
             self.cost_meter.check_or_raise(projected_eur=0.05)  # conservative
             resp = self.provider.complete(
                 system=self.system_prompt,

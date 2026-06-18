@@ -13,6 +13,8 @@ DEVIATIONS.md.
 
 from __future__ import annotations
 
+import threading
+
 from rich.markup import escape
 from textual import work
 from textual.app import App, ComposeResult
@@ -28,6 +30,7 @@ class PalimpsestApp(App):
     BINDINGS = [
         ("ctrl+q", "quit", "Quit"),
         ("ctrl+l", "clear_log", "Clear log"),
+        ("escape", "cancel_turn", "Stop"),
     ]
 
     def __init__(self, agent: Agent, cost_meter: CostMeter) -> None:
@@ -39,6 +42,11 @@ class PalimpsestApp(App):
         # T63: subscribe to the agent's tool events so the supervisor sees the
         # loop live. The agent fires these on the worker thread (see below).
         self.agent.on_event = self._on_agent_event
+        # T65: one cancel event shared with the agent. Esc sets it (on the main
+        # thread); the agent reads it at each turn boundary (on the worker thread).
+        # threading.Event is the right primitive for this cross-thread one-way flag.
+        self.cancel_event = threading.Event()
+        self.agent.cancel_event = self.cancel_event
 
     def compose(self) -> ComposeResult:
         yield Static(self._cost_text(), id="costbar")
@@ -71,6 +79,12 @@ class PalimpsestApp(App):
             log.write(escape(dispatch(self, text)))  # T27: intercepted before the agent
             return
 
+        # Clear any stale cancel left set by a late Esc as the previous turn ended
+        # (input was still disabled then) — otherwise this fresh run would cancel
+        # itself at turn 0. Safe on the main thread (where Esc is also handled), so
+        # the clear can't be lost to an interleaving keypress (T65). After this, an
+        # Esc sets the flag for the worker to observe at its next turn boundary.
+        self.cancel_event.clear()
         # Disable the input for the duration of the call: this is what guarantees a
         # single request in flight, so the CostMeter is never written concurrently.
         event.input.disabled = True
@@ -114,6 +128,15 @@ class PalimpsestApp(App):
 
     def action_clear_log(self) -> None:
         self.query_one("#log", RichLog).clear()
+
+    def action_cancel_turn(self) -> None:
+        # T65: request cancellation of the turn in flight. The input is disabled
+        # exactly while the agent worker is running, so an enabled input means
+        # nothing to cancel — ignore (and don't leave the flag set for the next run).
+        if not self.query_one("#prompt", Input).disabled:
+            return
+        self.cancel_event.set()
+        self.query_one("#log", RichLog).write("[dim]cancelling… (stops at the next step)[/]")
 
 
 def main() -> None:

@@ -1,6 +1,6 @@
 # T65 — Interrupt / cancel a turn
 
-**Status:** planned · **Group:** general agent · **Priority:** medium
+**Status:** done · **Group:** general agent · **Priority:** medium
 
 ## Why
 Stop a wrong-direction or runaway turn (one heading toward `max_turns`) without killing the app.
