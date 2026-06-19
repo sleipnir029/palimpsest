@@ -10,10 +10,20 @@ from __future__ import annotations
 
 import asyncio
 
+import pytest
 from textual.widgets import Input, RichLog, Static
 
 from palimpsest.cost import CostMeter
 from palimpsest.tui.app import PalimpsestApp
+
+
+@pytest.fixture(autouse=True)
+def _isolate_workspace(tmp_path, monkeypatch):
+    """Point the workspace at a throwaway dir so the app's SessionMonitor writes its
+    demo log into tmp, never the real ./workspace/.palimpsest (test isolation —
+    mirrors test_session/test_versioning). Without this, constructing PalimpsestApp
+    pollutes the real workspace and can trip a live monitor with a fixture event."""
+    monkeypatch.setenv("PALIMPSEST_WORKSPACE", str(tmp_path))
 
 
 class _StubAgent:
