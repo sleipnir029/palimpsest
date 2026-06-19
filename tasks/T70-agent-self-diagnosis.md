@@ -1,6 +1,6 @@
 # T70 — Agent self-diagnosis: act on extraction drops at run time
 
-**Status:** planned · **Group:** constrained-autonomy (thesis core) · **Priority:** high
+**Status:** done · **Group:** constrained-autonomy (thesis core) · **Priority:** high
 
 ## Bigger picture (read first)
 This is the sharpest version of the meeting's autonomy question and the thesis's lead

@@ -40,6 +40,7 @@ from . import register
 def extract_paper(pdf_path: str, parser_name: str = "mineru", skill_name: str = "oer-extraction") -> str:
     from palimpsest.cost import CostMeter
     from palimpsest.pipeline import run_paper
+    from palimpsest.runs import ExtractionRunLog
     from palimpsest.store import RDFStore
 
     try:
@@ -59,4 +60,27 @@ def extract_paper(pdf_path: str, parser_name: str = "mineru", skill_name: str = 
             return ("missing config: RUNPOD_API_KEY — a fresh parse needs RunPod. "
                     "Ask the user to set it via /config set RUNPOD_API_KEY <key>.")
         raise
-    return json.dumps(summary, indent=2)
+
+    # The summary's funnel (n_extracted → validated → inserted) hides the biggest
+    # drop bucket: extract-level errors (n_errors) aren't in it. Read the run row
+    # run_paper just recorded to get the true dropped count, and if anything
+    # dropped, nudge the agent to diagnose the pattern (T70) and decide. Read-only,
+    # €0 — never re-extracts on its own.
+    dropped = 0
+    run = ExtractionRunLog().latest_run(summary["paper_sha"], parser_name)
+    if run is not None:
+        dropped = run["n_errors"] + run["n_extracted"] - run["n_inserted"]
+    return json.dumps(summary, indent=2) + _drop_nudge(dropped, pdf_path, parser_name)
+
+
+def _drop_nudge(dropped: int, pdf_path: str, parser_name: str) -> str:
+    """In-loop nudge: a drop-heavy run should prompt the agent to diagnose, not
+    move on. Empty string when nothing dropped (no noise on a clean run)."""
+    if dropped <= 0:
+        return ""
+    return (
+        f"\n\n{dropped} measurement(s) dropped. Call "
+        f"diagnose_run('{pdf_path}', '{parser_name}') to see whether the drops "
+        f"are a systematic pattern (fix the skill/units and re-extract) or noise "
+        f"(accept), then decide."
+    )
