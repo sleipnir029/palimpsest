@@ -43,7 +43,12 @@ the original extraction-only core — don't shrink it back to a one-shot extract
 - LLM access via the Anthropic SDK. **Default runtime model: DeepSeek `deepseek-v4-flash`** (T50, 2026-06), called through DeepSeek's Anthropic-compatible endpoint (`https://api.deepseek.com/anthropic`) for cost — Anthropic (Sonnet) is too expensive for iterative runs. `AnthropicProvider` is kept as the fallback; Gemini SDK fallback also allowed. No third-party SDKs beyond these.
 - No agent frameworks (LangChain, LangGraph, CrewAI, AutoGen, smolagents, pydantic-ai).
 - No MCP servers. Python function calls only.
-- No LLM gateways (LiteLLM, OpenRouter).
+- No LLM gateways (LiteLLM, OpenRouter) **in the runtime** (engine/agent/pipeline). The
+  agent loop, extraction, and pipeline call providers directly. **Experiment-only carve-out
+  (T72, user-authorized 2026-06-19):** `experiments/llm_matrix.py` — the accuracy-vs-cost
+  benchmark — may route its non-Claude models through OpenRouter (OpenAI-compatible, one
+  key) for breadth. This is offline analysis code, not shipped runtime; Claude runs direct
+  (OpenRouter 2x-marks-up Claude), and no gateway enters `src/palimpsest/`.
 - pyoxigraph for RDF. SQLite for cache + CostMeter. dulwich for versioning.
 - LinkML for schema. EMMO ECHO + QUDT + PROV-O + palimpsest-local IRIs.
 - Textual + Rich + Typer for TUI. FastAPI + vendored PDF.js + HTMX for viewer.
