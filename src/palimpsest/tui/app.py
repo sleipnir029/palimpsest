@@ -98,8 +98,11 @@ class PalimpsestApp(App):
     @work(thread=True)
     def _run_agent(self, text: str) -> None:
         try:
-            reply = self.agent.run(text)
-        except Exception as exc:  # noqa: BLE001 — surface any failure into the chat
+            # Route through the monitor so each TUI turn records its euro delta +
+            # any exception/budget refusal to the demo log (monitor.run catches its
+            # own failures and returns an [error]/[budget] string, never raising).
+            reply = self.monitor.run(self.agent, text)
+        except Exception as exc:  # noqa: BLE001 — backstop: surface any failure into the chat
             reply = f"error: {exc}"
         # Hop back to the main thread to touch widgets + the cost bar. This also
         # acts as the sync barrier that keeps CostMeter access non-concurrent.

@@ -31,12 +31,14 @@ class _StubAgent:
     like the real Agent does, so the cost-bar update can be asserted."""
 
     def __init__(self, meter: CostMeter) -> None:
-        self.meter = meter
+        # cost_meter mirrors the real Agent's attribute — monitor.run() reads it to
+        # meter the per-turn euro delta.
+        self.cost_meter = meter
         self.last: str | None = None
 
     def run(self, text: str) -> str:
         self.last = text
-        self.meter.record_llm("stub", 0.01)
+        self.cost_meter.record_llm("stub", 0.01)
         return f"echo: {text}"
 
 
@@ -44,6 +46,9 @@ class _BoomAgent:
     """Raises on run() to exercise the worker error path."""
 
     last = None  # never set; asserts the slash path doesn't call it either
+
+    def __init__(self, meter: CostMeter) -> None:
+        self.cost_meter = meter  # monitor.run reads it before invoking run()
 
     def run(self, text: str) -> str:
         raise RuntimeError("kaboom")
@@ -57,7 +62,7 @@ class _ToolAgent:
     LONG = "x" * 500  # longer than the TUI's truncation cap
 
     def __init__(self, meter: CostMeter) -> None:
-        self.meter = meter
+        self.cost_meter = meter
         self.on_event = None  # the app overwrites this with its callback
 
     def run(self, text: str) -> str:
@@ -68,7 +73,7 @@ class _ToolAgent:
             self.on_event(
                 {"type": "tool_result", "name": "read_paper", "content": self.LONG, "is_error": False}
             )
-        self.meter.record_llm("stub", 0.01)
+        self.cost_meter.record_llm("stub", 0.01)
         return "final reply"
 
 
@@ -96,10 +101,32 @@ def test_app_smoke_reply_path(tmp_path):
     asyncio.run(_drive())
 
 
-def test_agent_error_surfaces_and_reenables_input(tmp_path):
-    """A raising agent.run() becomes an `error:` line, not a crash; input recovers."""
+def test_tui_records_per_turn_cost(tmp_path):
+    """The TUI routes the turn through the monitor so each turn's euro delta is
+    recorded (previously the TUI called agent.run directly and logged no turn cost)."""
     meter = CostMeter(str(tmp_path / "t.db"))
-    app = PalimpsestApp(agent=_BoomAgent(), cost_meter=meter)
+    agent = _StubAgent(meter)
+    app = PalimpsestApp(agent=agent, cost_meter=meter)
+
+    async def _drive() -> None:
+        async with app.run_test() as pilot:
+            app.query_one("#prompt", Input).value = "hello"
+            await pilot.press("enter")
+            await app.workers.wait_for_complete()
+            await pilot.pause()
+
+    asyncio.run(_drive())
+
+    assert app.monitor.runs, "no per-turn cost recorded"
+    assert app.monitor.runs[-1]["prompt"] == "hello"
+    assert app.monitor.runs[-1]["cost_eur"] == 0.01  # _StubAgent bills €0.01
+
+
+def test_agent_error_surfaces_and_reenables_input(tmp_path):
+    """A raising agent.run() surfaces as an `[error]` line (from monitor.run), not a
+    crash; input recovers and the monitor records the failed turn."""
+    meter = CostMeter(str(tmp_path / "t.db"))
+    app = PalimpsestApp(agent=_BoomAgent(meter), cost_meter=meter)
 
     async def _drive() -> None:
         async with app.run_test() as pilot:
@@ -110,6 +137,9 @@ def test_agent_error_surfaces_and_reenables_input(tmp_path):
             assert app.query_one("#prompt", Input).disabled is False
             log_text = "\n".join(strip.text for strip in app.query_one("#log", RichLog).lines)
             assert "error" in log_text and "kaboom" in log_text
+            # the TUI path records the failed turn through the monitor
+            assert app.monitor.runs[-1]["ok"] is False
+            assert any(i["kind"] == "exception" for i in app.monitor.issues)
 
     asyncio.run(_drive())
 
@@ -150,7 +180,7 @@ def test_tool_error_result_renders_failure_marker(tmp_path):
 
     class _ErrAgent:
         def __init__(self, m):
-            self.meter = m
+            self.cost_meter = m
             self.on_event = None
 
         def run(self, text):
@@ -158,7 +188,7 @@ def test_tool_error_result_renders_failure_marker(tmp_path):
                 self.on_event(
                     {"type": "tool_result", "name": "bash", "content": "error: nope", "is_error": True}
                 )
-            self.meter.record_llm("stub", 0.01)
+            self.cost_meter.record_llm("stub", 0.01)
             return "done"
 
     app = PalimpsestApp(agent=_ErrAgent(meter), cost_meter=meter)
