@@ -1,6 +1,6 @@
 # T69 — Skill ↔ schema ↔ ontology consistency gate
 
-**Status:** planned · **Group:** constrained-autonomy (thesis core) · **Priority:** high
+**Status:** done (2026-06-19) · **Group:** constrained-autonomy (thesis core) · **Priority:** high
 
 ## Bigger picture (read first)
 The thesis contribution is the **constrained-autonomy agent**: competence enforced in

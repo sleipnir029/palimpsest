@@ -3,6 +3,21 @@ name: oer-extraction
 description: Extract OER catalyst performance variables (overpotential, Tafel slope, mass activity, TOF, ECSA, exchange current density, stability, PEMWE cell voltage) from PEM electrolyzer / acidic water-splitting papers. Use when paper topic is OER, PEMWE, IrO2, RuO2, or oxygen evolution.
 when_to_use: paper_topic in {OER, PEMWE, acidic_water_splitting, iridium_oxide, ruthenium_oxide}
 version: 1.0.0
+# T69 machine-readable alignment: the schema Measurement classes this skill
+# extracts. The gate (src/palimpsest/skill_check.py) checks each against
+# schema/palimpsest.yaml at load. "PEMWE cell voltage" (in the description) has
+# no schema class yet (T18a F3) so it is NOT a target; ChargeTransferCoefficient
+# exists in the schema but the body does not teach it, so it is not listed.
+targets:
+  - Overpotential
+  - TafelSlope
+  - MassActivity
+  - TurnoverFrequency
+  - ECSA
+  - ExchangeCurrentDensity
+  - SpecificActivity
+  - Stability
+ontology: h2kg
 ---
 
 # OER extraction playbook
