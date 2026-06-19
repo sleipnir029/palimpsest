@@ -41,3 +41,4 @@ from . import edit_file  # noqa: E402,F401 — import for @register side effect
 from . import bash  # noqa: E402,F401 — import for @register side effect
 from . import workspace_status  # noqa: E402,F401 — import for @register side effect
 from . import extraction_report  # noqa: E402,F401 — import for @register side effect
+from . import graph_summary  # noqa: E402,F401 — import for @register side effect (registers describe_schema + graph_summary)
