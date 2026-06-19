@@ -57,7 +57,7 @@ Open a fresh conversation. **Do not paste a long task description.** Instead, pa
 You're working on palimpsest. Read these files in order and STOP:
 
 1. CLAUDE.md
-2. tasks/T67-context-compaction.md
+2. tasks/T69-skill-schema-consistency-gate.md
 3. PROGRESS.md
 
 After reading:
