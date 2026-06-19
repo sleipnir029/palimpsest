@@ -22,6 +22,7 @@ from textual.widgets import Input, RichLog, Static
 
 from ..agent import Agent, build_agent
 from ..cost import CostMeter
+from ..monitor import SessionMonitor
 from .slash import dispatch
 
 
@@ -42,6 +43,9 @@ class PalimpsestApp(App):
         # T63: subscribe to the agent's tool events so the supervisor sees the
         # loop live. The agent fires these on the worker thread (see below).
         self.agent.on_event = self._on_agent_event
+        # Also capture this session to a durable demo log (echo off — a print()
+        # would corrupt the Textual screen). Same gitignored dir as session.jsonl.
+        self.monitor = SessionMonitor(echo=False)
         # T65: one cancel event shared with the agent. Esc sets it (on the main
         # thread); the agent reads it at each turn boundary (on the worker thread).
         # threading.Event is the right primitive for this cross-thread one-way flag.
@@ -103,9 +107,11 @@ class PalimpsestApp(App):
 
     # live tool trace (T63) -------------------------------------------------
     def _on_agent_event(self, event: dict) -> None:
-        # Fires on the worker thread (inside agent.run). Hop to the main thread
-        # to touch the log — same marshalling the reply uses, so no widget is
-        # touched off-thread.
+        # Fires on the worker thread (inside agent.run). Capture to the demo log
+        # here (single-writer: the agent loop is serial and this is the only writer,
+        # so no lock is needed), then hop to the main thread to touch the widget —
+        # same marshalling the reply uses, so no widget is touched off-thread.
+        self.monitor.observe(event)
         self.call_from_thread(self._show_event, event)
 
     def _show_event(self, event: dict) -> None:
