@@ -1,6 +1,6 @@
 # T71 — New hydrogen domain skill (HER or PEMWE) + ontology alignment
 
-**Status:** planned · **Group:** skill extensibility (thesis contribution #4) · **Priority:** high
+**Status:** done (2026-06-19) · **Group:** skill extensibility (thesis contribution #4) · **Priority:** high
 
 ## Bigger picture (read first)
 The supervisor wants the use-case demo on **broader hydrogen technology**, not just OER

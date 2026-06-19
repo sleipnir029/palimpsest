@@ -201,6 +201,9 @@ class RDFStore:
         ("temperature_C", "temperatureC", XSD_FLOAT),
         ("scan_rate", "scanRate", XSD_FLOAT),
         ("cell_type", "cellType", None),
+        # T71: PEMWE-anode MEA context (mg/cm2). Without this row the schema slot
+        # validates but is silently dropped at insert (the T50 modeled-but-unpersisted trap).
+        ("catalyst_loading", "catalystLoading", XSD_FLOAT),
         # T50: universal categorical enums (stored as their bare string value)
         ("iR_correction", "iRCorrection", None),
         ("normalization_basis", "normalizationBasis", None),

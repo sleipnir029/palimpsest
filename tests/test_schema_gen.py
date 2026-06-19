@@ -40,6 +40,20 @@ def test_f3_classes_generated():
     assert Stability(value=30.0, unit_label="h").value == 30.0
 
 
+def test_t71_pemwe_classes_generated():
+    """T71: the two PEMWE full-cell classes regenerate into the Pydantic module,
+    and the new catalyst_loading Condition slot exists."""
+    from schema.generated.pydantic import (  # noqa: F401
+        Condition,
+        DegradationRate,
+        PEMWECellVoltage,
+    )
+
+    assert PEMWECellVoltage(value=1.75, unit_label="V").value == 1.75
+    assert DegradationRate(value=0.022, unit_label="mV/h").value == 0.022
+    assert Condition(catalyst_loading=0.15).catalyst_loading == 0.15
+
+
 def test_pydantic_instantiation():
     from schema.generated.pydantic import Overpotential
 
@@ -151,6 +165,9 @@ H2KG_CLOSE_MAPPINGS = {
     "MassActivity": "h2kg:MassActivity",
     "TurnoverFrequency": "h2kg:TurnoverFrequency",
     "ECSA": "h2kg:ElectrochemicallyActiveSurfaceArea",
+    # T71 — PEMWE full-cell classes (h2kg Property individuals, verified 2026-06-19).
+    "PEMWECellVoltage": "h2kg:CellVoltage",
+    "DegradationRate": "h2kg:CellVoltageIncreaseRate",
 }
 
 

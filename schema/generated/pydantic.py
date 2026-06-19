@@ -292,6 +292,34 @@ class Stability(Measurement):
     evidence: Optional[Evidence] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'prov:hadPrimarySource'} })
 
 
+class PEMWECellVoltage(Measurement):
+    """
+    Full-cell operating voltage at a stated cell current density (PEMWE single cell).
+    """
+    linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta({'class_uri': 'palimpsest:PEMWECellVoltage',
+         'close_mappings': ['h2kg:CellVoltage'],
+         'from_schema': 'https://w3id.org/palimpsest/v1'})
+
+    value: Optional[float] = Field(default=None, description="""Numeric value of the measurement, in the unit named by unit_label.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:value'} })
+    unit_label: Optional[str] = Field(default=None, description="""Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:unitLabel'} })
+    condition: Optional[Condition] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:condition'} })
+    evidence: Optional[Evidence] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'prov:hadPrimarySource'} })
+
+
+class DegradationRate(Measurement):
+    """
+    Rate of cell-voltage rise during a PEMWE durability hold (mV/h).
+    """
+    linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta({'class_uri': 'palimpsest:DegradationRate',
+         'close_mappings': ['h2kg:CellVoltageIncreaseRate'],
+         'from_schema': 'https://w3id.org/palimpsest/v1'})
+
+    value: Optional[float] = Field(default=None, description="""Numeric value of the measurement, in the unit named by unit_label.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:value'} })
+    unit_label: Optional[str] = Field(default=None, description="""Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:unitLabel'} })
+    condition: Optional[Condition] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:condition'} })
+    evidence: Optional[Evidence] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'prov:hadPrimarySource'} })
+
+
 class Catalyst(ConfiguredBaseModel):
     """
     An electrocatalyst material under study.
@@ -347,6 +375,9 @@ class Condition(ConfiguredBaseModel):
          'related_mappings': ['emmo:electrochemistry_29f2a35a_8c09_429d_b9e8_33f3e1fc3671'],
          'slot_uri': 'palimpsest:scanRate',
          'unit': {'exact_mappings': ['qudt:MilliV-PER-SEC'], 'ucum_code': 'mV/s'}} })
+    catalyst_loading: Optional[float] = Field(default=None, description="""Catalyst (typically anode Ir) loading on the electrode.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Condition'],
+         'slot_uri': 'palimpsest:catalystLoading',
+         'unit': {'ucum_code': 'mg/cm2'}} })
     iR_correction: Optional[IRCorrectionEnum] = Field(default=None, description="""Whether the reported value is iR-corrected.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Condition'], 'slot_uri': 'palimpsest:iRCorrection'} })
     normalization_basis: Optional[NormalizationBasisEnum] = Field(default=None, description="""Surface-area/mass basis the value is normalized to.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Condition'], 'slot_uri': 'palimpsest:normalizationBasis'} })
     cell_type_family: Optional[CellTypeFamilyEnum] = Field(default=None, description="""Coarse cell-architecture family (machine-readable peer of cell_type).""", json_schema_extra = { "linkml_meta": {'domain_of': ['Condition'], 'slot_uri': 'palimpsest:cellTypeFamily'} })
@@ -395,6 +426,8 @@ TurnoverFrequency.model_rebuild()
 ECSA.model_rebuild()
 SpecificActivity.model_rebuild()
 Stability.model_rebuild()
+PEMWECellVoltage.model_rebuild()
+DegradationRate.model_rebuild()
 Catalyst.model_rebuild()
 Electrolyte.model_rebuild()
 Condition.model_rebuild()
