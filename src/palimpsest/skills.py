@@ -19,9 +19,12 @@ Frontmatter shape (see `skills/oer-extraction/SKILL.md`):
 
 from __future__ import annotations
 
+import warnings
 from pathlib import Path
 
 import yaml
+
+from .skill_check import check_targets
 
 _DELIM = "---"
 
@@ -53,9 +56,28 @@ class SkillLoader:
     def __init__(self, root: Path = Path("skills")) -> None:
         self.root = Path(root)
         self._skills: dict[str, dict] = {}
+        # Meta of every scanned skill, valid or quarantined — lets the T69 gate
+        # (`validate_skill`) report on a quarantined skill the corrector wants to fix.
+        self._meta: dict[str, dict] = {}
+        # Quarantined skills: name -> reason. A skill whose declared `targets:`
+        # name a non-existent schema class is NOT registered (so it can't be
+        # used) but does not crash the process (T69; "refuse to use, not to boot"
+        # — keeps the agent alive for the future corrector layer).
+        self.invalid: dict[str, str] = {}
         for skill_md in sorted(self.root.glob("*/SKILL.md")):
             meta, _ = _split(skill_md.read_text(encoding="utf-8"))
             name = meta["name"]
+            self._meta[name] = meta
+            targets = meta.get("targets")
+            if targets:
+                missing = check_targets(name, targets)
+                if missing:
+                    reason = f"targets unknown schema classes: {', '.join(missing)}"
+                    self.invalid[name] = reason
+                    warnings.warn(
+                        f"skill {name!r} quarantined: {reason}", stacklevel=2
+                    )
+                    continue
             self._skills[name] = {"path": skill_md, "meta": meta}
 
     def manifest(self) -> str:
