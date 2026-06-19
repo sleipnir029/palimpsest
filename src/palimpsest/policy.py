@@ -60,6 +60,26 @@ _PROTECTED_DIRS = {"store", "cache"}
 _PROTECTED_NAMES = {"config.txt", ".env"}  # secrets — set via config.set_value, not write_file
 
 
+def is_secret_path(path: str) -> bool:
+    """True if reading this path surfaces secret content that must not be persisted.
+
+    Used by the session transcript (T66) to redact a ``read_file`` of a secret
+    before it is logged. Matches by basename/suffix against the same secret set
+    ``assert_writable`` protects (``_PROTECTED_NAMES`` + ``*.key``); ``*.db`` is
+    excluded — it is gitignored and ``read_file`` refuses binary, so it never
+    leaks. Not ``resolve()``d: only the name/suffix matters and we avoid touching
+    the filesystem. Known limit (accepted for this human-supervised threat model):
+    basename matching catches ``.env``, ``/abs/.env`` and ``../.env``, but a symlink
+    with a non-secret name (``link`` -> ``.env``) would evade it — closing that would
+    require a filesystem ``realpath`` we deliberately avoid here. Defence-in-depth: the
+    transcript is gitignored, so even an un-redacted secret never reaches a commit.
+    """
+    if not path:
+        return False
+    p = Path(path)
+    return p.name in _PROTECTED_NAMES or p.suffix == ".key"
+
+
 def assert_writable(path: str) -> Path:
     """Return the resolved path if the agent may write it, else raise.
 

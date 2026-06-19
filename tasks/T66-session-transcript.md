@@ -1,6 +1,6 @@
 # T66 — Session transcript / persistence
 
-**Status:** planned · **Group:** general agent · **Priority:** medium
+**Status:** done · **Group:** general agent · **Priority:** medium
 
 ## Why
 The agent forgets everything between spawns (`self.messages` is per-process). A persistent transcript

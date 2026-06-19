@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from jsonschema import ValidationError, validate
 
+from .session import SessionLog
 from .tools import TOOLS
 
 # USD per token, Sonnet pricing (card T06). 5-minute cache-creation tier.
@@ -44,6 +45,7 @@ class Agent:
         max_turns: int = 40,
         on_event=None,
         cancel_event=None,
+        session=None,
     ) -> None:
         self.provider = provider
         self.cost_meter = cost_meter
@@ -61,9 +63,16 @@ class Agent:
         # must clear it before each run (the TUI does, on its own thread) — run() does
         # NOT auto-clear, which would race the cross-thread set. Default None = off.
         self.cancel_event = cancel_event
+        # Session transcript (T66): mirrors each appended message to an append-only
+        # .palimpsest/session.jsonl in the workspace (gitignored — durable on disk,
+        # immune to /undo), so a spawn leaves a record and a future session can reload
+        # context. Best-effort, gated on the workspace being a git repo — a no-op in
+        # non-workspace unit tests. Secret-path reads are redacted before logging.
+        self.session = session if session is not None else SessionLog()
 
     def run(self, user_msg: str) -> str:
         self.messages.append({"role": "user", "content": user_msg})
+        self._log_message(self.messages[-1])
 
         # Cache only what exists: an empty system/tools block can't be cached.
         breakpoints = [
@@ -93,6 +102,7 @@ class Agent:
             # Append the assistant turn verbatim: the API needs the original
             # content blocks (text + tool_use) back to continue the conversation.
             self.messages.append({"role": "assistant", "content": resp.raw["content"]})
+            self._log_message(self.messages[-1])
 
             if not resp.tool_calls:
                 self._tag_turn()  # mark this turn's boundary in the workspace git log
@@ -112,6 +122,7 @@ class Agent:
                 })
                 results.append(result)
             self.messages.append({"role": "user", "content": results})
+            self._log_message(self._redact_secrets(self.messages[-1], resp.tool_calls))
 
         raise MaxTurnsExceeded(f"no final answer in {self.max_turns} turns")
 
@@ -127,6 +138,50 @@ class Agent:
             self.on_event(event)
         except Exception:  # noqa: BLE001 — observation must never break a turn
             pass
+
+    def _log_message(self, message: dict) -> None:
+        """Append a message to the session transcript (best-effort, T66).
+
+        A logging hiccup must never break a turn — same contract as
+        ``_emit``/``_tag_turn``/``_checkpoint``.
+        """
+        try:
+            self.session.append(message)
+        except Exception:  # noqa: BLE001 — persistence must never break a turn
+            pass
+
+    @staticmethod
+    def _redact_secrets(message: dict, tool_calls: list[dict]) -> dict:
+        """Return a COPY of a tool-result message with secret reads redacted (T66).
+
+        A ``read_file`` of a secret path (``.env``/``config.txt``/``*.key``) returns
+        the secret as the tool_result content; the transcript persists that to disk,
+        so it is redacted here before logging. The original stays in ``self.messages``
+        so the live session still works — only the persisted copy is masked, so a
+        resumed session (via ``SessionLog.load``) re-asks for the key rather than
+        inheriting a possibly-rotated secret. ``bash`` output is NOT redacted: it is
+        the supervised escape hatch (see policy.py), so a ``cat .env`` via bash is the
+        human's responsibility, the same model used for its spend. Only
+        ``input["path"]`` is inspected — every content-returning tool today
+        (``read_file``) uses that key; a future tool that returns file content under
+        a different key would bypass this (and the gitignore is the backstop).
+        """
+        from . import policy
+
+        secret_ids = {
+            c["id"]
+            for c in tool_calls
+            if policy.is_secret_path(c.get("input", {}).get("path", ""))
+        }
+        if not secret_ids:
+            return message
+        blocks = [
+            {**b, "content": "[redacted: secret path not persisted to the session log]"}
+            if isinstance(b, dict) and b.get("tool_use_id") in secret_ids
+            else b
+            for b in message["content"]
+        ]
+        return {**message, "content": blocks}
 
     @staticmethod
     def _tag_turn() -> None:
