@@ -106,6 +106,33 @@ def test_canonical_unit_lookup():
     assert canonical_unit("NotAMeasurement") is None
 
 
+def test_t71_canonical_units():
+    """T71: the two PEMWE classes + the catalyst_loading condition slot are
+    advertised with their canonical units, so the LLM converts before emitting
+    and units_match validates them."""
+    assert canonical_unit("PEMWECellVoltage") == "V"
+    assert canonical_unit("DegradationRate") == "mV/h"
+    assert UNIVERSAL_UNITS["catalyst_loading"] == "mg/cm2"
+    # paper-faithful spellings match; a prefix error (V/h is 1000x mV/h) does not
+    assert units_match("mV h⁻¹", "mV/h") is True
+    assert units_match("mg cm⁻²", "mg/cm2") is True
+    assert units_match("V/h", "mV/h") is False
+
+
+def test_pemwe_overlay_does_not_shadow_universal_keys():
+    """T71: catalyst_loading is now a universal Condition-slot unit. The PEMWE
+    overlay must not redefine it (or any UNIVERSAL_* key) — build the merged
+    prompt for BOTH real skills and assert it does not raise and renders both.
+    """
+    from pathlib import Path
+
+    prompt = build_normalization_prompt(
+        [Path("skills") / "oer-extraction", Path("skills") / "pemwe-anode"]
+    )
+    assert "oer-extraction" in prompt and "pemwe-anode" in prompt
+    assert "catalyst_loading" in prompt  # advertised once, from the universal layer
+
+
 @pytest.mark.parametrize(
     "emitted,canonical,expected",
     [

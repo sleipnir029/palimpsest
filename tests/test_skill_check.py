@@ -35,6 +35,10 @@ OER_TARGETS = [
     "Stability",
 ]
 
+# T71 — the PEMWE-anode overlay reuses the 8 OER classes and adds the two
+# full-cell classes its body teaches (SKILL.md targets:).
+PEMWE_TARGETS = OER_TARGETS + ["PEMWECellVoltage", "DegradationRate"]
+
 
 def _write_skill(root, name, *, targets=None):
     """Materialize a minimal `<root>/<name>/SKILL.md` for loader tests."""
@@ -89,6 +93,34 @@ def test_check_targets_names_the_missing_class():
 
 def test_real_oer_skill_membership_passes():
     report = validate_skill("oer-extraction", SkillLoader(), resolve_iris=False)
+    assert report.missing_classes == []
+    assert report.ok
+
+
+def test_pemwe_skill_declares_expected_targets():
+    from pathlib import Path
+
+    from palimpsest.skills import _split
+
+    meta, _ = _split(
+        Path("skills/pemwe-anode/SKILL.md").read_text(encoding="utf-8")
+    )
+    assert set(meta.get("targets") or []) == set(PEMWE_TARGETS)
+
+
+def test_pemwe_targets_are_real_measurement_classes():
+    # the T71 additions resolve as Measurement subclasses (gate's offline half)
+    mc = measurement_classes()
+    for name in ["PEMWECellVoltage", "DegradationRate"]:
+        assert name in mc, f"{name} should be a Measurement subclass"
+    assert check_targets("pemwe-anode", PEMWE_TARGETS) == []
+
+
+def test_real_pemwe_skill_membership_passes_and_not_quarantined():
+    loader = SkillLoader()
+    assert "pemwe-anode" in loader.names()
+    assert "pemwe-anode" not in loader.invalid
+    report = validate_skill("pemwe-anode", loader, resolve_iris=False)
     assert report.missing_classes == []
     assert report.ok
 
@@ -172,3 +204,12 @@ def test_check_skill_tool_renders_pass_for_real_skill():
     out = check_skill("oer-extraction")
     assert "oer-extraction" in out
     assert "PASS" in out
+
+
+@pytest.mark.slow
+def test_real_pemwe_skill_iris_resolve():
+    # T71: the two new classes' h2kg close_mappings (CellVoltage,
+    # CellVoltageIncreaseRate) resolve, as do the reused classes' IRIs.
+    report = validate_skill("pemwe-anode", SkillLoader(), resolve_iris=True)
+    assert report.unresolved_iris == [], report.unresolved_iris
+    assert report.ok

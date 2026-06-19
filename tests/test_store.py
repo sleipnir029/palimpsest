@@ -19,6 +19,7 @@ from schema.generated.pydantic import (
     Evidence,
     Overpotential,
     Paper,
+    PEMWECellVoltage,
 )
 
 from palimpsest.store import PALIM, RDFStore
@@ -262,3 +263,37 @@ def test_condition_enums_reach_graph():
     )
     assert len(rows) == 1
     assert rows[0] == {"ir": "applied", "fam": "RDE", "reg": "slow_LSV"}
+
+
+def test_t71_catalyst_loading_reaches_graph():
+    """T71: the new catalyst_loading Condition slot must persist as a triple —
+    the modeled-but-unpersisted trap (T50). Without the _COND_SCALARS row it
+    would validate in Pydantic and be silently dropped at insertion.
+    """
+    cond = Condition(current_density=2000.0, temperature_C=80.0, catalyst_loading=0.15)
+    m = PEMWECellVoltage(value=1.75, unit_label="V", condition=cond, evidence=_evidence())
+    store = RDFStore()
+    store.insert_extraction(m, run_id="r1")
+    rows = store.sparql(
+        f"PREFIX palim: <{PALIM}> "
+        "SELECT ?load WHERE { ?c palim:catalystLoading ?load . }"
+    )
+    assert len(rows) == 1
+    assert float(rows[0]["load"]) == 0.15
+
+
+def test_t71_pemwe_cell_voltage_inserts():
+    """T71: a PEMWECellVoltage instance inserts like any Measurement (generic
+    store path — no store.py per-class change needed)."""
+    m = PEMWECellVoltage(
+        value=1.75, unit_label="V",
+        condition=Condition(current_density=2000.0),
+        evidence=_evidence(),
+    )
+    store = RDFStore()
+    iri = store.insert_extraction(m, run_id="r1")
+    rows = store.sparql(
+        f"PREFIX palim: <{PALIM}> SELECT ?v WHERE {{ <{iri}> palim:value ?v . }}"
+    )
+    assert len(rows) == 1
+    assert float(rows[0]["v"]) == 1.75

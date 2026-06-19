@@ -1,0 +1,42 @@
+# PEMWE-anode normalization overlay (T71).
+#
+# Universal enums + canonical units live in src/palimpsest/normalize.py.
+# This file adds ONLY domain-specific buckets for PEMWE-anode (full-cell) papers.
+# `build_normalization_prompt` merges both layers at extraction time, and raises
+# if any key here shadows a UNIVERSAL_UNITS / UNIVERSAL_ENUMS key (incl.
+# `catalyst_loading`, which is now a universal Condition-slot unit).
+
+domain: pemwe-anode
+
+# Community-default PEMWE single-cell operating points. Lets downstream group
+# "all Vcell @ 2 A cm⁻²" without numeric matching. These are CELL current
+# densities (A/cm²), distinct from the RDE benchmarks in the OER overlay.
+cell_operating_points:
+  - id: PEMWE_Vcell_1A
+    description: "Entry-level PEMWE benchmark"
+    current_density: { value: 1, unit: "A/cm2" }
+    cell_type_family: single_cell_MEA
+  - id: PEMWE_Vcell_2A
+    description: "High-current PEMWE benchmark; SOA targets Vcell <= 1.75 V"
+    current_density: { value: 2, unit: "A/cm2" }
+    cell_type_family: single_cell_MEA
+
+# Typical PEMWE membrane families (record verbatim in condition.cell_type).
+membranes: [Nafion_117, Nafion_115, Nafion_212, Aquivion, Gore, reinforced_other]
+
+# Anode catalyst-loading regimes (mg/cm² Ir). Low-loading is the cost headline.
+# The numeric value goes on condition.catalyst_loading (universal unit mg/cm2).
+anode_loading_regimes:
+  - { id: low_loading, range_mg_cm2: "<=0.4", note: "cost-reduction headline" }
+  - { id: standard_loading, range_mg_cm2: "0.4-2.0", note: "common range" }
+
+# Degradation reporting. Canonical unit is mV/h (UNIVERSAL_UNITS.DegradationRate);
+# convert from the as-printed unit before emitting.
+degradation_units_seen: ["uV/h", "mV/h", "mV/1000h"]
+
+# Durability test families seen in PEMWE-anode literature.
+durability_modes:
+  values: [constant_current_hold, AST_square_wave, AST_OCV_cycling, start_stop_cycling]
+
+# Active metals seen in acidic PEMWE-anode literature.
+active_metals: [Ir, IrO2, IrOx, Ru, RuO2, RuIrOx, Ir_Co3O4, IrO2_TaB2, Ir_TiOx]

@@ -138,6 +138,26 @@ classes:
       - emmo:electrochemistry_a3b53904_22b1_42a9_a515_c8a3aed7e841  # Electrocatalyst
     description: Duration a catalyst sustains OER at a held current density (hours).
 
+  # T71 (PEMWE-anode overlay, ground-truth-driven): two full-cell quantities the
+  # PEMWE-anode corpus reports but the single-electrode OER schema lacked. Cell-level,
+  # so no clean EMMO ECHO (single-electrode) term — palimpsest-local class_uri, with an
+  # H2KG close_mapping (h2kg terms are Property individuals; close NOT exact, per T47).
+  PEMWECellVoltage:
+    is_a: Measurement
+    class_uri: palimpsest:PEMWECellVoltage
+    # TODO_EMMO_UPSTREAM: request CellVoltage as a full-cell electrochemical property.
+    close_mappings:
+      - h2kg:CellVoltage  # official H2KG home (a h2kg:Property) for this local class
+    description: Full-cell operating voltage at a stated cell current density (PEMWE single cell).
+
+  DegradationRate:
+    is_a: Measurement
+    class_uri: palimpsest:DegradationRate
+    # TODO_EMMO_UPSTREAM: request a voltage-degradation-rate durability metric.
+    close_mappings:
+      - h2kg:CellVoltageIncreaseRate  # "Cell Voltage Increase Rate" (a h2kg:Property)
+    description: Rate of cell-voltage rise during a PEMWE durability hold (mV/h).
+
   Catalyst:
     # Verified hash (Electrocatalyst), palimpsest-v2-design.md Appendix E line 661.
     class_uri: emmo:electrochemistry_a3b53904_22b1_42a9_a515_c8a3aed7e841
@@ -169,6 +189,9 @@ classes:
       - electrolyte
       - cell_type
       - scan_rate
+      # T71: MEA/single-cell parameter the PEMWE-anode corpus reports as a defining
+      # condition (anode Ir loading, mg/cm2). A condition, not a measured outcome.
+      - catalyst_loading
       # T50: the universal categorical enums advertised by normalize.py
       # (build_normalization_prompt) are modeled here so the LLM's emitted
       # values validate instead of tripping `extra="forbid"`.
@@ -424,6 +447,14 @@ slots:
   electrolyte:
     range: Electrolyte
     slot_uri: palimpsest:electrolyte
+  # T71: anode catalyst loading (PEMWE MEA context). H2KG home: h2kg:CatalystLoading
+  # (a h2kg:Parameter); kept as a plain slot like its sibling condition slots.
+  catalyst_loading:
+    range: float
+    slot_uri: palimpsest:catalystLoading
+    unit:
+      ucum_code: mg/cm2
+    description: Catalyst (typically anode Ir) loading on the electrode.
   cell_type:
     range: string
     slot_uri: palimpsest:cellType

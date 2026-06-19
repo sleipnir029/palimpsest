@@ -40,12 +40,15 @@ UNIVERSAL_UNITS: dict[str, str] = {
     "ECSA": "cm2",  # geometric ECSA; specific ECSA (m2/g) is T18a F3
     "SpecificActivity": "mA/cm2",  # T52: ECSA-normalized current
     "Stability": "h",  # T52: hours sustained at a held current density
+    "PEMWECellVoltage": "V",  # T71: full-cell operating voltage
+    "DegradationRate": "mV/h",  # T71: cell-voltage rise rate (convert uV/h, mV/1000h)
     # Condition slots:
     "current_density": "mA/cm2",
     "temperature_C": "Cel",
     "scan_rate": "mV/s",
     "electrolyte_ph": "[pH]",
     "electrode_potential_vs_rhe": "V",
+    "catalyst_loading": "mg/cm2",  # T71: anode Ir loading (PEMWE MEA context)
 }
 
 UNIVERSAL_ENUMS: dict[str, list[str]] = {

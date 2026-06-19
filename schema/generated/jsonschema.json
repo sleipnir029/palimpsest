@@ -1,697 +1,789 @@
 {
   "_generated": "DO NOT EDIT BY HAND. Run: pixi run schema",
-  "$defs": {
-    "Catalyst": {
-      "additionalProperties": false,
-      "description": "An electrocatalyst material under study.",
-      "properties": {
-        "composition": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "name": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "support": {
-          "type": [
-            "string",
-            "null"
-          ]
-        }
-      },
-      "title": "Catalyst",
-      "type": "object"
-    },
-    "CellTypeFamilyEnum": {
-      "description": "",
-      "enum": [
-        "RDE",
-        "three_electrode_flow",
-        "single_cell_MEA",
-        "stack"
-      ],
-      "title": "CellTypeFamilyEnum",
-      "type": "string"
-    },
-    "ChargeTransferCoefficient": {
-      "additionalProperties": false,
-      "description": "Butler-Volmer alpha; fraction of overpotential affecting forward reaction.",
-      "properties": {
-        "condition": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/Condition"
+    "$defs": {
+        "Catalyst": {
+            "additionalProperties": false,
+            "description": "An electrocatalyst material under study.",
+            "properties": {
+                "composition": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "name": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "support": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
             },
-            {
-              "type": "null"
-            }
-          ]
+            "title": "Catalyst",
+            "type": "object"
         },
-        "evidence": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/Evidence"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "unit_label": {
-          "description": "Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.",
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "value": {
-          "description": "Numeric value of the measurement, in the unit named by unit_label.",
-          "type": [
-            "number",
-            "null"
-          ]
-        }
-      },
-      "title": "ChargeTransferCoefficient",
-      "type": "object"
-    },
-    "Condition": {
-      "additionalProperties": false,
-      "description": "Experimental conditions under which a measurement was taken.",
-      "properties": {
-        "cell_type": {
-          "description": "e.g. \"three-electrode half-cell\", \"MEA\", \"flow cell\".",
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "cell_type_family": {
-          "$ref": "#/$defs/CellTypeFamilyEnum",
-          "description": "Coarse cell-architecture family (machine-readable peer of cell_type)."
-        },
-        "current_density": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "electrode_potential_vs_rhe": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "electrolyte": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/Electrolyte"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "electrolyte_family": {
-          "$ref": "#/$defs/ElectrolyteFamilyEnum",
-          "description": "Coarse electrolyte pH family."
-        },
-        "iR_correction": {
-          "$ref": "#/$defs/IRCorrectionEnum",
-          "description": "Whether the reported value is iR-corrected."
-        },
-        "normalization_basis": {
-          "$ref": "#/$defs/NormalizationBasisEnum",
-          "description": "Surface-area/mass basis the value is normalized to."
-        },
-        "scan_rate": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "scan_rate_regime": {
-          "$ref": "#/$defs/ScanRateRegimeEnum",
-          "description": "Coarse scan-rate regime."
-        },
-        "temperature_C": {
-          "type": [
-            "number",
-            "null"
-          ]
-        }
-      },
-      "title": "Condition",
-      "type": "object"
-    },
-    "ECSA": {
-      "additionalProperties": false,
-      "description": "Electrochemically active surface area.",
-      "properties": {
-        "condition": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/Condition"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "evidence": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/Evidence"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "unit_label": {
-          "description": "Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.",
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "value": {
-          "description": "Numeric value of the measurement, in the unit named by unit_label.",
-          "type": [
-            "number",
-            "null"
-          ]
-        }
-      },
-      "title": "ECSA",
-      "type": "object"
-    },
-    "Electrolyte": {
-      "additionalProperties": false,
-      "description": "Electrolyte solution used in the electrochemical cell.",
-      "properties": {
-        "concentration": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "electrolyte_ph": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "formula": {
-          "type": [
-            "string",
-            "null"
-          ]
-        }
-      },
-      "title": "Electrolyte",
-      "type": "object"
-    },
-    "ElectrolyteFamilyEnum": {
-      "description": "",
-      "enum": [
-        "acid",
-        "alkaline",
-        "neutral"
-      ],
-      "title": "ElectrolyteFamilyEnum",
-      "type": "string"
-    },
-    "Evidence": {
-      "additionalProperties": false,
-      "description": "Provenance anchor for an extracted triple, per CLAUDE.md non-negotiable.",
-      "properties": {
-        "bbox_x0": {
-          "description": "Page-relative left edge (x0) of the source region.",
-          "type": "number"
-        },
-        "bbox_x1": {
-          "description": "Page-relative right edge (x1) of the source region.",
-          "type": "number"
-        },
-        "bbox_y0": {
-          "description": "Page-relative top edge (y0) of the source region.",
-          "type": "number"
-        },
-        "bbox_y1": {
-          "description": "Page-relative bottom edge (y1) of the source region.",
-          "type": "number"
-        },
-        "page": {
-          "type": "integer"
-        },
-        "paper": {
-          "$ref": "#/$defs/Paper"
-        },
-        "parser_name": {
-          "type": "string"
-        },
-        "source_text": {
-          "type": [
-            "string",
-            "null"
-          ]
-        }
-      },
-      "required": [
-        "paper",
-        "page",
-        "bbox_x0",
-        "bbox_y0",
-        "bbox_x1",
-        "bbox_y1",
-        "parser_name"
-      ],
-      "title": "Evidence",
-      "type": "object"
-    },
-    "ExchangeCurrentDensity": {
-      "additionalProperties": false,
-      "description": "Current density at zero overpotential; Butler-Volmer i0.",
-      "properties": {
-        "condition": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/Condition"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "evidence": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/Evidence"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "unit_label": {
-          "description": "Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.",
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "value": {
-          "description": "Numeric value of the measurement, in the unit named by unit_label.",
-          "type": [
-            "number",
-            "null"
-          ]
-        }
-      },
-      "title": "ExchangeCurrentDensity",
-      "type": "object"
-    },
-    "IRCorrectionEnum": {
-      "description": "",
-      "enum": [
-        "applied",
-        "not_applied",
-        "unknown"
-      ],
-      "title": "IRCorrectionEnum",
-      "type": "string"
-    },
-    "MassActivity": {
-      "additionalProperties": false,
-      "description": "Catalytic current per unit mass of active material (A/g).",
-      "properties": {
-        "condition": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/Condition"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "evidence": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/Evidence"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "unit_label": {
-          "description": "Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.",
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "value": {
-          "description": "Numeric value of the measurement, in the unit named by unit_label.",
-          "type": [
-            "number",
-            "null"
-          ]
-        }
-      },
-      "title": "MassActivity",
-      "type": "object"
-    },
-    "Measurement": {
-      "additionalProperties": false,
-      "description": "Abstract base for any numeric OER metric extracted from a paper.",
-      "properties": {
-        "condition": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/Condition"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "evidence": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/Evidence"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "unit_label": {
-          "description": "Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.",
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "value": {
-          "description": "Numeric value of the measurement, in the unit named by unit_label.",
-          "type": [
-            "number",
-            "null"
-          ]
-        }
-      },
-      "title": "Measurement",
-      "type": "object"
-    },
-    "NormalizationBasisEnum": {
-      "description": "",
-      "enum": [
-        "geometric",
-        "ECSA",
-        "BET",
-        "mass"
-      ],
-      "title": "NormalizationBasisEnum",
-      "type": "string"
-    },
-    "Overpotential": {
-      "additionalProperties": false,
-      "description": "Deviation of the electrode potential from its equilibrium value.",
-      "properties": {
-        "condition": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/Condition"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "evidence": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/Evidence"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "unit_label": {
-          "description": "Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.",
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "value": {
-          "description": "Numeric value of the measurement, in the unit named by unit_label.",
-          "type": [
-            "number",
-            "null"
-          ]
-        }
-      },
-      "title": "Overpotential",
-      "type": "object"
-    },
-    "OxygenEvolutionReaction": {
-      "additionalProperties": false,
-      "description": "The anodic half-reaction producing O2 from water.",
-      "title": "OxygenEvolutionReaction",
-      "type": "object"
-    },
-    "Paper": {
-      "additionalProperties": false,
-      "description": "A research article that palimpsest has parsed.",
-      "properties": {
-        "authors": {
-          "items": {
+        "CellTypeFamilyEnum": {
+            "description": "",
+            "enum": [
+                "RDE",
+                "three_electrode_flow",
+                "single_cell_MEA",
+                "stack"
+            ],
+            "title": "CellTypeFamilyEnum",
             "type": "string"
-          },
-          "type": [
-            "array",
-            "null"
-          ]
         },
-        "doi": {
-          "description": "DOI of the paper.",
-          "type": [
-            "string",
-            "null"
-          ]
+        "ChargeTransferCoefficient": {
+            "additionalProperties": false,
+            "description": "Butler-Volmer alpha; fraction of overpotential affecting forward reaction.",
+            "properties": {
+                "condition": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Condition"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "evidence": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Evidence"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "unit_label": {
+                    "description": "Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "value": {
+                    "description": "Numeric value of the measurement, in the unit named by unit_label.",
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                }
+            },
+            "title": "ChargeTransferCoefficient",
+            "type": "object"
         },
-        "sha256": {
-          "description": "SHA-256 of the raw PDF bytes (T07 contract); identity key for the Paper, completes the \"paper_hash\" half of the provenance non-negotiable on Evidence.paper.",
-          "type": "string"
+        "Condition": {
+            "additionalProperties": false,
+            "description": "Experimental conditions under which a measurement was taken.",
+            "properties": {
+                "catalyst_loading": {
+                    "description": "Catalyst (typically anode Ir) loading on the electrode.",
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                },
+                "cell_type": {
+                    "description": "e.g. \"three-electrode half-cell\", \"MEA\", \"flow cell\".",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "cell_type_family": {
+                    "$ref": "#/$defs/CellTypeFamilyEnum",
+                    "description": "Coarse cell-architecture family (machine-readable peer of cell_type)."
+                },
+                "current_density": {
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                },
+                "electrode_potential_vs_rhe": {
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                },
+                "electrolyte": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Electrolyte"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "electrolyte_family": {
+                    "$ref": "#/$defs/ElectrolyteFamilyEnum",
+                    "description": "Coarse electrolyte pH family."
+                },
+                "iR_correction": {
+                    "$ref": "#/$defs/IRCorrectionEnum",
+                    "description": "Whether the reported value is iR-corrected."
+                },
+                "normalization_basis": {
+                    "$ref": "#/$defs/NormalizationBasisEnum",
+                    "description": "Surface-area/mass basis the value is normalized to."
+                },
+                "scan_rate": {
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                },
+                "scan_rate_regime": {
+                    "$ref": "#/$defs/ScanRateRegimeEnum",
+                    "description": "Coarse scan-rate regime."
+                },
+                "temperature_C": {
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                }
+            },
+            "title": "Condition",
+            "type": "object"
         },
-        "title": {
-          "type": [
-            "string",
-            "null"
-          ]
+        "DegradationRate": {
+            "additionalProperties": false,
+            "description": "Rate of cell-voltage rise during a PEMWE durability hold (mV/h).",
+            "properties": {
+                "condition": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Condition"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "evidence": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Evidence"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "unit_label": {
+                    "description": "Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "value": {
+                    "description": "Numeric value of the measurement, in the unit named by unit_label.",
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                }
+            },
+            "title": "DegradationRate",
+            "type": "object"
+        },
+        "ECSA": {
+            "additionalProperties": false,
+            "description": "Electrochemically active surface area.",
+            "properties": {
+                "condition": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Condition"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "evidence": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Evidence"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "unit_label": {
+                    "description": "Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "value": {
+                    "description": "Numeric value of the measurement, in the unit named by unit_label.",
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                }
+            },
+            "title": "ECSA",
+            "type": "object"
+        },
+        "Electrolyte": {
+            "additionalProperties": false,
+            "description": "Electrolyte solution used in the electrochemical cell.",
+            "properties": {
+                "concentration": {
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                },
+                "electrolyte_ph": {
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                },
+                "formula": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "title": "Electrolyte",
+            "type": "object"
+        },
+        "ElectrolyteFamilyEnum": {
+            "description": "",
+            "enum": [
+                "acid",
+                "alkaline",
+                "neutral"
+            ],
+            "title": "ElectrolyteFamilyEnum",
+            "type": "string"
+        },
+        "Evidence": {
+            "additionalProperties": false,
+            "description": "Provenance anchor for an extracted triple, per CLAUDE.md non-negotiable.",
+            "properties": {
+                "bbox_x0": {
+                    "description": "Page-relative left edge (x0) of the source region.",
+                    "type": "number"
+                },
+                "bbox_x1": {
+                    "description": "Page-relative right edge (x1) of the source region.",
+                    "type": "number"
+                },
+                "bbox_y0": {
+                    "description": "Page-relative top edge (y0) of the source region.",
+                    "type": "number"
+                },
+                "bbox_y1": {
+                    "description": "Page-relative bottom edge (y1) of the source region.",
+                    "type": "number"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "paper": {
+                    "$ref": "#/$defs/Paper"
+                },
+                "parser_name": {
+                    "type": "string"
+                },
+                "source_text": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "paper",
+                "page",
+                "bbox_x0",
+                "bbox_y0",
+                "bbox_x1",
+                "bbox_y1",
+                "parser_name"
+            ],
+            "title": "Evidence",
+            "type": "object"
+        },
+        "ExchangeCurrentDensity": {
+            "additionalProperties": false,
+            "description": "Current density at zero overpotential; Butler-Volmer i0.",
+            "properties": {
+                "condition": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Condition"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "evidence": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Evidence"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "unit_label": {
+                    "description": "Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "value": {
+                    "description": "Numeric value of the measurement, in the unit named by unit_label.",
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                }
+            },
+            "title": "ExchangeCurrentDensity",
+            "type": "object"
+        },
+        "IRCorrectionEnum": {
+            "description": "",
+            "enum": [
+                "applied",
+                "not_applied",
+                "unknown"
+            ],
+            "title": "IRCorrectionEnum",
+            "type": "string"
+        },
+        "MassActivity": {
+            "additionalProperties": false,
+            "description": "Catalytic current per unit mass of active material (A/g).",
+            "properties": {
+                "condition": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Condition"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "evidence": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Evidence"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "unit_label": {
+                    "description": "Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "value": {
+                    "description": "Numeric value of the measurement, in the unit named by unit_label.",
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                }
+            },
+            "title": "MassActivity",
+            "type": "object"
+        },
+        "Measurement": {
+            "additionalProperties": false,
+            "description": "Abstract base for any numeric OER metric extracted from a paper.",
+            "properties": {
+                "condition": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Condition"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "evidence": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Evidence"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "unit_label": {
+                    "description": "Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "value": {
+                    "description": "Numeric value of the measurement, in the unit named by unit_label.",
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                }
+            },
+            "title": "Measurement",
+            "type": "object"
+        },
+        "NormalizationBasisEnum": {
+            "description": "",
+            "enum": [
+                "geometric",
+                "ECSA",
+                "BET",
+                "mass"
+            ],
+            "title": "NormalizationBasisEnum",
+            "type": "string"
+        },
+        "Overpotential": {
+            "additionalProperties": false,
+            "description": "Deviation of the electrode potential from its equilibrium value.",
+            "properties": {
+                "condition": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Condition"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "evidence": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Evidence"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "unit_label": {
+                    "description": "Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "value": {
+                    "description": "Numeric value of the measurement, in the unit named by unit_label.",
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                }
+            },
+            "title": "Overpotential",
+            "type": "object"
+        },
+        "OxygenEvolutionReaction": {
+            "additionalProperties": false,
+            "description": "The anodic half-reaction producing O2 from water.",
+            "title": "OxygenEvolutionReaction",
+            "type": "object"
+        },
+        "PEMWECellVoltage": {
+            "additionalProperties": false,
+            "description": "Full-cell operating voltage at a stated cell current density (PEMWE single cell).",
+            "properties": {
+                "condition": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Condition"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "evidence": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Evidence"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "unit_label": {
+                    "description": "Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "value": {
+                    "description": "Numeric value of the measurement, in the unit named by unit_label.",
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                }
+            },
+            "title": "PEMWECellVoltage",
+            "type": "object"
+        },
+        "Paper": {
+            "additionalProperties": false,
+            "description": "A research article that palimpsest has parsed.",
+            "properties": {
+                "authors": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "doi": {
+                    "description": "DOI of the paper.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "sha256": {
+                    "description": "SHA-256 of the raw PDF bytes (T07 contract); identity key for the Paper, completes the \"paper_hash\" half of the provenance non-negotiable on Evidence.paper.",
+                    "type": "string"
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "sha256"
+            ],
+            "title": "Paper",
+            "type": "object"
+        },
+        "ScanRateRegimeEnum": {
+            "description": "",
+            "enum": [
+                "steady_state",
+                "slow_LSV",
+                "fast_LSV",
+                "fast_CV"
+            ],
+            "title": "ScanRateRegimeEnum",
+            "type": "string"
+        },
+        "SpecificActivity": {
+            "additionalProperties": false,
+            "description": "OER current normalized to electrochemically active surface area (mA/cm2_ECSA).",
+            "properties": {
+                "condition": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Condition"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "evidence": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Evidence"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "unit_label": {
+                    "description": "Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "value": {
+                    "description": "Numeric value of the measurement, in the unit named by unit_label.",
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                }
+            },
+            "title": "SpecificActivity",
+            "type": "object"
+        },
+        "Stability": {
+            "additionalProperties": false,
+            "description": "Duration a catalyst sustains OER at a held current density (hours).",
+            "properties": {
+                "condition": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Condition"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "evidence": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Evidence"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "unit_label": {
+                    "description": "Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "value": {
+                    "description": "Numeric value of the measurement, in the unit named by unit_label.",
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                }
+            },
+            "title": "Stability",
+            "type": "object"
+        },
+        "TafelSlope": {
+            "additionalProperties": false,
+            "description": "Slope of overpotential vs log(current density) in the Tafel region.",
+            "properties": {
+                "condition": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Condition"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "evidence": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Evidence"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "unit_label": {
+                    "description": "Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "value": {
+                    "description": "Numeric value of the measurement, in the unit named by unit_label.",
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                }
+            },
+            "title": "TafelSlope",
+            "type": "object"
+        },
+        "TurnoverFrequency": {
+            "additionalProperties": false,
+            "description": "Catalytic events per active site per second.",
+            "properties": {
+                "condition": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Condition"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "evidence": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Evidence"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "unit_label": {
+                    "description": "Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "value": {
+                    "description": "Numeric value of the measurement, in the unit named by unit_label.",
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                }
+            },
+            "title": "TurnoverFrequency",
+            "type": "object"
         }
-      },
-      "required": [
-        "sha256"
-      ],
-      "title": "Paper",
-      "type": "object"
     },
-    "ScanRateRegimeEnum": {
-      "description": "",
-      "enum": [
-        "steady_state",
-        "slow_LSV",
-        "fast_LSV",
-        "fast_CV"
-      ],
-      "title": "ScanRateRegimeEnum",
-      "type": "string"
-    },
-    "SpecificActivity": {
-      "additionalProperties": false,
-      "description": "OER current normalized to electrochemically active surface area (mA/cm2_ECSA).",
-      "properties": {
-        "condition": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/Condition"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "evidence": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/Evidence"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "unit_label": {
-          "description": "Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.",
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "value": {
-          "description": "Numeric value of the measurement, in the unit named by unit_label.",
-          "type": [
-            "number",
-            "null"
-          ]
-        }
-      },
-      "title": "SpecificActivity",
-      "type": "object"
-    },
-    "Stability": {
-      "additionalProperties": false,
-      "description": "Duration a catalyst sustains OER at a held current density (hours).",
-      "properties": {
-        "condition": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/Condition"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "evidence": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/Evidence"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "unit_label": {
-          "description": "Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.",
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "value": {
-          "description": "Numeric value of the measurement, in the unit named by unit_label.",
-          "type": [
-            "number",
-            "null"
-          ]
-        }
-      },
-      "title": "Stability",
-      "type": "object"
-    },
-    "TafelSlope": {
-      "additionalProperties": false,
-      "description": "Slope of overpotential vs log(current density) in the Tafel region.",
-      "properties": {
-        "condition": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/Condition"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "evidence": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/Evidence"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "unit_label": {
-          "description": "Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.",
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "value": {
-          "description": "Numeric value of the measurement, in the unit named by unit_label.",
-          "type": [
-            "number",
-            "null"
-          ]
-        }
-      },
-      "title": "TafelSlope",
-      "type": "object"
-    },
-    "TurnoverFrequency": {
-      "additionalProperties": false,
-      "description": "Catalytic events per active site per second.",
-      "properties": {
-        "condition": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/Condition"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "evidence": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/Evidence"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "unit_label": {
-          "description": "Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.",
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "value": {
-          "description": "Numeric value of the measurement, in the unit named by unit_label.",
-          "type": [
-            "number",
-            "null"
-          ]
-        }
-      },
-      "title": "TurnoverFrequency",
-      "type": "object"
-    }
-  },
-  "$id": "https://w3id.org/palimpsest/v1",
-  "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "additionalProperties": true,
-  "metamodel_version": "1.11.0",
-  "title": "palimpsest",
-  "type": "object",
-  "version": "0.1.0"
+    "$id": "https://w3id.org/palimpsest/v1",
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "additionalProperties": true,
+    "metamodel_version": "1.11.0",
+    "title": "palimpsest",
+    "type": "object",
+    "version": "0.1.0"
 }
+
