@@ -6,11 +6,22 @@ a fresh budget, and the monitor writes its logs into tmp_path. No network, no ke
 
 import json
 
+import pytest
+
 from palimpsest.agent import Agent
 from palimpsest.cost import CostMeter
 from palimpsest.monitor import SessionMonitor
 from palimpsest.providers.anthropic import LLMResponse
 from palimpsest.tools import register
+
+
+@pytest.fixture(autouse=True)
+def _isolate_workspace(tmp_path, monkeypatch):
+    """Isolate the workspace so a constructed Agent's SessionLog (T66) writes into tmp
+    (no .git there → no-op), never the real ./workspace/.palimpsest/session.jsonl.
+    The SessionMonitor here already targets tmp via log_dir, but the Agent's own
+    transcript would otherwise still pollute the real workspace."""
+    monkeypatch.setenv("PALIMPSEST_WORKSPACE", str(tmp_path))
 
 _ZERO = {
     "input_tokens": 0,
