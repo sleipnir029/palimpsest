@@ -97,6 +97,20 @@ def test_env_appended_to_pre_existing_gitignore(ws):
     assert "notes.md" in tracked and ".env" not in tracked
 
 
+def test_secret_backfilled_when_gitignore_already_has_palimpsest(ws):
+    # T66 NB1: the upgrade is keyed on the full required set, not one sentinel. A
+    # hand-edited .gitignore that already has `.palimpsest/` but lacks `.env` must
+    # still get `.env` backfilled, or the checkpoint would commit the secret.
+    (ws / ".gitignore").write_text("config.txt\n*.db\n.palimpsest/\n", encoding="utf-8")
+    versioning.ensure_repo()
+    assert ".env" in (ws / ".gitignore").read_text().splitlines()
+    config.set_value("DEEPSEEK_API_KEY", "SUPER-SECRET")
+    (ws / "notes.md").write_text("public", encoding="utf-8")
+    versioning.checkpoint("turn")
+    tracked = {p.decode() for p in porcelain.ls_files(Repo(str(ws)))}
+    assert "notes.md" in tracked and ".env" not in tracked
+
+
 def test_env_is_refused_by_write_policy(ws):
     with pytest.raises(PolicyViolation, match="protected"):
         assert_writable(str(ws / ".env"))

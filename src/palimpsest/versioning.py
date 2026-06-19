@@ -42,9 +42,18 @@ _GITIGNORE = (
     "*.db\n"
     "store/\n"
     "cache/\n"
+    # The session transcript (T66) is an append-only on-disk reflection record; it
+    # is deliberately NOT tracked, so /undo (which hard-resets the tracked tree) can
+    # never truncate it, and a read_file of a secret can never reach a commit.
+    ".palimpsest/\n"
     "__pycache__/\n"
     ".DS_Store\n"
 )
+
+# The exclusion lines the upgrade path must guarantee on a pre-existing .gitignore
+# (secrets, the ledger, bulk state, the T66 transcript) — checked as a set so a
+# gitignore missing any one is repaired, not just one keyed on a single sentinel.
+_REQUIRED_IGNORES = (".env", "config.txt", "*.key", "*.db", "store/", "cache/", ".palimpsest/")
 
 
 def ensure_repo(root: Path | None = None) -> None:
@@ -55,10 +64,16 @@ def ensure_repo(root: Path | None = None) -> None:
     existing = gi.read_text(encoding="utf-8") if gi.exists() else ""
     if not existing:
         gi.write_text(_GITIGNORE, encoding="utf-8")
-    elif ".env" not in existing.splitlines():
-        # An older workspace's .gitignore predates the secret-exclusion lines;
-        # append them so .env / *.key can never be auto-committed (no leak).
-        gi.write_text(existing.rstrip("\n") + "\n.env\n*.key\n", encoding="utf-8")
+    elif any(ln not in existing.splitlines() for ln in _REQUIRED_IGNORES):
+        # An older / hand-edited .gitignore is missing one or more exclusion lines;
+        # backfill exactly the absent ones so secrets (.env/config.txt/*.key), the
+        # ledger (*.db), bulk state (store/, cache/) and the T66 transcript
+        # (.palimpsest/) can never be auto-committed. Keyed on the full required SET
+        # (not a single sentinel line) so a gitignore missing any of them is repaired
+        # regardless of which lines it already has; idempotent (missing → [] on re-run).
+        lines = existing.splitlines()
+        missing = [ln for ln in _REQUIRED_IGNORES if ln not in lines]
+        gi.write_text(existing.rstrip("\n") + "\n" + "\n".join(missing) + "\n", encoding="utf-8")
     if not (root / ".git").exists():
         porcelain.init(str(root))
 
