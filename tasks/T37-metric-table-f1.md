@@ -1,5 +1,11 @@
 # T37 — Parser metric: table-cell F1
 
+**Status:** planned · **Group:** evaluation (thesis) · **Priority:** high
+
+> **Updated 2026-06-19** — scoreable parser set is **{docling, mineru, dots, paddle}**
+> (Chandra not parsed on this corpus — T34). Part of the shared T36–T39 parser
+> comparison (ceiling = ground truth, T35). See T39 + `report/supervisor-answers-2026-06-19.md` §1a.
+
 ## Why
 OER papers have lots of tables. How well does each parser extract them?
 

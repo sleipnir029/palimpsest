@@ -1,5 +1,15 @@
 # T43 — Thesis chapter: ontology gap analysis
 
+**Status:** planned (writing) · **Group:** thesis · **Priority:** medium · **Depends:** T47 (done)
+
+> **2026-06-19:** T47 (H2KG schema alignment) is **done** — the schema already carries
+> `skos:closeMatch` from all 7 OER metrics to H2KG terms (3 get an H2KG home; 4
+> dual-anchored to ECHO). So this chapter writes up an *existing* alignment, not a
+> planned one. Tie the gap analysis to the FAIR/interoperability argument
+> (`report/supervisor-answers-2026-06-19.md` §0) and note the run-time mechanism by which
+> the agent uses these IRIs (T62/T69). The genuine remaining gap (OER not native in
+> EMMO *or* H2KG) is the original contribution.
+
 > **Re-grounded against H2KG (2026-06-10).** The gap analysis must now be framed against the
 > official H2KG v1.0.0 release, not EMMO ECHO alone. Ground-check finding: **H2KG already defines
 > 3 of the 4 metrics this card lists as "palimpsest-local" — `h2kg:TafelSlope`,

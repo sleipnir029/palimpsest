@@ -1,10 +1,24 @@
 # T42 — Thesis chapter: parser comparison
 
+**Status:** planned (writing) · **Group:** thesis · **Priority:** medium · **Depends:** T36–T41
+
+> **Updated 2026-06-19** — corrections + framing:
+> - Parser set is **{docling, MinerU 2.5, dots.ocr, PaddleOCR}** — **Chandra excluded**
+>   (no geometry + timeouts, T34); report it separately as "excluded," not as a score.
+> - The "single LLM for downstream" limitation this card lists is now *partly answered*
+>   by the sibling study **T72** (LLM breadth matrix) — cross-reference it in Discussion
+>   instead of only listing it as a limitation.
+> - Lead the chapter with the **downstream-extraction-accuracy** result (T39), the
+>   thesis's principal claim; transcription/table/bbox metrics are supporting.
+> - See `report/supervisor-answers-2026-06-19.md` §1 for the shared metric + baseline design.
+
 ## Why
-The headline contribution: head-to-head comparison of docling, MinerU 2.5, olmOCR 2, Chandra 2 on OER catalyst papers.
+The headline parser study (contribution #2): head-to-head comparison of docling,
+MinerU 2.5, dots.ocr, and PaddleOCR on OER catalyst papers, evaluated on transcription
+fidelity AND downstream extraction accuracy.
 
 ## Input state
-- T36–T39 (all 4 metrics) and T41 (plots) merged.
+- T36–T39 (the 4 metrics) and T41 (plots) merged.
 
 ## Output state
 - File `thesis/02_parser_comparison.md` containing:

@@ -1,5 +1,12 @@
 # T38 — Parser metric: bbox precision
 
+**Status:** planned · **Group:** evaluation (thesis) · **Priority:** high
+
+> **Updated 2026-06-19** — part of the shared T36–T39 comparison. The detailed T49 note
+> below already fixes the parser set + Chandra exclusion + coordinate conventions; the
+> line about parsers "scoring 0" is superseded by that note (Chandra is *excluded*, not 0).
+> See T39 + `report/supervisor-answers-2026-06-19.md` §1a.
+
 ## Why
 Does each parser tell us WHERE a number came from with enough accuracy to highlight in the viewer?
 

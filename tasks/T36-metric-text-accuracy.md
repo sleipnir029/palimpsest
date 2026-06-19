@@ -1,5 +1,12 @@
 # T36 — Parser metric: text accuracy
 
+**Status:** planned · **Group:** evaluation (thesis) · **Priority:** high
+
+> **Updated 2026-06-19** — scoreable parser set is **{docling, mineru, dots, paddle}**
+> (Chandra was never parsed on this corpus — timed out, dropped at T34). Metric +
+> baseline scheme is shared across T36–T39: ceiling = human ground truth (T35); this is
+> the transcription-fidelity axis. See T39 and `report/supervisor-answers-2026-06-19.md` §1a.
+
 ## Why
 First parser-comparison metric: how well does each parser reproduce the literal text of the paper?
 
@@ -30,4 +37,5 @@ test -f experiments/text_accuracy.csv && head experiments/text_accuracy.csv
 
 ## Notes / references
 - Use `rapidfuzz` library (add to pixi.toml if needed) for fast Levenshtein.
-- Expected ranking, roughly: Chandra 2 ≥ olmOCR 2 > MinerU 2.5 ≥ docling. Don't be alarmed if numbers differ — that's data for the thesis.
+- No fixed expected ranking — the comparison *is* the result. (Earlier drafts guessed a
+  Chandra/olmOCR ranking; those aren't in the parsed set, so ignore that guess.)
