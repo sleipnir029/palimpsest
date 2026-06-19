@@ -17,6 +17,15 @@ from palimpsest.tools import register
 
 load_dotenv()
 
+
+@pytest.fixture(autouse=True)
+def _isolate_workspace(tmp_path, monkeypatch):
+    """Isolate the workspace so a constructed Agent's SessionLog (T66) and versioning
+    write into tmp (no .git there → no-ops), never the real ./workspace transcript.
+    Without this, every agent.run() here pollutes the real session.jsonl."""
+    monkeypatch.setenv("PALIMPSEST_WORKSPACE", str(tmp_path))
+
+
 _skip_no_key = pytest.mark.skipif(
     not os.environ.get("ANTHROPIC_API_KEY"),
     reason="ANTHROPIC_API_KEY not set (.env missing or empty)",
