@@ -5,14 +5,18 @@ Two decoupled families per T18 advisor review:
 - label-resolution: catches EMMO renaming the human label (cosmetic change).
 A green-on-first / red-on-second tells you immediately which mode failed.
 """
-from functools import lru_cache
-from pathlib import Path
-
-import httpx
 import pytest
-from rdflib import OWL, RDF, Graph, URIRef
+from rdflib import OWL, RDF, URIRef
 
-from palimpsest.ontology import EMMO_ECHO, KNOWN_IRIS, echo_graph, emmo_iri
+from palimpsest.ontology import (
+    EMMO_ECHO,
+    H2KG_NS,
+    H2KG_TTL_URL,
+    KNOWN_IRIS,
+    echo_graph,
+    emmo_iri,
+    h2kg_graph,
+)
 
 OVERPOTENTIAL_HASH = f"{EMMO_ECHO}#electrochemistry_1cd1d777_e67b_47eb_81f1_edac35d9f2c6"
 
@@ -45,8 +49,7 @@ def test_known_labels_resolve(label):
 # table. The namespaces are distinct, and no ECHO hash entry may point into the h2kg namespace.
 # (Note: some labels like "Overpotential" are BOTH ECHO classes and H2KG fragments, so this
 # guard checks IRI *values*, not label strings.) Catches a future mistake of pasting an h2kg
-# IRI into KNOWN_IRIS.
-H2KG_NS = "https://w3id.org/h2kg/hydrogen-ontology#"
+# IRI into KNOWN_IRIS. (H2KG_NS is imported from palimpsest.ontology — T69.)
 
 
 def test_no_h2kg_iri_in_echo_table():
@@ -54,13 +57,7 @@ def test_no_h2kg_iri_in_echo_table():
     assert not any(iri.startswith(H2KG_NS) for iri in KNOWN_IRIS.values())
 
 
-# Live H2KG resolution. The base namespace content-negotiates to this GitHub file
-# (the .../releases/1.0.0 IRI does not yet resolve); pinned to @main, verified 2026-06-10.
-H2KG_TTL_URL = (
-    "https://raw.githubusercontent.com/ViMiLabs/AIMWORKS/main"
-    "/ontology_release/output/ontology/core_schema.ttl"
-)
-_H2KG_CACHE = Path.home() / ".cache" / "palimpsest" / "h2kg_core.ttl"
+# H2KG_TTL_URL + h2kg_graph live in palimpsest.ontology (T69) and are imported above.
 
 # Each mapped fragment → its expected H2KG type local-name. h2kg:Property are measured
 # outputs; h2kg:Parameter are simulation inputs (so exact_mappings would be wrong — these
@@ -74,25 +71,6 @@ H2KG_FRAGMENT_TYPES = {
     "ExchangeCurrentDensity": "Parameter",
     "ChargeTransferCoefficient": "Parameter",
 }
-
-
-@lru_cache(maxsize=1)
-def h2kg_graph() -> Graph:
-    """Load the H2KG core schema into an rdflib Graph, cached to disk on first call.
-
-    Mirrors ontology.py:echo_graph() — atomic write so a Ctrl-C mid-download leaves
-    no truncated .ttl that would poison future calls.
-    """
-    if not _H2KG_CACHE.exists():
-        _H2KG_CACHE.parent.mkdir(parents=True, exist_ok=True)
-        resp = httpx.get(H2KG_TTL_URL, follow_redirects=True, timeout=60.0)
-        resp.raise_for_status()
-        tmp = _H2KG_CACHE.with_suffix(".ttl.tmp")
-        tmp.write_bytes(resp.content)
-        tmp.replace(_H2KG_CACHE)
-    g = Graph()
-    g.parse(_H2KG_CACHE, format="ttl")
-    return g
 
 
 @pytest.mark.slow
