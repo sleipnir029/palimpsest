@@ -66,6 +66,7 @@ class OpenAICompatProvider:
         messages: list[dict],
         tools: list[dict] | None = None,
         cache_breakpoints: list[str] | None = None,
+        response_format: dict | None = None,
     ) -> LLMResponse:
         if tools is not None:
             raise NotImplementedError(
@@ -80,6 +81,14 @@ class OpenAICompatProvider:
             "temperature": self.temperature,
             "messages": [{"role": "system", "content": system}, *messages],
         }
+        if response_format is not None:
+            # T72 strict-output arm. `require_parameters` makes OpenRouter route only
+            # to providers that actually honour response_format (else it silently drops
+            # the constraint). We do NOT enable OpenRouter's response-healing plugin, so
+            # malformed JSON surfaces as a parse error rather than being hidden — that's
+            # the point of the arm (measure the model, not the gateway's repair).
+            payload["response_format"] = response_format
+            payload["require_parameters"] = True
         headers = {"Authorization": f"Bearer {self._key}"}
         resp = self._client.post(
             f"{self.base_url}/chat/completions", json=payload, headers=headers
