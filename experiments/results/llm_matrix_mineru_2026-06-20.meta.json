@@ -1,0 +1,33 @@
+{
+  "finding": 1,
+  "stage": "stage-1 model selection",
+  "date": "2026-06-20",
+  "git_commit": "d85fd14",
+  "parser": "mineru",
+  "models": [
+    "deepseek-flash",
+    "deepseek-pro",
+    "gemini-free",
+    "gemini-lite",
+    "haiku-4.5",
+    "openai-frontier",
+    "openai-mini",
+    "opus-4.8",
+    "qwen-plus",
+    "sonnet-4.6"
+  ],
+  "n_models": 10,
+  "rows": 69,
+  "modes": [
+    "raw",
+    "strict"
+  ],
+  "gold_papers": 5,
+  "gold_tuples": 41,
+  "budget_before_eur": 3.0401,
+  "budget_after_eur": 6.4243,
+  "run_spend_eur": 3.3842,
+  "prompt_hash": "bd526972a038",
+  "csv": "llm_matrix_mineru_2026-06-20.csv",
+  "notes": "local errored x5 (LOCAL_BASE_URL missing http://); qwen-plus dropped 1 cell (OpenRouter RemoteProtocolError) -> 4 papers."
+}
