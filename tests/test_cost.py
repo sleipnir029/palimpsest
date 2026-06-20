@@ -2,7 +2,7 @@
 
 import pytest
 
-from palimpsest.cost import BudgetExceeded, CostMeter
+from palimpsest.cost import _CANONICAL_DB, BudgetExceeded, CostMeter
 
 
 def test_default_budget(tmp_path):
@@ -44,3 +44,16 @@ def test_set_budget_refuses_below_spend(tmp_path):
     msg = m.set_budget(20)
     assert msg.startswith("refused")
     assert m.cap == 50.0  # unchanged
+
+
+def test_bare_db_name_redirects_to_canonical():
+    # The €50 cap must be ONE ledger regardless of cwd: a bare relative "palimpsest.db"
+    # (what every runtime call site passes) is redirected to the repo-root canonical file
+    # so launching from a subdir can't fork an empty, under-counting ledger.
+    assert CostMeter("palimpsest.db").db_path == _CANONICAL_DB
+
+
+def test_absolute_path_is_not_redirected(tmp_path):
+    # Tests (and any explicit absolute path) must pass through untouched.
+    p = str(tmp_path / "x.db")
+    assert CostMeter(p).db_path == p

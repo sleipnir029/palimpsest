@@ -25,12 +25,13 @@ from fastapi.templating import Jinja2Templates
 
 from schema.generated import pydantic as _schema  # PEP 420 namespace pkg
 
+from ..cost import canonical_db
 from ..store import PALIM, RDFStore, _expand
 from ..tools.read_paper import read_paper
 
 _BASE = Path(__file__).parent
 PAPERS_DIR = Path("papers")
-DB_PATH = "palimpsest.db"
+DB_PATH = canonical_db("palimpsest.db")  # one repo-root ledger/cache, cwd-independent
 STORE_PATH = "store"  # RocksDB dir the pipeline persists the graph to (gitignored).
 # Note: RocksDB is single-writer/exclusive — the viewer holds this open for its
 # lifetime (see _graph_store), so a pipeline run can't write store/ while it's up.
