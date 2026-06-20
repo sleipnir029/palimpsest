@@ -539,11 +539,15 @@ def extract(
     cost_meter: Any = None,
     provider: Any = None,
     cache: Any = None,
+    response_format: Any = None,
 ) -> tuple[list[BaseModel], list[tuple[Exception, dict]]]:
     """Run extraction over one cached parser output, ONE LLM call per page.
 
     The ``provider`` and ``cache`` kwargs exist for test injection; ``cost_meter``
-    is optional so direct calls can keep budget tracking honest.
+    is optional so direct calls can keep budget tracking honest. ``response_format``
+    is the T72 strict-output arm: when set (an OpenAI-style ``json_schema`` dict),
+    it is forwarded to ``provider.complete`` — only OpenAI-compatible providers
+    honour it. Leave None for the production path (plain JSON + Pydantic).
     """
     if cache is None:
         from palimpsest.cache import ParserCache  # lazy: break import cycle
@@ -588,6 +592,7 @@ def extract(
             by_page.setdefault(page, []).append(i)
         batches = [ids for _p, ids in sorted(by_page.items())]
 
+    extra = {"response_format": response_format} if response_format is not None else {}
     for batch in batches:
         content = full if batch is None else _render_projection(spans, batch)
         resp = provider.complete(
@@ -595,6 +600,7 @@ def extract(
             messages=[{"role": "user", "content": content + "\n\nReturn the measurements."}],
             tools=None,
             cache_breakpoints=["system"],
+            **extra,
         )
         if cost_meter is not None:
             from palimpsest.agent import _cost_eur  # lazy: import cycle
