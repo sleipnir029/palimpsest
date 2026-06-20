@@ -122,8 +122,11 @@ SPECS: list[Spec] = [
     # OpenAI = the 3rd major closed frontier lab, + its cheap tier (within-OpenAI scaling):
     _openrouter("openai-frontier", "OpenAI frontier (closed)", "OR_OPENAI_MODEL", 2.50, 15.0),
     _openrouter("openai-mini", "OpenAI small (closed)", "OR_OPENAI_MINI_MODEL", 0.75, 4.50),
-    # Qwen = the strongest OPEN-weight family; the cost-value 1M-ctx flagship:
-    _openrouter("qwen-plus", "Qwen3.7-Plus (open, value)", "OR_QWEN_MODEL", 0.32, 1.28),
+    # Qwen DROPPED for future runs: OpenRouter's qwen3.7-plus endpoint repeatedly
+    # stalled/ReadTimeout'd during the dots sweep (multi-minute hangs, lost cells) —
+    # not worth the wall-clock. Its mineru/docling data is captured (FINDINGS #1/#2).
+    # Re-enable here if OpenRouter routing improves or a faster provider is pinned.
+    # _openrouter("qwen-plus", "Qwen3.7-Plus (open, value)", "OR_QWEN_MODEL", 0.32, 1.28),
     # Gemini Flash-Lite via OpenRouter = ultra-cheap baseline + the strict-arm Gemini
     # (the free-tier Gemini below is raw-only); pairs with gemini-3.5-flash for scaling:
     _openrouter("gemini-lite", "Gemini Flash-Lite (cheap)", "OR_GEMINI_LITE_MODEL", 0.25, 1.50),
