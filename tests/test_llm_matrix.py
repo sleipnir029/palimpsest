@@ -168,3 +168,17 @@ def test_ground_truth_filters_to_cached_papers_with_gold():
 
 def test_ground_truth_empty_for_unparsed_parser():
     assert llm_matrix._ground_truth("no_such_parser") == {}
+
+
+def test_score_handles_null_value_pred():
+    # `value` is schema-nullable, so a model can emit a measurement with value=None.
+    # Regression: the dots Stage-2 run crashed on `abs(None - float)` in _matches.
+    # A null-value extraction must NOT crash _score, can't match a numeric gold, but
+    # still counts toward n_valid (it's a spurious output → lowers precision).
+    from ab_extract import _score
+
+    class Overpotential:  # class name = the Measurement type the scorer reads
+        value = None
+
+    tp, n_preds, recall, precision = _score([Overpotential()], [("Overpotential", 236.0)])
+    assert tp == 0 and n_preds == 1 and recall == 0.0 and precision == 0.0

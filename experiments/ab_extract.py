@@ -90,6 +90,8 @@ GOLD: dict[str, list[tuple[str, float]]] = {
 def _matches(pred_type, pred_val, gt_type, gt_val) -> bool:
     if pred_type != gt_type:
         return False
+    if pred_val is None:  # `value` is schema-nullable; a null-value extraction can't
+        return False      # match a numeric gold (and must not crash the scorer)
     tol = max(abs(gt_val) * 0.01, 0.5 if abs(gt_val) >= 1 else 1e-4)
     return abs(pred_val - gt_val) <= tol
 

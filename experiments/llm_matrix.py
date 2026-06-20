@@ -385,34 +385,37 @@ def main(dry_run: bool = False, parser: str = _PARSER) -> None:
                         response_format=strict_rf if mode == "strict" else None,
                     )
                     latency = time.monotonic() - t0
-                except Exception as e:  # noqa: BLE001 — one bad model/mode must not kill the matrix
+                    # Score + append INSIDE the try: a scoring edge case (e.g. a
+                    # null-value extraction) must drop only this cell, never kill the
+                    # whole paid run (rows are written once at the end).
+                    tp, n_preds, recall, precision = _score(valid, truth)
+                    f1 = _f1(recall, precision)
+                    if spec.price_in is not None and spec.price_out is not None:
+                        usd = (provider.in_tokens * spec.price_in
+                               + provider.out_tokens * spec.price_out) / 1_000_000
+                        eur_val = usd * _USD_TO_EUR
+                        eur = f"{eur_val:.5f}"
+                        eur_tp = f"{eur_val / tp:.5f}" if tp else ""  # cost per CORRECT extraction
+                    else:
+                        eur = ""  # rate not verified — record tokens, leave cost blank
+                        eur_tp = ""
+                    rows.append({
+                        "paper_sha8": sha[:8], "parser": parser, "label": spec.label,
+                        "model_id": model_id, "role": spec.role, "mode": mode,
+                        "n_valid": n_preds, "n_errors": len(errors),
+                        "tp": tp, "gt_total": len(truth),
+                        "recall": f"{recall:.4f}", "precision": f"{precision:.4f}", "f1": f"{f1:.4f}",
+                        "in_tokens": provider.in_tokens, "out_tokens": provider.out_tokens,
+                        "eur_per_paper": eur, "eur_per_tp": eur_tp, "latency_s": f"{latency:.2f}",
+                        "temperature": _temperature(provider._inner),
+                        "prompt_hash": prompt_hash,
+                    })
+                    ran.append(f"{spec.label}/{mode} on {sha[:8]}: "
+                               f"recall={recall:.0%} f1={f1:.2f} €={eur or 'n/a'}")
+                except Exception as e:  # noqa: BLE001 — one bad model/mode/score must not kill the matrix
                     skipped.append(
                         f"{spec.label}/{mode} on {sha[:8]} (error: {type(e).__name__}: {e})")
                     continue
-                tp, n_preds, recall, precision = _score(valid, truth)
-                f1 = _f1(recall, precision)
-                if spec.price_in is not None and spec.price_out is not None:
-                    usd = (provider.in_tokens * spec.price_in
-                           + provider.out_tokens * spec.price_out) / 1_000_000
-                    eur_val = usd * _USD_TO_EUR
-                    eur = f"{eur_val:.5f}"
-                    eur_tp = f"{eur_val / tp:.5f}" if tp else ""  # cost per CORRECT extraction
-                else:
-                    eur = ""  # rate not verified — record tokens, leave cost blank
-                    eur_tp = ""
-                rows.append({
-                    "paper_sha8": sha[:8], "parser": parser, "label": spec.label,
-                    "model_id": model_id, "role": spec.role, "mode": mode,
-                    "n_valid": n_preds, "n_errors": len(errors),
-                    "tp": tp, "gt_total": len(truth),
-                    "recall": f"{recall:.4f}", "precision": f"{precision:.4f}", "f1": f"{f1:.4f}",
-                    "in_tokens": provider.in_tokens, "out_tokens": provider.out_tokens,
-                    "eur_per_paper": eur, "eur_per_tp": eur_tp, "latency_s": f"{latency:.2f}",
-                    "temperature": _temperature(provider._inner),
-                    "prompt_hash": prompt_hash,
-                })
-                ran.append(f"{spec.label}/{mode} on {sha[:8]}: "
-                           f"recall={recall:.0%} f1={f1:.2f} €={eur or 'n/a'}")
             if stopped:
                 break
         if stopped:
