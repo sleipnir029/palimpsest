@@ -235,3 +235,76 @@ dots → `gemini-3.5-flash` (free) 88%.
 - `qwen3.7-plus` dropped from the roster (OpenRouter latency).
 - `paddle` is the only parser left to close the 4-parser grid.
 - `local` still unmeasured (`LOCAL_BASE_URL` missing `http://`).
+
+---
+
+## Finding 4 — paddle sweep + FULL 4-parser grid & production synthesis (2026-06-20)
+
+**Data:** [`llm_matrix_paddle_2026-06-20.csv`](./llm_matrix_paddle_2026-06-20.csv)
+· meta sidecar. **Setup:** parser = **paddle** · 5 gold papers · 8 models · raw +
+strict · budget €12.20 → €14.03 (run +€1.83). qwen already dropped. **Anthropic
+credits drained mid-run** → `sonnet-4.6` paddle is **partial (2/5 papers)** and
+not comparable; `gemini-free` missed 1 paddle paper to a transient 503. The
+per-cell resilience fix (`3ef5742`) let the run finish despite both.
+
+### FULL grid — raw mode µF1 (mineru / docling / dots / paddle)
+
+| Model | µF1 m/d/dt/p | micro-recall m/d/dt/p | avg µF1 † | €/correct |
+|---|---|---|---|---|
+| **gemini-3.1-flash-lite** | .76/.86/.78/.81 | 83/93/85/83 | **0.80** | €0.0011 |
+| gemini-3.5-flash (free) | .65/.75/.75/.84 | 78/88/88/92 | 0.72 ‡ | **€0** |
+| deepseek-pro | .73/.73/.66/.73 | 88/88/76/93 | 0.71 | €0.0017 |
+| sonnet-4.6 | .76/.78/.57/(.88) | 85/95/80/(95) | 0.71 ‡ | €0.0166 |
+| gpt-5.4 | .68/.74/.65/.64 | 85/90/85/78 | 0.67 | €0.0109 |
+| haiku-4.5 | .62/.61/.67/.76 | 73/51/73/90 | 0.66 | €0.0059 |
+| gpt-5.4-mini | .56/.63/.55/.57 | 61/76/68/85 | 0.58 | €0.0039 |
+| deepseek-flash | .27/.63/.67/.31 | 51/88/80/59 | **0.47** | €0.0006 |
+
+† avg over parsers where the model ran all 5 papers. ‡ gemini-free = 3/4 parsers
+(503 on one paddle paper); sonnet = 3/4 (paddle partial, shown parenthesised).
+
+### Per-parser winner (raw, micro-recall, full-5-paper models only)
+
+| Parser | Best | | Cheap alternative |
+|---|---|---|---|
+| mineru | deepseek-pro | 88% | gemini-lite 83% |
+| docling | sonnet-4.6 | 95% | gemini-lite 93% (~12× cheaper) |
+| dots | gemini-3.5-flash (free) | 88% | — (€0) |
+| paddle | deepseek-pro | 93% | gemini-free 92% (€0) |
+
+### Synthesis — the production decision
+
+1. **Best overall model: `gemini-3.1-flash-lite`.** Highest *and* most consistent
+   (0.80 avg µF1, every parser 81–93% recall) at €0.0011/correct. Robustness
+   across parsers is the deciding property for an autonomous agent that may run any
+   parser.
+2. **Recommended production combo: docling + `gemini-3.1-flash-lite`** (0.86 F1,
+   93% recall, €0.0011/correct). If €0 outweighs the F1 gap: docling/paddle +
+   free `gemini-3.5-flash` (88–92%, €0).
+3. **`deepseek-pro` is the best parser-agnostic *paid* fallback** (76–93% on every
+   parser) and a drop-in runtime change (same DeepSeek provider, `model=
+   deepseek-v4-pro`).
+4. **`deepseek-v4-flash` (the locked T50 default) should be replaced.** Worst
+   overall (0.47 avg µF1), too parser-fragile to trust as the default; it only
+   looks cheap until you price its misses (it found ~nothing on 3 mineru + 3
+   paddle papers). See "open decision" below.
+5. **Parser ranking:** docling ≳ dots ≈ paddle > mineru for ceilings, but the
+   best model is parser-robust enough that the *model* choice matters more than the
+   parser once you're off mineru.
+
+### Operational / data-quality notes
+
+- Anthropic credits drained → sonnet paddle partial (2 papers); top up to re-run
+  if a full sonnet paddle row is wanted.
+- `gemini-free` paddle = 4 papers (one 503); re-runnable for €0.
+- `local` never measured (`LOCAL_BASE_URL` lacks `http://` in `.env`).
+- bd9811a5 (the figure-Tafel paper) still caps recall on mineru/dots/paddle where
+  those values aren't in the parse text; docling recovers them — a parser-coverage
+  effect, uniform across models.
+
+### OPEN DECISION (for the user)
+
+Change the locked runtime default `deepseek-v4-flash` (T50) → either
+`deepseek-v4-pro` (safe drop-in, steady ~88%) or `gemini-3.1-flash-lite` (best
+overall, needs the runtime pointed at the Gemini provider). Deferred to the user;
+this is a CLAUDE.md-locked default, so it changes only on explicit approval.
