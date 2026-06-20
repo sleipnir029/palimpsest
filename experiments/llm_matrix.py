@@ -23,9 +23,11 @@ import csv
 import hashlib
 import json
 import os
+import subprocess
 import sys
 import time
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Callable
 
@@ -52,6 +54,7 @@ from palimpsest.tools.extract import _JSONSCHEMA_PATH, _MEASUREMENT_NAMES, extra
 load_dotenv()
 
 _OUT = Path(__file__).resolve().parent / "llm_matrix.csv"
+_RESULTS = _OUT.parent / "results"  # stamped, git-tracked snapshots (never overwritten)
 _PARSER = "mineru"
 _SKILL = "oer-extraction"
 
@@ -109,8 +112,9 @@ def _openrouter(label, role, model_env, price_in, price_out):
 # (OpenAI frontier↔mini, DeepSeek flash↔pro, Gemini flash↔flash-lite, Claude tiers) to
 # isolate "does size help within a family?". Slugs verified live on openrouter.ai
 # (2026-06-20); prices are the per-model-page rate for the recommended slug — re-confirm
-# before trusting €/paper if you swap a slug. Opus 4.8 is a ONE-TIME ceiling here, pruned
-# before the Stage-2 parser grid (it's not the production model).
+# before trusting €/paper if you swap a slug. Opus 4.8 was the Stage-1 one-time ceiling
+# (FINDINGS.md #1: ~20x cost, no accuracy gain) — DROPPED post-Stage-1; the rest are kept
+# for the Stage-2 parser sweep (a model weak on mineru may be fine on docling/dots).
 SPECS: list[Spec] = [
     # ---- OpenRouter hub (one key); YOU set the slugs in .env, rationale in .env.example.
     # These are the strict-capable rows (Part C raw-vs-strict). Claude/DeepSeek are NOT
@@ -130,9 +134,8 @@ SPECS: list[Spec] = [
     Spec("sonnet-4.6", "claude-sonnet-4-6", "mid frontier",
          lambda: AnthropicProvider(model="claude-sonnet-4-6", name="claude-sonnet-4-6"),
          3.0, 15.0, "ANTHROPIC_API_KEY"),
-    Spec("opus-4.8", "claude-opus-4-8", "frontier ceiling (one-time, pruned)",
-         lambda: AnthropicProvider(model="claude-opus-4-8", name="claude-opus-4-8"),
-         5.0, 25.0, "ANTHROPIC_API_KEY"),
+    # opus-4.8 DROPPED post-Stage-1 (FINDINGS.md #1: ~20x cost, no accuracy gain over
+    # sonnet/deepseek-pro). Was the one-time ceiling; re-add only to re-measure the top.
     # ---- DeepSeek direct (authoritative; the agent default; already funded) ----
     Spec("deepseek-flash", "deepseek-v4-flash", "production default under test",
          lambda: DeepSeekProvider(), 0.14, 0.28, "DEEPSEEK_API_KEY"),
@@ -270,9 +273,44 @@ def _ground_truth(parser: str = _PARSER) -> dict[str, list]:
 
 
 # Rough €/paper ceiling for the budget pre-check: ~25K in + 3K out at the priciest
-# model in the matrix (Opus 5/25 USD/M) ≈ €0.18; round up so check_or_raise refuses a
-# call that would breach the €50 cap BEFORE it's made.
+# model in the matrix (now Sonnet 3/15 USD/M, after Opus was dropped) ≈ €0.14; keep 0.20
+# so check_or_raise refuses a call that would breach the €50 cap BEFORE it's made.
 _PER_PAPER_CEILING_EUR = 0.20
+
+
+def _archive(rows: list[dict], parser: str, spent_before: float,
+             spent_after: float, prompt_hash: str) -> Path:
+    """Persist a stamped, git-tracked copy of this run under experiments/results/.
+
+    `llm_matrix.csv` is overwritten every run; this snapshot is the PERMANENT record
+    so a later run (e.g. the Stage-2 parser sweep) can never clobber it. The sidecar
+    `.meta.json` carries the run context the CSV columns don't (date, git commit,
+    budget delta). A same-parser, same-day re-run overwrites that day's snapshot;
+    git history keeps the prior committed version.
+    """
+    _RESULTS.mkdir(exist_ok=True)
+    date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    stem = _RESULTS / f"llm_matrix_{parser}_{date}"
+    with stem.with_suffix(".csv").open("w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=_HEADER)
+        w.writeheader()
+        w.writerows(rows)
+    try:
+        commit = subprocess.check_output(
+            ["git", "rev-parse", "--short", "HEAD"], text=True).strip()
+    except Exception:  # noqa: BLE001 — git absent must not lose the data
+        commit = ""
+    meta = {
+        "date": date, "git_commit": commit, "parser": parser,
+        "models": sorted({r["label"] for r in rows}), "rows": len(rows),
+        "modes": sorted({r["mode"] for r in rows}),
+        "budget_before_eur": round(spent_before, 4),
+        "budget_after_eur": round(spent_after, 4),
+        "run_spend_eur": round(spent_after - spent_before, 4),
+        "prompt_hash": prompt_hash, "csv": stem.with_suffix(".csv").name,
+    }
+    stem.with_suffix(".meta.json").write_text(json.dumps(meta, indent=2) + "\n")
+    return stem.with_suffix(".csv")
 
 
 def main(dry_run: bool = False, parser: str = _PARSER) -> None:
@@ -386,7 +424,10 @@ def main(dry_run: bool = False, parser: str = _PARSER) -> None:
         w.writerows(rows)
 
     spent_after = meter.total_eur()
+    archived = _archive(rows, parser, spent_before, spent_after, prompt_hash) if rows else None
     print(f"\nwrote {len(rows)} row(s) to {_OUT}")
+    if archived:
+        print(f"archived snapshot → {archived}")
     for line in ran:
         print("  ran ", line)
     for line in skipped:
