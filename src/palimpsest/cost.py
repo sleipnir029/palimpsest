@@ -6,6 +6,25 @@ next check without a restart.
 """
 
 import sqlite3
+from pathlib import Path
+
+# The ONE canonical DB: repo-root/palimpsest.db, resolved absolutely. This single file
+# holds the cost ledger, the parser cache (T16), AND the extraction-run log (T57), so
+# ALL of them must resolve here regardless of launch cwd — else a subdir run forks a
+# second, empty file that both under-counts the €50 cap and re-parses (GPU spend,
+# violating parse-once). Tests pass absolute tmp paths → untouched.
+_CANONICAL_DB = str(Path(__file__).resolve().parents[2] / "palimpsest.db")
+
+
+def canonical_db(db_path: str) -> str:
+    """Redirect the bare relative ``"palimpsest.db"`` to the one repo-root file.
+
+    Shared by CostMeter, ParserCache, and ExtractionRunLog so every consumer of
+    palimpsest.db agrees on its location. Anything else (absolute paths, alternate
+    names) passes through unchanged.
+    """
+    return _CANONICAL_DB if db_path == "palimpsest.db" else db_path
+
 
 _DDL = """
 CREATE TABLE IF NOT EXISTS cost_ledger (
@@ -34,7 +53,12 @@ class BudgetExceeded(Exception):
 
 
 class CostMeter:
-    def __init__(self, db_path: str = "palimpsest.db"):
+    def __init__(self, db_path: str = _CANONICAL_DB):
+        # Redirect the bare relative default to the canonical repo-root ledger so every
+        # runtime entry point (pipeline/agent/run_paper/tui/parse_corpus/llm_matrix)
+        # shares ONE budget, regardless of launch cwd. Absolute paths (tests) pass through.
+        db_path = canonical_db(db_path)
+        self.db_path = db_path  # resolved path (post-redirect); handy for debug + tests
         # check_same_thread=False so the TUI's thread worker (T26) can record from
         # off the main thread. The caller MUST serialize access — the TUI relies on
         # single-in-flight (input disabled while running) + call_from_thread, so the

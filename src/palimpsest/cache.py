@@ -13,6 +13,8 @@ from __future__ import annotations
 
 import sqlite3
 from datetime import datetime, timezone
+
+from .cost import canonical_db  # one repo-root palimpsest.db, cwd-independent
 from pathlib import Path
 
 from .tools.read_paper import read_paper
@@ -55,7 +57,7 @@ class ParserCache:
         cache_dir: Path = Path("cache"),
     ) -> None:
         self.cache_dir = Path(cache_dir)
-        self.conn = sqlite3.connect(db_path)
+        self.conn = sqlite3.connect(canonical_db(db_path))
         # SQLite defaults foreign_keys=OFF per connection — without this the
         # FOREIGN KEY clause in _DDL is documentation, not enforcement.
         self.conn.execute("PRAGMA foreign_keys = ON")

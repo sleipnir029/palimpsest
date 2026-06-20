@@ -21,6 +21,8 @@ from __future__ import annotations
 import sqlite3
 from datetime import datetime, timezone
 
+from .cost import canonical_db  # one repo-root palimpsest.db, cwd-independent
+
 _DDL = """
 CREATE TABLE IF NOT EXISTS extraction_runs (
     paper_sha256 TEXT NOT NULL,
@@ -51,7 +53,7 @@ class ExtractionRunLog:
     def __init__(self, db_path: str = "palimpsest.db") -> None:
         # check_same_thread=False mirrors CostMeter: the TUI runs the agent (and
         # thus run_paper) on a worker thread. Access is serialized the same way.
-        self.conn = sqlite3.connect(db_path, check_same_thread=False)
+        self.conn = sqlite3.connect(canonical_db(db_path), check_same_thread=False)
         self.conn.executescript(_DDL)
         self._migrate()
         self.conn.commit()
