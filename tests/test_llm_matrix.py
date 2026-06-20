@@ -105,3 +105,66 @@ def test_temperature_blank_for_anthropic():
     # Anthropic sets no temperature (API default) — column stays honestly blank, not 0.
     # Locks against a regression if someone adds a default temperature to extra_request.
     assert llm_matrix._temperature(AnthropicProvider(api_key="x", model="m")) == ""
+
+
+# --- Part C: strict response_format schema (locks the OpenAI-strict invariants so a
+# future schema regen — e.g. a new Condition enum without a null branch — fails HERE,
+# offline, instead of silently erroring out every strict live call). ----------------
+
+def _walk(node, fn):
+    if isinstance(node, dict):
+        fn(node)
+        for v in node.values():
+            _walk(v, fn)
+    elif isinstance(node, list):
+        for v in node:
+            _walk(v, fn)
+
+
+def test_strict_response_format_is_openai_strict_compliant():
+    import jsonschema
+
+    rf = llm_matrix._strict_response_format()
+    assert rf["type"] == "json_schema"
+    js = rf["json_schema"]
+    assert js["strict"] is True
+    schema = js["schema"]
+    jsonschema.Draft202012Validator.check_schema(schema)  # valid JSON Schema
+
+    # OpenAI strict: every object is closed AND lists every property in `required`.
+    def _closed(node):
+        if node.get("type") == "object" and "properties" in node:
+            assert node.get("additionalProperties") is False, node
+            assert set(node.get("required", [])) == set(node["properties"]), node
+
+    _walk(schema, _closed)
+
+    # No dangling $ref (every ref resolves to a $def).
+    defs = set(schema["$defs"])
+    refs: set[str] = set()
+    _walk(schema, lambda n: refs.add(n["$ref"].split("/")[-1]) if "$ref" in n else None)
+    assert refs <= defs, f"dangling $ref(s): {refs - defs}"
+
+
+def test_strict_schema_type_enum_covers_all_measurements():
+    rf = llm_matrix._strict_response_format()
+    item = rf["json_schema"]["schema"]["properties"]["items"]["items"]
+    assert set(item["properties"]["type"]["enum"]) == set(llm_matrix._MEASUREMENT_NAMES)
+    # evidence is span-ids only (NOT the bbox-laden generated Evidence def).
+    assert item["properties"]["evidence"]["$ref"].endswith("EvidenceSpans")
+
+
+def test_ground_truth_filters_to_cached_papers_with_gold():
+    # _ground_truth scores a paper only if BOTH its <parser>.json cache AND a GOLD
+    # entry exist — so the same gold drives Stage 2 (other parsers) with no change.
+    from ab_extract import GOLD
+
+    gt = llm_matrix._ground_truth("mineru")
+    assert gt, "expected mineru gold papers (corpus fixtures present)"
+    assert set(gt) <= set(GOLD)  # never score a paper without gold
+    for sha, tuples in gt.items():
+        assert tuples is GOLD[sha]  # values are the GOLD tuples, unchanged
+
+
+def test_ground_truth_empty_for_unparsed_parser():
+    assert llm_matrix._ground_truth("no_such_parser") == {}
