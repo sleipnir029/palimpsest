@@ -263,6 +263,30 @@ per-cell resilience fix (`3ef5742`) let the run finish despite both.
 † avg over parsers where the model ran all 5 papers. ‡ gemini-free = 3/4 parsers
 (503 on one paddle paper); sonnet = 3/4 (paddle partial, shown parenthesised).
 
+### paddle — per-model detail (raw), including the partial sonnet row
+
+Standalone paddle scores. **`sonnet-4.6` ran only 2/5 papers** (Anthropic credit
+exhausted mid-run); its row is shown as-collected but is an optimistic partial —
+**not comparable** to the full-5 rows. `gemini-free` = 4/5 (one 503).
+
+| Model | papers | µrecall | µF1 | micro-recall | €/correct |
+|---|---|---|---|---|---|
+| sonnet-4.6 * | 2/5 | 83% | 0.88 | 95% (21/22) | €0.0130 |
+| gemini-3.5-flash (free) * | 4/5 | 85% | 0.84 | 92% (34/37) | €0 |
+| gemini-3.1-flash-lite | 5/5 | 84% | 0.81 | 83% (34/41) | €0.0012 |
+| haiku-4.5 | 5/5 | 87% | 0.76 | 90% (37/41) | €0.0054 |
+| deepseek-pro | 5/5 | 88% | 0.73 | 93% (38/41) | €0.0017 |
+| gpt-5.4 | 5/5 | 71% | 0.64 | 78% (32/41) | €0.0129 |
+| gpt-5.4-mini | 5/5 | 81% | 0.57 | 85% (35/41) | €0.0037 |
+| deepseek-flash | 5/5 | 34% | 0.31 | 59% (24/41) | €0.0009 |
+
+`*` partial coverage (see above). sonnet-4.6 paddle per-paper: `3432d049` r=100%
+F1=0.95 · `bd86866b` r=67% F1=0.80 (the only two it completed before the 400s).
+
+On full-5-paper coverage, **deepseek-pro leads paddle recall (93%)**, haiku is
+unexpectedly strong (90%), free gemini-flash is excellent value (92%, €0), and
+deepseek-flash collapses again (59%) — the same parser-fragility it shows on mineru.
+
 ### Per-parser winner (raw, micro-recall, full-5-paper models only)
 
 | Parser | Best | | Cheap alternative |
