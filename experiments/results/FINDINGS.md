@@ -179,3 +179,59 @@ tuples) · 10 models · raw + strict (4 OpenRouter rows) · budget €6.42 → �
 - The locked `deepseek-v4-flash` default is now defensible *on docling* (cheapest
   viable, €0.0007/correct) but inconsistent; `deepseek-pro` is the steadier pick.
   Decide after the full grid.
+
+---
+
+## Finding 3 — Stage-2 dots sweep + full three-parser comparison (2026-06-20)
+
+**Data:** [`llm_matrix_dots_2026-06-20.csv`](./llm_matrix_dots_2026-06-20.csv) ·
+meta sidecar. **Setup:** parser = **dots** · same 5 gold papers (41 tuples) ·
+9 models scored · raw + strict · budget €10.11 → €12.20 (run +€2.09; **plus
+~€0.94 wasted** on a first attempt that crashed on a null-value extraction — root
+cause fixed in commit `3ef5742`, scorer + per-cell resilience). qwen lost both
+its dots **strict** cells to OpenRouter timeout/protocol errors → **dropped from
+future runs**.
+
+### Three-parser comparison — raw mode (µF1 · micro-recall %), mineru / docling / dots
+
+| Model | µF1 (min/doc/dots) | micro-recall (min/doc/dots) | best €/correct |
+|---|---|---|---|
+| gemini-3.1-flash-lite | 0.76 / **0.86** / 0.78 | 83 / **93** / 85 | €0.0011 |
+| gemini-3.5-flash (free) | 0.65 / 0.75 / 0.75 | 78 / 88 / 88 | **€0** |
+| deepseek-pro | 0.73 / 0.73 / 0.66 | 88 / 88 / 76 | €0.0017 |
+| deepseek-flash | 0.27 / 0.63 / 0.67 | 51 / 88 / 80 | €0.0006 |
+| sonnet-4.6 | 0.76 / 0.78 / 0.57 | 85 / **95** / 80 | €0.0166 |
+| gpt-5.4 | 0.68 / 0.74 / 0.65 | 85 / 90 / 85 | €0.0109 |
+| gpt-5.4-mini | 0.56 / 0.63 / 0.55 | 61 / 76 / 68 | €0.0039 |
+| haiku-4.5 | 0.62 / 0.61 / 0.67 | 73 / 51 / 73 | €0.0059 |
+| qwen3.7-plus † | 0.76 / 0.73 / 0.72 | 85 / 85 / 80 | €0.0023 |
+
+† qwen dropped going forward (latency); its data is retained here.
+
+**Per-parser best model (raw, micro-recall):** mineru → `deepseek-pro` 88% ·
+docling → `sonnet-4.6` 95% (or `gemini-3.1-flash-lite` 93%, ~12× cheaper) ·
+dots → `gemini-3.5-flash` (free) 88%.
+
+### Key findings
+
+1. **docling is the best parser overall** — most models peak there; **mineru is
+   the weakest**, dots sits in between. The parser choice moves accuracy more than
+   most model choices do.
+2. **gemini models are the most parser-robust and cheapest:** free
+   `gemini-3.5-flash` is steady (78/88/88% micro) at €0; `gemini-3.1-flash-lite`
+   peaks on docling (0.86 F1, 93%, €0.0011). These are the production front-runners.
+3. **`deepseek-flash` kept climbing off mineru** (0.27→0.63→0.67 µF1) — its
+   Stage-1 "worst model" verdict was definitively a mineru artifact.
+4. **Several models are parser-fragile:** `sonnet-4.6` collapses on dots
+   (0.78→0.57 µF1, 0% on bd86866b), `deepseek-pro` dips on dots (88→76%), `haiku`
+   is erratic (worst on docling, fine on dots). The parser×model interaction is
+   real signal, not noise.
+
+### Decisions / open
+
+- **Emerging production pick: docling + `gemini-3.1-flash-lite`** (0.86 F1, 93%
+  recall, €0.0011/correct) — or free `gemini-3.5-flash` on docling (88%, €0) if
+  €0 outweighs the F1 gap. Confirm after paddle.
+- `qwen3.7-plus` dropped from the roster (OpenRouter latency).
+- `paddle` is the only parser left to close the 4-parser grid.
+- `local` still unmeasured (`LOCAL_BASE_URL` missing `http://`).
