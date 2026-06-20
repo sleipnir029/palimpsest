@@ -1,1 +1,1 @@
-paper_sha8,label,model_id,role,n_valid,n_errors,tp,gt_total,recall,precision,f1,in_tokens,out_tokens,eur_per_paper,latency_s,temperature,prompt_hash
+paper_sha8,parser,label,model_id,role,mode,n_valid,n_errors,tp,gt_total,recall,precision,f1,in_tokens,out_tokens,eur_per_paper,eur_per_tp,latency_s,temperature,prompt_hash
