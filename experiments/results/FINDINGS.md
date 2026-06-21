@@ -463,3 +463,20 @@ are proposed, not auto-added.)
 backed by **parser-union** for the figure-only coverage gap. Within-model passes are
 modest and model-dependent (union-k3), two-faced (requery), or unhelpful (reason-first).
 And a chunk of the apparent precision gap is gold-thinness, not model error.
+
+### Caveat — generalization risk of the T74 extraction guards (read before T73)
+
+The extraction guards added during the T74 gold-thinness work — the **C3 magnitude
+ceilings** (`normalize.PLAUSIBLE_MAX`) and especially the **unit re-derivation**
+(`normalize.rederive_milli_value`) — were tuned against the **5-paper T72 set**. The
+re-derivation in particular took three review rounds to stop corrupting its own test
+spans, which is a strong overfitting signal: a heuristic that brittle on 5 papers may
+misfire (or silently mis-rescale) on unseen OCR/LaTeX forms in the 20–25-paper T73 run.
+
+Decision (user, 2026-06-21): **keep them as-is, but do NOT tune them further on these 5
+papers.** Treat T73 as the generalization test. Watch for: re-derivation silently
+changing a correct value, and C3 routing a real-but-extreme value to errors. If either
+misfires on T73, **relax or revert** rather than adding another special case. The guards
+are conservative-by-design (re-derivation only acts on an unambiguous single-occurrence
+adjacent prefix; misses leave the model's value untouched), so the expected failure mode
+is a miss, not a corruption — but validate, don't assume.
