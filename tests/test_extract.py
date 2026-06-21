@@ -162,6 +162,48 @@ def test_invalid_span_citation_routed_to_errors(tmp_path):
     assert all(isinstance(e, ValueError) and "span citation" in str(e) for e, _ in errors)
 
 
+def test_extra_instruction_appended_to_user_message(tmp_path):
+    """T74: the optional `extra_instruction` is appended to the user content so the
+    multi-pass arms (reason-first, re-query) can steer one extra/altered pass. The
+    default (None) leaves the production user message byte-identical."""
+    sha = "f" * 64
+    cache = _seed_cache(tmp_path, sha)
+    response = {"items": []}
+
+    class _Capture(_StubProvider):
+        def complete(self, system, messages, tools=None, cache_breakpoints=None):
+            self.last_user = messages[0]["content"]
+            return super().complete(system, messages, tools, cache_breakpoints)
+
+    # with instruction → present
+    p = _Capture(json.dumps(response))
+    extract(paper_sha=sha, provider=p, cache=cache, extra_instruction="MARKER_XYZ")
+    assert "MARKER_XYZ" in p.last_user
+
+    # without (production) → absent
+    p2 = _Capture(json.dumps(response))
+    extract(paper_sha=sha, provider=p2, cache=cache)
+    assert "MARKER_XYZ" not in p2.last_user
+
+
+def test_reason_first_response_parses_and_drops_reasoning(tmp_path):
+    """T74 arm B's whole premise: a leading `reasoning` key on the outer object is
+    IGNORED by _parse_response (json.loads then body["items"]), so reason-then-format
+    needs no schema/parser change. Guards that the reasoning is dropped and items
+    still extract — the only correctness claim arm B rests on."""
+    sha = "9" * 64
+    cache = _seed_cache(tmp_path, sha)
+    resp = {"reasoning": "page states 236 mV overpotential and a 47 mV/dec Tafel slope",
+            "items": [
+                {"type": "Overpotential", "value": 236.0, "unit_label": "mV", "evidence": _ev(0)},
+            ]}
+    valid, errors = extract(paper_sha=sha, provider=_StubProvider(json.dumps(resp)), cache=cache)
+    assert errors == []
+    assert len(valid) == 1
+    assert type(valid[0]).__name__ == "Overpotential"
+    assert not hasattr(valid[0], "reasoning")  # outer key never reaches the model
+
+
 def test_mis_citation_guard(tmp_path):
     """A value whose digits aren't in the cited span → likely mis-citation → error."""
     sha = "c" * 64
