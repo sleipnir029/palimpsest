@@ -149,12 +149,18 @@ def rederive_milli_value(value: float | None, source_text: str, canonical: str |
     prefix immediately attached to that base (e.g. ``22 µV/h``). Then the stored value
     is corrected to canonical (22 µV/h → 0.022 mV/h).
 
-    Safety (hardened after review): the value is matched as a WHOLE numeric token (digit
-    boundaries, so ``22`` never matches inside ``1225``), and the unit must be ADJACENT
-    to the FIRST occurrence of that token (optionally across a range like ``2.3–2.8``),
-    so a foreign prefixed unit elsewhere in the span can't be grabbed. Only micro/nano/
-    milli prefixes are accepted. Any miss → value unchanged: a missed conversion is safe,
-    a wrong rescale corrupts data. Runs after the mis-citation guard.
+    Safety (hardened over two reviews): convert ONLY when the value's printed form
+    appears EXACTLY ONCE in the span as a whole numeric token (digit boundaries, so
+    ``22`` never matches inside ``1225``) AND an accepted prefix + base is IMMEDIATELY
+    adjacent to it (whitespace only). Two corruption classes drove this:
+      - if the value occurs more than once (``5 µV noise; signal 5 mV/h``) we cannot
+        tell which is the measurement → ambiguous → leave it unchanged;
+      - there is NO range bridging (``Fig 3-5 µV/h`` must not rescale the ``3``), so a
+        range low-end (``2.3–2.8 µV/h`` → 2.3) is a deliberate safe MISS; the high-end
+        (2.8, adjacent to the unit) still converts.
+    Only micro/nano/milli prefixes are accepted. A missed conversion is safe (the value
+    is left as the model emitted it); a wrong rescale corrupts — so every ambiguous case
+    misses. Runs after the mis-citation guard.
     """
     if value is None or not canonical or not source_text:
         return value
@@ -163,18 +169,18 @@ def rederive_milli_value(value: float | None, source_text: str, canonical: str |
         return value
     base = mc.group(1)
     txt = _clean_units(source_text)
-    # Unit anchored right after the number (or a "lo–hi" range tail): optional range,
-    # optional space, an accepted prefix, optional space, the base letter.
-    unit_re = re.compile(r"(?:\s*[-–—]\s*[\d.]+)?\s*([µunm])\s*" + base)
+    # An accepted prefix + base immediately after the number (whitespace only) — no
+    # range tail, so a hyphen between two numbers can never bridge a foreign unit in.
+    unit_re = re.compile(r"\s*([µunm])\s*" + base)
     forms = {"%g" % value}
     if value == int(value):
         forms.add(str(int(value)))
     for s in forms:
-        # whole-number token: not glued to other digits, and not the head of a decimal
-        m = re.search(r"(?<!\d)" + re.escape(s) + r"(?!\d)(?!\.\d)", txt)
-        if not m:
-            continue
-        um = unit_re.match(txt, m.end())  # anchored at the end of THIS token only
+        # whole-number token: not glued to other digits, not the head of a decimal
+        occ = list(re.finditer(r"(?<!\d)" + re.escape(s) + r"(?!\d)(?!\.\d)", txt))
+        if len(occ) != 1:
+            continue  # 0 → try next form; >1 → ambiguous → leave value unchanged
+        um = unit_re.match(txt, occ[0].end())  # anchored at the end of THAT token
         if um:
             fac = _PREFIX_FACTOR.get(um.group(1))
             if fac is not None:
