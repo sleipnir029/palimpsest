@@ -70,43 +70,49 @@ def canonical_unit(measurement_class_name: str) -> str | None:
     return UNIVERSAL_UNITS.get(measurement_class_name)
 
 
-# T74 — per-slot plausibility bounds (in the canonical unit above), for the C3
-# magnitude sanity check. C2 (units_match) validates the unit LABEL's dimension but
-# NOT that the value was converted to it — a model can emit a µV/h reading under an
-# "mV/h" label and pass C2 with a value 1000× too large (every DegradationRate
-# candidate in the T74 gold audit). These bounds catch gross prefix errors. They are
-# DELIBERATELY GENEROUS — meant to reject magnitude blunders, never to police a
-# physically unusual but real value. Slots without clear physical bounds are omitted
-# (magnitude_ok returns True for them → never rejected).
-# ponytail: a static range, not unit re-derivation from the cited span; widen a bound
-# here if a real value is ever wrongly rejected.
-PLAUSIBLE_RANGE: dict[str, tuple[float, float]] = {
-    "Overpotential": (0.0, 2000.0),        # mV
-    "TafelSlope": (0.0, 1000.0),           # mV/decade
-    "MassActivity": (0.0, 1e6),            # A/g
-    "TurnoverFrequency": (0.0, 1e5),       # 1/s
-    "SpecificActivity": (0.0, 1e6),        # mA/cm2
-    "Stability": (0.0, 1e5),               # h
-    "PEMWECellVoltage": (0.5, 5.0),        # V (full-cell operating voltage)
-    "DegradationRate": (0.0, 10.0),        # mV/h (good PEMWE << 1; 22 mV/h ⇒ a µV/h blunder)
-    "ChargeTransferCoefficient": (0.0, 2.0),
+# T74 — per-slot UPPER magnitude ceilings (in the canonical unit above), for the C3
+# sanity check. C2 (units_match) validates the unit LABEL's dimension but NOT that the
+# value was converted to it — a model can emit a value in a prefixed unit under the
+# canonical label (e.g. "1900 mV" labelled "V") and pass C2 with a value ~1000× too
+# large. C3 rejects values whose MAGNITUDE exceeds a generous physical ceiling, catching
+# that over-magnitude class. Only the ceiling matters (the blunder inflates), and the
+# check is on |value| so a real sign convention (negative HER overpotential, a falling-
+# voltage rate) is never what triggers a reject — palimpsest is general, not OER-only.
+# Ceilings are DELIBERATELY GENEROUS — reject blunders, never a physically unusual but
+# real value. Slots without a clear ceiling are omitted (magnitude_ok → True).
+# DegradationRate is DELIBERATELY OMITTED: magnitude alone cannot separate a µV/h-as-mV/h
+# blunder from a genuine high accelerated-stress rate, AND a correctly converted value is
+# blocked upstream by the mis-citation guard anyway — that needs unit re-derivation from
+# the cited span (deferred), not a bound here.
+# ponytail: static ceilings, not unit re-derivation; widen one if a real value is ever
+# wrongly rejected.
+PLAUSIBLE_MAX: dict[str, float] = {
+    "Overpotential": 2000.0,        # mV
+    "TafelSlope": 1000.0,           # mV/decade
+    "MassActivity": 1e6,            # A/g
+    "TurnoverFrequency": 1e5,       # 1/s
+    "SpecificActivity": 1e6,        # mA/cm2
+    "Stability": 1e5,               # h
+    "PEMWECellVoltage": 5.0,        # V (a mV-under-V blunder ⇒ ~1900 ≫ 5)
+    "ChargeTransferCoefficient": 2.0,
 }
 
 
 def magnitude_ok(measurement_class_name: str, value: float | None) -> bool:
-    """Is ``value`` within the slot's plausible range (C3)? True if no range tracked.
+    """Is ``|value|`` within the slot's plausible ceiling (C3)? True if untracked.
 
     Complements ``units_match`` (C2): C2 checks the unit label is dimensionally the
-    canonical one; this checks the magnitude is sane, catching values emitted in a
-    prefixed unit (µV/h) under the canonical label (mV/h) without conversion. ``None``
-    passes (null-value handling lives in the caller, not here).
+    canonical one; this checks the magnitude is sane, catching a value emitted in a
+    prefixed unit (e.g. mV under a V label) without conversion. Tests ``abs`` so a real
+    negative value (HER sign convention, a falling-voltage rate) is never rejected.
+    ``None`` passes (null-value handling lives in the caller, not here).
     """
     if value is None:
         return True
-    rng = PLAUSIBLE_RANGE.get(measurement_class_name)
-    if rng is None:
+    cap = PLAUSIBLE_MAX.get(measurement_class_name)
+    if cap is None:
         return True
-    return rng[0] <= value <= rng[1]
+    return abs(value) <= cap
 
 
 # Map unicode superscript characters to ASCII so `s⁻¹` reads as `s-1`.

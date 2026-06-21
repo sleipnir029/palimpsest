@@ -200,7 +200,7 @@ def test_magnitude_guard_rejects_unconverted_prefixed_unit(tmp_path):
     ]}
     valid, errors = extract(paper_sha=sha, provider=_StubProvider(json.dumps(resp)), cache=cache)
     assert len(valid) == 1 and valid[0].value == 1.9
-    assert len(errors) == 1 and "out of plausible range" in str(errors[0][0])
+    assert len(errors) == 1 and "magnitude exceeds the plausible ceiling" in str(errors[0][0])
 
 
 def test_reason_first_response_parses_and_drops_reasoning(tmp_path):

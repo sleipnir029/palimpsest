@@ -122,10 +122,13 @@ ones):
 | c63193979 (s41467-025-63541-9) | Stability 400 | "operational stability … over 400 h at both 1 A/cm² and 2 A/cm²" (docling+dots) |
 
 **Deferred (not added):** DegradationRate values (22/52/2.3–2.8 µV/h). The
-extractions emitted them in µV/h under an mV/h label without converting (1000× off);
-the new C3 magnitude guard now rejects such values, but clean canonical-unit GOLD
-point-values need a separate pass. Other ≥3-agreement candidates were rejected as
-artifacts/duplicates/wrong-quantity — see `gold_verification_t74.md`.
+extractions emitted them in µV/h under an mV/h label without converting (1000× off).
+NOTE (post C3-review): DegradationRate is **not** magnitude-guarded by C3 — a µV/h-as-mV/h
+blunder is indistinguishable from a real high accelerated-stress rate, and a correctly
+converted value (0.022 mV/h) is blocked upstream by the mis-citation guard anyway. Clean
+DegradationRate extraction needs unit re-derivation from the cited span (deferred), not a
+magnitude bound. Other ≥3-agreement candidates were rejected as artifacts/duplicates/
+wrong-quantity — see `gold_verification_t74.md`.
 
 **Impact:** denominators grew, so recall numbers in the T72 FINDINGS/report (built on
 the 40-tuple gold) differ from re-scores on the 47-tuple gold. The stamped T72 CSV
