@@ -446,10 +446,17 @@ distinct FP (type,value,paper) groups across the grid, by cross-model agreement:
   precision loss.
 
 So the "406 FPs" conflated ~30% gold-scope gaps with ~50% real hallucinations:
-**precision is meaningfully understated**, and the schema/gold could be extended
-(PEMWECellVoltage, DegradationRate) to capture what the cheap models already extract.
-Cross-model agreement is a label-free oracle for gold completeness — the same
-decorrelated-error principle that powers model-union, reused for QA.
+**precision is meaningfully understated**. NOTE (verified against `schema/palimpsest.yaml`):
+the top "real" types — `PEMWECellVoltage`, `DegradationRate` — are **already in the
+schema** (added T71). So the gap is **GOLD completeness, not the schema**: the cheap
+models extract valid measurements the hand-built `ab_extract.GOLD` simply doesn't list.
+Fix = extend GOLD, not the schema. Candidate additions (≥3-model agreement, with cited
+spans, for human verification before folding in) → `results/gold_candidates_t74.md`.
+Cross-model agreement is a label-free oracle for gold completeness — the
+decorrelated-error principle that powers model-union, reused for QA. (Several candidates
+will be rejected on review — e.g. `Stability 2.5`, the value the gold-audit deliberately
+removed, and duplicate extractions of values already in GOLD — which is exactly why they
+are proposed, not auto-added.)
 
 **Updated thesis takeaway.** The best gap-closer is not a within-model loop — it is
 **model-union of two cheap models** (docling 100%, paddle 95% = frontier, ~10× cheaper),
