@@ -115,6 +115,62 @@ def magnitude_ok(measurement_class_name: str, value: float | None) -> bool:
     return abs(value) <= cap
 
 
+# T74 — unit re-derivation. The deeper half of the C2/C3 unit story: models routinely
+# emit the RAW number printed in the source under the canonical label, without doing the
+# conversion the prompt asks for ("22 µV/h" → value=22, unit_label="mV/h" — 1000× too
+# big). C2 can't catch it (label is canonical) and a magnitude bound can't separate it
+# from a real value. The fix is to re-derive the value from the cited span's OWN metric
+# prefix. SCOPE: only milli-prefixed LINEAR first-units (mV·, mA·) — Overpotential,
+# TafelSlope, ExchangeCurrentDensity, SpecificActivity, DegradationRate. Area units
+# (cm2) are excluded (prefix scaling there is squared, not linear) and so is everything
+# without an m-prefixed V/A canonical, via the `^m[VA]` gate below.
+_MILLI_CANON = re.compile(r"^m([VA])\b")
+_PREFIX_FACTOR = {"µ": 1e-6, "u": 1e-6, "n": 1e-9, "c": 1e-2, "m": 1e-3, "k": 1e3, "M": 1e6}
+# Prefix char immediately (modulo one space) before the canonical base letter (V/A).
+_PREFIXED_BASE = {b: re.compile(r"([µuncmkM])\s*" + b) for b in ("V", "A")}
+
+
+def _clean_units(text: str) -> str:
+    """De-noise LaTeX/unicode so a metric prefix reads as a bare char: \\mu→µ, μ→µ,
+    drop \\mathrm{}, braces, thin-spaces, stray backslashes."""
+    text = text.replace("\\mu", "µ").replace("\\mathrm", "").replace("\\,", "").replace("\\;", "")
+    text = text.replace("{", "").replace("}", "").replace("\\", "")
+    return text.replace("μ", "µ")  # GREEK SMALL LETTER MU → MICRO SIGN
+
+
+def rederive_milli_value(value: float | None, source_text: str, canonical: str | None) -> float:
+    """Rescale ``value`` to a milli-canonical unit using the cited span's metric prefix.
+
+    Returns ``value`` unchanged unless: the canonical unit is milli-prefixed on a V/A
+    base (e.g. ``mV/h``), AND the span states the value with a DIFFERENT metric prefix
+    on that base (e.g. ``µV/h``). Then the stored value is corrected to canonical
+    (22 µV/h → 0.022 mV/h). Conservative: an absent/unrecognised prefix → no change.
+    Runs AFTER the mis-citation guard, which has confirmed the emitted number is the one
+    printed in the span — so we know ``value`` is in the span's units, not pre-converted.
+    """
+    if value is None or not canonical or not source_text:
+        return value
+    mc = _MILLI_CANON.match(canonical)
+    if not mc:
+        return value
+    base = mc.group(1)
+    txt = _clean_units(source_text)
+    pat = _PREFIXED_BASE[base]
+    forms = {"%g" % value}
+    if value == int(value):
+        forms.add(str(int(value)))
+    for s in forms:
+        idx = txt.find(s)
+        while idx != -1:
+            m = pat.search(txt[idx + len(s): idx + len(s) + 12])
+            if m:
+                fac = _PREFIX_FACTOR.get("µ" if m.group(1) == "u" else m.group(1))
+                if fac is not None:
+                    return value * (fac / 1e-3)  # source-prefix → milli
+            idx = txt.find(s, idx + 1)
+    return value
+
+
 # Map unicode superscript characters to ASCII so `s⁻¹` reads as `s-1`.
 _SUPERSCRIPTS = str.maketrans("⁰¹²³⁴⁵⁶⁷⁸⁹⁻", "0123456789-")
 # Token-level synonyms folded to one spelling before comparison.

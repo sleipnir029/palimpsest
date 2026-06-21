@@ -203,6 +203,25 @@ def test_magnitude_guard_rejects_unconverted_prefixed_unit(tmp_path):
     assert len(errors) == 1 and "magnitude exceeds the plausible ceiling" in str(errors[0][0])
 
 
+def test_unit_rederivation_converts_microvolt_per_hour(tmp_path):
+    """T74 end-to-end: a model emits the raw span number (22) under the canonical
+    'mV/h' label from a span that actually states 'µV/h'. The pipeline must store the
+    re-derived canonical value 0.022 (not 22), having passed mis-citation (22 is in
+    the span), C2 (label==canonical), and C3 (DegradationRate unguarded)."""
+    sha = "7" * 64
+    page = [{"type": "text", "content": "very low voltage degradation (degradation rate: 22 µV/h)",
+             "bbox": [10, 10, 500, 30]}]
+    cache = _seed_cache(tmp_path, sha, parser_text=json.dumps([page]))
+    resp = {"items": [
+        {"type": "DegradationRate", "value": 22.0, "unit_label": "mV/h", "evidence": _ev(0)},
+    ]}
+    valid, errors = extract(paper_sha=sha, provider=_StubProvider(json.dumps(resp)), cache=cache)
+    assert errors == []
+    assert len(valid) == 1
+    assert valid[0].value == 0.022  # 22 µV/h re-derived to canonical mV/h
+    assert valid[0].evidence.source_text.endswith("22 µV/h)")  # provenance intact
+
+
 def test_reason_first_response_parses_and_drops_reasoning(tmp_path):
     """T74 arm B's whole premise: a leading `reasoning` key on the outer object is
     IGNORED by _parse_response (json.loads then body["items"]), so reason-then-format
