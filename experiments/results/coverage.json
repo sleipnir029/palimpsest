@@ -126,11 +126,11 @@
     },
     "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c": {
       "cached": true,
-      "covered": 7,
-      "total": 7,
-      "ceiling": 1.0,
+      "covered": 8,
+      "total": 10,
+      "ceiling": 0.8,
       "distinctive_covered": 6,
-      "distinctive_total": 6,
+      "distinctive_total": 8,
       "tuples": [
         {
           "type": "Overpotential",
@@ -173,16 +173,34 @@
           "value": 40.0,
           "present": true,
           "distinctive": false
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "present": false,
+          "distinctive": true
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "present": false,
+          "distinctive": true
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "present": true,
+          "distinctive": false
         }
       ]
     },
     "c63193979cec7f3d44d6d989fab9f7a7ba60590b18545f9129a982e578b8dc17": {
       "cached": true,
-      "covered": 4,
-      "total": 4,
+      "covered": 5,
+      "total": 5,
       "ceiling": 1.0,
-      "distinctive_covered": 2,
-      "distinctive_total": 2,
+      "distinctive_covered": 3,
+      "distinctive_total": 3,
       "tuples": [
         {
           "type": "MassActivity",
@@ -207,16 +225,22 @@
           "value": 40.0,
           "present": true,
           "distinctive": false
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "present": true,
+          "distinctive": true
         }
       ]
     },
     "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54": {
       "cached": true,
-      "covered": 4,
-      "total": 8,
-      "ceiling": 0.5,
-      "distinctive_covered": 4,
-      "distinctive_total": 8,
+      "covered": 7,
+      "total": 11,
+      "ceiling": 0.6364,
+      "distinctive_covered": 6,
+      "distinctive_total": 10,
       "tuples": [
         {
           "type": "Overpotential",
@@ -265,6 +289,24 @@
           "value": 200.0,
           "present": true,
           "distinctive": true
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "present": true,
+          "distinctive": false
         }
       ]
     },
@@ -418,11 +460,11 @@
     },
     "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c": {
       "cached": true,
-      "covered": 7,
-      "total": 7,
+      "covered": 10,
+      "total": 10,
       "ceiling": 1.0,
-      "distinctive_covered": 6,
-      "distinctive_total": 6,
+      "distinctive_covered": 8,
+      "distinctive_total": 8,
       "tuples": [
         {
           "type": "Overpotential",
@@ -465,16 +507,34 @@
           "value": 40.0,
           "present": true,
           "distinctive": false
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "present": true,
+          "distinctive": false
         }
       ]
     },
     "c63193979cec7f3d44d6d989fab9f7a7ba60590b18545f9129a982e578b8dc17": {
       "cached": true,
-      "covered": 4,
-      "total": 4,
+      "covered": 5,
+      "total": 5,
       "ceiling": 1.0,
-      "distinctive_covered": 2,
-      "distinctive_total": 2,
+      "distinctive_covered": 3,
+      "distinctive_total": 3,
       "tuples": [
         {
           "type": "MassActivity",
@@ -499,16 +559,22 @@
           "value": 40.0,
           "present": true,
           "distinctive": false
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "present": true,
+          "distinctive": true
         }
       ]
     },
     "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54": {
       "cached": true,
-      "covered": 8,
-      "total": 8,
+      "covered": 11,
+      "total": 11,
       "ceiling": 1.0,
-      "distinctive_covered": 8,
-      "distinctive_total": 8,
+      "distinctive_covered": 10,
+      "distinctive_total": 10,
       "tuples": [
         {
           "type": "Overpotential",
@@ -557,6 +623,24 @@
           "value": 200.0,
           "present": true,
           "distinctive": true
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "present": true,
+          "distinctive": false
         }
       ]
     },
@@ -710,11 +794,11 @@
     },
     "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c": {
       "cached": true,
-      "covered": 7,
-      "total": 7,
-      "ceiling": 1.0,
+      "covered": 8,
+      "total": 10,
+      "ceiling": 0.8,
       "distinctive_covered": 6,
-      "distinctive_total": 6,
+      "distinctive_total": 8,
       "tuples": [
         {
           "type": "Overpotential",
@@ -757,16 +841,34 @@
           "value": 40.0,
           "present": true,
           "distinctive": false
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "present": false,
+          "distinctive": true
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "present": false,
+          "distinctive": true
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "present": true,
+          "distinctive": false
         }
       ]
     },
     "c63193979cec7f3d44d6d989fab9f7a7ba60590b18545f9129a982e578b8dc17": {
       "cached": true,
-      "covered": 4,
-      "total": 4,
+      "covered": 5,
+      "total": 5,
       "ceiling": 1.0,
-      "distinctive_covered": 2,
-      "distinctive_total": 2,
+      "distinctive_covered": 3,
+      "distinctive_total": 3,
       "tuples": [
         {
           "type": "MassActivity",
@@ -791,16 +893,22 @@
           "value": 40.0,
           "present": true,
           "distinctive": false
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "present": true,
+          "distinctive": true
         }
       ]
     },
     "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54": {
       "cached": true,
-      "covered": 4,
-      "total": 8,
-      "ceiling": 0.5,
-      "distinctive_covered": 4,
-      "distinctive_total": 8,
+      "covered": 7,
+      "total": 11,
+      "ceiling": 0.6364,
+      "distinctive_covered": 6,
+      "distinctive_total": 10,
       "tuples": [
         {
           "type": "Overpotential",
@@ -849,6 +957,24 @@
           "value": 200.0,
           "present": true,
           "distinctive": true
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "present": true,
+          "distinctive": false
         }
       ]
     },
@@ -1002,11 +1128,11 @@
     },
     "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c": {
       "cached": true,
-      "covered": 7,
-      "total": 7,
-      "ceiling": 1.0,
-      "distinctive_covered": 6,
-      "distinctive_total": 6,
+      "covered": 9,
+      "total": 10,
+      "ceiling": 0.9,
+      "distinctive_covered": 7,
+      "distinctive_total": 8,
       "tuples": [
         {
           "type": "Overpotential",
@@ -1049,16 +1175,34 @@
           "value": 40.0,
           "present": true,
           "distinctive": false
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "present": false,
+          "distinctive": true
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "present": true,
+          "distinctive": false
         }
       ]
     },
     "c63193979cec7f3d44d6d989fab9f7a7ba60590b18545f9129a982e578b8dc17": {
       "cached": true,
-      "covered": 4,
-      "total": 4,
+      "covered": 5,
+      "total": 5,
       "ceiling": 1.0,
-      "distinctive_covered": 2,
-      "distinctive_total": 2,
+      "distinctive_covered": 3,
+      "distinctive_total": 3,
       "tuples": [
         {
           "type": "MassActivity",
@@ -1083,16 +1227,22 @@
           "value": 40.0,
           "present": true,
           "distinctive": false
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "present": true,
+          "distinctive": true
         }
       ]
     },
     "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54": {
       "cached": true,
-      "covered": 8,
-      "total": 8,
+      "covered": 11,
+      "total": 11,
       "ceiling": 1.0,
-      "distinctive_covered": 8,
-      "distinctive_total": 8,
+      "distinctive_covered": 10,
+      "distinctive_total": 10,
       "tuples": [
         {
           "type": "Overpotential",
@@ -1141,6 +1291,24 @@
           "value": 200.0,
           "present": true,
           "distinctive": true
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "present": true,
+          "distinctive": false
         }
       ]
     },

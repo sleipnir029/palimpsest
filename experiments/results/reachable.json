@@ -4,221 +4,221 @@
       "parser": "docling",
       "label": "deepseek-flash",
       "mode": "judge",
-      "hit": 37,
-      "gt_total": 40,
+      "hit": 44,
+      "gt_total": 47,
       "coverage_gap": 0,
-      "recall": 0.925,
-      "reachable_recall": 0.925
+      "recall": 0.9362,
+      "reachable_recall": 0.9362
     },
     {
       "parser": "docling",
       "label": "deepseek-flash",
       "mode": "raw",
-      "hit": 38,
-      "gt_total": 40,
+      "hit": 44,
+      "gt_total": 47,
       "coverage_gap": 0,
-      "recall": 0.95,
-      "reachable_recall": 0.95
+      "recall": 0.9362,
+      "reachable_recall": 0.9362
     },
     {
       "parser": "docling",
       "label": "deepseek-flash",
       "mode": "reason-first",
-      "hit": 16,
-      "gt_total": 40,
+      "hit": 19,
+      "gt_total": 47,
       "coverage_gap": 0,
-      "recall": 0.4,
-      "reachable_recall": 0.4
+      "recall": 0.4043,
+      "reachable_recall": 0.4043
     },
     {
       "parser": "docling",
       "label": "deepseek-flash",
       "mode": "reason-first-16k",
-      "hit": 30,
-      "gt_total": 40,
+      "hit": 31,
+      "gt_total": 47,
       "coverage_gap": 0,
-      "recall": 0.75,
-      "reachable_recall": 0.75
+      "recall": 0.6596,
+      "reachable_recall": 0.6596
     },
     {
       "parser": "docling",
       "label": "deepseek-flash",
       "mode": "requery",
-      "hit": 36,
-      "gt_total": 40,
+      "hit": 42,
+      "gt_total": 47,
       "coverage_gap": 0,
-      "recall": 0.9,
-      "reachable_recall": 0.9
+      "recall": 0.8936,
+      "reachable_recall": 0.8936
     },
     {
       "parser": "docling",
       "label": "deepseek-flash",
       "mode": "union-k3",
-      "hit": 37,
-      "gt_total": 40,
+      "hit": 44,
+      "gt_total": 47,
       "coverage_gap": 0,
-      "recall": 0.925,
-      "reachable_recall": 0.925
+      "recall": 0.9362,
+      "reachable_recall": 0.9362
     },
     {
       "parser": "docling",
       "label": "deepseek-pro",
       "mode": "raw",
-      "hit": 40,
-      "gt_total": 40,
+      "hit": 46,
+      "gt_total": 47,
       "coverage_gap": 0,
-      "recall": 1.0,
-      "reachable_recall": 1.0
+      "recall": 0.9787,
+      "reachable_recall": 0.9787
     },
     {
       "parser": "docling",
       "label": "gemini-lite",
       "mode": "judge",
-      "hit": 38,
-      "gt_total": 40,
+      "hit": 40,
+      "gt_total": 47,
       "coverage_gap": 0,
-      "recall": 0.95,
-      "reachable_recall": 0.95
+      "recall": 0.8511,
+      "reachable_recall": 0.8511
     },
     {
       "parser": "docling",
       "label": "gemini-lite",
       "mode": "raw",
-      "hit": 37,
-      "gt_total": 40,
+      "hit": 38,
+      "gt_total": 47,
       "coverage_gap": 0,
-      "recall": 0.925,
-      "reachable_recall": 0.925
+      "recall": 0.8085,
+      "reachable_recall": 0.8085
     },
     {
       "parser": "docling",
       "label": "gemini-lite",
       "mode": "reason-first",
-      "hit": 37,
-      "gt_total": 40,
+      "hit": 38,
+      "gt_total": 47,
       "coverage_gap": 0,
-      "recall": 0.925,
-      "reachable_recall": 0.925
+      "recall": 0.8085,
+      "reachable_recall": 0.8085
     },
     {
       "parser": "docling",
       "label": "gemini-lite",
       "mode": "reason-first-16k",
-      "hit": 37,
-      "gt_total": 40,
+      "hit": 38,
+      "gt_total": 47,
       "coverage_gap": 0,
-      "recall": 0.925,
-      "reachable_recall": 0.925
+      "recall": 0.8085,
+      "reachable_recall": 0.8085
     },
     {
       "parser": "docling",
       "label": "gemini-lite",
       "mode": "requery",
-      "hit": 39,
-      "gt_total": 40,
+      "hit": 41,
+      "gt_total": 47,
       "coverage_gap": 0,
-      "recall": 0.975,
-      "reachable_recall": 0.975
+      "recall": 0.8723,
+      "reachable_recall": 0.8723
     },
     {
       "parser": "docling",
       "label": "gemini-lite",
       "mode": "strict",
-      "hit": 26,
-      "gt_total": 40,
+      "hit": 28,
+      "gt_total": 47,
       "coverage_gap": 0,
-      "recall": 0.65,
-      "reachable_recall": 0.65
+      "recall": 0.5957,
+      "reachable_recall": 0.5957
     },
     {
       "parser": "docling",
       "label": "gemini-lite",
       "mode": "union-k3",
-      "hit": 39,
-      "gt_total": 40,
+      "hit": 41,
+      "gt_total": 47,
       "coverage_gap": 0,
-      "recall": 0.975,
-      "reachable_recall": 0.975
+      "recall": 0.8723,
+      "reachable_recall": 0.8723
     },
     {
       "parser": "docling",
       "label": "haiku-4.5",
       "mode": "raw",
-      "hit": 24,
-      "gt_total": 40,
+      "hit": 25,
+      "gt_total": 47,
       "coverage_gap": 0,
-      "recall": 0.6,
-      "reachable_recall": 0.6
+      "recall": 0.5319,
+      "reachable_recall": 0.5319
     },
     {
       "parser": "docling",
       "label": "openai-frontier",
       "mode": "raw",
-      "hit": 35,
-      "gt_total": 40,
+      "hit": 41,
+      "gt_total": 47,
       "coverage_gap": 0,
-      "recall": 0.875,
-      "reachable_recall": 0.875
+      "recall": 0.8723,
+      "reachable_recall": 0.8723
     },
     {
       "parser": "docling",
       "label": "openai-frontier",
       "mode": "strict",
-      "hit": 38,
-      "gt_total": 40,
+      "hit": 45,
+      "gt_total": 47,
       "coverage_gap": 0,
-      "recall": 0.95,
-      "reachable_recall": 0.95
+      "recall": 0.9574,
+      "reachable_recall": 0.9574
     },
     {
       "parser": "docling",
       "label": "openai-mini",
       "mode": "raw",
       "hit": 29,
-      "gt_total": 40,
+      "gt_total": 47,
       "coverage_gap": 0,
-      "recall": 0.725,
-      "reachable_recall": 0.725
+      "recall": 0.617,
+      "reachable_recall": 0.617
     },
     {
       "parser": "docling",
       "label": "openai-mini",
       "mode": "strict",
-      "hit": 34,
-      "gt_total": 40,
+      "hit": 37,
+      "gt_total": 47,
       "coverage_gap": 0,
-      "recall": 0.85,
-      "reachable_recall": 0.85
+      "recall": 0.7872,
+      "reachable_recall": 0.7872
     },
     {
       "parser": "docling",
       "label": "sonnet-4.6",
       "mode": "raw",
-      "hit": 39,
-      "gt_total": 40,
+      "hit": 43,
+      "gt_total": 47,
       "coverage_gap": 0,
-      "recall": 0.975,
-      "reachable_recall": 0.975
+      "recall": 0.9149,
+      "reachable_recall": 0.9149
     },
     {
       "parser": "dots",
       "label": "deepseek-flash",
       "mode": "raw",
-      "hit": 28,
-      "gt_total": 40,
-      "coverage_gap": 4,
-      "recall": 0.7,
-      "reachable_recall": 0.7778
+      "hit": 32,
+      "gt_total": 47,
+      "coverage_gap": 6,
+      "recall": 0.6809,
+      "reachable_recall": 0.7805
     },
     {
       "parser": "dots",
       "label": "deepseek-pro",
       "mode": "raw",
-      "hit": 36,
-      "gt_total": 40,
+      "hit": 40,
+      "gt_total": 47,
       "coverage_gap": 4,
-      "recall": 0.9,
-      "reachable_recall": 1.0
+      "recall": 0.8511,
+      "reachable_recall": 0.9302
     },
     {
       "parser": "dots",
@@ -234,50 +234,50 @@
       "parser": "dots",
       "label": "gemini-lite",
       "mode": "raw",
-      "hit": 33,
-      "gt_total": 40,
-      "coverage_gap": 4,
-      "recall": 0.825,
-      "reachable_recall": 0.9167
+      "hit": 34,
+      "gt_total": 47,
+      "coverage_gap": 6,
+      "recall": 0.7234,
+      "reachable_recall": 0.8293
     },
     {
       "parser": "dots",
       "label": "gemini-lite",
       "mode": "strict",
-      "hit": 19,
-      "gt_total": 40,
-      "coverage_gap": 4,
-      "recall": 0.475,
-      "reachable_recall": 0.5278
+      "hit": 20,
+      "gt_total": 47,
+      "coverage_gap": 6,
+      "recall": 0.4255,
+      "reachable_recall": 0.4878
     },
     {
       "parser": "dots",
       "label": "haiku-4.5",
       "mode": "raw",
-      "hit": 35,
-      "gt_total": 40,
+      "hit": 41,
+      "gt_total": 47,
       "coverage_gap": 4,
-      "recall": 0.875,
-      "reachable_recall": 0.9722
+      "recall": 0.8723,
+      "reachable_recall": 0.9535
     },
     {
       "parser": "dots",
       "label": "openai-frontier",
       "mode": "raw",
-      "hit": 32,
-      "gt_total": 40,
+      "hit": 39,
+      "gt_total": 47,
       "coverage_gap": 4,
-      "recall": 0.8,
-      "reachable_recall": 0.8889
+      "recall": 0.8298,
+      "reachable_recall": 0.907
     },
     {
       "parser": "dots",
       "label": "openai-frontier",
       "mode": "strict",
-      "hit": 36,
-      "gt_total": 40,
+      "hit": 43,
+      "gt_total": 47,
       "coverage_gap": 4,
-      "recall": 0.9,
+      "recall": 0.9149,
       "reachable_recall": 1.0
     },
     {
@@ -285,57 +285,57 @@
       "label": "openai-mini",
       "mode": "raw",
       "hit": 23,
-      "gt_total": 40,
-      "coverage_gap": 4,
-      "recall": 0.575,
-      "reachable_recall": 0.6389
+      "gt_total": 47,
+      "coverage_gap": 6,
+      "recall": 0.4894,
+      "reachable_recall": 0.561
     },
     {
       "parser": "dots",
       "label": "openai-mini",
       "mode": "strict",
-      "hit": 31,
-      "gt_total": 40,
+      "hit": 36,
+      "gt_total": 47,
       "coverage_gap": 4,
-      "recall": 0.775,
-      "reachable_recall": 0.8611
+      "recall": 0.766,
+      "reachable_recall": 0.8372
     },
     {
       "parser": "dots",
       "label": "sonnet-4.6",
       "mode": "raw",
-      "hit": 34,
-      "gt_total": 40,
+      "hit": 40,
+      "gt_total": 47,
       "coverage_gap": 4,
-      "recall": 0.85,
-      "reachable_recall": 0.9444
+      "recall": 0.8511,
+      "reachable_recall": 0.9302
     },
     {
       "parser": "mineru",
       "label": "deepseek-flash",
       "mode": "raw",
-      "hit": 23,
-      "gt_total": 40,
-      "coverage_gap": 4,
-      "recall": 0.575,
-      "reachable_recall": 0.6389
+      "hit": 24,
+      "gt_total": 47,
+      "coverage_gap": 6,
+      "recall": 0.5106,
+      "reachable_recall": 0.5854
     },
     {
       "parser": "mineru",
       "label": "deepseek-pro",
       "mode": "raw",
-      "hit": 36,
-      "gt_total": 40,
+      "hit": 41,
+      "gt_total": 47,
       "coverage_gap": 4,
-      "recall": 0.9,
-      "reachable_recall": 1.0
+      "recall": 0.8723,
+      "reachable_recall": 0.9535
     },
     {
       "parser": "mineru",
       "label": "gemini-free",
       "mode": "raw",
-      "hit": 25,
-      "gt_total": 25,
+      "hit": 26,
+      "gt_total": 26,
       "coverage_gap": 0,
       "recall": 1.0,
       "reachable_recall": 1.0
@@ -344,281 +344,281 @@
       "parser": "mineru",
       "label": "gemini-lite",
       "mode": "raw",
-      "hit": 33,
-      "gt_total": 40,
+      "hit": 35,
+      "gt_total": 47,
       "coverage_gap": 4,
-      "recall": 0.825,
-      "reachable_recall": 0.9167
+      "recall": 0.7447,
+      "reachable_recall": 0.814
     },
     {
       "parser": "mineru",
       "label": "gemini-lite",
       "mode": "strict",
-      "hit": 25,
-      "gt_total": 40,
-      "coverage_gap": 4,
-      "recall": 0.625,
-      "reachable_recall": 0.6944
+      "hit": 26,
+      "gt_total": 47,
+      "coverage_gap": 6,
+      "recall": 0.5532,
+      "reachable_recall": 0.6341
     },
     {
       "parser": "mineru",
       "label": "haiku-4.5",
       "mode": "raw",
-      "hit": 34,
-      "gt_total": 40,
+      "hit": 36,
+      "gt_total": 47,
       "coverage_gap": 4,
-      "recall": 0.85,
-      "reachable_recall": 0.9444
+      "recall": 0.766,
+      "reachable_recall": 0.8372
     },
     {
       "parser": "mineru",
       "label": "openai-frontier",
       "mode": "raw",
-      "hit": 32,
-      "gt_total": 40,
+      "hit": 38,
+      "gt_total": 47,
       "coverage_gap": 4,
-      "recall": 0.8,
-      "reachable_recall": 0.8889
+      "recall": 0.8085,
+      "reachable_recall": 0.8837
     },
     {
       "parser": "mineru",
       "label": "openai-frontier",
+      "mode": "strict",
+      "hit": 42,
+      "gt_total": 47,
+      "coverage_gap": 4,
+      "recall": 0.8936,
+      "reachable_recall": 0.9767
+    },
+    {
+      "parser": "mineru",
+      "label": "openai-mini",
+      "mode": "raw",
+      "hit": 26,
+      "gt_total": 47,
+      "coverage_gap": 6,
+      "recall": 0.5532,
+      "reachable_recall": 0.6341
+    },
+    {
+      "parser": "mineru",
+      "label": "openai-mini",
       "mode": "strict",
       "hit": 35,
-      "gt_total": 40,
+      "gt_total": 47,
       "coverage_gap": 4,
-      "recall": 0.875,
-      "reachable_recall": 0.9722
-    },
-    {
-      "parser": "mineru",
-      "label": "openai-mini",
-      "mode": "raw",
-      "hit": 25,
-      "gt_total": 40,
-      "coverage_gap": 4,
-      "recall": 0.625,
-      "reachable_recall": 0.6944
-    },
-    {
-      "parser": "mineru",
-      "label": "openai-mini",
-      "mode": "strict",
-      "hit": 30,
-      "gt_total": 40,
-      "coverage_gap": 4,
-      "recall": 0.75,
-      "reachable_recall": 0.8333
+      "recall": 0.7447,
+      "reachable_recall": 0.814
     },
     {
       "parser": "mineru",
       "label": "sonnet-4.6",
       "mode": "raw",
-      "hit": 34,
-      "gt_total": 40,
+      "hit": 40,
+      "gt_total": 47,
       "coverage_gap": 4,
-      "recall": 0.85,
-      "reachable_recall": 0.9444
+      "recall": 0.8511,
+      "reachable_recall": 0.9302
     },
     {
       "parser": "paddle",
       "label": "deepseek-flash",
       "mode": "judge",
-      "hit": 31,
-      "gt_total": 40,
-      "coverage_gap": 0,
-      "recall": 0.775,
-      "reachable_recall": 0.775
+      "hit": 34,
+      "gt_total": 47,
+      "coverage_gap": 1,
+      "recall": 0.7234,
+      "reachable_recall": 0.7391
     },
     {
       "parser": "paddle",
       "label": "deepseek-flash",
       "mode": "raw",
-      "hit": 29,
-      "gt_total": 40,
-      "coverage_gap": 0,
-      "recall": 0.725,
-      "reachable_recall": 0.725
+      "hit": 33,
+      "gt_total": 47,
+      "coverage_gap": 1,
+      "recall": 0.7021,
+      "reachable_recall": 0.7174
     },
     {
       "parser": "paddle",
       "label": "deepseek-flash",
       "mode": "reason-first",
       "hit": 29,
-      "gt_total": 40,
-      "coverage_gap": 0,
-      "recall": 0.725,
-      "reachable_recall": 0.725
+      "gt_total": 47,
+      "coverage_gap": 1,
+      "recall": 0.617,
+      "reachable_recall": 0.6304
     },
     {
       "parser": "paddle",
       "label": "deepseek-flash",
       "mode": "reason-first-16k",
-      "hit": 29,
-      "gt_total": 40,
-      "coverage_gap": 0,
-      "recall": 0.725,
-      "reachable_recall": 0.725
+      "hit": 30,
+      "gt_total": 47,
+      "coverage_gap": 1,
+      "recall": 0.6383,
+      "reachable_recall": 0.6522
     },
     {
       "parser": "paddle",
       "label": "deepseek-flash",
       "mode": "requery",
-      "hit": 27,
-      "gt_total": 40,
-      "coverage_gap": 0,
-      "recall": 0.675,
-      "reachable_recall": 0.675
+      "hit": 31,
+      "gt_total": 47,
+      "coverage_gap": 1,
+      "recall": 0.6596,
+      "reachable_recall": 0.6739
     },
     {
       "parser": "paddle",
       "label": "deepseek-flash",
       "mode": "union-k3",
-      "hit": 31,
-      "gt_total": 40,
-      "coverage_gap": 0,
-      "recall": 0.775,
-      "reachable_recall": 0.775
+      "hit": 35,
+      "gt_total": 47,
+      "coverage_gap": 1,
+      "recall": 0.7447,
+      "reachable_recall": 0.7609
     },
     {
       "parser": "paddle",
       "label": "deepseek-pro",
       "mode": "raw",
-      "hit": 35,
-      "gt_total": 40,
+      "hit": 40,
+      "gt_total": 47,
       "coverage_gap": 0,
-      "recall": 0.875,
-      "reachable_recall": 0.875
+      "recall": 0.8511,
+      "reachable_recall": 0.8511
     },
     {
       "parser": "paddle",
       "label": "gemini-lite",
       "mode": "judge",
-      "hit": 37,
-      "gt_total": 40,
+      "hit": 41,
+      "gt_total": 47,
       "coverage_gap": 0,
-      "recall": 0.925,
-      "reachable_recall": 0.925
+      "recall": 0.8723,
+      "reachable_recall": 0.8723
     },
     {
       "parser": "paddle",
       "label": "gemini-lite",
       "mode": "raw",
-      "hit": 37,
-      "gt_total": 40,
+      "hit": 40,
+      "gt_total": 47,
       "coverage_gap": 0,
-      "recall": 0.925,
-      "reachable_recall": 0.925
+      "recall": 0.8511,
+      "reachable_recall": 0.8511
     },
     {
       "parser": "paddle",
       "label": "gemini-lite",
       "mode": "reason-first",
-      "hit": 36,
-      "gt_total": 40,
+      "hit": 41,
+      "gt_total": 47,
       "coverage_gap": 0,
-      "recall": 0.9,
-      "reachable_recall": 0.9
+      "recall": 0.8723,
+      "reachable_recall": 0.8723
     },
     {
       "parser": "paddle",
       "label": "gemini-lite",
       "mode": "reason-first-16k",
-      "hit": 38,
-      "gt_total": 40,
+      "hit": 40,
+      "gt_total": 47,
       "coverage_gap": 0,
-      "recall": 0.95,
-      "reachable_recall": 0.95
+      "recall": 0.8511,
+      "reachable_recall": 0.8511
     },
     {
       "parser": "paddle",
       "label": "gemini-lite",
       "mode": "requery",
-      "hit": 37,
-      "gt_total": 40,
+      "hit": 40,
+      "gt_total": 47,
       "coverage_gap": 0,
-      "recall": 0.925,
-      "reachable_recall": 0.925
+      "recall": 0.8511,
+      "reachable_recall": 0.8511
     },
     {
       "parser": "paddle",
       "label": "gemini-lite",
       "mode": "strict",
       "hit": 32,
-      "gt_total": 40,
-      "coverage_gap": 0,
-      "recall": 0.8,
-      "reachable_recall": 0.8
+      "gt_total": 47,
+      "coverage_gap": 1,
+      "recall": 0.6809,
+      "reachable_recall": 0.6957
     },
     {
       "parser": "paddle",
       "label": "gemini-lite",
       "mode": "union-k3",
-      "hit": 37,
-      "gt_total": 40,
+      "hit": 41,
+      "gt_total": 47,
       "coverage_gap": 0,
-      "recall": 0.925,
-      "reachable_recall": 0.925
+      "recall": 0.8723,
+      "reachable_recall": 0.8723
     },
     {
       "parser": "paddle",
       "label": "haiku-4.5",
       "mode": "raw",
-      "hit": 36,
-      "gt_total": 40,
-      "coverage_gap": 0,
-      "recall": 0.9,
-      "reachable_recall": 0.9
-    },
-    {
-      "parser": "paddle",
-      "label": "openai-frontier",
-      "mode": "raw",
-      "hit": 30,
-      "gt_total": 40,
-      "coverage_gap": 0,
-      "recall": 0.75,
-      "reachable_recall": 0.75
-    },
-    {
-      "parser": "paddle",
-      "label": "openai-frontier",
-      "mode": "strict",
       "hit": 39,
-      "gt_total": 40,
+      "gt_total": 47,
       "coverage_gap": 0,
-      "recall": 0.975,
-      "reachable_recall": 0.975
+      "recall": 0.8298,
+      "reachable_recall": 0.8298
+    },
+    {
+      "parser": "paddle",
+      "label": "openai-frontier",
+      "mode": "raw",
+      "hit": 37,
+      "gt_total": 47,
+      "coverage_gap": 0,
+      "recall": 0.7872,
+      "reachable_recall": 0.7872
+    },
+    {
+      "parser": "paddle",
+      "label": "openai-frontier",
+      "mode": "strict",
+      "hit": 45,
+      "gt_total": 47,
+      "coverage_gap": 0,
+      "recall": 0.9574,
+      "reachable_recall": 0.9574
     },
     {
       "parser": "paddle",
       "label": "openai-mini",
       "mode": "raw",
-      "hit": 35,
-      "gt_total": 40,
+      "hit": 41,
+      "gt_total": 47,
       "coverage_gap": 0,
-      "recall": 0.875,
-      "reachable_recall": 0.875
+      "recall": 0.8723,
+      "reachable_recall": 0.8723
     },
     {
       "parser": "paddle",
       "label": "openai-mini",
       "mode": "strict",
-      "hit": 31,
-      "gt_total": 40,
+      "hit": 33,
+      "gt_total": 47,
       "coverage_gap": 0,
-      "recall": 0.775,
-      "reachable_recall": 0.775
+      "recall": 0.7021,
+      "reachable_recall": 0.7021
     },
     {
       "parser": "paddle",
       "label": "sonnet-4.6",
       "mode": "raw",
-      "hit": 38,
-      "gt_total": 40,
+      "hit": 43,
+      "gt_total": 47,
       "coverage_gap": 0,
-      "recall": 0.95,
-      "reachable_recall": 0.95
+      "recall": 0.9149,
+      "reachable_recall": 0.9149
     }
   ]
 }

@@ -70,6 +70,45 @@ def canonical_unit(measurement_class_name: str) -> str | None:
     return UNIVERSAL_UNITS.get(measurement_class_name)
 
 
+# T74 — per-slot plausibility bounds (in the canonical unit above), for the C3
+# magnitude sanity check. C2 (units_match) validates the unit LABEL's dimension but
+# NOT that the value was converted to it — a model can emit a µV/h reading under an
+# "mV/h" label and pass C2 with a value 1000× too large (every DegradationRate
+# candidate in the T74 gold audit). These bounds catch gross prefix errors. They are
+# DELIBERATELY GENEROUS — meant to reject magnitude blunders, never to police a
+# physically unusual but real value. Slots without clear physical bounds are omitted
+# (magnitude_ok returns True for them → never rejected).
+# ponytail: a static range, not unit re-derivation from the cited span; widen a bound
+# here if a real value is ever wrongly rejected.
+PLAUSIBLE_RANGE: dict[str, tuple[float, float]] = {
+    "Overpotential": (0.0, 2000.0),        # mV
+    "TafelSlope": (0.0, 1000.0),           # mV/decade
+    "MassActivity": (0.0, 1e6),            # A/g
+    "TurnoverFrequency": (0.0, 1e5),       # 1/s
+    "SpecificActivity": (0.0, 1e6),        # mA/cm2
+    "Stability": (0.0, 1e5),               # h
+    "PEMWECellVoltage": (0.5, 5.0),        # V (full-cell operating voltage)
+    "DegradationRate": (0.0, 10.0),        # mV/h (good PEMWE << 1; 22 mV/h ⇒ a µV/h blunder)
+    "ChargeTransferCoefficient": (0.0, 2.0),
+}
+
+
+def magnitude_ok(measurement_class_name: str, value: float | None) -> bool:
+    """Is ``value`` within the slot's plausible range (C3)? True if no range tracked.
+
+    Complements ``units_match`` (C2): C2 checks the unit label is dimensionally the
+    canonical one; this checks the magnitude is sane, catching values emitted in a
+    prefixed unit (µV/h) under the canonical label (mV/h) without conversion. ``None``
+    passes (null-value handling lives in the caller, not here).
+    """
+    if value is None:
+        return True
+    rng = PLAUSIBLE_RANGE.get(measurement_class_name)
+    if rng is None:
+        return True
+    return rng[0] <= value <= rng[1]
+
+
 # Map unicode superscript characters to ASCII so `s⁻¹` reads as `s-1`.
 _SUPERSCRIPTS = str.maketrans("⁰¹²³⁴⁵⁶⁷⁸⁹⁻", "0123456789-")
 # Token-level synonyms folded to one spelling before comparison.

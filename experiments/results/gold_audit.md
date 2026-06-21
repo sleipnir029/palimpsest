@@ -104,3 +104,30 @@ Most importantly, a large part of the measured accuracy gap — especially the p
 and the failure to reach 100% — is **explained by gold structure (figure-only values,
 thinness), not by model competence.** The coverage decomposition (`coverage.py`) quantifies
 how much.
+
+---
+
+## Gold version bump (2026-06-21, T74): 40 → 47 tuples
+
+T74's gold-thinness audit (`gold_thinness.py` + `gold_verification_t74.md`) found
+real measurements the gold under-scoped — full-cell PEMWE metrics the three-electrode
+OER gold never listed, which the models extracted correctly but scored as false
+positives. Added after parser-text verification (PDF-confirmed for the single-parser
+ones):
+
+| paper | added tuples | evidence |
+|---|---|---|
+| c9a68107 (s41467-023-40912-8) | PEMWECellVoltage 1.67, 1.83, 2.0 | Fig 5c labels 1.67 V @1 A/cm², 1.83 V @2 A/cm² (PDF p7); 2.0 V @3.06 A/cm² (text) |
+| bd9811a5 (s41565-025-02030-y) | PEMWECellVoltage 1.939, 1.986, 2.0 | "voltage rose from 1.939 V to 2.000 V in first 500 h … 1.986 V at 1,600 h" (docling+paddle identical) |
+| c63193979 (s41467-025-63541-9) | Stability 400 | "operational stability … over 400 h at both 1 A/cm² and 2 A/cm²" (docling+dots) |
+
+**Deferred (not added):** DegradationRate values (22/52/2.3–2.8 µV/h). The
+extractions emitted them in µV/h under an mV/h label without converting (1000× off);
+the new C3 magnitude guard now rejects such values, but clean canonical-unit GOLD
+point-values need a separate pass. Other ≥3-agreement candidates were rejected as
+artifacts/duplicates/wrong-quantity — see `gold_verification_t74.md`.
+
+**Impact:** denominators grew, so recall numbers in the T72 FINDINGS/report (built on
+the 40-tuple gold) differ from re-scores on the 47-tuple gold. The stamped T72 CSV
+snapshots remain the frozen 40-tuple record; T74 results use 47. The change only
+strengthens the T74 headline (model-union docling 100% vs sonnet single-shot 91%).

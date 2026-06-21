@@ -60,24 +60,35 @@ GOLD: dict[str, list[tuple[str, float]]] = {
     # s41467-022-35426-8 — Ir-Co3O4 (the original A/B paper); experiments/ground_truth.md
     "3432d04920eb6649d15d8883e64dc7f3d54700ecd5050d09e31ae286f1d4f53d": GT_MODELED,  # 19
     # s41467-023-40912-8 — IrO2@TaB2; ground_truth_s41467-023-40912-8.md (7)
+    # T74 gold-thinness add (2026-06-21): 3 PEMWE full-cell voltages — Fig 5c labels
+    # 1.67 V @1 A/cm² and 1.83 V @2 A/cm² (PDF-confirmed p7), text gives 2.0 V @3.06
+    # A/cm². Under-scoped by the three-electrode OER gold. See results/gold_verification_t74.md.
     "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c": [
         ("Overpotential", 288.0), ("Overpotential", 307.0),
         ("TafelSlope", 42.6), ("TafelSlope", 45.1),
         ("MassActivity", 345.0),
         ("Stability", 120.0), ("Stability", 40.0),
+        ("PEMWECellVoltage", 1.67), ("PEMWECellVoltage", 1.83), ("PEMWECellVoltage", 2.0),
     ],
     # s41467-025-63541-9 — Ir/TiOx@Ti; ground_truth_s41467-025-63541-9.md (4)
+    # T74 gold-thinness add (2026-06-21): Stability 400 h — "operational stability …
+    # over 400 h at both 1 A/cm² and 2 A/cm²" (docling+dots). See gold_verification_t74.md.
     "c63193979cec7f3d44d6d989fab9f7a7ba60590b18545f9129a982e578b8dc17": [
         ("MassActivity", 192.0), ("MassActivity", 81.0),
         ("Stability", 1700.0), ("Stability", 40.0),
+        ("Stability", 400.0),
     ],
     # s41565-025-02030-y — RuxIrOx; ground_truth_s41565-025-02030-y.md (8; row 9 RuO2
     # stability is qualitative "tens of hours" → no numeric tuple)
+    # T74 gold-thinness add (2026-06-21): 3 PEMWE cell voltages from the durability hold —
+    # "voltage initially rose from 1.939 V to 2.000 V in the first 500 h … reached 1.986 V
+    # when … stopped at 1,600 h" (docling+paddle identical). See gold_verification_t74.md.
     "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54": [
         ("Overpotential", 240.0),
         ("TafelSlope", 45.16), ("TafelSlope", 46.25),
         ("TafelSlope", 48.29), ("TafelSlope", 51.78),
         ("Stability", 1500.0), ("Stability", 1600.0), ("Stability", 200.0),
+        ("PEMWECellVoltage", 1.939), ("PEMWECellVoltage", 1.986), ("PEMWECellVoltage", 2.0),
     ],
     # s41929-024-01168-7 — amorphous IrOx vs rutile IrO2; ground_truth_s41929-024-01168-7.md (2)
     # T72 gold-audit fix (2026-06-21): dropped ("Stability", 2.5). The paper's "2.5 h" is a

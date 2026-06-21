@@ -153,3 +153,31 @@ def test_pemwe_overlay_does_not_shadow_universal_keys():
 )
 def test_units_match(emitted, canonical, expected):
     assert units_match(emitted, canonical) is expected
+
+
+# T74 — magnitude sanity check (C3). The dimensional check (units_match/C2) validates
+# the unit LABEL but not that the value was actually converted to it: a model can emit
+# a µV/h reading under an "mV/h" label and pass C2 with a value 1000× too large
+# (every DegradationRate candidate in the T74 audit). magnitude_ok bounds the value
+# per slot to catch gross prefix errors.
+import pytest as _pytest
+from palimpsest.normalize import magnitude_ok
+
+
+@_pytest.mark.parametrize(
+    "type_name,value,expected",
+    [
+        ("DegradationRate", 0.022, True),    # 22 µV/h correctly converted to mV/h
+        ("DegradationRate", 22.0, False),    # the bug: µV/h value under mV/h label
+        ("DegradationRate", 460.0, False),
+        ("PEMWECellVoltage", 1.83, True),
+        ("PEMWECellVoltage", 1900.0, False), # mV under a V label
+        ("Overpotential", 236.0, True),
+        ("Overpotential", 236000.0, False),  # V under an mV label
+        ("Stability", 400.0, True),
+        ("UnknownType", 1e9, True),          # untracked slot → never reject (no range)
+        ("Overpotential", None, True),       # null handled elsewhere; don't crash here
+    ],
+)
+def test_magnitude_ok(type_name, value, expected):
+    assert magnitude_ok(type_name, value) is expected

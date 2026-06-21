@@ -8379,10 +8379,10 @@
       "label": "deepseek-flash",
       "mode": "judge",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 14,
-      "fp": 6,
-      "hit": 8,
+      "fp": 3,
+      "hit": 11,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 0,
@@ -8425,6 +8425,21 @@
         {
           "type": "Stability",
           "value": 200.0,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "hit"
         }
       ]
@@ -8434,10 +8449,10 @@
       "label": "deepseek-flash",
       "mode": "raw",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 12,
-      "fp": 4,
-      "hit": 8,
+      "fp": 1,
+      "hit": 11,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 0,
@@ -8481,6 +8496,21 @@
           "type": "Stability",
           "value": 200.0,
           "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "hit"
         }
       ]
     },
@@ -8489,13 +8519,13 @@
       "label": "deepseek-flash",
       "mode": "reason-first-16k",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 1,
       "fp": 0,
       "hit": 1,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 7,
+      "model_gap": 10,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -8535,6 +8565,21 @@
         {
           "type": "Stability",
           "value": 200.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "model_gap"
         }
       ]
@@ -8544,13 +8589,13 @@
       "label": "deepseek-flash",
       "mode": "reason-first",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 1,
       "fp": 0,
       "hit": 1,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 7,
+      "model_gap": 10,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -8591,6 +8636,21 @@
           "type": "Stability",
           "value": 200.0,
           "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -8599,10 +8659,10 @@
       "label": "deepseek-flash",
       "mode": "requery",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 10,
-      "fp": 3,
-      "hit": 7,
+      "fp": 0,
+      "hit": 10,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -8646,6 +8706,21 @@
           "type": "Stability",
           "value": 200.0,
           "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "hit"
         }
       ]
     },
@@ -8654,10 +8729,10 @@
       "label": "deepseek-flash",
       "mode": "union-k3",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 14,
-      "fp": 6,
-      "hit": 8,
+      "fp": 3,
+      "hit": 11,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 0,
@@ -8700,6 +8775,21 @@
         {
           "type": "Stability",
           "value": 200.0,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "hit"
         }
       ]
@@ -8709,10 +8799,10 @@
       "label": "deepseek-pro",
       "mode": "raw",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 12,
-      "fp": 4,
-      "hit": 8,
+      "fp": 1,
+      "hit": 11,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 0,
@@ -8755,6 +8845,21 @@
         {
           "type": "Stability",
           "value": 200.0,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "hit"
         }
       ]
@@ -8764,13 +8869,13 @@
       "label": "gemini-lite",
       "mode": "judge",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 8,
       "fp": 1,
       "hit": 7,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 1,
+      "model_gap": 4,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -8811,6 +8916,21 @@
           "type": "Stability",
           "value": 200.0,
           "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -8819,13 +8939,13 @@
       "label": "gemini-lite",
       "mode": "raw",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 6,
       "fp": 0,
       "hit": 6,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 2,
+      "model_gap": 5,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -8865,6 +8985,21 @@
         {
           "type": "Stability",
           "value": 200.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "model_gap"
         }
       ]
@@ -8874,13 +9009,13 @@
       "label": "gemini-lite",
       "mode": "reason-first-16k",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 6,
       "fp": 0,
       "hit": 6,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 2,
+      "model_gap": 5,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -8920,6 +9055,21 @@
         {
           "type": "Stability",
           "value": 200.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "model_gap"
         }
       ]
@@ -8929,13 +9079,13 @@
       "label": "gemini-lite",
       "mode": "reason-first",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 6,
       "fp": 0,
       "hit": 6,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 2,
+      "model_gap": 5,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -8975,6 +9125,21 @@
         {
           "type": "Stability",
           "value": 200.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "model_gap"
         }
       ]
@@ -8984,13 +9149,13 @@
       "label": "gemini-lite",
       "mode": "requery",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 10,
       "fp": 2,
       "hit": 8,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 0,
+      "model_gap": 3,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -9031,6 +9196,21 @@
           "type": "Stability",
           "value": 200.0,
           "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -9039,13 +9219,13 @@
       "label": "gemini-lite",
       "mode": "strict",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 6,
       "fp": 0,
       "hit": 6,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 2,
+      "model_gap": 5,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -9085,6 +9265,21 @@
         {
           "type": "Stability",
           "value": 200.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "model_gap"
         }
       ]
@@ -9094,13 +9289,13 @@
       "label": "gemini-lite",
       "mode": "union-k3",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 8,
       "fp": 1,
       "hit": 7,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 1,
+      "model_gap": 4,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -9141,6 +9336,21 @@
           "type": "Stability",
           "value": 200.0,
           "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -9149,13 +9359,13 @@
       "label": "haiku-4.5",
       "mode": "raw",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 7,
       "fp": 0,
       "hit": 7,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 1,
+      "model_gap": 4,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -9195,6 +9405,21 @@
         {
           "type": "Stability",
           "value": 200.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "model_gap"
         }
       ]
@@ -9204,10 +9429,10 @@
       "label": "openai-frontier",
       "mode": "raw",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 16,
-      "fp": 9,
-      "hit": 7,
+      "fp": 6,
+      "hit": 10,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -9250,6 +9475,21 @@
         {
           "type": "Stability",
           "value": 200.0,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "hit"
         }
       ]
@@ -9259,10 +9499,10 @@
       "label": "openai-frontier",
       "mode": "strict",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 16,
-      "fp": 8,
-      "hit": 8,
+      "fp": 5,
+      "hit": 11,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 0,
@@ -9306,6 +9546,21 @@
           "type": "Stability",
           "value": 200.0,
           "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "hit"
         }
       ]
     },
@@ -9314,13 +9569,13 @@
       "label": "openai-mini",
       "mode": "raw",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 2,
       "fp": 0,
       "hit": 2,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 6,
+      "model_gap": 9,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -9360,6 +9615,21 @@
         {
           "type": "Stability",
           "value": 200.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "model_gap"
         }
       ]
@@ -9369,13 +9639,13 @@
       "label": "openai-mini",
       "mode": "strict",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 8,
       "fp": 1,
       "hit": 7,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 1,
+      "model_gap": 4,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -9416,6 +9686,21 @@
           "type": "Stability",
           "value": 200.0,
           "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -9424,13 +9709,13 @@
       "label": "sonnet-4.6",
       "mode": "raw",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 8,
-      "fp": 1,
+      "fp": 0,
       "hit": 7,
-      "wrong_type": 0,
+      "wrong_type": 1,
       "coverage_gap": 0,
-      "model_gap": 1,
+      "model_gap": 3,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -9470,6 +9755,22 @@
         {
           "type": "Stability",
           "value": 200.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "wrong_type",
+          "predicted_as": "DegradationRate"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "model_gap"
         }
       ]
@@ -9479,10 +9780,10 @@
       "label": "deepseek-flash",
       "mode": "raw",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 8,
-      "fp": 4,
-      "hit": 4,
+      "fp": 1,
+      "hit": 7,
       "wrong_type": 0,
       "coverage_gap": 4,
       "model_gap": 0,
@@ -9525,6 +9826,21 @@
         {
           "type": "Stability",
           "value": 200.0,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "hit"
         }
       ]
@@ -9534,13 +9850,13 @@
       "label": "deepseek-pro",
       "mode": "raw",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 6,
-      "fp": 2,
-      "hit": 4,
+      "fp": 1,
+      "hit": 5,
       "wrong_type": 0,
       "coverage_gap": 4,
-      "model_gap": 0,
+      "model_gap": 2,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -9581,6 +9897,21 @@
           "type": "Stability",
           "value": 200.0,
           "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -9589,13 +9920,13 @@
       "label": "gemini-lite",
       "mode": "raw",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 2,
       "fp": 0,
       "hit": 2,
       "wrong_type": 0,
       "coverage_gap": 4,
-      "model_gap": 2,
+      "model_gap": 5,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -9635,6 +9966,21 @@
         {
           "type": "Stability",
           "value": 200.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "model_gap"
         }
       ]
@@ -9644,13 +9990,13 @@
       "label": "gemini-lite",
       "mode": "strict",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 2,
       "fp": 0,
       "hit": 2,
       "wrong_type": 0,
       "coverage_gap": 4,
-      "model_gap": 2,
+      "model_gap": 5,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -9690,6 +10036,21 @@
         {
           "type": "Stability",
           "value": 200.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "model_gap"
         }
       ]
@@ -9699,10 +10060,10 @@
       "label": "haiku-4.5",
       "mode": "raw",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 9,
-      "fp": 5,
-      "hit": 4,
+      "fp": 2,
+      "hit": 7,
       "wrong_type": 0,
       "coverage_gap": 4,
       "model_gap": 0,
@@ -9745,6 +10106,21 @@
         {
           "type": "Stability",
           "value": 200.0,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "hit"
         }
       ]
@@ -9754,10 +10130,10 @@
       "label": "openai-frontier",
       "mode": "raw",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 13,
-      "fp": 9,
-      "hit": 4,
+      "fp": 6,
+      "hit": 7,
       "wrong_type": 0,
       "coverage_gap": 4,
       "model_gap": 0,
@@ -9800,6 +10176,21 @@
         {
           "type": "Stability",
           "value": 200.0,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "hit"
         }
       ]
@@ -9809,10 +10200,10 @@
       "label": "openai-frontier",
       "mode": "strict",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 12,
-      "fp": 8,
-      "hit": 4,
+      "fp": 5,
+      "hit": 7,
       "wrong_type": 0,
       "coverage_gap": 4,
       "model_gap": 0,
@@ -9856,6 +10247,21 @@
           "type": "Stability",
           "value": 200.0,
           "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "hit"
         }
       ]
     },
@@ -9864,13 +10270,13 @@
       "label": "openai-mini",
       "mode": "raw",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 3,
       "fp": 1,
       "hit": 2,
       "wrong_type": 0,
       "coverage_gap": 4,
-      "model_gap": 2,
+      "model_gap": 5,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -9911,6 +10317,21 @@
           "type": "Stability",
           "value": 200.0,
           "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -9919,10 +10340,10 @@
       "label": "openai-mini",
       "mode": "strict",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 12,
-      "fp": 8,
-      "hit": 4,
+      "fp": 5,
+      "hit": 7,
       "wrong_type": 0,
       "coverage_gap": 4,
       "model_gap": 0,
@@ -9965,6 +10386,21 @@
         {
           "type": "Stability",
           "value": 200.0,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "hit"
         }
       ]
@@ -9974,10 +10410,10 @@
       "label": "sonnet-4.6",
       "mode": "raw",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 8,
-      "fp": 4,
-      "hit": 4,
+      "fp": 1,
+      "hit": 7,
       "wrong_type": 0,
       "coverage_gap": 4,
       "model_gap": 0,
@@ -10021,6 +10457,21 @@
           "type": "Stability",
           "value": 200.0,
           "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "hit"
         }
       ]
     },
@@ -10029,10 +10480,290 @@
       "label": "deepseek-flash",
       "mode": "raw",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 0,
       "fp": 0,
       "hit": 0,
+      "wrong_type": 0,
+      "coverage_gap": 4,
+      "model_gap": 7,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 240.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.16,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 46.25,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 48.29,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 51.78,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 1500.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 1600.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 200.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "mineru",
+      "label": "deepseek-pro",
+      "mode": "raw",
+      "sha8": "bd9811a5",
+      "gt_total": 11,
+      "n_preds": 8,
+      "fp": 2,
+      "hit": 6,
+      "wrong_type": 0,
+      "coverage_gap": 4,
+      "model_gap": 1,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 240.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.16,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 46.25,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 48.29,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 51.78,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 1500.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1600.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 200.0,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "mineru",
+      "label": "gemini-lite",
+      "mode": "raw",
+      "sha8": "bd9811a5",
+      "gt_total": 11,
+      "n_preds": 3,
+      "fp": 1,
+      "hit": 2,
+      "wrong_type": 0,
+      "coverage_gap": 4,
+      "model_gap": 5,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 240.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.16,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 46.25,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 48.29,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 51.78,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 1500.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1600.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 200.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "mineru",
+      "label": "gemini-lite",
+      "mode": "strict",
+      "sha8": "bd9811a5",
+      "gt_total": 11,
+      "n_preds": 2,
+      "fp": 0,
+      "hit": 2,
+      "wrong_type": 0,
+      "coverage_gap": 4,
+      "model_gap": 5,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 240.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.16,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 46.25,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 48.29,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 51.78,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 1500.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1600.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 200.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "mineru",
+      "label": "haiku-4.5",
+      "mode": "raw",
+      "sha8": "bd9811a5",
+      "gt_total": 11,
+      "n_preds": 3,
+      "fp": 0,
+      "hit": 3,
       "wrong_type": 0,
       "coverage_gap": 4,
       "model_gap": 4,
@@ -10040,61 +10771,6 @@
         {
           "type": "Overpotential",
           "value": 240.0,
-          "status": "model_gap"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 45.16,
-          "status": "coverage_gap"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 46.25,
-          "status": "coverage_gap"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 48.29,
-          "status": "coverage_gap"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 51.78,
-          "status": "coverage_gap"
-        },
-        {
-          "type": "Stability",
-          "value": 1500.0,
-          "status": "model_gap"
-        },
-        {
-          "type": "Stability",
-          "value": 1600.0,
-          "status": "model_gap"
-        },
-        {
-          "type": "Stability",
-          "value": 200.0,
-          "status": "model_gap"
-        }
-      ]
-    },
-    {
-      "parser": "mineru",
-      "label": "deepseek-pro",
-      "mode": "raw",
-      "sha8": "bd9811a5",
-      "gt_total": 8,
-      "n_preds": 8,
-      "fp": 4,
-      "hit": 4,
-      "wrong_type": 0,
-      "coverage_gap": 4,
-      "model_gap": 0,
-      "per_tuple": [
-        {
-          "type": "Overpotential",
-          "value": 240.0,
           "status": "hit"
         },
         {
@@ -10130,171 +10806,21 @@
         {
           "type": "Stability",
           "value": 200.0,
-          "status": "hit"
-        }
-      ]
-    },
-    {
-      "parser": "mineru",
-      "label": "gemini-lite",
-      "mode": "raw",
-      "sha8": "bd9811a5",
-      "gt_total": 8,
-      "n_preds": 3,
-      "fp": 1,
-      "hit": 2,
-      "wrong_type": 0,
-      "coverage_gap": 4,
-      "model_gap": 2,
-      "per_tuple": [
-        {
-          "type": "Overpotential",
-          "value": 240.0,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 45.16,
-          "status": "coverage_gap"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 46.25,
-          "status": "coverage_gap"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 48.29,
-          "status": "coverage_gap"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 51.78,
-          "status": "coverage_gap"
-        },
-        {
-          "type": "Stability",
-          "value": 1500.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 1600.0,
           "status": "model_gap"
         },
         {
-          "type": "Stability",
-          "value": 200.0,
-          "status": "model_gap"
-        }
-      ]
-    },
-    {
-      "parser": "mineru",
-      "label": "gemini-lite",
-      "mode": "strict",
-      "sha8": "bd9811a5",
-      "gt_total": 8,
-      "n_preds": 2,
-      "fp": 0,
-      "hit": 2,
-      "wrong_type": 0,
-      "coverage_gap": 4,
-      "model_gap": 2,
-      "per_tuple": [
-        {
-          "type": "Overpotential",
-          "value": 240.0,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 45.16,
-          "status": "coverage_gap"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 46.25,
-          "status": "coverage_gap"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 48.29,
-          "status": "coverage_gap"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 51.78,
-          "status": "coverage_gap"
-        },
-        {
-          "type": "Stability",
-          "value": 1500.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 1600.0,
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
           "status": "model_gap"
         },
         {
-          "type": "Stability",
-          "value": 200.0,
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
           "status": "model_gap"
-        }
-      ]
-    },
-    {
-      "parser": "mineru",
-      "label": "haiku-4.5",
-      "mode": "raw",
-      "sha8": "bd9811a5",
-      "gt_total": 8,
-      "n_preds": 3,
-      "fp": 0,
-      "hit": 3,
-      "wrong_type": 0,
-      "coverage_gap": 4,
-      "model_gap": 1,
-      "per_tuple": [
-        {
-          "type": "Overpotential",
-          "value": 240.0,
-          "status": "hit"
         },
         {
-          "type": "TafelSlope",
-          "value": 45.16,
-          "status": "coverage_gap"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 46.25,
-          "status": "coverage_gap"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 48.29,
-          "status": "coverage_gap"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 51.78,
-          "status": "coverage_gap"
-        },
-        {
-          "type": "Stability",
-          "value": 1500.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 1600.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 200.0,
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "model_gap"
         }
       ]
@@ -10304,10 +10830,10 @@
       "label": "openai-frontier",
       "mode": "raw",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 12,
-      "fp": 8,
-      "hit": 4,
+      "fp": 5,
+      "hit": 7,
       "wrong_type": 0,
       "coverage_gap": 4,
       "model_gap": 0,
@@ -10350,6 +10876,21 @@
         {
           "type": "Stability",
           "value": 200.0,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "hit"
         }
       ]
@@ -10359,10 +10900,10 @@
       "label": "openai-frontier",
       "mode": "strict",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 12,
-      "fp": 8,
-      "hit": 4,
+      "fp": 5,
+      "hit": 7,
       "wrong_type": 0,
       "coverage_gap": 4,
       "model_gap": 0,
@@ -10405,6 +10946,21 @@
         {
           "type": "Stability",
           "value": 200.0,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "hit"
         }
       ]
@@ -10414,13 +10970,13 @@
       "label": "openai-mini",
       "mode": "raw",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 5,
       "fp": 2,
       "hit": 3,
       "wrong_type": 0,
       "coverage_gap": 4,
-      "model_gap": 1,
+      "model_gap": 4,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -10461,6 +11017,21 @@
           "type": "Stability",
           "value": 200.0,
           "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -10469,10 +11040,10 @@
       "label": "openai-mini",
       "mode": "strict",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 5,
-      "fp": 3,
-      "hit": 2,
+      "fp": 0,
+      "hit": 5,
       "wrong_type": 0,
       "coverage_gap": 4,
       "model_gap": 2,
@@ -10516,6 +11087,21 @@
           "type": "Stability",
           "value": 200.0,
           "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "hit"
         }
       ]
     },
@@ -10524,10 +11110,10 @@
       "label": "sonnet-4.6",
       "mode": "raw",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 8,
-      "fp": 4,
-      "hit": 4,
+      "fp": 1,
+      "hit": 7,
       "wrong_type": 0,
       "coverage_gap": 4,
       "model_gap": 0,
@@ -10571,6 +11157,21 @@
           "type": "Stability",
           "value": 200.0,
           "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "hit"
         }
       ]
     },
@@ -10579,10 +11180,10 @@
       "label": "deepseek-flash",
       "mode": "judge",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 17,
-      "fp": 10,
-      "hit": 7,
+      "fp": 7,
+      "hit": 10,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -10626,6 +11227,21 @@
           "type": "Stability",
           "value": 200.0,
           "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "hit"
         }
       ]
     },
@@ -10634,10 +11250,10 @@
       "label": "deepseek-flash",
       "mode": "raw",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 12,
-      "fp": 6,
-      "hit": 6,
+      "fp": 3,
+      "hit": 9,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 2,
@@ -10681,6 +11297,21 @@
           "type": "Stability",
           "value": 200.0,
           "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "hit"
         }
       ]
     },
@@ -10689,13 +11320,13 @@
       "label": "deepseek-flash",
       "mode": "reason-first-16k",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 1,
       "fp": 1,
       "hit": 0,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 8,
+      "model_gap": 11,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -10735,6 +11366,21 @@
         {
           "type": "Stability",
           "value": 200.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "model_gap"
         }
       ]
@@ -10744,13 +11390,13 @@
       "label": "deepseek-flash",
       "mode": "reason-first",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 0,
       "fp": 0,
       "hit": 0,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 8,
+      "model_gap": 11,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -10791,6 +11437,21 @@
           "type": "Stability",
           "value": 200.0,
           "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -10799,10 +11460,10 @@
       "label": "deepseek-flash",
       "mode": "requery",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 12,
-      "fp": 6,
-      "hit": 6,
+      "fp": 3,
+      "hit": 9,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 2,
@@ -10846,6 +11507,21 @@
           "type": "Stability",
           "value": 200.0,
           "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "hit"
         }
       ]
     },
@@ -10854,10 +11530,10 @@
       "label": "deepseek-flash",
       "mode": "union-k3",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 17,
-      "fp": 10,
-      "hit": 7,
+      "fp": 7,
+      "hit": 10,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -10901,6 +11577,21 @@
           "type": "Stability",
           "value": 200.0,
           "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "hit"
         }
       ]
     },
@@ -10909,10 +11600,10 @@
       "label": "deepseek-pro",
       "mode": "raw",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 11,
-      "fp": 5,
-      "hit": 6,
+      "fp": 2,
+      "hit": 9,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 2,
@@ -10956,6 +11647,21 @@
           "type": "Stability",
           "value": 200.0,
           "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "hit"
         }
       ]
     },
@@ -10964,13 +11670,13 @@
       "label": "gemini-lite",
       "mode": "judge",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 8,
       "fp": 2,
       "hit": 6,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 2,
+      "model_gap": 5,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -11010,6 +11716,21 @@
         {
           "type": "Stability",
           "value": 200.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "model_gap"
         }
       ]
@@ -11019,13 +11740,13 @@
       "label": "gemini-lite",
       "mode": "raw",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 6,
       "fp": 0,
       "hit": 6,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 2,
+      "model_gap": 5,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -11065,6 +11786,21 @@
         {
           "type": "Stability",
           "value": 200.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "model_gap"
         }
       ]
@@ -11074,13 +11810,13 @@
       "label": "gemini-lite",
       "mode": "reason-first-16k",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 6,
       "fp": 0,
       "hit": 6,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 2,
+      "model_gap": 5,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -11120,6 +11856,21 @@
         {
           "type": "Stability",
           "value": 200.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "model_gap"
         }
       ]
@@ -11129,10 +11880,10 @@
       "label": "gemini-lite",
       "mode": "reason-first",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 9,
-      "fp": 3,
-      "hit": 6,
+      "fp": 0,
+      "hit": 9,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 2,
@@ -11176,6 +11927,21 @@
           "type": "Stability",
           "value": 200.0,
           "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "hit"
         }
       ]
     },
@@ -11184,13 +11950,13 @@
       "label": "gemini-lite",
       "mode": "requery",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 9,
-      "fp": 3,
+      "fp": 2,
       "hit": 6,
-      "wrong_type": 0,
+      "wrong_type": 1,
       "coverage_gap": 0,
-      "model_gap": 2,
+      "model_gap": 4,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -11230,6 +11996,22 @@
         {
           "type": "Stability",
           "value": 200.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "wrong_type",
+          "predicted_as": "DegradationRate"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "model_gap"
         }
       ]
@@ -11239,13 +12021,13 @@
       "label": "gemini-lite",
       "mode": "strict",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 6,
       "fp": 0,
       "hit": 6,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 2,
+      "model_gap": 5,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -11285,6 +12067,21 @@
         {
           "type": "Stability",
           "value": 200.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "model_gap"
         }
       ]
@@ -11294,13 +12091,13 @@
       "label": "gemini-lite",
       "mode": "union-k3",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 8,
       "fp": 2,
       "hit": 6,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 2,
+      "model_gap": 5,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -11340,6 +12137,21 @@
         {
           "type": "Stability",
           "value": 200.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "model_gap"
         }
       ]
@@ -11349,13 +12161,13 @@
       "label": "haiku-4.5",
       "mode": "raw",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 7,
       "fp": 1,
       "hit": 6,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 2,
+      "model_gap": 5,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -11396,6 +12208,21 @@
           "type": "Stability",
           "value": 200.0,
           "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -11404,10 +12231,10 @@
       "label": "openai-frontier",
       "mode": "raw",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 4,
-      "fp": 3,
-      "hit": 1,
+      "fp": 0,
+      "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 7,
@@ -11451,6 +12278,21 @@
           "type": "Stability",
           "value": 200.0,
           "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "hit"
         }
       ]
     },
@@ -11459,10 +12301,10 @@
       "label": "openai-frontier",
       "mode": "strict",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 12,
-      "fp": 5,
-      "hit": 7,
+      "fp": 2,
+      "hit": 10,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -11506,6 +12348,21 @@
           "type": "Stability",
           "value": 200.0,
           "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "hit"
         }
       ]
     },
@@ -11514,10 +12371,10 @@
       "label": "openai-mini",
       "mode": "raw",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 23,
-      "fp": 17,
-      "hit": 6,
+      "fp": 14,
+      "hit": 9,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 2,
@@ -11561,6 +12418,21 @@
           "type": "Stability",
           "value": 200.0,
           "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "hit"
         }
       ]
     },
@@ -11569,13 +12441,13 @@
       "label": "openai-mini",
       "mode": "strict",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 3,
       "fp": 1,
       "hit": 2,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 6,
+      "model_gap": 9,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -11615,6 +12487,21 @@
         {
           "type": "Stability",
           "value": 200.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "model_gap"
         }
       ]
@@ -11624,10 +12511,10 @@
       "label": "sonnet-4.6",
       "mode": "raw",
       "sha8": "bd9811a5",
-      "gt_total": 8,
+      "gt_total": 11,
       "n_preds": 9,
-      "fp": 3,
-      "hit": 6,
+      "fp": 0,
+      "hit": 9,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 2,
@@ -11671,6 +12558,21 @@
           "type": "Stability",
           "value": 200.0,
           "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.939,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.986,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "hit"
         }
       ]
     },
@@ -11679,10 +12581,10 @@
       "label": "deepseek-flash",
       "mode": "judge",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 8,
-      "fp": 5,
-      "hit": 3,
+      "fp": 4,
+      "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -11706,6 +12608,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "hit"
         }
       ]
     },
@@ -11714,13 +12621,13 @@
       "label": "deepseek-flash",
       "mode": "raw",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 9,
       "fp": 5,
       "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 0,
+      "model_gap": 1,
       "per_tuple": [
         {
           "type": "MassActivity",
@@ -11741,6 +12648,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -11749,10 +12661,10 @@
       "label": "deepseek-flash",
       "mode": "reason-first-16k",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 12,
-      "fp": 8,
-      "hit": 4,
+      "fp": 7,
+      "hit": 5,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 0,
@@ -11775,6 +12687,11 @@
         {
           "type": "Stability",
           "value": 40.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
           "status": "hit"
         }
       ]
@@ -11784,10 +12701,10 @@
       "label": "deepseek-flash",
       "mode": "reason-first",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 10,
-      "fp": 6,
-      "hit": 4,
+      "fp": 5,
+      "hit": 5,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 0,
@@ -11811,6 +12728,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "hit"
         }
       ]
     },
@@ -11819,13 +12741,13 @@
       "label": "deepseek-flash",
       "mode": "requery",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 13,
       "fp": 10,
       "hit": 3,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 1,
+      "model_gap": 2,
       "per_tuple": [
         {
           "type": "MassActivity",
@@ -11846,6 +12768,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -11854,10 +12781,10 @@
       "label": "deepseek-flash",
       "mode": "union-k3",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 9,
-      "fp": 6,
-      "hit": 3,
+      "fp": 5,
+      "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -11881,6 +12808,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "hit"
         }
       ]
     },
@@ -11889,10 +12821,10 @@
       "label": "deepseek-pro",
       "mode": "raw",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 10,
-      "fp": 6,
-      "hit": 4,
+      "fp": 5,
+      "hit": 5,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 0,
@@ -11915,6 +12847,11 @@
         {
           "type": "Stability",
           "value": 40.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
           "status": "hit"
         }
       ]
@@ -11924,10 +12861,10 @@
       "label": "gemini-lite",
       "mode": "judge",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 7,
-      "fp": 4,
-      "hit": 3,
+      "fp": 3,
+      "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -11951,6 +12888,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "hit"
         }
       ]
     },
@@ -11959,10 +12901,10 @@
       "label": "gemini-lite",
       "mode": "raw",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 7,
-      "fp": 4,
-      "hit": 3,
+      "fp": 3,
+      "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -11986,6 +12928,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "hit"
         }
       ]
     },
@@ -11994,13 +12941,13 @@
       "label": "gemini-lite",
       "mode": "reason-first-16k",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 9,
       "fp": 5,
       "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 0,
+      "model_gap": 1,
       "per_tuple": [
         {
           "type": "MassActivity",
@@ -12021,6 +12968,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -12029,13 +12981,13 @@
       "label": "gemini-lite",
       "mode": "reason-first",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 4,
       "fp": 0,
       "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 0,
+      "model_gap": 1,
       "per_tuple": [
         {
           "type": "MassActivity",
@@ -12056,6 +13008,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -12064,10 +13021,10 @@
       "label": "gemini-lite",
       "mode": "requery",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 7,
-      "fp": 4,
-      "hit": 3,
+      "fp": 3,
+      "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -12091,6 +13048,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "hit"
         }
       ]
     },
@@ -12099,10 +13061,10 @@
       "label": "gemini-lite",
       "mode": "strict",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 4,
-      "fp": 1,
-      "hit": 3,
+      "fp": 0,
+      "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -12126,6 +13088,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "hit"
         }
       ]
     },
@@ -12134,10 +13101,10 @@
       "label": "gemini-lite",
       "mode": "union-k3",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 8,
-      "fp": 4,
-      "hit": 4,
+      "fp": 3,
+      "hit": 5,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 0,
@@ -12161,6 +13128,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "hit"
         }
       ]
     },
@@ -12169,13 +13141,13 @@
       "label": "haiku-4.5",
       "mode": "raw",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 6,
       "fp": 3,
       "hit": 3,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 1,
+      "model_gap": 2,
       "per_tuple": [
         {
           "type": "MassActivity",
@@ -12195,6 +13167,11 @@
         {
           "type": "Stability",
           "value": 40.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
           "status": "model_gap"
         }
       ]
@@ -12204,10 +13181,10 @@
       "label": "openai-frontier",
       "mode": "raw",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 6,
-      "fp": 3,
-      "hit": 3,
+      "fp": 2,
+      "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -12231,6 +13208,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "hit"
         }
       ]
     },
@@ -12239,10 +13221,10 @@
       "label": "openai-frontier",
       "mode": "strict",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 8,
-      "fp": 5,
-      "hit": 3,
+      "fp": 4,
+      "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -12266,6 +13248,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "hit"
         }
       ]
     },
@@ -12274,13 +13261,13 @@
       "label": "openai-mini",
       "mode": "raw",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 15,
       "fp": 13,
       "hit": 2,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 2,
+      "model_gap": 3,
       "per_tuple": [
         {
           "type": "MassActivity",
@@ -12300,6 +13287,11 @@
         {
           "type": "Stability",
           "value": 40.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
           "status": "model_gap"
         }
       ]
@@ -12309,13 +13301,13 @@
       "label": "openai-mini",
       "mode": "strict",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 8,
       "fp": 6,
       "hit": 2,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 2,
+      "model_gap": 3,
       "per_tuple": [
         {
           "type": "MassActivity",
@@ -12335,6 +13327,11 @@
         {
           "type": "Stability",
           "value": 40.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
           "status": "model_gap"
         }
       ]
@@ -12344,10 +13341,10 @@
       "label": "sonnet-4.6",
       "mode": "raw",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 6,
-      "fp": 2,
-      "hit": 4,
+      "fp": 1,
+      "hit": 5,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 0,
@@ -12370,6 +13367,11 @@
         {
           "type": "Stability",
           "value": 40.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
           "status": "hit"
         }
       ]
@@ -12379,10 +13381,10 @@
       "label": "deepseek-flash",
       "mode": "raw",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 8,
-      "fp": 5,
-      "hit": 3,
+      "fp": 4,
+      "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -12406,6 +13408,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "hit"
         }
       ]
     },
@@ -12414,10 +13421,10 @@
       "label": "deepseek-pro",
       "mode": "raw",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 9,
-      "fp": 5,
-      "hit": 4,
+      "fp": 4,
+      "hit": 5,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 0,
@@ -12441,6 +13448,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "hit"
         }
       ]
     },
@@ -12449,10 +13461,10 @@
       "label": "gemini-lite",
       "mode": "raw",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 9,
-      "fp": 6,
-      "hit": 3,
+      "fp": 5,
+      "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -12476,6 +13488,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "hit"
         }
       ]
     },
@@ -12484,10 +13501,10 @@
       "label": "gemini-lite",
       "mode": "strict",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 6,
-      "fp": 3,
-      "hit": 3,
+      "fp": 2,
+      "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -12511,6 +13528,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "hit"
         }
       ]
     },
@@ -12519,13 +13541,13 @@
       "label": "haiku-4.5",
       "mode": "raw",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 9,
       "fp": 5,
       "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 0,
+      "model_gap": 1,
       "per_tuple": [
         {
           "type": "MassActivity",
@@ -12546,6 +13568,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -12554,10 +13581,10 @@
       "label": "openai-frontier",
       "mode": "raw",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 9,
-      "fp": 6,
-      "hit": 3,
+      "fp": 5,
+      "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -12581,6 +13608,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "hit"
         }
       ]
     },
@@ -12589,10 +13621,10 @@
       "label": "openai-frontier",
       "mode": "strict",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 13,
-      "fp": 9,
-      "hit": 4,
+      "fp": 8,
+      "hit": 5,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 0,
@@ -12616,6 +13648,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "hit"
         }
       ]
     },
@@ -12624,10 +13661,50 @@
       "label": "openai-mini",
       "mode": "raw",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 9,
       "fp": 7,
       "hit": 2,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 3,
+      "per_tuple": [
+        {
+          "type": "MassActivity",
+          "value": 192.0,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 81.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 1700.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "dots",
+      "label": "openai-mini",
+      "mode": "strict",
+      "sha8": "c6319397",
+      "gt_total": 5,
+      "n_preds": 9,
+      "fp": 6,
+      "hit": 3,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 2,
@@ -12650,42 +13727,12 @@
         {
           "type": "Stability",
           "value": 40.0,
-          "status": "model_gap"
-        }
-      ]
-    },
-    {
-      "parser": "dots",
-      "label": "openai-mini",
-      "mode": "strict",
-      "sha8": "c6319397",
-      "gt_total": 4,
-      "n_preds": 9,
-      "fp": 6,
-      "hit": 3,
-      "wrong_type": 0,
-      "coverage_gap": 0,
-      "model_gap": 1,
-      "per_tuple": [
-        {
-          "type": "MassActivity",
-          "value": 192.0,
-          "status": "hit"
-        },
-        {
-          "type": "MassActivity",
-          "value": 81.0,
-          "status": "model_gap"
-        },
-        {
-          "type": "Stability",
-          "value": 1700.0,
           "status": "hit"
         },
         {
           "type": "Stability",
-          "value": 40.0,
-          "status": "hit"
+          "value": 400.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -12694,10 +13741,10 @@
       "label": "sonnet-4.6",
       "mode": "raw",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 6,
-      "fp": 2,
-      "hit": 4,
+      "fp": 1,
+      "hit": 5,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 0,
@@ -12720,6 +13767,11 @@
         {
           "type": "Stability",
           "value": 40.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
           "status": "hit"
         }
       ]
@@ -12729,10 +13781,10 @@
       "label": "deepseek-flash",
       "mode": "raw",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 7,
-      "fp": 4,
-      "hit": 3,
+      "fp": 3,
+      "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -12756,6 +13808,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "hit"
         }
       ]
     },
@@ -12764,10 +13821,10 @@
       "label": "deepseek-pro",
       "mode": "raw",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 11,
-      "fp": 7,
-      "hit": 4,
+      "fp": 6,
+      "hit": 5,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 0,
@@ -12790,6 +13847,11 @@
         {
           "type": "Stability",
           "value": 40.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
           "status": "hit"
         }
       ]
@@ -12799,10 +13861,10 @@
       "label": "gemini-free",
       "mode": "raw",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 8,
-      "fp": 4,
-      "hit": 4,
+      "fp": 3,
+      "hit": 5,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 0,
@@ -12826,6 +13888,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "hit"
         }
       ]
     },
@@ -12834,13 +13901,13 @@
       "label": "gemini-lite",
       "mode": "raw",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 6,
       "fp": 3,
       "hit": 3,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 1,
+      "model_gap": 2,
       "per_tuple": [
         {
           "type": "MassActivity",
@@ -12860,6 +13927,11 @@
         {
           "type": "Stability",
           "value": 40.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
           "status": "model_gap"
         }
       ]
@@ -12869,10 +13941,10 @@
       "label": "gemini-lite",
       "mode": "strict",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 4,
-      "fp": 1,
-      "hit": 3,
+      "fp": 0,
+      "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -12896,6 +13968,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "hit"
         }
       ]
     },
@@ -12904,13 +13981,13 @@
       "label": "haiku-4.5",
       "mode": "raw",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 8,
       "fp": 4,
       "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 0,
+      "model_gap": 1,
       "per_tuple": [
         {
           "type": "MassActivity",
@@ -12931,6 +14008,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -12939,10 +14021,10 @@
       "label": "openai-frontier",
       "mode": "raw",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 9,
-      "fp": 6,
-      "hit": 3,
+      "fp": 5,
+      "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -12966,6 +14048,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "hit"
         }
       ]
     },
@@ -12974,10 +14061,10 @@
       "label": "openai-frontier",
       "mode": "strict",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 9,
-      "fp": 6,
-      "hit": 3,
+      "fp": 5,
+      "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -13001,6 +14088,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "hit"
         }
       ]
     },
@@ -13009,10 +14101,10 @@
       "label": "openai-mini",
       "mode": "raw",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 13,
-      "fp": 11,
-      "hit": 2,
+      "fp": 10,
+      "hit": 3,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 2,
@@ -13036,6 +14128,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "hit"
         }
       ]
     },
@@ -13044,13 +14141,13 @@
       "label": "openai-mini",
       "mode": "strict",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 16,
       "fp": 12,
       "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 0,
+      "model_gap": 1,
       "per_tuple": [
         {
           "type": "MassActivity",
@@ -13071,6 +14168,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -13079,10 +14181,10 @@
       "label": "sonnet-4.6",
       "mode": "raw",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 6,
-      "fp": 2,
-      "hit": 4,
+      "fp": 1,
+      "hit": 5,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 0,
@@ -13105,6 +14207,11 @@
         {
           "type": "Stability",
           "value": 40.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
           "status": "hit"
         }
       ]
@@ -13114,13 +14221,13 @@
       "label": "deepseek-flash",
       "mode": "judge",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 10,
       "fp": 7,
       "hit": 3,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 1,
+      "model_gap": 2,
       "per_tuple": [
         {
           "type": "MassActivity",
@@ -13140,6 +14247,11 @@
         {
           "type": "Stability",
           "value": 40.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
           "status": "model_gap"
         }
       ]
@@ -13149,10 +14261,10 @@
       "label": "deepseek-flash",
       "mode": "raw",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 9,
-      "fp": 6,
-      "hit": 3,
+      "fp": 5,
+      "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -13176,6 +14288,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "hit"
         }
       ]
     },
@@ -13184,10 +14301,10 @@
       "label": "deepseek-flash",
       "mode": "reason-first-16k",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 12,
-      "fp": 8,
-      "hit": 4,
+      "fp": 7,
+      "hit": 5,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 0,
@@ -13210,6 +14327,11 @@
         {
           "type": "Stability",
           "value": 40.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
           "status": "hit"
         }
       ]
@@ -13219,13 +14341,13 @@
       "label": "deepseek-flash",
       "mode": "reason-first",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 4,
       "fp": 0,
       "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 0,
+      "model_gap": 1,
       "per_tuple": [
         {
           "type": "MassActivity",
@@ -13246,6 +14368,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -13254,10 +14381,10 @@
       "label": "deepseek-flash",
       "mode": "requery",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 8,
-      "fp": 5,
-      "hit": 3,
+      "fp": 4,
+      "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -13281,6 +14408,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "hit"
         }
       ]
     },
@@ -13289,10 +14421,10 @@
       "label": "deepseek-flash",
       "mode": "union-k3",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 11,
-      "fp": 8,
-      "hit": 3,
+      "fp": 7,
+      "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -13316,6 +14448,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "hit"
         }
       ]
     },
@@ -13324,13 +14461,13 @@
       "label": "deepseek-pro",
       "mode": "raw",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 7,
       "fp": 3,
       "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 0,
+      "model_gap": 1,
       "per_tuple": [
         {
           "type": "MassActivity",
@@ -13351,6 +14488,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -13359,10 +14501,10 @@
       "label": "gemini-lite",
       "mode": "judge",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 7,
-      "fp": 4,
-      "hit": 3,
+      "fp": 3,
+      "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -13386,6 +14528,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "hit"
         }
       ]
     },
@@ -13394,10 +14541,10 @@
       "label": "gemini-lite",
       "mode": "raw",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 6,
-      "fp": 3,
-      "hit": 3,
+      "fp": 2,
+      "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -13421,6 +14568,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "hit"
         }
       ]
     },
@@ -13429,13 +14581,13 @@
       "label": "gemini-lite",
       "mode": "reason-first-16k",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 8,
       "fp": 4,
       "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 0,
+      "model_gap": 1,
       "per_tuple": [
         {
           "type": "MassActivity",
@@ -13456,6 +14608,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -13464,10 +14621,10 @@
       "label": "gemini-lite",
       "mode": "reason-first",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 6,
-      "fp": 3,
-      "hit": 3,
+      "fp": 2,
+      "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -13491,6 +14648,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "hit"
         }
       ]
     },
@@ -13499,10 +14661,10 @@
       "label": "gemini-lite",
       "mode": "requery",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 7,
-      "fp": 4,
-      "hit": 3,
+      "fp": 3,
+      "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -13526,6 +14688,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "hit"
         }
       ]
     },
@@ -13534,13 +14701,13 @@
       "label": "gemini-lite",
       "mode": "strict",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 3,
       "fp": 0,
       "hit": 3,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 1,
+      "model_gap": 2,
       "per_tuple": [
         {
           "type": "MassActivity",
@@ -13560,6 +14727,11 @@
         {
           "type": "Stability",
           "value": 40.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
           "status": "model_gap"
         }
       ]
@@ -13569,10 +14741,10 @@
       "label": "gemini-lite",
       "mode": "union-k3",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 7,
-      "fp": 4,
-      "hit": 3,
+      "fp": 3,
+      "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -13596,6 +14768,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "hit"
         }
       ]
     },
@@ -13604,13 +14781,13 @@
       "label": "haiku-4.5",
       "mode": "raw",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 6,
       "fp": 3,
       "hit": 3,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 1,
+      "model_gap": 2,
       "per_tuple": [
         {
           "type": "MassActivity",
@@ -13630,6 +14807,11 @@
         {
           "type": "Stability",
           "value": 40.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
           "status": "model_gap"
         }
       ]
@@ -13639,10 +14821,10 @@
       "label": "openai-frontier",
       "mode": "raw",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 9,
-      "fp": 6,
-      "hit": 3,
+      "fp": 5,
+      "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -13666,6 +14848,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "hit"
         }
       ]
     },
@@ -13674,13 +14861,13 @@
       "label": "openai-frontier",
       "mode": "strict",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 11,
       "fp": 7,
       "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 0,
+      "model_gap": 1,
       "per_tuple": [
         {
           "type": "MassActivity",
@@ -13701,6 +14888,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -13709,10 +14901,10 @@
       "label": "openai-mini",
       "mode": "raw",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 9,
-      "fp": 7,
-      "hit": 2,
+      "fp": 6,
+      "hit": 3,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 2,
@@ -13736,6 +14928,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "hit"
         }
       ]
     },
@@ -13744,13 +14941,13 @@
       "label": "openai-mini",
       "mode": "strict",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 16,
       "fp": 12,
       "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 0,
+      "model_gap": 1,
       "per_tuple": [
         {
           "type": "MassActivity",
@@ -13771,6 +14968,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -13779,10 +14981,10 @@
       "label": "sonnet-4.6",
       "mode": "raw",
       "sha8": "c6319397",
-      "gt_total": 4,
+      "gt_total": 5,
       "n_preds": 8,
-      "fp": 4,
-      "hit": 4,
+      "fp": 3,
+      "hit": 5,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 0,
@@ -13806,6 +15008,11 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 400.0,
+          "status": "hit"
         }
       ]
     },
@@ -13814,10 +15021,10 @@
       "label": "deepseek-flash",
       "mode": "judge",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 11,
-      "fp": 5,
-      "hit": 6,
+      "fp": 2,
+      "hit": 9,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -13856,6 +15063,21 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "hit"
         }
       ]
     },
@@ -13864,10 +15086,10 @@
       "label": "deepseek-flash",
       "mode": "raw",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 10,
-      "fp": 4,
-      "hit": 6,
+      "fp": 1,
+      "hit": 9,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -13906,6 +15128,21 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "hit"
         }
       ]
     },
@@ -13914,13 +15151,13 @@
       "label": "deepseek-flash",
       "mode": "reason-first-16k",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 6,
       "fp": 0,
       "hit": 6,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 1,
+      "model_gap": 4,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -13956,6 +15193,21 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -13964,13 +15216,13 @@
       "label": "deepseek-flash",
       "mode": "reason-first",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 10,
-      "fp": 3,
-      "hit": 7,
+      "fp": 1,
+      "hit": 9,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 0,
+      "model_gap": 1,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -14006,6 +15258,21 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -14014,10 +15281,10 @@
       "label": "deepseek-flash",
       "mode": "requery",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 10,
-      "fp": 4,
-      "hit": 6,
+      "fp": 1,
+      "hit": 9,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -14056,6 +15323,21 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "hit"
         }
       ]
     },
@@ -14064,10 +15346,10 @@
       "label": "deepseek-flash",
       "mode": "union-k3",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 13,
-      "fp": 7,
-      "hit": 6,
+      "fp": 4,
+      "hit": 9,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -14106,6 +15388,21 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "hit"
         }
       ]
     },
@@ -14114,13 +15411,13 @@
       "label": "deepseek-pro",
       "mode": "raw",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 11,
-      "fp": 4,
-      "hit": 7,
+      "fp": 2,
+      "hit": 9,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 0,
+      "model_gap": 1,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -14156,6 +15453,21 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -14164,13 +15476,13 @@
       "label": "gemini-lite",
       "mode": "judge",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 10,
-      "fp": 3,
-      "hit": 7,
+      "fp": 2,
+      "hit": 8,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 0,
+      "model_gap": 2,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -14206,6 +15518,21 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -14214,210 +15541,10 @@
       "label": "gemini-lite",
       "mode": "raw",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 8,
       "fp": 1,
       "hit": 7,
-      "wrong_type": 0,
-      "coverage_gap": 0,
-      "model_gap": 0,
-      "per_tuple": [
-        {
-          "type": "Overpotential",
-          "value": 288.0,
-          "status": "hit"
-        },
-        {
-          "type": "Overpotential",
-          "value": 307.0,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 42.6,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 45.1,
-          "status": "hit"
-        },
-        {
-          "type": "MassActivity",
-          "value": 345.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 120.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 40.0,
-          "status": "hit"
-        }
-      ]
-    },
-    {
-      "parser": "docling",
-      "label": "gemini-lite",
-      "mode": "reason-first-16k",
-      "sha8": "c9a68107",
-      "gt_total": 7,
-      "n_preds": 8,
-      "fp": 1,
-      "hit": 7,
-      "wrong_type": 0,
-      "coverage_gap": 0,
-      "model_gap": 0,
-      "per_tuple": [
-        {
-          "type": "Overpotential",
-          "value": 288.0,
-          "status": "hit"
-        },
-        {
-          "type": "Overpotential",
-          "value": 307.0,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 42.6,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 45.1,
-          "status": "hit"
-        },
-        {
-          "type": "MassActivity",
-          "value": 345.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 120.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 40.0,
-          "status": "hit"
-        }
-      ]
-    },
-    {
-      "parser": "docling",
-      "label": "gemini-lite",
-      "mode": "reason-first",
-      "sha8": "c9a68107",
-      "gt_total": 7,
-      "n_preds": 8,
-      "fp": 1,
-      "hit": 7,
-      "wrong_type": 0,
-      "coverage_gap": 0,
-      "model_gap": 0,
-      "per_tuple": [
-        {
-          "type": "Overpotential",
-          "value": 288.0,
-          "status": "hit"
-        },
-        {
-          "type": "Overpotential",
-          "value": 307.0,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 42.6,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 45.1,
-          "status": "hit"
-        },
-        {
-          "type": "MassActivity",
-          "value": 345.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 120.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 40.0,
-          "status": "hit"
-        }
-      ]
-    },
-    {
-      "parser": "docling",
-      "label": "gemini-lite",
-      "mode": "requery",
-      "sha8": "c9a68107",
-      "gt_total": 7,
-      "n_preds": 9,
-      "fp": 2,
-      "hit": 7,
-      "wrong_type": 0,
-      "coverage_gap": 0,
-      "model_gap": 0,
-      "per_tuple": [
-        {
-          "type": "Overpotential",
-          "value": 288.0,
-          "status": "hit"
-        },
-        {
-          "type": "Overpotential",
-          "value": 307.0,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 42.6,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 45.1,
-          "status": "hit"
-        },
-        {
-          "type": "MassActivity",
-          "value": 345.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 120.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 40.0,
-          "status": "hit"
-        }
-      ]
-    },
-    {
-      "parser": "docling",
-      "label": "gemini-lite",
-      "mode": "strict",
-      "sha8": "c9a68107",
-      "gt_total": 7,
-      "n_preds": 6,
-      "fp": 2,
-      "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 3,
@@ -14430,6 +15557,266 @@
         {
           "type": "Overpotential",
           "value": 307.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
+      "mode": "reason-first-16k",
+      "sha8": "c9a68107",
+      "gt_total": 10,
+      "n_preds": 8,
+      "fp": 0,
+      "hit": 8,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 2,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
+      "mode": "reason-first",
+      "sha8": "c9a68107",
+      "gt_total": 10,
+      "n_preds": 8,
+      "fp": 0,
+      "hit": 8,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 2,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
+      "mode": "requery",
+      "sha8": "c9a68107",
+      "gt_total": 10,
+      "n_preds": 9,
+      "fp": 1,
+      "hit": 8,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 2,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
+      "mode": "strict",
+      "sha8": "c9a68107",
+      "gt_total": 10,
+      "n_preds": 6,
+      "fp": 1,
+      "hit": 5,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 5,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
           "status": "model_gap"
         },
         {
@@ -14455,6 +15842,21 @@
         {
           "type": "Stability",
           "value": 40.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "model_gap"
         }
       ]
@@ -14464,13 +15866,13 @@
       "label": "gemini-lite",
       "mode": "union-k3",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 10,
-      "fp": 3,
-      "hit": 7,
+      "fp": 2,
+      "hit": 8,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 0,
+      "model_gap": 2,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -14506,6 +15908,21 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -14514,13 +15931,13 @@
       "label": "haiku-4.5",
       "mode": "raw",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 10,
-      "fp": 3,
-      "hit": 7,
+      "fp": 2,
+      "hit": 8,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 0,
+      "model_gap": 2,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -14556,6 +15973,21 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -14564,13 +15996,13 @@
       "label": "openai-frontier",
       "mode": "raw",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 7,
-      "fp": 3,
-      "hit": 4,
+      "fp": 1,
+      "hit": 6,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 3,
+      "model_gap": 4,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -14605,6 +16037,21 @@
         {
           "type": "Stability",
           "value": 40.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "model_gap"
         }
       ]
@@ -14614,10 +16061,10 @@
       "label": "openai-frontier",
       "mode": "strict",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 11,
-      "fp": 5,
-      "hit": 6,
+      "fp": 2,
+      "hit": 9,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -14656,6 +16103,21 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "hit"
         }
       ]
     },
@@ -14664,13 +16126,13 @@
       "label": "openai-mini",
       "mode": "raw",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 7,
       "fp": 3,
       "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 3,
+      "model_gap": 6,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -14706,6 +16168,21 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -14714,10 +16191,10 @@
       "label": "openai-mini",
       "mode": "strict",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 16,
-      "fp": 10,
-      "hit": 6,
+      "fp": 7,
+      "hit": 9,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -14756,6 +16233,21 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "hit"
         }
       ]
     },
@@ -14764,10 +16256,10 @@
       "label": "sonnet-4.6",
       "mode": "raw",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 11,
-      "fp": 4,
-      "hit": 7,
+      "fp": 1,
+      "hit": 10,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 0,
@@ -14805,6 +16297,21 @@
         {
           "type": "Stability",
           "value": 40.0,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "hit"
         }
       ]
@@ -14814,13 +16321,13 @@
       "label": "deepseek-flash",
       "mode": "raw",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 0,
       "fp": 0,
       "hit": 0,
       "wrong_type": 0,
-      "coverage_gap": 0,
-      "model_gap": 7,
+      "coverage_gap": 2,
+      "model_gap": 8,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -14855,6 +16362,21 @@
         {
           "type": "Stability",
           "value": 40.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "model_gap"
         }
       ]
@@ -14864,13 +16386,13 @@
       "label": "deepseek-pro",
       "mode": "raw",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 10,
-      "fp": 3,
-      "hit": 7,
+      "fp": 1,
+      "hit": 9,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 0,
+      "model_gap": 1,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -14906,6 +16428,21 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -14914,11 +16451,141 @@
       "label": "gemini-lite",
       "mode": "raw",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 8,
       "fp": 1,
       "hit": 7,
       "wrong_type": 0,
+      "coverage_gap": 2,
+      "model_gap": 1,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "dots",
+      "label": "gemini-lite",
+      "mode": "strict",
+      "sha8": "c9a68107",
+      "gt_total": 10,
+      "n_preds": 6,
+      "fp": 0,
+      "hit": 6,
+      "wrong_type": 0,
+      "coverage_gap": 2,
+      "model_gap": 2,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "dots",
+      "label": "haiku-4.5",
+      "mode": "raw",
+      "sha8": "c9a68107",
+      "gt_total": 10,
+      "n_preds": 11,
+      "fp": 1,
+      "hit": 10,
+      "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 0,
       "per_tuple": [
@@ -14956,18 +16623,293 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "hit"
         }
       ]
     },
     {
       "parser": "dots",
-      "label": "gemini-lite",
+      "label": "openai-frontier",
+      "mode": "raw",
+      "sha8": "c9a68107",
+      "gt_total": 10,
+      "n_preds": 9,
+      "fp": 2,
+      "hit": 7,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 3,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "model_gap"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "dots",
+      "label": "openai-frontier",
       "mode": "strict",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
+      "n_preds": 12,
+      "fp": 2,
+      "hit": 10,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "dots",
+      "label": "openai-mini",
+      "mode": "raw",
+      "sha8": "c9a68107",
+      "gt_total": 10,
       "n_preds": 6,
-      "fp": 0,
+      "fp": 2,
+      "hit": 4,
+      "wrong_type": 0,
+      "coverage_gap": 2,
+      "model_gap": 4,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "model_gap"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "dots",
+      "label": "openai-mini",
+      "mode": "strict",
+      "sha8": "c9a68107",
+      "gt_total": 10,
+      "n_preds": 10,
+      "fp": 4,
       "hit": 6,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 4,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "model_gap"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "dots",
+      "label": "sonnet-4.6",
+      "mode": "raw",
+      "sha8": "c9a68107",
+      "gt_total": 10,
+      "n_preds": 10,
+      "fp": 1,
+      "hit": 9,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -15005,307 +16947,22 @@
         {
           "type": "Stability",
           "value": 40.0,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "model_gap"
-        }
-      ]
-    },
-    {
-      "parser": "dots",
-      "label": "haiku-4.5",
-      "mode": "raw",
-      "sha8": "c9a68107",
-      "gt_total": 7,
-      "n_preds": 11,
-      "fp": 4,
-      "hit": 7,
-      "wrong_type": 0,
-      "coverage_gap": 0,
-      "model_gap": 0,
-      "per_tuple": [
-        {
-          "type": "Overpotential",
-          "value": 288.0,
-          "status": "hit"
-        },
-        {
-          "type": "Overpotential",
-          "value": 307.0,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 42.6,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 45.1,
-          "status": "hit"
-        },
-        {
-          "type": "MassActivity",
-          "value": 345.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 120.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 40.0,
-          "status": "hit"
-        }
-      ]
-    },
-    {
-      "parser": "dots",
-      "label": "openai-frontier",
-      "mode": "raw",
-      "sha8": "c9a68107",
-      "gt_total": 7,
-      "n_preds": 9,
-      "fp": 5,
-      "hit": 4,
-      "wrong_type": 0,
-      "coverage_gap": 0,
-      "model_gap": 3,
-      "per_tuple": [
-        {
-          "type": "Overpotential",
-          "value": 288.0,
-          "status": "hit"
-        },
-        {
-          "type": "Overpotential",
-          "value": 307.0,
-          "status": "model_gap"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 42.6,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 45.1,
-          "status": "model_gap"
-        },
-        {
-          "type": "MassActivity",
-          "value": 345.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 120.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 40.0,
-          "status": "model_gap"
-        }
-      ]
-    },
-    {
-      "parser": "dots",
-      "label": "openai-frontier",
-      "mode": "strict",
-      "sha8": "c9a68107",
-      "gt_total": 7,
-      "n_preds": 12,
-      "fp": 5,
-      "hit": 7,
-      "wrong_type": 0,
-      "coverage_gap": 0,
-      "model_gap": 0,
-      "per_tuple": [
-        {
-          "type": "Overpotential",
-          "value": 288.0,
-          "status": "hit"
-        },
-        {
-          "type": "Overpotential",
-          "value": 307.0,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 42.6,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 45.1,
-          "status": "hit"
-        },
-        {
-          "type": "MassActivity",
-          "value": 345.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 120.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 40.0,
-          "status": "hit"
-        }
-      ]
-    },
-    {
-      "parser": "dots",
-      "label": "openai-mini",
-      "mode": "raw",
-      "sha8": "c9a68107",
-      "gt_total": 7,
-      "n_preds": 6,
-      "fp": 2,
-      "hit": 4,
-      "wrong_type": 0,
-      "coverage_gap": 0,
-      "model_gap": 3,
-      "per_tuple": [
-        {
-          "type": "Overpotential",
-          "value": 288.0,
-          "status": "hit"
-        },
-        {
-          "type": "Overpotential",
-          "value": 307.0,
-          "status": "model_gap"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 42.6,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 45.1,
-          "status": "model_gap"
-        },
-        {
-          "type": "MassActivity",
-          "value": 345.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 120.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 40.0,
-          "status": "model_gap"
-        }
-      ]
-    },
-    {
-      "parser": "dots",
-      "label": "openai-mini",
-      "mode": "strict",
-      "sha8": "c9a68107",
-      "gt_total": 7,
-      "n_preds": 10,
-      "fp": 6,
-      "hit": 4,
-      "wrong_type": 0,
-      "coverage_gap": 0,
-      "model_gap": 3,
-      "per_tuple": [
-        {
-          "type": "Overpotential",
-          "value": 288.0,
-          "status": "hit"
-        },
-        {
-          "type": "Overpotential",
-          "value": 307.0,
-          "status": "model_gap"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 42.6,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 45.1,
-          "status": "model_gap"
-        },
-        {
-          "type": "MassActivity",
-          "value": 345.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 120.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 40.0,
-          "status": "model_gap"
-        }
-      ]
-    },
-    {
-      "parser": "dots",
-      "label": "sonnet-4.6",
-      "mode": "raw",
-      "sha8": "c9a68107",
-      "gt_total": 7,
-      "n_preds": 10,
-      "fp": 3,
-      "hit": 7,
-      "wrong_type": 0,
-      "coverage_gap": 0,
-      "model_gap": 0,
-      "per_tuple": [
-        {
-          "type": "Overpotential",
-          "value": 288.0,
-          "status": "hit"
-        },
-        {
-          "type": "Overpotential",
-          "value": 307.0,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 42.6,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 45.1,
-          "status": "hit"
-        },
-        {
-          "type": "MassActivity",
-          "value": 345.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 120.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 40.0,
-          "status": "hit"
         }
       ]
     },
@@ -15314,13 +16971,13 @@
       "label": "deepseek-flash",
       "mode": "raw",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 0,
       "fp": 0,
       "hit": 0,
       "wrong_type": 0,
-      "coverage_gap": 0,
-      "model_gap": 7,
+      "coverage_gap": 2,
+      "model_gap": 8,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -15355,6 +17012,21 @@
         {
           "type": "Stability",
           "value": 40.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "model_gap"
         }
       ]
@@ -15364,110 +17036,10 @@
       "label": "deepseek-pro",
       "mode": "raw",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 11,
-      "fp": 4,
-      "hit": 7,
-      "wrong_type": 0,
-      "coverage_gap": 0,
-      "model_gap": 0,
-      "per_tuple": [
-        {
-          "type": "Overpotential",
-          "value": 288.0,
-          "status": "hit"
-        },
-        {
-          "type": "Overpotential",
-          "value": 307.0,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 42.6,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 45.1,
-          "status": "hit"
-        },
-        {
-          "type": "MassActivity",
-          "value": 345.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 120.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 40.0,
-          "status": "hit"
-        }
-      ]
-    },
-    {
-      "parser": "mineru",
-      "label": "gemini-lite",
-      "mode": "raw",
-      "sha8": "c9a68107",
-      "gt_total": 7,
-      "n_preds": 10,
-      "fp": 3,
-      "hit": 7,
-      "wrong_type": 0,
-      "coverage_gap": 0,
-      "model_gap": 0,
-      "per_tuple": [
-        {
-          "type": "Overpotential",
-          "value": 288.0,
-          "status": "hit"
-        },
-        {
-          "type": "Overpotential",
-          "value": 307.0,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 42.6,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 45.1,
-          "status": "hit"
-        },
-        {
-          "type": "MassActivity",
-          "value": 345.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 120.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 40.0,
-          "status": "hit"
-        }
-      ]
-    },
-    {
-      "parser": "mineru",
-      "label": "gemini-lite",
-      "mode": "strict",
-      "sha8": "c9a68107",
-      "gt_total": 7,
-      "n_preds": 6,
-      "fp": 0,
-      "hit": 6,
+      "fp": 2,
+      "hit": 9,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 1,
@@ -15505,6 +17077,151 @@
         {
           "type": "Stability",
           "value": 40.0,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "mineru",
+      "label": "gemini-lite",
+      "mode": "raw",
+      "sha8": "c9a68107",
+      "gt_total": 10,
+      "n_preds": 10,
+      "fp": 1,
+      "hit": 9,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 1,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "mineru",
+      "label": "gemini-lite",
+      "mode": "strict",
+      "sha8": "c9a68107",
+      "gt_total": 10,
+      "n_preds": 6,
+      "fp": 0,
+      "hit": 6,
+      "wrong_type": 0,
+      "coverage_gap": 2,
+      "model_gap": 2,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "model_gap"
         }
       ]
@@ -15514,13 +17231,13 @@
       "label": "haiku-4.5",
       "mode": "raw",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 12,
-      "fp": 5,
-      "hit": 7,
+      "fp": 3,
+      "hit": 9,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 0,
+      "model_gap": 1,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -15556,6 +17273,21 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -15564,13 +17296,13 @@
       "label": "openai-frontier",
       "mode": "raw",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 7,
-      "fp": 3,
-      "hit": 4,
+      "fp": 1,
+      "hit": 6,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 3,
+      "model_gap": 4,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -15605,6 +17337,21 @@
         {
           "type": "Stability",
           "value": 40.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "model_gap"
         }
       ]
@@ -15614,10 +17361,10 @@
       "label": "openai-frontier",
       "mode": "strict",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 13,
-      "fp": 6,
-      "hit": 7,
+      "fp": 3,
+      "hit": 10,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 0,
@@ -15656,6 +17403,21 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "hit"
         }
       ]
     },
@@ -15664,13 +17426,13 @@
       "label": "openai-mini",
       "mode": "raw",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 8,
       "fp": 4,
       "hit": 4,
       "wrong_type": 0,
-      "coverage_gap": 0,
-      "model_gap": 3,
+      "coverage_gap": 2,
+      "model_gap": 4,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -15705,6 +17467,21 @@
         {
           "type": "Stability",
           "value": 40.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "model_gap"
         }
       ]
@@ -15714,13 +17491,13 @@
       "label": "openai-mini",
       "mode": "strict",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 10,
-      "fp": 6,
-      "hit": 4,
+      "fp": 4,
+      "hit": 6,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 3,
+      "model_gap": 4,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -15755,6 +17532,21 @@
         {
           "type": "Stability",
           "value": 40.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "model_gap"
         }
       ]
@@ -15764,13 +17556,13 @@
       "label": "sonnet-4.6",
       "mode": "raw",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 10,
-      "fp": 3,
-      "hit": 7,
+      "fp": 1,
+      "hit": 9,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 0,
+      "model_gap": 1,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -15806,6 +17598,21 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -15814,13 +17621,13 @@
       "label": "deepseek-flash",
       "mode": "judge",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 0,
       "fp": 0,
       "hit": 0,
       "wrong_type": 0,
-      "coverage_gap": 0,
-      "model_gap": 7,
+      "coverage_gap": 1,
+      "model_gap": 9,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -15855,6 +17662,21 @@
         {
           "type": "Stability",
           "value": 40.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "model_gap"
         }
       ]
@@ -15864,13 +17686,13 @@
       "label": "deepseek-flash",
       "mode": "raw",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 0,
       "fp": 0,
       "hit": 0,
       "wrong_type": 0,
-      "coverage_gap": 0,
-      "model_gap": 7,
+      "coverage_gap": 1,
+      "model_gap": 9,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -15905,6 +17727,21 @@
         {
           "type": "Stability",
           "value": 40.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "model_gap"
         }
       ]
@@ -15914,13 +17751,13 @@
       "label": "deepseek-flash",
       "mode": "reason-first-16k",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 8,
       "fp": 1,
       "hit": 7,
       "wrong_type": 0,
-      "coverage_gap": 0,
-      "model_gap": 0,
+      "coverage_gap": 1,
+      "model_gap": 2,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -15956,6 +17793,21 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -15964,13 +17816,13 @@
       "label": "deepseek-flash",
       "mode": "reason-first",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 5,
       "fp": 0,
       "hit": 5,
       "wrong_type": 0,
-      "coverage_gap": 0,
-      "model_gap": 2,
+      "coverage_gap": 1,
+      "model_gap": 4,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -16005,6 +17857,21 @@
         {
           "type": "Stability",
           "value": 40.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "model_gap"
         }
       ]
@@ -16014,13 +17881,13 @@
       "label": "deepseek-flash",
       "mode": "requery",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 0,
       "fp": 0,
       "hit": 0,
       "wrong_type": 0,
-      "coverage_gap": 0,
-      "model_gap": 7,
+      "coverage_gap": 1,
+      "model_gap": 9,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -16055,6 +17922,21 @@
         {
           "type": "Stability",
           "value": 40.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "model_gap"
         }
       ]
@@ -16064,13 +17946,13 @@
       "label": "deepseek-flash",
       "mode": "union-k3",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 0,
       "fp": 0,
       "hit": 0,
       "wrong_type": 0,
-      "coverage_gap": 0,
-      "model_gap": 7,
+      "coverage_gap": 1,
+      "model_gap": 9,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -16105,6 +17987,21 @@
         {
           "type": "Stability",
           "value": 40.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "model_gap"
         }
       ]
@@ -16114,13 +18011,13 @@
       "label": "deepseek-pro",
       "mode": "raw",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 10,
-      "fp": 3,
-      "hit": 7,
+      "fp": 1,
+      "hit": 9,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 0,
+      "model_gap": 1,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -16156,6 +18053,21 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -16164,10 +18076,10 @@
       "label": "gemini-lite",
       "mode": "judge",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 13,
-      "fp": 6,
-      "hit": 7,
+      "fp": 3,
+      "hit": 10,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 0,
@@ -16205,6 +18117,21 @@
         {
           "type": "Stability",
           "value": 40.0,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
           "status": "hit"
         }
       ]
@@ -16214,13 +18141,13 @@
       "label": "gemini-lite",
       "mode": "raw",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 9,
-      "fp": 2,
-      "hit": 7,
+      "fp": 0,
+      "hit": 9,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 0,
+      "model_gap": 1,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -16256,6 +18183,21 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -16264,13 +18206,13 @@
       "label": "gemini-lite",
       "mode": "reason-first-16k",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 9,
-      "fp": 2,
-      "hit": 7,
+      "fp": 0,
+      "hit": 9,
       "wrong_type": 0,
       "coverage_gap": 0,
-      "model_gap": 0,
+      "model_gap": 1,
       "per_tuple": [
         {
           "type": "Overpotential",
@@ -16306,6 +18248,21 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -16314,410 +18271,10 @@
       "label": "gemini-lite",
       "mode": "reason-first",
       "sha8": "c9a68107",
-      "gt_total": 7,
+      "gt_total": 10,
       "n_preds": 8,
-      "fp": 2,
-      "hit": 6,
-      "wrong_type": 0,
-      "coverage_gap": 0,
-      "model_gap": 1,
-      "per_tuple": [
-        {
-          "type": "Overpotential",
-          "value": 288.0,
-          "status": "hit"
-        },
-        {
-          "type": "Overpotential",
-          "value": 307.0,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 42.6,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 45.1,
-          "status": "hit"
-        },
-        {
-          "type": "MassActivity",
-          "value": 345.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 120.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 40.0,
-          "status": "model_gap"
-        }
-      ]
-    },
-    {
-      "parser": "paddle",
-      "label": "gemini-lite",
-      "mode": "requery",
-      "sha8": "c9a68107",
-      "gt_total": 7,
-      "n_preds": 9,
-      "fp": 2,
+      "fp": 1,
       "hit": 7,
-      "wrong_type": 0,
-      "coverage_gap": 0,
-      "model_gap": 0,
-      "per_tuple": [
-        {
-          "type": "Overpotential",
-          "value": 288.0,
-          "status": "hit"
-        },
-        {
-          "type": "Overpotential",
-          "value": 307.0,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 42.6,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 45.1,
-          "status": "hit"
-        },
-        {
-          "type": "MassActivity",
-          "value": 345.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 120.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 40.0,
-          "status": "hit"
-        }
-      ]
-    },
-    {
-      "parser": "paddle",
-      "label": "gemini-lite",
-      "mode": "strict",
-      "sha8": "c9a68107",
-      "gt_total": 7,
-      "n_preds": 6,
-      "fp": 0,
-      "hit": 6,
-      "wrong_type": 0,
-      "coverage_gap": 0,
-      "model_gap": 1,
-      "per_tuple": [
-        {
-          "type": "Overpotential",
-          "value": 288.0,
-          "status": "hit"
-        },
-        {
-          "type": "Overpotential",
-          "value": 307.0,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 42.6,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 45.1,
-          "status": "hit"
-        },
-        {
-          "type": "MassActivity",
-          "value": 345.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 120.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 40.0,
-          "status": "model_gap"
-        }
-      ]
-    },
-    {
-      "parser": "paddle",
-      "label": "gemini-lite",
-      "mode": "union-k3",
-      "sha8": "c9a68107",
-      "gt_total": 7,
-      "n_preds": 13,
-      "fp": 6,
-      "hit": 7,
-      "wrong_type": 0,
-      "coverage_gap": 0,
-      "model_gap": 0,
-      "per_tuple": [
-        {
-          "type": "Overpotential",
-          "value": 288.0,
-          "status": "hit"
-        },
-        {
-          "type": "Overpotential",
-          "value": 307.0,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 42.6,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 45.1,
-          "status": "hit"
-        },
-        {
-          "type": "MassActivity",
-          "value": 345.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 120.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 40.0,
-          "status": "hit"
-        }
-      ]
-    },
-    {
-      "parser": "paddle",
-      "label": "haiku-4.5",
-      "mode": "raw",
-      "sha8": "c9a68107",
-      "gt_total": 7,
-      "n_preds": 13,
-      "fp": 6,
-      "hit": 7,
-      "wrong_type": 0,
-      "coverage_gap": 0,
-      "model_gap": 0,
-      "per_tuple": [
-        {
-          "type": "Overpotential",
-          "value": 288.0,
-          "status": "hit"
-        },
-        {
-          "type": "Overpotential",
-          "value": 307.0,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 42.6,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 45.1,
-          "status": "hit"
-        },
-        {
-          "type": "MassActivity",
-          "value": 345.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 120.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 40.0,
-          "status": "hit"
-        }
-      ]
-    },
-    {
-      "parser": "paddle",
-      "label": "openai-frontier",
-      "mode": "raw",
-      "sha8": "c9a68107",
-      "gt_total": 7,
-      "n_preds": 10,
-      "fp": 5,
-      "hit": 5,
-      "wrong_type": 0,
-      "coverage_gap": 0,
-      "model_gap": 2,
-      "per_tuple": [
-        {
-          "type": "Overpotential",
-          "value": 288.0,
-          "status": "hit"
-        },
-        {
-          "type": "Overpotential",
-          "value": 307.0,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 42.6,
-          "status": "model_gap"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 45.1,
-          "status": "model_gap"
-        },
-        {
-          "type": "MassActivity",
-          "value": 345.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 120.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 40.0,
-          "status": "hit"
-        }
-      ]
-    },
-    {
-      "parser": "paddle",
-      "label": "openai-frontier",
-      "mode": "strict",
-      "sha8": "c9a68107",
-      "gt_total": 7,
-      "n_preds": 12,
-      "fp": 5,
-      "hit": 7,
-      "wrong_type": 0,
-      "coverage_gap": 0,
-      "model_gap": 0,
-      "per_tuple": [
-        {
-          "type": "Overpotential",
-          "value": 288.0,
-          "status": "hit"
-        },
-        {
-          "type": "Overpotential",
-          "value": 307.0,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 42.6,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 45.1,
-          "status": "hit"
-        },
-        {
-          "type": "MassActivity",
-          "value": 345.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 120.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 40.0,
-          "status": "hit"
-        }
-      ]
-    },
-    {
-      "parser": "paddle",
-      "label": "openai-mini",
-      "mode": "raw",
-      "sha8": "c9a68107",
-      "gt_total": 7,
-      "n_preds": 13,
-      "fp": 7,
-      "hit": 6,
-      "wrong_type": 0,
-      "coverage_gap": 0,
-      "model_gap": 1,
-      "per_tuple": [
-        {
-          "type": "Overpotential",
-          "value": 288.0,
-          "status": "hit"
-        },
-        {
-          "type": "Overpotential",
-          "value": 307.0,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 42.6,
-          "status": "hit"
-        },
-        {
-          "type": "TafelSlope",
-          "value": 45.1,
-          "status": "hit"
-        },
-        {
-          "type": "MassActivity",
-          "value": 345.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 120.0,
-          "status": "hit"
-        },
-        {
-          "type": "Stability",
-          "value": 40.0,
-          "status": "model_gap"
-        }
-      ]
-    },
-    {
-      "parser": "paddle",
-      "label": "openai-mini",
-      "mode": "strict",
-      "sha8": "c9a68107",
-      "gt_total": 7,
-      "n_preds": 9,
-      "fp": 5,
-      "hit": 4,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 3,
@@ -16730,7 +18287,7 @@
         {
           "type": "Overpotential",
           "value": 307.0,
-          "status": "model_gap"
+          "status": "hit"
         },
         {
           "type": "TafelSlope",
@@ -16740,7 +18297,7 @@
         {
           "type": "TafelSlope",
           "value": 45.1,
-          "status": "model_gap"
+          "status": "hit"
         },
         {
           "type": "MassActivity",
@@ -16756,18 +18313,163 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
         }
       ]
     },
     {
       "parser": "paddle",
-      "label": "sonnet-4.6",
-      "mode": "raw",
+      "label": "gemini-lite",
+      "mode": "requery",
       "sha8": "c9a68107",
-      "gt_total": 7,
-      "n_preds": 10,
+      "gt_total": 10,
+      "n_preds": 9,
+      "fp": 0,
+      "hit": 9,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 1,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "gemini-lite",
+      "mode": "strict",
+      "sha8": "c9a68107",
+      "gt_total": 10,
+      "n_preds": 6,
+      "fp": 0,
+      "hit": 6,
+      "wrong_type": 0,
+      "coverage_gap": 1,
+      "model_gap": 3,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "coverage_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "gemini-lite",
+      "mode": "union-k3",
+      "sha8": "c9a68107",
+      "gt_total": 10,
+      "n_preds": 13,
       "fp": 3,
-      "hit": 7,
+      "hit": 10,
       "wrong_type": 0,
       "coverage_gap": 0,
       "model_gap": 0,
@@ -16806,6 +18508,411 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "haiku-4.5",
+      "mode": "raw",
+      "sha8": "c9a68107",
+      "gt_total": 10,
+      "n_preds": 13,
+      "fp": 3,
+      "hit": 10,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "openai-frontier",
+      "mode": "raw",
+      "sha8": "c9a68107",
+      "gt_total": 10,
+      "n_preds": 10,
+      "fp": 2,
+      "hit": 8,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 2,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "model_gap"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "openai-frontier",
+      "mode": "strict",
+      "sha8": "c9a68107",
+      "gt_total": 10,
+      "n_preds": 12,
+      "fp": 2,
+      "hit": 10,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "openai-mini",
+      "mode": "raw",
+      "sha8": "c9a68107",
+      "gt_total": 10,
+      "n_preds": 13,
+      "fp": 5,
+      "hit": 8,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 2,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "openai-mini",
+      "mode": "strict",
+      "sha8": "c9a68107",
+      "gt_total": 10,
+      "n_preds": 9,
+      "fp": 3,
+      "hit": 6,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 4,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "model_gap"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "sonnet-4.6",
+      "mode": "raw",
+      "sha8": "c9a68107",
+      "gt_total": 10,
+      "n_preds": 10,
+      "fp": 2,
+      "hit": 8,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 2,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.67,
+          "status": "hit"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 1.83,
+          "status": "model_gap"
+        },
+        {
+          "type": "PEMWECellVoltage",
+          "value": 2.0,
+          "status": "model_gap"
         }
       ]
     }

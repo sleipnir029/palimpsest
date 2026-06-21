@@ -186,6 +186,23 @@ def test_extra_instruction_appended_to_user_message(tmp_path):
     assert "MARKER_XYZ" not in p2.last_user
 
 
+def test_magnitude_guard_rejects_unconverted_prefixed_unit(tmp_path):
+    """T74 C3: a value emitted in a prefixed unit (mV) under the canonical label (V)
+    passes C2 (dimension matches) but is ~1000× too large; the magnitude guard must
+    route it to errors while the in-range value of the same measurement validates."""
+    sha = "8" * 64
+    page = [{"type": "text", "content": "operating cell voltage of 1.9 V (not 1900)",
+             "bbox": [10, 10, 400, 30]}]
+    cache = _seed_cache(tmp_path, sha, parser_text=json.dumps([page]))
+    resp = {"items": [
+        {"type": "PEMWECellVoltage", "value": 1.9, "unit_label": "V", "evidence": _ev(0)},
+        {"type": "PEMWECellVoltage", "value": 1900.0, "unit_label": "V", "evidence": _ev(0)},
+    ]}
+    valid, errors = extract(paper_sha=sha, provider=_StubProvider(json.dumps(resp)), cache=cache)
+    assert len(valid) == 1 and valid[0].value == 1.9
+    assert len(errors) == 1 and "out of plausible range" in str(errors[0][0])
+
+
 def test_reason_first_response_parses_and_drops_reasoning(tmp_path):
     """T74 arm B's whole premise: a leading `reasoning` key on the outer object is
     IGNORED by _parse_response (json.loads then body["items"]), so reason-then-format
