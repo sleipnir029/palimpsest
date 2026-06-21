@@ -166,6 +166,56 @@ def load_taxonomy():
     return per_parser, total
 
 
+def load_reachable():
+    """Per model (avg over parsers): micro-recall vs reachable-recall.
+
+    reachable-recall = hits / (gold the parser actually surfaced) = hit / (gt - coverage_gap).
+    It divides the coverage ceiling out, isolating pure model skill.
+    """
+    rs = json.load((RESULTS / "rescore.json").open())
+    acc = {m: dict(hit=0, gt=0, cov=0) for m in CANON}
+    grid_hit = grid_gt = grid_cov = 0
+    for c in rs["cells"]:
+        if c["mode"] != "raw" or c["label"] not in CANON:
+            continue
+        a = acc[c["label"]]
+        a["hit"] += c["hit"]; a["gt"] += c["gt_total"]; a["cov"] += c["coverage_gap"]
+        grid_hit += c["hit"]; grid_gt += c["gt_total"]; grid_cov += c["coverage_gap"]
+    out = {}
+    for m, a in acc.items():
+        out[m] = dict(
+            microRecall=round(a["hit"] / a["gt"], 4) if a["gt"] else None,
+            reachableRecall=round(a["hit"] / (a["gt"] - a["cov"]), 4) if (a["gt"] - a["cov"]) else None,
+        )
+    grid = dict(microRecall=round(grid_hit / grid_gt, 4),
+                reachableRecall=round(grid_hit / (grid_gt - grid_cov), 4))
+    return out, grid
+
+
+def load_by_type():
+    """Recall per measurement type, across the raw canonical grid."""
+    rs = json.load((RESULTS / "rescore.json").open())
+    agg = {}
+    for c in rs["cells"]:
+        if c["mode"] != "raw" or c["label"] not in CANON:
+            continue
+        for t in c["per_tuple"]:
+            d = agg.setdefault(t["type"], dict(total=0, hit=0, model_gap=0, coverage_gap=0, wrong_type=0))
+            d["total"] += 1
+            st = t["status"]
+            if st in d:
+                d[st] += 1
+    out = []
+    for typ, d in agg.items():
+        reach = d["total"] - d["coverage_gap"]
+        out.append(dict(type=typ, total=d["total"], hit=d["hit"],
+                        coverage_gap=d["coverage_gap"], model_gap=d["model_gap"],
+                        recall=round(d["hit"] / d["total"], 4) if d["total"] else 0,
+                        reachableRecall=round(d["hit"] / reach, 4) if reach else 0))
+    out.sort(key=lambda x: x["recall"])
+    return out
+
+
 def load_papers():
     papers = []
     with MANIFEST.open(newline="") as fh:
@@ -180,6 +230,8 @@ def main():
     grid, avg = build_grid(rows)
     coverage, figure_only = load_coverage()
     taxonomy, tax_total = load_taxonomy()
+    reachable, reach_grid = load_reachable()
+    by_type = load_by_type()
     papers = load_papers()
 
     # gold count per paper (from raw deepseek-pro rows, any parser has full gt)
@@ -215,6 +267,7 @@ def main():
         grid=grid, avgByModel=avg,
         coverage=coverage, figureOnly=figure_only,
         taxonomy=taxonomy, taxonomyTotal=tax_total,
+        reachable=reachable, reachableGrid=reach_grid, byType=by_type,
         hero=hero,
     )
 
@@ -256,13 +309,20 @@ def main():
     f["CEIL_MINERU"] = f'{100*coverage["mineru"]["ceiling"]:.0f}'
     f["CEIL_DOTS"] = f'{100*coverage["dots"]["ceiling"]:.0f}'
     f["N_FIGONLY"] = len(figure_only)
+    # reachable-recall (coverage ceiling divided out)
+    f["GRID_RECALL"] = f'{100*reach_grid["microRecall"]:.0f}'
+    f["GRID_REACHABLE"] = f'{100*reach_grid["reachableRecall"]:.0f}'
+    f["DSFLASH_REACHABLE"] = f'{100*reachable["deepseek-flash"]["reachableRecall"]:.0f}'
+    f["DSFLASH_MICRO"] = f'{100*reachable["deepseek-flash"]["microRecall"]:.0f}'
+    # measurement type extremes
+    f["TYPE_HARDEST"] = by_type[0]["type"]
+    f["TYPE_HARDEST_R"] = f'{100*by_type[0]["recall"]:.0f}'
+    f["TYPE_EASIEST"] = by_type[-1]["type"]
+    f["TYPE_EASIEST_R"] = f'{100*by_type[-1]["recall"]:.0f}'
 
     if "--dump" in sys.argv:
-        print(json.dumps(dict(facts=f, avg=avg["raw"], hero=hero,
-                              coverage={p: coverage[p]["ceiling"] for p in PARSERS},
-                              taxTotal=tax_total,
-                              order=order,
-                              figureOnly=figure_only), indent=2))
+        print(json.dumps(dict(facts=f, reachable=reachable, reachGrid=reach_grid,
+                              byType=by_type, order=order), indent=2))
         return
 
     html = render(data, f)

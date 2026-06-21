@@ -236,6 +236,57 @@ text{font-family:var(--grotesk)}
   font-family:var(--grotesk);font-size:.82rem;line-height:1.6}
 .colophon b{color:var(--ink-2)}
 
+/* ---------- orientation: key findings + glossary ---------- */
+.findings{border:1px solid var(--rule-2);border-radius:8px;background:var(--paper-2);padding:1.3rem 1.5rem;margin:1.6rem 0}
+.findings h2{font-family:var(--grotesk);font-weight:700;font-size:.8rem;text-transform:uppercase;
+  letter-spacing:.12em;color:var(--teal-2);margin-bottom:.9rem}
+.findings ol{margin:0;padding:0;list-style:none;counter-reset:kf}
+.findings li{counter-increment:kf;position:relative;padding:.5rem 0 .5rem 2.4rem;
+  border-top:1px solid var(--rule);font-size:1.02rem;color:var(--ink)}
+.findings li:first-child{border-top:0}
+.findings li::before{content:counter(kf,decimal-leading-zero);position:absolute;left:0;top:.62rem;
+  font-family:var(--mono);font-size:.78rem;color:var(--correction)}
+.findings li b{font-weight:600}
+.findings li .mono{color:var(--teal-2)}
+details.disc{border-top:1px solid var(--rule);margin:0}
+details.disc>summary{cursor:pointer;list-style:none;padding:.9rem 0;font-family:var(--grotesk);
+  font-weight:600;font-size:.95rem;color:var(--ink);display:flex;align-items:center;gap:.6rem}
+details.disc>summary::-webkit-details-marker{display:none}
+details.disc>summary::before{content:"+";font-family:var(--mono);color:var(--teal-2);font-size:1.1rem;width:1rem}
+details.disc[open]>summary::before{content:"\2212"}
+details.disc>summary .hint{font-family:var(--grotesk);font-weight:400;font-size:.82rem;color:var(--muted);margin-left:auto}
+details.disc>.disc-body{padding:.2rem 0 1.2rem}
+.glossary{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem 2.2rem}
+@media(max-width:760px){.glossary{grid-template-columns:1fr}}
+.glossary h3{font-family:var(--grotesk);font-weight:700;font-size:.72rem;text-transform:uppercase;
+  letter-spacing:.1em;color:var(--muted);margin:0 0 .3rem;padding-bottom:.3rem;border-bottom:1px solid var(--rule-2)}
+.glossary dl{margin:0}
+.glossary dt{font-family:var(--grotesk);font-weight:600;font-size:.9rem;color:var(--ink);margin-top:.65rem}
+.glossary dd{margin:.1rem 0 0;font-size:.92rem;line-height:1.45;color:var(--ink-2)}
+.glossary dd .mono{color:var(--teal-2)}
+
+/* ---------- raising the ceiling: flow + menu ---------- */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin:1.4rem 0}
+@media(max-width:680px){.split{grid-template-columns:1fr}}
+.gapcard{border:1px solid var(--rule-2);border-radius:8px;padding:1.1rem 1.2rem;background:var(--paper-2)}
+.gapcard .gh{font-family:var(--grotesk);font-weight:700;font-size:.95rem;display:flex;justify-content:space-between;align-items:baseline}
+.gapcard .gh .pctn{font-family:var(--mono);color:var(--correction);font-size:1.1rem}
+.gapcard .who{font-family:var(--grotesk);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:.2rem 0 .6rem}
+.gapcard p{font-size:.92rem;margin:.5rem 0 0;color:var(--ink-2)}
+.gapcard .fix{font-family:var(--grotesk);font-size:.84rem;color:var(--ink);margin-top:.7rem;padding-top:.6rem;border-top:1px solid var(--rule)}
+.gapcard .fix b{color:var(--teal-2)}
+.passlist{counter-reset:pl;margin:1.2rem 0}
+.passlist .p{counter-increment:pl;position:relative;padding:.9rem 0 .9rem 3rem;border-top:1px solid var(--rule)}
+.passlist .p::before{content:counter(pl);position:absolute;left:0;top:.85rem;width:1.7rem;height:1.7rem;
+  border:1.5px solid var(--teal);border-radius:50%;color:var(--teal-2);font-family:var(--mono);
+  font-size:.82rem;display:flex;align-items:center;justify-content:center}
+.passlist .p h3{font-family:var(--grotesk);font-weight:600;font-size:1rem;margin:0 0 .2rem}
+.passlist .p .cost{font-family:var(--mono);font-size:.74rem;color:var(--muted);float:right}
+.passlist .p p{font-size:.95rem;margin:.2rem 0 0;color:var(--ink-2)}
+.future{font-family:var(--grotesk);font-size:.64rem;text-transform:uppercase;letter-spacing:.09em;font-weight:700;
+  color:var(--amber);border:1px solid color-mix(in srgb,var(--amber) 40%,transparent);
+  background:color-mix(in srgb,var(--amber) 12%,var(--paper-2));border-radius:3px;padding:.1rem .45rem;vertical-align:middle}
+
 @media(prefers-reduced-motion:no-preference){
   .reveal{opacity:0;transform:translateY(8px);transition:opacity .6s ease,transform .6s ease}
   .reveal.in{opacity:1;transform:none}
@@ -247,14 +298,16 @@ text{font-family:var(--grotesk)}
 <nav class="nav" aria-label="Sections">
   <div class="nav-in">
     <div class="brand">palimpsest<span>/</span>T72</div>
+    <a href="#start"><span class="n">&#9656;</span> <span class="lbl">Start</span></a>
     <a href="#corpus"><span class="n">1</span> <span class="lbl">Question</span></a>
     <a href="#method"><span class="n">2</span> <span class="lbl">Method</span></a>
     <a href="#story"><span class="n">3</span> <span class="lbl">The turn</span></a>
     <a href="#results"><span class="n">4</span> <span class="lbl">Results</span></a>
     <a href="#why"><span class="n">5</span> <span class="lbl">Why</span></a>
-    <a href="#objections"><span class="n">6</span> <span class="lbl">Objections</span></a>
-    <a href="#repro"><span class="n">7</span> <span class="lbl">Reproducibility</span></a>
-    <a href="#decision"><span class="n">8</span> <span class="lbl">Decision</span></a>
+    <a href="#ceiling"><span class="n">6</span> <span class="lbl">Ceiling</span></a>
+    <a href="#objections"><span class="n">7</span> <span class="lbl">Objections</span></a>
+    <a href="#repro"><span class="n">8</span> <span class="lbl">Reproducibility</span></a>
+    <a href="#decision"><span class="n">9</span> <span class="lbl">Decision</span></a>
   </div>
 </nav>
 
@@ -290,6 +343,63 @@ text{font-family:var(--grotesk)}
   </div>
 </header>
 
+<!-- ======================= START HERE ======================= -->
+<section id="start" style="border-top:0;padding-top:1.4rem">
+  <div class="findings">
+    <h2>What this page shows &mdash; in five lines</h2>
+    <ol>
+      <li><b>You don&rsquo;t need an expensive model.</b> The highest average on the corrected grid is a
+        cheap one (%%TOP_MODEL%%, &micro;F1 %%TOP_F1%%); cost per correct extraction spans about
+        <span class="mono">%%COST_SPREAD%%&times;</span>.</li>
+      <li><b>Accuracy is conditional on the parser.</b> The same weights (deepseek-flash) score
+        &micro;F1 <span class="mono">%%DSFLASH_MINERU%%</span> on one parser and
+        <span class="mono">%%DSFLASH_DOCLING%%</span> on another.</li>
+      <li><b>Most of the remaining gap is the parser, not the model.</b> Of %%TAX_MISS%% misses,
+        %%TAX_COVGAP%% (%%TAX_COVGAP_PCT%%%) are values absent from the parser&rsquo;s text; once that
+        ceiling is divided out, grid recall rises %%GRID_RECALL%%% &rarr; %%GRID_REACHABLE%%%.</li>
+      <li><b>The way to capture more is passes, not a different input.</b> Sending the PDF straight to a
+        vision model fixes only the %%TAX_COVGAP_PCT%%% ceiling (and breaks provenance); the
+        %%TAX_MODELGAP_PCT%%% model gap needs a second pass / ensemble / loop &mdash; see &sect;6.</li>
+      <li><b>One decision is still open:</b> the locked runtime default is the weakest overall model.
+        Candidates and trade-offs in &sect;9.</li>
+    </ol>
+  </div>
+
+  <details class="disc">
+    <summary>Definitions &amp; glossary<span class="hint">domain + method terms &mdash; click to expand</span></summary>
+    <div class="disc-body">
+      <div class="glossary">
+        <div>
+          <h3>The science</h3>
+          <dl>
+            <dt>OER</dt><dd>Oxygen-evolution reaction &mdash; the slow half-reaction in water electrolysis these catalysts accelerate.</dd>
+            <dt>Overpotential</dt><dd>Extra voltage (mV) above thermodynamic minimum needed to drive a target current; <em>lower is better</em>. Usually quoted at 10&nbsp;mA/cm&sup2;.</dd>
+            <dt>Tafel slope</dt><dd>mV per decade of current &mdash; how much more voltage each 10&times; in rate costs; lower means better kinetics. Often printed only inside a figure.</dd>
+            <dt>Mass / specific activity</dt><dd>Current normalized per gram of catalyst (mass) or per real surface area (specific).</dd>
+            <dt>Turnover frequency (TOF)</dt><dd>Reactions per active site per second &mdash; intrinsic site activity.</dd>
+            <dt>Stability</dt><dd>How long performance holds (hours) under load &mdash; the durability test.</dd>
+            <dt>RHE &middot; iR-correction</dt><dd>Reference electrode potentials are quoted vs RHE; <span class="mono">iR</span>-correction removes the solution&rsquo;s resistive voltage drop.</dd>
+          </dl>
+        </div>
+        <div>
+          <h3>The method</h3>
+          <dl>
+            <dt>Parser</dt><dd>The tool that turns a PDF into text + layout the model reads. <em>Figure-aware</em> parsers also emit text rendered inside figures.</dd>
+            <dt>Gold tuple</dt><dd>A hand-verified (measurement type, value) the model is expected to find.</dd>
+            <dt>Recall &middot; precision &middot; F1</dt><dd>Found / total; correct / reported; their harmonic mean.</dd>
+            <dt>micro vs &micro; (macro)</dt><dd>Micro pools all papers (weights big papers more); &micro; averages per-paper scores equally.</dd>
+            <dt>Coverage ceiling</dt><dd>The best recall <em>any</em> model could reach on a parser &mdash; the share of gold values whose text the parser actually emitted.</dd>
+            <dt>Reachable-recall</dt><dd>Recall with the ceiling divided out (<span class="mono">hits / reachable</span>) &mdash; isolates pure model skill from parser limits.</dd>
+            <dt>Coverage gap vs model gap</dt><dd>A miss the parser caused (value not in text) vs one the model caused (value was there, not taken).</dd>
+            <dt>raw vs strict</dt><dd>Free-form JSON vs decoding locked to a JSON schema.</dd>
+            <dt>prompt_hash &middot; tolerance</dt><dd><span class="mono">%%PROMPT_HASH%%</span> fingerprints the inputs; a value counts as correct within <span class="mono">&plusmn;1%</span>.</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </details>
+</section>
+
 <!-- ======================= 1 · QUESTION & CORPUS ======================= -->
 <section id="corpus">
   <div class="section-head">
@@ -318,21 +428,27 @@ text{font-family:var(--grotesk)}
     live in a mix of tables, prose, and figures.</p>
   </div>
 
-  <h3 class="grotesk" style="font-family:var(--grotesk);font-weight:600;font-size:.95rem;margin:1.6rem 0 .4rem">The corpus &mdash; %%N_PAPERS%% papers, %%N_GOLD%% gold tuples</h3>
-  <table class="tbl">
-    <thead><tr><th class="num">#</th><th>SHA-8</th><th>DOI</th><th class="num">Pages</th><th class="num">Gold</th></tr></thead>
-    <tbody>%%CORPUS_ROWS%%</tbody>
-  </table>
+  <p style="font-size:.98rem;color:var(--ink-2)">The corpus is %%N_PAPERS%% papers (%%N_GOLD%% gold tuples),
+  the roster %%N_MODELS%% models across four providers, each read through four parsers. The split that matters among
+  parsers is <em>figure-aware</em> (Docling, PaddleOCR, dots.ocr) versus <em>text-block</em> (MinerU).</p>
 
-  <h3 class="grotesk" style="font-family:var(--grotesk);font-weight:600;font-size:.95rem;margin:1.6rem 0 .4rem">The roster &mdash; %%N_MODELS%% models, four providers</h3>
-  <table class="tbl">
-    <thead><tr><th>Label</th><th>Model</th><th>Provider</th><th>Family</th><th>Access</th><th>Tier</th></tr></thead>
-    <tbody>%%ROSTER_ROWS%%</tbody>
-  </table>
-  <p class="muted" style="font-size:.86rem;font-family:var(--grotesk)">A free-tier Gemini ran on a subset
-  and is excluded from the comparable grid. The four parsers &mdash; MinerU, Docling, dots.ocr, PaddleOCR &mdash;
-  all run cloud-side; the split that matters is <em>figure-aware</em> (Docling, PaddleOCR, dots.ocr) versus
-  <em>text-block</em> (MinerU).</p>
+  <details class="disc">
+    <summary>The %%N_PAPERS%% papers and %%N_MODELS%% models<span class="hint">full tables &mdash; click to expand</span></summary>
+    <div class="disc-body">
+      <h3 class="grotesk" style="font-family:var(--grotesk);font-weight:600;font-size:.85rem;margin:.4rem 0 .4rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Corpus &mdash; %%N_PAPERS%% papers, %%N_GOLD%% gold tuples</h3>
+      <table class="tbl">
+        <thead><tr><th class="num">#</th><th>SHA-8</th><th>DOI</th><th class="num">Pages</th><th class="num">Gold</th></tr></thead>
+        <tbody>%%CORPUS_ROWS%%</tbody>
+      </table>
+      <h3 class="grotesk" style="font-family:var(--grotesk);font-weight:600;font-size:.85rem;margin:1.4rem 0 .4rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Roster &mdash; %%N_MODELS%% models, four providers</h3>
+      <table class="tbl">
+        <thead><tr><th>Label</th><th>Model</th><th>Provider</th><th>Family</th><th>Access</th><th>Tier</th></tr></thead>
+        <tbody>%%ROSTER_ROWS%%</tbody>
+      </table>
+      <p class="muted" style="font-size:.84rem;font-family:var(--grotesk)">A free-tier Gemini ran on a subset
+      and is excluded from the comparable grid.</p>
+    </div>
+  </details>
 </section>
 
 <!-- ======================= 2 · METHOD ======================= -->
@@ -512,6 +628,23 @@ text{font-family:var(--grotesk)}
     log cost axis. Points to the upper-left are the prize: high accuracy, near-zero cost. Sonnet sits far to
     the right for a fraction of a point of F1.</figcaption>
   </figure>
+
+  <div class="passage">
+    <h3>Skill vs ceiling &mdash; what the model actually missed</h3>
+    <p>Raw recall blames the model for values the parser never produced. <em>Reachable-recall</em> divides the
+    coverage ceiling out &mdash; <span class="mono">hits / (gold the parser surfaced)</span> &mdash; so what
+    remains is pure model skill. The lift from one to the other is the parser&rsquo;s share of the blame.</p>
+    <aside class="mnote"><span class="mlabel">Reading</span>The dot is raw recall; the tick is reachable.
+    A wide gap means that model was held back by the parser, not its own ability. Grid-wide it is
+    %%GRID_RECALL%%% &rarr; %%GRID_REACHABLE%%%.</aside>
+  </div>
+
+  <figure class="figfull">
+    <div class="chart" id="reachable"></div>
+    <figcaption><b>Most models are better than their recall suggests.</b> Average over the four parsers, raw.
+    Once figure-only values are excluded, deepseek-pro and sonnet clear 95%; even deepseek-flash reaches
+    %%DSFLASH_REACHABLE%%% from a raw %%DSFLASH_MICRO%%%.</figcaption>
+  </figure>
 </section>
 
 <!-- ======================= 5 · WHY ======================= -->
@@ -613,12 +746,112 @@ text{font-family:var(--grotesk)}
     actually emitted. The %%N_FIGONLY%%-point gap on MinerU and dots.ocr is the four figure-only Tafel slopes:</figcaption>
     <ul class="muted" style="font-family:var(--mono);font-size:.82rem;line-height:1.7;margin:.6rem 0 0;padding-left:1.1rem">%%FIGUREONLY%%</ul>
   </figure>
+
+  <div class="passage">
+    <p>The same split sorts the <em>measurement types</em>. %%TYPE_HARDEST%% looks like the hardest quantity
+    (recall %%TYPE_HARDEST_R%%%) &mdash; but its whole shortfall is the figure-only ceiling: divide that out and
+    it is among the easiest. <strong>Stability</strong> is the genuinely hard one for the models: no coverage
+    gap, yet recall stays low, because a bare value can&rsquo;t tell a hero catalyst&rsquo;s lifetime from a
+    reference&rsquo;s.</p>
+    <aside class="mnote"><span class="mlabel">Reading</span>Solid bar = recall; the hollow extension = the
+    reachable-recall a figure-aware parser unlocks. Only %%TYPE_HARDEST%% has a meaningful extension.</aside>
+  </div>
+
+  <figure class="figfull">
+    <div class="chart" id="bytype"></div>
+    <figcaption><b>Which quantities are hard &mdash; and why.</b> Recall by measurement type across the raw grid.
+    The gap between solid and hollow is the parser ceiling; everything to the left of it is the model.</figcaption>
+  </figure>
 </section>
 
-<!-- ======================= 6 · OBJECTIONS ======================= -->
+<!-- ======================= 6 · RAISING THE CEILING ======================= -->
+<section id="ceiling">
+  <div class="section-head">
+    <div class="kicker"><span class="secno">06</span><span class="eyebrow">Raising the ceiling</span>
+      <span class="future">proposed &middot; T73</span></div>
+    <h2>What would actually capture everything?</h2>
+  </div>
+
+  <div class="passage">
+    <p class="lead">The obvious idea is to stop parsing and send the PDF straight to a vision model. It helps
+    less than it looks, and it costs something palimpsest cannot give up. The fix the data points to is
+    <em>passes</em>, not a different input.</p>
+    <aside class="mnote warn"><span class="mlabel">Caveat</span>T72 measured <em>single-shot</em> extraction.
+    Everything in this section is a proposed method with a predicted mechanism &mdash; the next experiment
+    (T73) would measure it.</aside>
+  </div>
+
+  <div class="passage">
+    <p>Start from the taxonomy, because the two kinds of miss have two different cures. Sending the page as an
+    image attacks only the first; it does nothing for the second &mdash; which is the larger.</p>
+  </div>
+
+  <div class="split">
+    <div class="gapcard">
+      <div class="gh">Coverage gap <span class="pctn">%%TAX_COVGAP_PCT%%%</span></div>
+      <div class="who">parser&rsquo;s fault &middot; value not in the text</div>
+      <p>The %%N_FIGONLY%% Tafel slopes printed only inside a figure. A text-only parser can never emit them.</p>
+      <div class="fix"><b>Fix:</b> a figure-aware parser already closes this (Docling, PaddleOCR hit a 100%
+      ceiling). Belt-and-suspenders: send only parser-flagged <em>figure crops</em> to a vision model, inheriting
+      the parser&rsquo;s bbox so provenance survives.</div>
+    </div>
+    <div class="gapcard">
+      <div class="gh">Model gap <span class="pctn">%%TAX_MODELGAP_PCT%%%</span></div>
+      <div class="who">model&rsquo;s fault &middot; value was there, not taken</div>
+      <p>The value sat in the parser&rsquo;s output and the model simply didn&rsquo;t return it. Changing the
+      input format does not fix this.</p>
+      <div class="fix"><b>Fix:</b> a second pass &mdash; re-query for what&rsquo;s missing, union across parsers,
+      or loop with a verifier. This is the real headroom.</div>
+    </div>
+  </div>
+
+  <div class="passage">
+    <h3>Why not just send the PDF to the API?</h3>
+    <p>Three reasons it is an auxiliary tool, not a replacement. <strong>One</strong>, it targets only the
+    %%TAX_COVGAP_PCT%%% coverage gap &mdash; already solved more cheaply by a figure-aware parser.
+    <strong>Two</strong>, it breaks the provenance invariant: every triple palimpsest stores must carry
+    <span class="mono">(paper_hash, parser, page, bbox)</span>. A parser hands you the bbox; a raw vision call
+    does not &mdash; the model would have to self-report pixel coordinates, unreliably. <strong>Three</strong>,
+    a rendered page is thousands of image tokens, so the cheap-model economics that make this study interesting
+    collapse, and vision OCR of dense numeric tables is often <em>worse</em> than a good text parser.</p>
+    <aside class="mnote"><span class="mlabel">The principle</span>The parser is not in the way of accuracy &mdash;
+    it is what makes a provenance-clean, auditable triple possible. Vision is a patch for figures, not the road.</aside>
+  </div>
+
+  <div class="passage">
+    <h3>The passes, cheapest first</h3>
+    <p>All of these keep parse-then-extract, so provenance is intact, and all are affordable precisely because
+    the strong models here are cheap &mdash; the thesis turned into a method.</p>
+  </div>
+
+  <div class="passlist">
+    <div class="p"><span class="cost">~free</span><h3>Parser ensemble (union)</h3>
+      <p>Run two figure-aware parsers and union the extractions. Different parsers surface different values;
+      near-free recall, provenance preserved. The first move.</p></div>
+    <div class="p"><span class="cost">+1 call</span><h3>Coverage-driven second pass</h3>
+      <p>Tell the model what it already found and ask specifically for the types usually present but missing:
+      &ldquo;you reported overpotential and stability; OER papers normally also report a Tafel slope and mass
+      activity &mdash; extract them or state &lsquo;absent&rsquo;.&rdquo; Aimed straight at the model gap.</p></div>
+    <div class="p"><span class="cost">&times;N calls</span><h3>Self-consistency</h3>
+      <p>Sample N times at non-zero temperature, then union or vote. Recall rises with the union; the vote
+      cleans precision. Cost scales with N &mdash; cheap models make it viable.</p></div>
+    <div class="p"><span class="cost">loop</span><h3>Verify-and-loop (the critic)</h3>
+      <p>A pass that checks each extracted value against its cited span &mdash; killing false positives and bad
+      bboxes &mdash; then re-reads for misses. Repeat until a pass adds nothing new: <em>loop-until-dry</em>.</p></div>
+  </div>
+
+  <div class="passage">
+    <p><strong>The recommendation:</strong> keep parse-then-extract; default to a figure-aware parser (ceiling
+    solved); add a two-pass loop (extract &rarr; coverage-driven re-query &rarr; stop when dry), unioned across
+    two parsers; reserve targeted vision for parser-flagged figure crops only. Predicted effect: most of the
+    %%TAX_MODELGAP%% model gaps convert to hits for the price of about one extra cheap call per paper.</p>
+  </div>
+</section>
+
+<!-- ======================= 7 · OBJECTIONS ======================= -->
 <section id="objections">
   <div class="section-head">
-    <div class="kicker"><span class="secno">06</span><span class="eyebrow">Objections &amp; answers</span></div>
+    <div class="kicker"><span class="secno">07</span><span class="eyebrow">Objections &amp; answers</span></div>
     <h2>What a skeptical examiner asks</h2>
   </div>
   <div class="passage">
@@ -631,7 +864,7 @@ text{font-family:var(--grotesk)}
 <!-- ======================= 7 · REPRODUCIBILITY ======================= -->
 <section id="repro">
   <div class="section-head">
-    <div class="kicker"><span class="secno">07</span><span class="eyebrow">Reproducibility ledger</span></div>
+    <div class="kicker"><span class="secno">08</span><span class="eyebrow">Reproducibility ledger</span></div>
     <h2>What makes this re-runnable &mdash; and where it stops</h2>
   </div>
   <div class="passage">
@@ -672,7 +905,7 @@ text{font-family:var(--grotesk)}
 <!-- ======================= 8 · DECISION ======================= -->
 <section id="decision">
   <div class="section-head">
-    <div class="kicker"><span class="secno">08</span><span class="eyebrow">The open decision</span></div>
+    <div class="kicker"><span class="secno">09</span><span class="eyebrow">The open decision</span></div>
     <h2>The locked default is still the weakest model</h2>
   </div>
   <div class="passage">
@@ -919,6 +1152,62 @@ function coverage(){
 }
 
 /* ---------------- controls + boot ---------------- */
+/* ---------------- reachable-recall dumbbell ---------------- */
+function reachableChart(){
+  const host=document.getElementById("reachable"); if(!host) return;
+  const W=720,rowH=34,padL=150,padR=60,T=10;
+  const rows=ORDER.map(k=>({k,a:DATA.reachable[k].microRecall,b:DATA.reachable[k].reachableRecall}))
+    .sort((x,y)=>y.b-x.b);
+  const H=T+rows.length*rowH+24;
+  const lo=0.5, hi=1.0, X=v=>padL+(v-lo)/(hi-lo)*(W-padL-padR);
+  const s=svg(W,H);
+  for(let g=5;g<=10;g++){const xx=X(g/10);
+    s.appendChild(E("line",{x1:xx,y1:T,x2:xx,y2:T+rows.length*rowH,stroke:"#E0E4E0","stroke-width":1}));
+    s.appendChild(txt(xx,H-8,(g/10).toFixed(1),{"text-anchor":"middle","font-size":9,fill:"#9aa0a6","font-family":"IBM Plex Mono"}));}
+  rows.forEach((r,i)=>{
+    const y=T+i*rowH+rowH/2;
+    s.appendChild(txt(padL-12,y+4,MNAME[r.k],{"text-anchor":"end","font-size":12,fill:"#14181A"}));
+    s.appendChild(E("line",{x1:X(r.a),y1:y,x2:X(r.b),y2:y,stroke:MC[r.k],"stroke-width":2,opacity:.55}));
+    s.appendChild(E("circle",{cx:X(r.a),cy:y,r:5,fill:MC[r.k]}));
+    s.appendChild(E("line",{x1:X(r.b),y1:y-6,x2:X(r.b),y2:y+6,stroke:MC[r.k],"stroke-width":2.5}));
+    s.appendChild(txt(X(r.b)+10,y+4,pct(r.b),{"font-size":10.5,fill:"#3A4044","font-family":"IBM Plex Mono"}));
+  });
+  host.innerHTML=""; host.appendChild(s);
+  legendOnce(host,"reach-legend",[["#14181A","● recall (raw)","dot"],["#14181A","│ reachable-recall","tick"]]);
+}
+
+/* ---------------- recall by measurement type ---------------- */
+function typeChart(){
+  const host=document.getElementById("bytype"); if(!host) return;
+  const W=720,rowH=40,padL=140,padR=60,T=8;
+  const rows=DATA.byType;
+  const H=T+rows.length*rowH+8, X=v=>padL+v*(W-padL-padR);
+  const s=svg(W,H);
+  for(let g=0;g<=10;g+=2){const xx=X(g/10);
+    s.appendChild(E("line",{x1:xx,y1:T,x2:xx,y2:T+rows.length*rowH,stroke:"#E0E4E0","stroke-width":1}));}
+  rows.forEach((r,i)=>{
+    const y=T+i*rowH;
+    s.appendChild(txt(padL-12,y+rowH/2,r.type,{"text-anchor":"end","font-size":12,fill:"#14181A","font-weight":600}));
+    s.appendChild(txt(padL-12,y+rowH/2+14,"n="+r.total,{"text-anchor":"end","font-size":9,fill:"#9aa0a6","font-family":"IBM Plex Mono"}));
+    if(r.reachableRecall>r.recall)
+      s.appendChild(E("rect",{x:X(r.recall),y:y+9,width:X(r.reachableRecall)-X(r.recall),height:rowH-22,
+        fill:"none",stroke:"#B23A2E","stroke-width":1.2,"stroke-dasharray":"3 2"}));
+    s.appendChild(E("rect",{x:padL,y:y+9,width:Math.max(X(r.recall)-padL,1),height:rowH-22,rx:2,fill:"#0F6E63",opacity:.9}));
+    s.appendChild(txt(X(Math.max(r.recall,r.reachableRecall))+8,y+rowH/2+4,
+      pct(r.recall)+(r.reachableRecall>r.recall?" → "+pct(r.reachableRecall):""),
+      {"font-size":10.5,fill:"#3A4044","font-family":"IBM Plex Mono"}));
+  });
+  host.innerHTML=""; host.appendChild(s);
+  legendOnce(host,"type-legend",[["#0F6E63","recall","sq"],["#B23A2E","reachable (ceiling lifted)","dash"]]);
+}
+
+function legendOnce(host,id,items){
+  if(document.getElementById(id)) return;
+  const leg=document.createElement("div"); leg.id=id; leg.className="legend";
+  leg.innerHTML=items.map(([c,l])=>`<span><i style="background:${c}"></i>${l}</span>`).join("");
+  host.parentNode.insertBefore(leg,host.nextSibling);
+}
+
 function wire(){
   document.getElementById("lb-metric").addEventListener("change",e=>{LB.metric=e.target.value;leaderboard();});
   document.getElementById("lb-parser").addEventListener("change",e=>{LB.parser=e.target.value;leaderboard();});
@@ -933,7 +1222,7 @@ function wire(){
     scatter();
   }));
 }
-function drawAll(){ heroChart(); leaderboard(); heatmap(); scatter(); taxonomy(); coverage(); }
+function drawAll(){ heroChart(); leaderboard(); heatmap(); scatter(); reachableChart(); taxonomy(); coverage(); typeChart(); }
 function boot(){
   drawAll(); wire();
   // scrollspy
