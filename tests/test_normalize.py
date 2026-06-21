@@ -204,7 +204,8 @@ from palimpsest.normalize import rederive_milli_value
         (22.0, "rate: 22 μ V/h, Figs", "mV/h", 0.022),         # space after prefix
         (52.0, "of 52 µV/h), achieving", "mV/h", 0.052),
         (2.8, r"2.8\mu\mathrm{V}\mathrm{h}^{-1}", "mV/h", 0.0028),  # LaTeX
-        (2.3, "2.3–2.8 µV h -1 . To", "mV/h", 0.0023),          # range: unit after the OTHER number
+        (2.8, "2.3–2.8 µV h -1 . To", "mV/h", 0.0028),          # range HIGH end is adjacent → converts
+        (2.3, "2.3–2.8 µV h -1 . To", "mV/h", 2.3),             # range LOW end not adjacent → SAFE MISS (no range bridge)
         # must NOT change — canonical-unit spans (same milli prefix or no prefix):
         (236.0, "236 mV, which is", "mV", 236.0),
         (236.0, "236mVinanacid medium", "mV", 236.0),           # no space, trailing junk
@@ -220,6 +221,11 @@ from palimpsest.normalize import rederive_milli_value
         (22.0, "22 kV/h test", "mV/h", 22.0),                   # B3: kilo not accepted
         (5.0, "load 5}{kV elsewhere", "mV", 5.0),               # B4: brace-merge must not mint a prefix
         (2.0, "tested 2 times at 0.022 mV/h", "mV/h", 2.0),     # value adjacent to no prefix → unchanged
+        # --- re-review findings (B5/B6): ambiguity & hyphen-bridge must NOT corrupt ---
+        (5.0, "5 µV noise floor; signal was 5 mV/h", "mV/h", 5.0),   # B5: value occurs twice → ambiguous → unchanged
+        (3.0, "Fig 3-5 µV/h shown", "mV/h", 3.0),                    # B6: hyphen must not bridge "3" to "µV"
+        (2.0, "samples 2-8 µV/h plot", "mV/h", 2.0),                 # B6: same, leading count
+        (100.0, "100-5 µV/h", "mV/h", 100.0),                        # B6: no range bridge
     ],
 )
 def test_rederive_milli_value(value, source, canonical, expected):
