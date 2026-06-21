@@ -79,10 +79,13 @@ GOLD: dict[str, list[tuple[str, float]]] = {
         ("TafelSlope", 48.29), ("TafelSlope", 51.78),
         ("Stability", 1500.0), ("Stability", 1600.0), ("Stability", 200.0),
     ],
-    # s41929-024-01168-7 — amorphous IrOx vs rutile IrO2; ground_truth_s41929-024-01168-7.md (3)
+    # s41929-024-01168-7 — amorphous IrOx vs rutile IrO2; ground_truth_s41929-024-01168-7.md (2)
+    # T72 gold-audit fix (2026-06-21): dropped ("Stability", 2.5). The paper's "2.5 h" is a
+    # measurement-WINDOW reproducibility note for BOTH samples ("redox features ... stable for
+    # 20 cycles and 2.5 h of operation"), NOT a durability/endurance benchmark — numerically
+    # real but semantically not a Stability measurement. See results/gold_audit.md (paper 5).
     "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01": [
         ("Overpotential", 210.0), ("Overpotential", 330.0),
-        ("Stability", 2.5),
     ],
 }
 
@@ -96,8 +99,13 @@ def _matches(pred_type, pred_val, gt_type, gt_val) -> bool:
     return abs(pred_val - gt_val) <= tol
 
 
-def _score(valid, ground_truth):
-    preds = [(type(v).__name__, v.value) for v in valid]
+def _score_preds(preds, ground_truth):
+    """Score a list of (type_name, value) prediction tuples against gold.
+
+    Split out from `_score` so the same greedy matcher serves both the live path
+    (Pydantic instances) and the cached path (T72 extraction cache → plain dicts),
+    with no behaviour change for existing callers.
+    """
     matched = set()
     tp = 0
     for pt, pv in preds:
@@ -108,6 +116,10 @@ def _score(valid, ground_truth):
     recall = tp / len(ground_truth)
     precision = tp / len(preds) if preds else 0.0
     return tp, len(preds), recall, precision
+
+
+def _score(valid, ground_truth):
+    return _score_preds([(type(v).__name__, v.value) for v in valid], ground_truth)
 
 
 def _pro_provider():
