@@ -38,7 +38,9 @@ from typing import Any
 
 from pydantic import BaseModel, ValidationError
 
-from palimpsest.normalize import build_normalization_prompt, canonical_unit, units_match
+from palimpsest.normalize import (
+    build_normalization_prompt, canonical_unit, magnitude_ok, units_match,
+)
 from palimpsest.providers import AnthropicProvider, DeepSeekProvider
 
 from schema.generated import pydantic as _schema  # PEP 420 namespace pkg
@@ -487,6 +489,20 @@ def _process_items(
                 errors.append((
                     ValueError(
                         f"unit_label {inst.unit_label!r} != canonical {canon!r} for {type_name}"
+                    ),
+                    raw,
+                ))
+                continue
+            # C3 (T74): magnitude sanity. C2 passes a value emitted in a prefixed unit
+            # (e.g. µV/h) under the canonical label (mV/h) without conversion — the
+            # value is then ~1000× off but dimensionally "correct". Reject values
+            # outside the slot's plausible range so an unconverted reading can't slip in.
+            if not magnitude_ok(type_name, getattr(inst, "value", None)):
+                errors.append((
+                    ValueError(
+                        f"value {getattr(inst, 'value', None)!r} out of plausible range "
+                        f"for {type_name} (canonical unit {canon!r}; likely an unconverted "
+                        f"prefixed unit)"
                     ),
                     raw,
                 ))
