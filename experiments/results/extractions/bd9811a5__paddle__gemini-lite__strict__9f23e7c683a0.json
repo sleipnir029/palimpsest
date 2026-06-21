@@ -1,0 +1,244 @@
+{
+  "schema_version": 1,
+  "paper_sha": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54",
+  "parser": "paddle",
+  "label": "gemini-lite",
+  "mode": "strict",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "google/gemini-3.1-flash-lite",
+  "temperature": 0.0,
+  "in_tokens": 28681,
+  "out_tokens": 1410,
+  "latency_s": 3.53,
+  "items": [
+    {
+      "value": 1500.0,
+      "unit_label": "h",
+      "condition": {
+        "current_density": 2000.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": 60.0,
+        "electrolyte": {
+          "formula": "H2SO4",
+          "concentration": 0.5,
+          "electrolyte_ph": null
+        },
+        "cell_type": "PEM water electrolyser",
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "not_applied",
+        "normalization_basis": "geometric",
+        "cell_type_family": "single_cell_MEA",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54"
+        },
+        "page": 1,
+        "bbox_x0": 25.0,
+        "bbox_y0": 635.0,
+        "bbox_x1": 1168.0,
+        "bbox_y1": 1545.0,
+        "source_text": "While mixing iridium (Ir) with ruthenium oxide $\\left(\\mathrm{RuO_{2}}\\right)$ has proven to be an effective strategy for reducing Ir loading in anode catalysts for proton-exchange membrane (PeM) water electrolysers, achieving industriall levant long-rm tabilitytpiclly quirsnIr-ich, Ru-lean combination. Here, by combining density functional theory with Metropolis Monte Carlo methods, we discovered that suff icient stabilization in the $\\mathrm{R u O}_{2}$ \uff01lattice could be achieved with less than 50 at.% of Ir, and that Ir in the first subsurface layer plays a critical role. By effectively dispersing Ir dopants within the $\\mathrm{R u O}_{2}$ lattice, we demonstrated an Ir:Ru atomic ratio of only 1:6that exhibited exceptional stability for over 1,5o0 h of continuous water electrolysis at 2 A $\\mathrm{cm}^{-2}$ .Our $\\mathrm{Ru_{6}IrO_{x}}$ catalyst has the potential to reduce Ir loading by 80% compared with current commercial PEM water electrolysers,and its stability was further validated under industrial testing conditions in a 25-cm2 PEM electrolyser.\n When Ir content was further increased to 14 at.%, the $\\mathsf{R u}_{6}\\mathsf{I r O}_{3}$ 3became stable enough to retain the potential though the 1,5o0-h test oa  s $2.3\u20132.8\\mu\\mathrm{V}\\mathrm{h}^{-1}$  eee e e ee r eere r rre see e re $\\mathrm{Ru_{6}IrO}$ xmaintained stable voltage over the testing period, while $\\mathrm{RuO}_{2}$ exhibited rapid deactivation (Supplementary Fig.19).Given the supreme durability, it was not surprising that Ru dissolution plateaued at less than one-third the amount observed for $\\mathrm{R u}_{12}\\mathrm{I r O}_{x}$ , and Ir dissolution was barely detectable. This minimal dissolution, combined with the well-preserved structure and composition observed in the post-operation analysis (Supplementary Fig. 20 and Supplementary Table 8), demonstrated the superior structure durability and resistance of $\\mathrm{{^{\\prime}R u_{6}I r O_{3}}}$ to the highly acidic and oxidative environment. Stable performance of $\\mathrm{{\\bf{\\sf{I r O}}}}$ xand $\\mathrm{I r O}_{2}\\mathrm{a t}2\\mathrm{A}\\mathrm{c m}^{-2}$ (Supplementary Figs.2l and 22) further supports the stabilizing effect of higher Ir content.\n To validate the outstanding durability of $\\mathrm{{\\sf{R u}}}_{6}\\mathrm{{\\sf{I r O}}}_{x}$ in a larger PEM electrolyser and under elevated temperature operation, our collaborators at De Nora Tech applied this catalyst to an anode in a 25-cm2 PEM water electrolyser (Fig.4a) following their standard testing protocols (Methods). Compared with commercial iridium black (IrB),$\\mathrm{R u}_{6}\\mathrm{I r O}_{\\mathrm{x}}$ .demonstrated almost identical activity up to 1A cm-2 (Fig. 4b), with slightly higher voltage above1 A cmdespite having only one-third of the Ir.Duringte 1-habiliy tt Fig.4, te curnt asgradually raised to 50 A and maintained at this level. The voltage initially rose from 1.939 V to 2.000 V in the first 500 h, probably indicative of a catalyst layer activation process. The voltage then experienced a slow decrease and reached 1.986 V when the test had to be stopped at 1,600 h due to other uses of the device. The superior durabillity of $\\mathrm{Ru_{6}IrO_{3}}$ is also supported by the similar electrochemical impedance spectroscopy (ElS) curves of beginning and end oftests (Fig.4).Compared with other reported Ir-containing acidic OER catalysts (Supplementary Table 9),$\\mathrm{{\\sf  Ru}}_{6}\\mathrm{{\\sf  IrO}},$ not only delivered stable performance at a high current density of 2$\\mathtt{A c m}^{-2}$ for over 1,500 h but also did ",
+        "parser_name": "paddle"
+      },
+      "type": "Stability"
+    },
+    {
+      "value": 240.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 10.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": 25.0,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": 1.0
+        },
+        "cell_type": "RDE",
+        "scan_rate": 5.0,
+        "catalyst_loading": 0.4,
+        "iR_correction": "not_applied",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": "slow_LSV"
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54"
+        },
+        "page": 3,
+        "bbox_x0": 607.0,
+        "bbox_y0": 1427.0,
+        "bbox_x1": 1163.0,
+        "bbox_y1": 1538.0,
+        "source_text": "To better understand the intrinsic characteristics of the Ir $\\mathsf{\\cdot R u O}_{\\mathrm{r}}$ catalysts, OER activities of different as-prepared catalysts were evaluated in a rotating disk electrode (RDE) setup. According to the polarization curves (Fig. 3a), all Ir $\\mathsf{-R u O}_{s}$ catalysts and the pristine $\\mathrm{R u O}_{2}$ showed similarOER activities,with overpotentials of-240 mVto reach10 mA cm-2.",
+        "parser_name": "paddle"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 48.29,
+      "unit_label": "mV/decade",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": 25.0,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": 1.0
+        },
+        "cell_type": "RDE",
+        "scan_rate": 5.0,
+        "catalyst_loading": 0.4,
+        "iR_correction": "not_applied",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": "slow_LSV"
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54"
+        },
+        "page": 5,
+        "bbox_x0": 105.0,
+        "bbox_y0": 54.0,
+        "bbox_x1": 1089.0,
+        "bbox_y1": 890.0,
+        "source_text": "a 50$RuIrOx$b 0.26\n40R_uO{}$$R_u_{2}}$$R_u_{4}{}$Ru_IrO Ru{}O$Ru_24}O}$H \u2192H\u2082O+O\u2082$ (m)302010 reeee 0.200.240.22RuO\u208248.29 mV dec 45.16 mV dec 46.25 mV dec 51.78 mV dec HER H H H,O OER 0H\u2082O$ \n0.18\n1.11.21.31.41.51.600.20.40.60.81.01.21.4Potential (V versus RHE)log(j/mA cm-2)Cathode PEM Anode d \n2.8Current density=2Acm $Ru_{}rORoom temperature Ru_}rO}-2$ 2.4\nVoltage (V)0080O 00\n09000000000000a8\u221e8q 2.0\n02004006008001,0001,2001,400 2.82.42.02.82.40000o0coo00o0\u2207RuO2-1\u25bcRuO{22Ru2O-22RurO.-1aaee e e 604020Ru_{IrO \u2190Ru{2}rOx RuO RuO\u2082e nee  rn 6543210RuIrOx RuO RuO 2.00\n02004000102030405001020304050Time (h)Time (h)Time (h)",
+        "parser_name": "paddle"
+      },
+      "type": "TafelSlope"
+    },
+    {
+      "value": 45.16,
+      "unit_label": "mV/decade",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": 25.0,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": 1.0
+        },
+        "cell_type": "RDE",
+        "scan_rate": 5.0,
+        "catalyst_loading": 0.4,
+        "iR_correction": "not_applied",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": "slow_LSV"
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54"
+        },
+        "page": 5,
+        "bbox_x0": 105.0,
+        "bbox_y0": 54.0,
+        "bbox_x1": 1089.0,
+        "bbox_y1": 890.0,
+        "source_text": "a 50$RuIrOx$b 0.26\n40R_uO{}$$R_u_{2}}$$R_u_{4}{}$Ru_IrO Ru{}O$Ru_24}O}$H \u2192H\u2082O+O\u2082$ (m)302010 reeee 0.200.240.22RuO\u208248.29 mV dec 45.16 mV dec 46.25 mV dec 51.78 mV dec HER H H H,O OER 0H\u2082O$ \n0.18\n1.11.21.31.41.51.600.20.40.60.81.01.21.4Potential (V versus RHE)log(j/mA cm-2)Cathode PEM Anode d \n2.8Current density=2Acm $Ru_{}rORoom temperature Ru_}rO}-2$ 2.4\nVoltage (V)0080O 00\n09000000000000a8\u221e8q 2.0\n02004006008001,0001,2001,400 2.82.42.02.82.40000o0coo00o0\u2207RuO2-1\u25bcRuO{22Ru2O-22RurO.-1aaee e e 604020Ru_{IrO \u2190Ru{2}rOx RuO RuO\u2082e nee  rn 6543210RuIrOx RuO RuO 2.00\n02004000102030405001020304050Time (h)Time (h)Time (h)",
+        "parser_name": "paddle"
+      },
+      "type": "TafelSlope"
+    },
+    {
+      "value": 46.25,
+      "unit_label": "mV/decade",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": 25.0,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": 1.0
+        },
+        "cell_type": "RDE",
+        "scan_rate": 5.0,
+        "catalyst_loading": 0.4,
+        "iR_correction": "not_applied",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": "slow_LSV"
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54"
+        },
+        "page": 5,
+        "bbox_x0": 105.0,
+        "bbox_y0": 54.0,
+        "bbox_x1": 1089.0,
+        "bbox_y1": 890.0,
+        "source_text": "a 50$RuIrOx$b 0.26\n40R_uO{}$$R_u_{2}}$$R_u_{4}{}$Ru_IrO Ru{}O$Ru_24}O}$H \u2192H\u2082O+O\u2082$ (m)302010 reeee 0.200.240.22RuO\u208248.29 mV dec 45.16 mV dec 46.25 mV dec 51.78 mV dec HER H H H,O OER 0H\u2082O$ \n0.18\n1.11.21.31.41.51.600.20.40.60.81.01.21.4Potential (V versus RHE)log(j/mA cm-2)Cathode PEM Anode d \n2.8Current density=2Acm $Ru_{}rORoom temperature Ru_}rO}-2$ 2.4\nVoltage (V)0080O 00\n09000000000000a8\u221e8q 2.0\n02004006008001,0001,2001,400 2.82.42.02.82.40000o0coo00o0\u2207RuO2-1\u25bcRuO{22Ru2O-22RurO.-1aaee e e 604020Ru_{IrO \u2190Ru{2}rOx RuO RuO\u2082e nee  rn 6543210RuIrOx RuO RuO 2.00\n02004000102030405001020304050Time (h)Time (h)Time (h)",
+        "parser_name": "paddle"
+      },
+      "type": "TafelSlope"
+    },
+    {
+      "value": 51.78,
+      "unit_label": "mV/decade",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": 25.0,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": 1.0
+        },
+        "cell_type": "RDE",
+        "scan_rate": 5.0,
+        "catalyst_loading": 0.4,
+        "iR_correction": "not_applied",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": "slow_LSV"
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54"
+        },
+        "page": 5,
+        "bbox_x0": 105.0,
+        "bbox_y0": 54.0,
+        "bbox_x1": 1089.0,
+        "bbox_y1": 890.0,
+        "source_text": "a 50$RuIrOx$b 0.26\n40R_uO{}$$R_u_{2}}$$R_u_{4}{}$Ru_IrO Ru{}O$Ru_24}O}$H \u2192H\u2082O+O\u2082$ (m)302010 reeee 0.200.240.22RuO\u208248.29 mV dec 45.16 mV dec 46.25 mV dec 51.78 mV dec HER H H H,O OER 0H\u2082O$ \n0.18\n1.11.21.31.41.51.600.20.40.60.81.01.21.4Potential (V versus RHE)log(j/mA cm-2)Cathode PEM Anode d \n2.8Current density=2Acm $Ru_{}rORoom temperature Ru_}rO}-2$ 2.4\nVoltage (V)0080O 00\n09000000000000a8\u221e8q 2.0\n02004006008001,0001,2001,400 2.82.42.02.82.40000o0coo00o0\u2207RuO2-1\u25bcRuO{22Ru2O-22RurO.-1aaee e e 604020Ru_{IrO \u2190Ru{2}rOx RuO RuO\u2082e nee  rn 6543210RuIrOx RuO RuO 2.00\n02004000102030405001020304050Time (h)Time (h)Time (h)",
+        "parser_name": "paddle"
+      },
+      "type": "TafelSlope"
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "paper_sha": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54",
+  "parser": "mineru",
+  "label": "gemini-lite",
+  "mode": "raw",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "google/gemini-3.1-flash-lite",
+  "temperature": 0.0,
+  "in_tokens": 27404,
+  "out_tokens": 329,
+  "latency_s": 1.65,
+  "items": [
+    {
+      "value": 240.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 10.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "applied",
+        "normalization_basis": null,
+        "cell_type_family": null,
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54"
+        },
+        "page": 3,
+        "bbox_x0": 507.0,
+        "bbox_y0": 874.0,
+        "bbox_x1": 942.0,
+        "bbox_y1": 943.0,
+        "source_text": "To better understand the intrinsic characteristics of the Ir-RuO  _x  catalysts, OER activities of different as-prepared catalysts were evaluated in a rotating disk electrode (RDE) setup. According to the polarization curves (Fig. 3a), all Ir-RuO  _x  catalysts and the pristine RuO  _2  showed similar OER activities, with overpotentials of   \\sim 240 mV to reach 10 mA cm  ^{-2} .",
+        "parser_name": "mineru"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 1500.0,
+      "unit_label": "h",
+      "condition": {
+        "current_density": 2000.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": "single_cell_MEA",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54"
+        },
+        "page": 1,
+        "bbox_x0": 60.0,
+        "bbox_y0": 411.0,
+        "bbox_x1": 944.0,
+        "bbox_y1": 941.0,
+        "source_text": "While mixing iridium (Ir) with ruthenium oxide (RuO  _2 ) has proven to be an effective strategy for reducing Ir loading in anode catalysts for proton-exchange membrane (PEM) water electrolysers, achieving industrially relevant long-term stability typically requires an Ir-rich, Ru-lean combination. Here, by combining density functional theory with Metropolis Monte Carlo methods, we discovered that sufficient stabilization in the RuO  _2  lattice could be achieved with less than 50 at.% of Ir, and that Ir in the first subsurface layer plays a critical role. By effectively dispersing Ir dopants within the RuO  _2  lattice, we demonstrated an Ir:Ru atomic ratio of only 1:6 that exhibited exceptional stability for over 1,500 h of continuous water electrolysis at 2 A cm  ^{-2} . Our Ru  _6 IrO  _x  catalyst has the potential to reduce Ir loading by 80% compared with current commercial PEM water electrolysers, and its stability was further validated under industrial testing conditions in a 25-cm  ^2  PEM electrolyser. When Ir content was further increased to 14 at.%, the    Ru_{6}IrO_{x}   became stable enough to retain the potential though the 1,500-h test with minimal degradation rate of 2.3\u20132.8    \\mu V h^{-1}  . To provide a comprehensive evaluation of the durability, the stability tests were also carried out under constant voltage, in which    Ru_{6}IrO_{x}   maintained stable voltage over the testing period, while    RuO_{2}   exhibited rapid deactivation (Supplementary Fig. 19). Given the supreme durability, it was not surprising that Ru dissolution plateaued at less than one-third the amount observed for    Ru_{12}IrO_{x}  , and Ir dissolution was barely detectable. This minimal dissolution, combined with the well-preserved structure and composition observed in the post-operation analysis (Supplementary Fig. 20 and Supplementary Table 8), demonstrated the superior structure durability and resistance of    Ru_{6}IrO_{x}   to the highly acidic and oxidative environment. Stable performance of    Ru_{3}IrO_{x}   and    IrO_{2}   at 2 A cm   ^{-2}   (Supplementary Figs. 21 and 22) further supports the stabilizing effect of higher Ir content. In this study, we explored the lower limit of Ir incorporation level in   \\mathrm{RuO_2}  lattice for durable PEM water electrolysis under industrially relevant operation conditions, coupling DFT and MMC methods. Ir incorporated in the first subsurface layer not only demonstrated the largest effect on stability, which was reflected by substantial increases in the vacancy formation energy of   \\mathrm{Ru}_{\\mathrm{CUS}} , but was also the most favoured site under synthesis conditions. Our DFT and MMC computed results indicated that total surface stabilization could be achieved with less than 50 at.% Ir. By homogeneous mixing Ir into   \\mathrm{RuO_2}  lattice,   \\mathrm{Ru_6IrO_x}  with 14 at.% Ir successfully sustained   2\\mathrm{Acm}^{-2}  for more than   1,500\\mathrm{h} , the stability of which was further validated at total current of   50\\mathrm{A}  in a scaled-up cell by De Nora.",
+        "parser_name": "mineru"
+      },
+      "type": "Stability"
+    },
+    {
+      "value": 1500.0,
+      "unit_label": "h",
+      "condition": {
+        "current_density": 2000.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": "single_cell_MEA",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54"
+        },
+        "page": 12,
+        "bbox_x0": 60.0,
+        "bbox_y0": 56.0,
+        "bbox_x1": 497.0,
+        "bbox_y1": 86.0,
+        "source_text": "of    2 \\, A cm^{-2}   for 1,500 h, and the potential profile is presented without iR correction.",
+        "parser_name": "mineru"
+      },
+      "type": "Stability"
+    }
+  ],
+  "errors": [
+    {
+      "error": "ValueError: likely mis-citation for DegradationRate: value 0.0023 not found in cited span(s)",
+      "raw": {
+        "type": "DegradationRate",
+        "value": 0.0023,
+        "unit_label": "mV/h",
+        "condition": {
+          "current_density": 2000.0,
+          "cell_type_family": "single_cell_MEA"
+        },
+        "evidence": {
+          "spans": [
+            47
+          ]
+        }
+      }
+    },
+    {
+      "error": "ValueError: likely mis-citation for DegradationRate: value 0.0028 not found in cited span(s)",
+      "raw": {
+        "type": "DegradationRate",
+        "value": 0.0028,
+        "unit_label": "mV/h",
+        "condition": {
+          "current_density": 2000.0,
+          "cell_type_family": "single_cell_MEA"
+        },
+        "evidence": {
+          "spans": [
+            47
+          ]
+        }
+      }
+    }
+  ]
+}

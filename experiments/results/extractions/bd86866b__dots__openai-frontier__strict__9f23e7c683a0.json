@@ -1,0 +1,196 @@
+{
+  "schema_version": 1,
+  "paper_sha": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01",
+  "parser": "dots",
+  "label": "openai-frontier",
+  "mode": "strict",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "openai/gpt-5.4",
+  "temperature": 0.0,
+  "in_tokens": 30151,
+  "out_tokens": 688,
+  "latency_s": 3.85,
+  "items": [
+    {
+      "value": 210.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 0.5,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": "three-electrode set-up",
+        "scan_rate": 10.0,
+        "catalyst_loading": 0.08,
+        "iR_correction": "applied",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": "fast_CV"
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 2,
+        "bbox_x0": 77.0,
+        "bbox_y0": 98.0,
+        "bbox_x1": 1163.0,
+        "bbox_y1": 1291.0,
+        "source_text": "Compared with IrO\u2082, the cyclic voltammograms of IrO\u2093 show higher redox current densities of around one order of magnitude, when normalized to the geometric area. IrO\u2093 also shows a higher activity than IrO\u2082, as reflected in the overpotential required to achieve 0.5 mA cm\u207b\u00b2 geo (~210 mV and 330 mV for IrO\u2093 and IrO\u2082, respectively; Fig. 1d). IrO\u2093 shows two distinct broad redox peaks at around 0.8 and 1.2 V versus the reversible hydrogen electrode (RHE). By contrast, no distinct redox peak can be observed for IrO\u2082. The redox features and catalytic activity of both samples are relatively stable for 20 cycles and 2.5 h of operation (further results on the stability of the redox features, activity and morphology/structure can be found in Supplementary Note 2). **Fig. 1 | Structure, composition and electrochemical behaviour of amorphous IrO<sub>x</sub> and rutile IrO<sub>2</sub>, a,b, Possible crystal structures of rutile IrO<sub>2</sub> (a) and amorphous IrO<sub>x</sub> (b). Grey, red and white spheres represent iridium, oxygen and hydrogen atoms, respectively. Ir<sub>cus</sub> denotes a coordinatively unsaturated iridium site and Ir<sub>bri</sub> denotes an iridium site bound to the bridging oxygen. c, Ex situ k<sup>2</sup>-weighted Fourier transform (FT) of EXAFS spectra collected at the iridium L<sub>3</sub> edge of amorphous IrO<sub>x</sub> and rutile IrO<sub>2</sub>, showing the iridium coordination environment. Experimental data (solid lines) and fits (dotted lines) are shown. R, interatomic distance. d, Cyclic voltammograms of amorphous IrO<sub>x</sub> and rutile IrO<sub>2</sub> with the same iridium loading obtained at a scan rate of 10 mV s<sup>-1</sup> in 0.1 M HClO\u2084 electrolyte (curves are *iR*-corrected (*i*, current; *R*, resistance)). Cyclic voltammograms are obtained after five cycles. The inset shows an expansion of the cyclic voltammogram of rutile IrO\u2082, *e*, Schematic showing procedures for using ToF-SIMS to detect proton penetration in iridium oxides. Dark red polygons denote iridium oxides and the dark yellow rectangle represents the wax-covered surface. Light blue and dark blue spheres denote protons (H\u207a) and deuterium ions (D\u207b), respectively. *f*, Comparison of the D/H ratio change with ToF-SIMS sputter time in amorphous IrO\u2082 and rutile IrO\u2082 before and after electrochemical cycling in deuterated HClO\u2084 solution. The downward arrow points to the region where a higher deuterium signal was observed compared to the background. \u226599.0%). The volume of the solution was then increased to 50 ml by adding more water (20 ml). The solution was left to rest for four days at 35 \u00b0C and then stored in a refrigerator at 4 \u00b0C. The electrodeposition of IrO\u2093 was conducted with a typical three-electrode set-up using this solution. A clean FTO glass substrate was used as the working electrode, and a platinum mesh and Ag/AgCl were used as the counter and reference electrodes, respectively. Polyimide tape was attached to the FTO surface to limit the conductive surface to ~1 \u00d7 1 cm. The electrodeposition was carried out by applying an anodic current density of 35 \u00b5A cm\u207b\u00b2 for 1,000 s. The mass loading of the obtained IrO\u2093 was around 80 \u00b5g cm\u207b\u00b2. For ToF-SIMS and XPS measurements, IrO\u2093 was deposited on a titanium substrate for a longer deposition time of 12,000 s to obtain a thicker layer sample. SEM images were obtained from the sample deposited on both titanium substrates and FTO substrates. Rutile IrO\u2082 is obtained via thermal annealing of the IrO\u2093 sample in the atmosphere at 550 \u00b0C for 8 h, at a heating rate of 10 \u00b0C min\u207b\u00b9. Thus, rutile IrO\u2082 sample has the same iridium mass loading as the amorphous IrO\u2093 sample. All electrochemical measurements were carried out in 0.1 M HClO\u2084 prepared by dilution of concentrated perchloric acid (Suprapur 70% HClO\u2084, Merck) in ultrapure water (>18.2 M\u03a9 cm, Sartorius). The electrochemical tests were conducted using a typical three-electrode set-up with an SP-150 or an SP-300 BioLogic potentiostat. The iridium oxides deposited on the FTO substrate (1 \u00d7 1 cm) were used directly as the working electrode. A platinum mesh and an Ag/AgCl electrode (KCl-saturated) were used as the counter and reference electrodes, respectively. The reference electrode was calibrated to the RHE in the same electrolyte using saturated H\u2082 on a clean platinum surface. Potentials were iR-compensated by manually subtracting the product of current and resistance $i \\times R_u$, for which the resistance $R_u$ (-25 \u03a9) was obtained from a high-frequency intercept of the real resistance during electrochemical impedance spectroscopy.",
+        "parser_name": "dots"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 330.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 0.5,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": "three-electrode set-up",
+        "scan_rate": 10.0,
+        "catalyst_loading": 0.08,
+        "iR_correction": "applied",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": "fast_CV"
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 2,
+        "bbox_x0": 77.0,
+        "bbox_y0": 98.0,
+        "bbox_x1": 1163.0,
+        "bbox_y1": 1291.0,
+        "source_text": "Compared with IrO\u2082, the cyclic voltammograms of IrO\u2093 show higher redox current densities of around one order of magnitude, when normalized to the geometric area. IrO\u2093 also shows a higher activity than IrO\u2082, as reflected in the overpotential required to achieve 0.5 mA cm\u207b\u00b2 geo (~210 mV and 330 mV for IrO\u2093 and IrO\u2082, respectively; Fig. 1d). IrO\u2093 shows two distinct broad redox peaks at around 0.8 and 1.2 V versus the reversible hydrogen electrode (RHE). By contrast, no distinct redox peak can be observed for IrO\u2082. The redox features and catalytic activity of both samples are relatively stable for 20 cycles and 2.5 h of operation (further results on the stability of the redox features, activity and morphology/structure can be found in Supplementary Note 2). **Fig. 1 | Structure, composition and electrochemical behaviour of amorphous IrO<sub>x</sub> and rutile IrO<sub>2</sub>, a,b, Possible crystal structures of rutile IrO<sub>2</sub> (a) and amorphous IrO<sub>x</sub> (b). Grey, red and white spheres represent iridium, oxygen and hydrogen atoms, respectively. Ir<sub>cus</sub> denotes a coordinatively unsaturated iridium site and Ir<sub>bri</sub> denotes an iridium site bound to the bridging oxygen. c, Ex situ k<sup>2</sup>-weighted Fourier transform (FT) of EXAFS spectra collected at the iridium L<sub>3</sub> edge of amorphous IrO<sub>x</sub> and rutile IrO<sub>2</sub>, showing the iridium coordination environment. Experimental data (solid lines) and fits (dotted lines) are shown. R, interatomic distance. d, Cyclic voltammograms of amorphous IrO<sub>x</sub> and rutile IrO<sub>2</sub> with the same iridium loading obtained at a scan rate of 10 mV s<sup>-1</sup> in 0.1 M HClO\u2084 electrolyte (curves are *iR*-corrected (*i*, current; *R*, resistance)). Cyclic voltammograms are obtained after five cycles. The inset shows an expansion of the cyclic voltammogram of rutile IrO\u2082, *e*, Schematic showing procedures for using ToF-SIMS to detect proton penetration in iridium oxides. Dark red polygons denote iridium oxides and the dark yellow rectangle represents the wax-covered surface. Light blue and dark blue spheres denote protons (H\u207a) and deuterium ions (D\u207b), respectively. *f*, Comparison of the D/H ratio change with ToF-SIMS sputter time in amorphous IrO\u2082 and rutile IrO\u2082 before and after electrochemical cycling in deuterated HClO\u2084 solution. The downward arrow points to the region where a higher deuterium signal was observed compared to the background. \u226599.0%). The volume of the solution was then increased to 50 ml by adding more water (20 ml). The solution was left to rest for four days at 35 \u00b0C and then stored in a refrigerator at 4 \u00b0C. The electrodeposition of IrO\u2093 was conducted with a typical three-electrode set-up using this solution. A clean FTO glass substrate was used as the working electrode, and a platinum mesh and Ag/AgCl were used as the counter and reference electrodes, respectively. Polyimide tape was attached to the FTO surface to limit the conductive surface to ~1 \u00d7 1 cm. The electrodeposition was carried out by applying an anodic current density of 35 \u00b5A cm\u207b\u00b2 for 1,000 s. The mass loading of the obtained IrO\u2093 was around 80 \u00b5g cm\u207b\u00b2. For ToF-SIMS and XPS measurements, IrO\u2093 was deposited on a titanium substrate for a longer deposition time of 12,000 s to obtain a thicker layer sample. SEM images were obtained from the sample deposited on both titanium substrates and FTO substrates. Rutile IrO\u2082 is obtained via thermal annealing of the IrO\u2093 sample in the atmosphere at 550 \u00b0C for 8 h, at a heating rate of 10 \u00b0C min\u207b\u00b9. Thus, rutile IrO\u2082 sample has the same iridium mass loading as the amorphous IrO\u2093 sample. All electrochemical measurements were carried out in 0.1 M HClO\u2084 prepared by dilution of concentrated perchloric acid (Suprapur 70% HClO\u2084, Merck) in ultrapure water (>18.2 M\u03a9 cm, Sartorius). The electrochemical tests were conducted using a typical three-electrode set-up with an SP-150 or an SP-300 BioLogic potentiostat. The iridium oxides deposited on the FTO substrate (1 \u00d7 1 cm) were used directly as the working electrode. A platinum mesh and an Ag/AgCl electrode (KCl-saturated) were used as the counter and reference electrodes, respectively. The reference electrode was calibrated to the RHE in the same electrolyte using saturated H\u2082 on a clean platinum surface. Potentials were iR-compensated by manually subtracting the product of current and resistance $i \\times R_u$, for which the resistance $R_u$ (-25 \u03a9) was obtained from a high-frequency intercept of the real resistance during electrochemical impedance spectroscopy.",
+        "parser_name": "dots"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 2.5,
+      "unit_label": "h",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": "three-electrode set-up",
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "unknown",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 2,
+        "bbox_x0": 77.0,
+        "bbox_y0": 525.0,
+        "bbox_x1": 1163.0,
+        "bbox_y1": 1291.0,
+        "source_text": "Compared with IrO\u2082, the cyclic voltammograms of IrO\u2093 show higher redox current densities of around one order of magnitude, when normalized to the geometric area. IrO\u2093 also shows a higher activity than IrO\u2082, as reflected in the overpotential required to achieve 0.5 mA cm\u207b\u00b2 geo (~210 mV and 330 mV for IrO\u2093 and IrO\u2082, respectively; Fig. 1d). IrO\u2093 shows two distinct broad redox peaks at around 0.8 and 1.2 V versus the reversible hydrogen electrode (RHE). By contrast, no distinct redox peak can be observed for IrO\u2082. The redox features and catalytic activity of both samples are relatively stable for 20 cycles and 2.5 h of operation (further results on the stability of the redox features, activity and morphology/structure can be found in Supplementary Note 2). All electrochemical measurements were carried out in 0.1 M HClO\u2084 prepared by dilution of concentrated perchloric acid (Suprapur 70% HClO\u2084, Merck) in ultrapure water (>18.2 M\u03a9 cm, Sartorius). The electrochemical tests were conducted using a typical three-electrode set-up with an SP-150 or an SP-300 BioLogic potentiostat. The iridium oxides deposited on the FTO substrate (1 \u00d7 1 cm) were used directly as the working electrode. A platinum mesh and an Ag/AgCl electrode (KCl-saturated) were used as the counter and reference electrodes, respectively. The reference electrode was calibrated to the RHE in the same electrolyte using saturated H\u2082 on a clean platinum surface. Potentials were iR-compensated by manually subtracting the product of current and resistance $i \\times R_u$, for which the resistance $R_u$ (-25 \u03a9) was obtained from a high-frequency intercept of the real resistance during electrochemical impedance spectroscopy.",
+        "parser_name": "dots"
+      },
+      "type": "Stability"
+    },
+    {
+      "value": 250.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "unknown",
+        "normalization_basis": null,
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 9,
+        "bbox_x0": 77.0,
+        "bbox_y0": 636.0,
+        "bbox_x1": 612.0,
+        "bbox_y1": 1290.0,
+        "source_text": "volcano plot at a fixed overpotential of 250 mV (Fig. 6b and Supplementary Fig. 42). The steep part of the left side of the volcano (for example, when \u0394G\u00b0~O~ - \u0394G\u00b0~OH~ (\u03b8~O~ = 0) < 1.28 eV in the curve of r = 0.15 eV) is where the *O coverage is saturated, whereas the less steep part represents where \u0394G\u00b0~O~ - \u0394G\u00b0~OH~ (\u03b8~O~) is changing due to the Frumkin repulsion term. The Frumkin repulsion term has a higher impact on increasing the activity for a material with a stronger *O binding energy, for a given interaction strength. This is evident from our data on amorphous and rutile iridium oxide catalysts, where the adsorbate-adsorbate interaction increases the relative activity of the two materials by different degrees, although they have a similar interaction parameter (-0.15 eV). This is because the stronger binding strength of *O on the IrO~x~ surface results in a higher coverage for IrO~x~ compared with IrO~2~ at this potential (Fig. 5a, top panel), and a consequently higher repulsion between adsorbates. However, both show a higher activity than the molecular iridium catalyst analysed previously, which has no adsorbate-adsorbate interaction\u00b2\u2078. This observation is consistent with our previous suggestion that, although the studied molecular iridium catalyst showed faster kinetics than amorphous IrO~x~ at low overpotentials, it is less active than amorphous IrO~x~ at higher overpotentials due to a lack of cooperative interactions between active states\u00b2\u2078. Similar analyses at overpotentials of 200 and 280 mV are also given in Supplementary Fig. 43. These results indicate that the potential can alter the coverage of *O species, which in turn can weaken the binding energies for catalysts that bind oxygen too strongly in a conventional volcano plot, hence improving the OER activity. This analysis elucidates the fundamental origin of the activity discrepancies between different iridium-based catalysts, including amorphous and crystalline iridium oxides.",
+        "parser_name": "dots"
+      },
+      "type": "Overpotential"
+    }
+  ],
+  "errors": [
+    {
+      "error": "ValueError: likely mis-citation for TurnoverFrequency: value 0.25 not found in cited span(s)",
+      "raw": {
+        "type": "TurnoverFrequency",
+        "value": 0.25,
+        "unit_label": "1/s",
+        "condition": {
+          "catalyst_loading": null,
+          "cell_type": "three-electrode set-up",
+          "cell_type_family": "RDE",
+          "current_density": null,
+          "electrode_potential_vs_rhe": null,
+          "electrolyte": {
+            "concentration": 0.1,
+            "electrolyte_ph": null,
+            "formula": "HClO4"
+          },
+          "electrolyte_family": "acid",
+          "iR_correction": "unknown",
+          "normalization_basis": null,
+          "scan_rate": null,
+          "scan_rate_regime": null,
+          "temperature_C": null
+        },
+        "evidence": {
+          "spans": [
+            64
+          ]
+        }
+      }
+    }
+  ]
+}

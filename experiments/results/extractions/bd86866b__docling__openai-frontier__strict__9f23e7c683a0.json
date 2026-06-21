@@ -1,0 +1,278 @@
+{
+  "schema_version": 1,
+  "paper_sha": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01",
+  "parser": "docling",
+  "label": "openai-frontier",
+  "mode": "strict",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "openai/gpt-5.4",
+  "temperature": 0.0,
+  "in_tokens": 42847,
+  "out_tokens": 952,
+  "latency_s": 4.92,
+  "items": [
+    {
+      "value": 210.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 0.5,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": 10.0,
+        "catalyst_loading": null,
+        "iR_correction": "applied",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": "fast_CV"
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 2,
+        "bbox_x0": 39.68069648900001,
+        "bbox_y0": 508.3047297360312,
+        "bbox_x1": 562.7924033711711,
+        "bbox_y1": 421.90034628903123,
+        "source_text": "Compared with IrO2, the cyclic voltammograms of IrO x show higher redox current densities of around one order of magnitude, when normalized to the geometric area. IrO x also shows a higher activity than IrO 2 , as reflected in the overpotential required to achieve 0.5 mA cm -2 geo (~210 mV and 330 mV for IrO x and IrO 2 , respectively; Fig. 1d). IrO x shows two distinct broad redox peaks at around 0.8 and 1.2 V versus the reversible hydrogen electrode (RHE). By contrast, no distinct redox peak can be observed for IrO 2 . The redox features and catalytic activity of both samples are relatively stable for 20 cycles and 2.5 h of operation (further results on the stability of the redox features, activity and morphology/ structure can be found in Supplementary Note 2). Fig. 1 | Structure, composition and electrochemical behaviour of amorphous IrO x and rutile IrO 2 . a , b , Possible crystal structures of rutile IrO 2 ( a ) and amorphous IrO x ( b ). Grey, red and white spheres represent iridium, oxygen and hydrogen atoms, respectively. Ir cus denotes a coordinatively unsaturated iridium site and Ir bri denotes an iridium site bound to the bridging oxygen. c , Ex situ k 2 -weighted Fourier transform (FT) of EXAFS spectra collected at the iridium L3 edge of amorphous IrO x and rutile IrO 2 , showing the iridium coordination environment. Experimental data (solid lines) and fits (dotted lines) are shown. R , interatomic distance. d , Cyclic voltammograms of amorphous IrO x and rutile IrO2 with the same iridium loading obtained at a scan rate of 10 mV s -1 in 0.1 M HClO4 electrolyte (curves are iR -corrected ( i , current; R , resistance)). Cyclic voltammograms are obtained after five cycles. The inset shows an expansion of the cyclic voltammogram of rutile IrO 2 . e , Schematic showing procedures for using ToF-SIMS to detect proton penetration in iridium oxides. Dark red polygons denote iridium oxides and the dark yellow rectangle represents the wax-covered surface. Light blue and dark blue spheres denote protons (H + ) and deuterium ions (D + ), respectively. f , Comparison of the D/H ratio change with ToF-SIMS sputter time in amorphous IrO x and rutile IrO 2 before and after electrochemical cycling in deuterated HClO 4 solution. The downward arrow points to the region where a higher deuterium signal was observed compared to the background.",
+        "parser_name": "docling"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 330.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 0.5,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": 10.0,
+        "catalyst_loading": null,
+        "iR_correction": "applied",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": "fast_CV"
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 2,
+        "bbox_x0": 39.68069648900001,
+        "bbox_y0": 508.3047297360312,
+        "bbox_x1": 562.7924033711711,
+        "bbox_y1": 421.90034628903123,
+        "source_text": "Compared with IrO2, the cyclic voltammograms of IrO x show higher redox current densities of around one order of magnitude, when normalized to the geometric area. IrO x also shows a higher activity than IrO 2 , as reflected in the overpotential required to achieve 0.5 mA cm -2 geo (~210 mV and 330 mV for IrO x and IrO 2 , respectively; Fig. 1d). IrO x shows two distinct broad redox peaks at around 0.8 and 1.2 V versus the reversible hydrogen electrode (RHE). By contrast, no distinct redox peak can be observed for IrO 2 . The redox features and catalytic activity of both samples are relatively stable for 20 cycles and 2.5 h of operation (further results on the stability of the redox features, activity and morphology/ structure can be found in Supplementary Note 2). Fig. 1 | Structure, composition and electrochemical behaviour of amorphous IrO x and rutile IrO 2 . a , b , Possible crystal structures of rutile IrO 2 ( a ) and amorphous IrO x ( b ). Grey, red and white spheres represent iridium, oxygen and hydrogen atoms, respectively. Ir cus denotes a coordinatively unsaturated iridium site and Ir bri denotes an iridium site bound to the bridging oxygen. c , Ex situ k 2 -weighted Fourier transform (FT) of EXAFS spectra collected at the iridium L3 edge of amorphous IrO x and rutile IrO 2 , showing the iridium coordination environment. Experimental data (solid lines) and fits (dotted lines) are shown. R , interatomic distance. d , Cyclic voltammograms of amorphous IrO x and rutile IrO2 with the same iridium loading obtained at a scan rate of 10 mV s -1 in 0.1 M HClO4 electrolyte (curves are iR -corrected ( i , current; R , resistance)). Cyclic voltammograms are obtained after five cycles. The inset shows an expansion of the cyclic voltammogram of rutile IrO 2 . e , Schematic showing procedures for using ToF-SIMS to detect proton penetration in iridium oxides. Dark red polygons denote iridium oxides and the dark yellow rectangle represents the wax-covered surface. Light blue and dark blue spheres denote protons (H + ) and deuterium ions (D + ), respectively. f , Comparison of the D/H ratio change with ToF-SIMS sputter time in amorphous IrO x and rutile IrO 2 before and after electrochemical cycling in deuterated HClO 4 solution. The downward arrow points to the region where a higher deuterium signal was observed compared to the background.",
+        "parser_name": "docling"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 2.5,
+      "unit_label": "h",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": null,
+        "cell_type": "three-electrode set-up",
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "unknown",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 2,
+        "bbox_x0": 306.141815185,
+        "bbox_y0": 537.0568085930313,
+        "bbox_x1": 562.7924033711711,
+        "bbox_y1": 421.90034628903123,
+        "source_text": "Compared with IrO2, the cyclic voltammograms of IrO x show higher redox current densities of around one order of magnitude, when normalized to the geometric area. IrO x also shows a higher activity than IrO 2 , as reflected in the overpotential required to achieve 0.5 mA cm -2 geo (~210 mV and 330 mV for IrO x and IrO 2 , respectively; Fig. 1d). IrO x shows two distinct broad redox peaks at around 0.8 and 1.2 V versus the reversible hydrogen electrode (RHE). By contrast, no distinct redox peak can be observed for IrO 2 . The redox features and catalytic activity of both samples are relatively stable for 20 cycles and 2.5 h of operation (further results on the stability of the redox features, activity and morphology/ structure can be found in Supplementary Note 2).",
+        "parser_name": "docling"
+      },
+      "type": "Stability"
+    },
+    {
+      "value": 0.001,
+      "unit_label": "1/s",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": 1.4,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "unknown",
+        "normalization_basis": null,
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 8,
+        "bbox_x0": 39.682207113000004,
+        "bbox_y0": 578.0211298820312,
+        "bbox_x1": 373.50018579100004,
+        "bbox_y1": 610.6116430750878,
+        "source_text": "Fig. 5 | Intrinsic rate of the RDS for amorphous IrO x and rutile IrO 2 . a , Coverage of *O cus as a function of the potential for amorphous and rutile iridium oxides (top), and the corresponding TOF per active state of amorphous IrO x and rutile IrO 2 at the same potential (bottom). b , Intrinsic reaction rate per active state of IrO x and IrO2 as a function of the coverage of *O cus . The red and blue shaded regions in a and b are guides for the eye. c , Experimentally determined \u2206 G \u00b0 *O - \u2206 G \u00b0 *OH values at different coverages of *O cus . The \u2206 G \u00b0 *O - \u2206 G \u00b0 *OH values are calculated following the Frumkin electroadsorption isotherm \u2206 G \u00b0 *O - \u2206 G \u00b0 *OH = \u2206 G \u00b0 *O - \u2206 G \u00b0 *OH ( \u03b8 *O = 0) + r\u03b8 *O , 0.001 TOF from open-circuit decay 1.40",
+        "parser_name": "docling"
+      },
+      "type": "TurnoverFrequency"
+    },
+    {
+      "value": 0.01,
+      "unit_label": "1/s",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": 1.45,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "unknown",
+        "normalization_basis": null,
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 8,
+        "bbox_x0": 39.682207113000004,
+        "bbox_y0": 578.0211298820312,
+        "bbox_x1": 373.50018579100004,
+        "bbox_y1": 639.3335376805406,
+        "source_text": "Fig. 5 | Intrinsic rate of the RDS for amorphous IrO x and rutile IrO 2 . a , Coverage of *O cus as a function of the potential for amorphous and rutile iridium oxides (top), and the corresponding TOF per active state of amorphous IrO x and rutile IrO 2 at the same potential (bottom). b , Intrinsic reaction rate per active state of IrO x and IrO2 as a function of the coverage of *O cus . The red and blue shaded regions in a and b are guides for the eye. c , Experimentally determined \u2206 G \u00b0 *O - \u2206 G \u00b0 *OH values at different coverages of *O cus . The \u2206 G \u00b0 *O - \u2206 G \u00b0 *OH values are calculated following the Frumkin electroadsorption isotherm \u2206 G \u00b0 *O - \u2206 G \u00b0 *OH = \u2206 G \u00b0 *O - \u2206 G \u00b0 *OH ( \u03b8 *O = 0) + r\u03b8 *O , 0.01 TOF from open-circuit decay 1.45",
+        "parser_name": "docling"
+      },
+      "type": "TurnoverFrequency"
+    },
+    {
+      "value": 0.1,
+      "unit_label": "1/s",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": 1.5,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "unknown",
+        "normalization_basis": null,
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 8,
+        "bbox_x0": 39.682207113000004,
+        "bbox_y0": 578.0211298820312,
+        "bbox_x1": 373.50018579100004,
+        "bbox_y1": 676.5135376805406,
+        "source_text": "Fig. 5 | Intrinsic rate of the RDS for amorphous IrO x and rutile IrO 2 . a , Coverage of *O cus as a function of the potential for amorphous and rutile iridium oxides (top), and the corresponding TOF per active state of amorphous IrO x and rutile IrO 2 at the same potential (bottom). b , Intrinsic reaction rate per active state of IrO x and IrO2 as a function of the coverage of *O cus . The red and blue shaded regions in a and b are guides for the eye. c , Experimentally determined \u2206 G \u00b0 *O - \u2206 G \u00b0 *OH values at different coverages of *O cus . The \u2206 G \u00b0 *O - \u2206 G \u00b0 *OH values are calculated following the Frumkin electroadsorption isotherm \u2206 G \u00b0 *O - \u2206 G \u00b0 *OH = \u2206 G \u00b0 *O - \u2206 G \u00b0 *OH ( \u03b8 *O = 0) + r\u03b8 *O , 0.1 TOF from open-circuit decay 1.50",
+        "parser_name": "docling"
+      },
+      "type": "TurnoverFrequency"
+    },
+    {
+      "value": 1.0,
+      "unit_label": "1/s",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": 1.55,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "unknown",
+        "normalization_basis": null,
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 8,
+        "bbox_x0": 39.682207113000004,
+        "bbox_y0": 578.0211298820312,
+        "bbox_x1": 373.50018579100004,
+        "bbox_y1": 713.5890376805406,
+        "source_text": "Fig. 5 | Intrinsic rate of the RDS for amorphous IrO x and rutile IrO 2 . a , Coverage of *O cus as a function of the potential for amorphous and rutile iridium oxides (top), and the corresponding TOF per active state of amorphous IrO x and rutile IrO 2 at the same potential (bottom). b , Intrinsic reaction rate per active state of IrO x and IrO2 as a function of the coverage of *O cus . The red and blue shaded regions in a and b are guides for the eye. c , Experimentally determined \u2206 G \u00b0 *O - \u2206 G \u00b0 *OH values at different coverages of *O cus . The \u2206 G \u00b0 *O - \u2206 G \u00b0 *OH values are calculated following the Frumkin electroadsorption isotherm \u2206 G \u00b0 *O - \u2206 G \u00b0 *OH = \u2206 G \u00b0 *O - \u2206 G \u00b0 *OH ( \u03b8 *O = 0) + r\u03b8 *O , 1 TOF from open-circuit decay 1.55",
+        "parser_name": "docling"
+      },
+      "type": "TurnoverFrequency"
+    }
+  ],
+  "errors": []
+}

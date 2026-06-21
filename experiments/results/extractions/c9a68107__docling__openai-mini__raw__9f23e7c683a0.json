@@ -1,0 +1,266 @@
+{
+  "schema_version": 1,
+  "paper_sha": "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c",
+  "parser": "docling",
+  "label": "openai-mini",
+  "mode": "raw",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "openai/gpt-5.4-mini",
+  "temperature": 0.0,
+  "in_tokens": 35867,
+  "out_tokens": 401,
+  "latency_s": 2.64,
+  "items": [
+    {
+      "value": 288.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 10.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "applied",
+        "normalization_basis": "geometric",
+        "cell_type_family": null,
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c"
+        },
+        "page": 4,
+        "bbox_x0": 306.14037150898804,
+        "bbox_y0": 335.2303139896312,
+        "bbox_x1": 561.364524137142,
+        "bbox_y1": 197.45013165405237,
+        "source_text": "Electrocatalytic performance in a three-electrode con fi guration The electrocatalytic activities toward OER of IrO2@TaB2 were measured using a standard three-electrode con fi guration in 0.1 M HClO4 electrolyte. As the IrO2 content increases, the electrocatalytic activity for OER increased rapidly (Fig. 4a), and reaches its optimization when the Ir content is 16 wt%. However, a further increase in the Ir content of the IrO2@TaB2 results in a slight deterioration of the electrocatalytic activity. The required overpotential to generate a current density of 10 mAcm -2 (normalized over the electrode geometric area) for 16 wt% IrO2@TaB2 is 288 mV, lower than that of unsupported IrO2 (307 mV). The Tafel slope of 16 wt% IrO2@TaB2 is 42.6 mV dec -1 (Supplementary Fig. 8), close to that of unsupported IrO2 (45.1 mV dec -1 ), indicating that the the TaB2 support has no change to OER pathway of IrO2.",
+        "parser_name": "docling"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 42.6,
+      "unit_label": "mV/decade",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": 1.0,
+        "catalyst_loading": null,
+        "iR_correction": "applied",
+        "normalization_basis": null,
+        "cell_type_family": null,
+        "electrolyte_family": "acid",
+        "scan_rate_regime": "slow_LSV"
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c"
+        },
+        "page": 4,
+        "bbox_x0": 39.68373113353903,
+        "bbox_y0": 335.2303139896312,
+        "bbox_x1": 561.364524137142,
+        "bbox_y1": 348.1610508312982,
+        "source_text": "Electrocatalytic performance in a three-electrode con fi guration The electrocatalytic activities toward OER of IrO2@TaB2 were measured using a standard three-electrode con fi guration in 0.1 M HClO4 electrolyte. As the IrO2 content increases, the electrocatalytic activity for OER increased rapidly (Fig. 4a), and reaches its optimization when the Ir content is 16 wt%. However, a further increase in the Ir content of the IrO2@TaB2 results in a slight deterioration of the electrocatalytic activity. The required overpotential to generate a current density of 10 mAcm -2 (normalized over the electrode geometric area) for 16 wt% IrO2@TaB2 is 288 mV, lower than that of unsupported IrO2 (307 mV). The Tafel slope of 16 wt% IrO2@TaB2 is 42.6 mV dec -1 (Supplementary Fig. 8), close to that of unsupported IrO2 (45.1 mV dec -1 ), indicating that the the TaB2 support has no change to OER pathway of IrO2. The performances of catalysts were studied in a standard threeelectrode system by a CH Instrument (Model 660E) and the electrolyte was 0.1 M HClO4 solution bubbled with O2 gas. Linear sweep voltammetry (LSV) measurements were performed with the scan rate of 1 mV s -1 and compensated by 85% iR-drop. The chronopotentiometric curve was measured without iR-drop compensation. The counter electrode was a Pt wire and the reference electrode was a saturated calomel electrode (SCE). The potential was normalized with respect to the reversible hydrogen electrode (RHE), according to Eq. (1):",
+        "parser_name": "docling"
+      },
+      "type": "TafelSlope"
+    },
+    {
+      "value": 345.0,
+      "unit_label": "A/g",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": 1.53,
+        "temperature_C": null,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": null,
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c"
+        },
+        "page": 4,
+        "bbox_x0": 306.140099244663,
+        "bbox_y0": 195.14272852860427,
+        "bbox_x1": 561.3927166354785,
+        "bbox_y1": 48.31341725500636,
+        "source_text": "Electrochemical double layer capacitance (DLC) measurements were carried out to obtain the electrochemically active surface area (ECSA) of IrO2@TaB2 by estimating the accumulated charge amount at the electrode surface. Generally, the ECSA values become larger with increasing Ir content in IrO2@TaB2 (Fig. 4b, left and Supplementary Table 6). In order to compare the intrinsic activities of different catalysts, we normalized the measured currents by the ECSAs (Fig. 4b, right). The 16 wt% IrO2@TaB2 presents the highest current density ( j ECSA) at 1.53 V versus reversible hydrogen electrode (RHE) among these IrO2@TaB2 samples, which is 5.2 times larger than that of IrO2. We further compared the iridium mass activities of IrO2@TaB2 and IrO2 by normalizing the measured currents over the mass of iridium ( j ir). Although 16% IrO2@TaB2 has 70 wt% less iridium relative to IrO2, it displays a high iridium mass activity of 345 A g -1 at 1.53 V versus RHE",
+        "parser_name": "docling"
+      },
+      "type": "MassActivity"
+    },
+    {
+      "value": 0.0,
+      "unit_label": "cm2",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": null,
+        "electrolyte_family": null,
+        "scan_rate_regime": "slow_LSV"
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c"
+        },
+        "page": 4,
+        "bbox_x0": 306.140099244663,
+        "bbox_y0": 195.14272852860427,
+        "bbox_x1": 561.3927166354785,
+        "bbox_y1": 573.0629060850063,
+        "source_text": "Electrochemical double layer capacitance (DLC) measurements were carried out to obtain the electrochemically active surface area (ECSA) of IrO2@TaB2 by estimating the accumulated charge amount at the electrode surface. Generally, the ECSA values become larger with increasing Ir content in IrO2@TaB2 (Fig. 4b, left and Supplementary Table 6). In order to compare the intrinsic activities of different catalysts, we normalized the measured currents by the ECSAs (Fig. 4b, right). The 16 wt% IrO2@TaB2 presents the highest current density ( j ECSA) at 1.53 V versus reversible hydrogen electrode (RHE) among these IrO2@TaB2 samples, which is 5.2 times larger than that of IrO2. We further compared the iridium mass activities of IrO2@TaB2 and IrO2 by normalizing the measured currents over the mass of iridium ( j ir). Although 16% IrO2@TaB2 has 70 wt% less iridium relative to IrO2, it displays a high iridium mass activity of 345 A g -1 at 1.53 V versus RHE To calculate ECSA of catalysts, we performed CV tests in the nonfaradaic current region between 0.83 V and 0.93 V vs. RHE at different scan rates (10, 25, 50, 75, and 100 mV s -1 ). A linear trend could be obtained via plotting the currents difference ( \u0394 i ) between the anodic and cathodic sweeps ( i anodic -i cathodic) at 0.88 V against the scan rate. The slope of the fi tting line was equal to twice the geometric double layer capacitance (Cdl). The ECSA of the catalyst was estimated according to the Eq. (4): ECSA= Cdl Cs \u00f0 cm 2 \u00de \u00f0 4 \u00de",
+        "parser_name": "docling"
+      },
+      "type": "ECSA"
+    },
+    {
+      "value": 120.0,
+      "unit_label": "h",
+      "condition": {
+        "current_density": 10.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": "RDE",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c"
+        },
+        "page": 5,
+        "bbox_x0": 39.68376650809003,
+        "bbox_y0": 120.13837209203132,
+        "bbox_x1": 561.3719861422353,
+        "bbox_y1": 91.17298521281532,
+        "source_text": "Besides high activity, IrO2@TaB2 displays great catalytic and structural stability for acidic OER. The galvanostatic measurements (Fig. 4d) demonstrate that IrO2@TaB2 remains steadily catalytic activity for more than 120 h of continuous operation at a current density of 10 mA cm -2 , while IrO2 lost its catalytic activity after 40 h in the acidic electrolyte. Supplementary Fig. 9 exhibits the polarization curve for OER obtained from IrO2@TaB2 and IrO2 before and after 5000 cycles. IrO2@TaB2 presents no measurable loss of catalytic activity after the continuous polarization measurements, while IrO2 suffers from a severe deactivation. These results suggest that TaB2 support greatly enhances the catalytic stability of IrO2. Moreover, IrO2@TaB2 achieves a faradaic ef fi ciency of nearly 100% during acidic OER(SupplementaryFig.10),con fi rming that the observed current can be entirely attributed to the oxygen generation. To investigate the catalytic mechanism, OER performance of IrO2@TaB2 and IrO2 were examined in HClO4 electrolytes with different pH. The catalytic activities of IrO2@TaB2 and IrO2 show strong pH dependence in the pH range of 0 -1.5 on the standard hydrogen electrode (SHE) scale (Fig. 5a). The potential -pH dependence value of IrO2@TaB2 is -57.3 mV dec -1 , which is near to that of IrO2 ( -58.0 mV dec -1 , Fig. 5b). Such a near -60mV dec -1 Nernstian potential shift indicates a proton coupled electron transfer (CPET) process 54 , and the OER at Ir sites strictly follows the conventional adsorbates evolution mechanism (AEM) pathway. In addition, we applied in situ differential electrochemical mass spectrometry (DEMS) to study the reaction mechanisms. The O source of evolved oxygen product can be identifi ed through labeling of catalysts with 18 O isotope. When the 18 O-labeled IrO2@TaB2 electrocatalyst works in H2 16 O electrolyte, 34 O2 (or 16 O 18 O) to 32 O2 ratio in gaseous product is 0.43% (Fig. 5c). It should benotedthatthe natural stable abundance of 18 Oisotope is about 0.2% in water 55,56 , indicating the minimum detected amount of 34 O2 in OER products is about 0.4%. We further carried out DEMS measurement for 18 O-labeled IrO2 catalyst under the same condition, the 34 O2/ 32 O2",
+        "parser_name": "docling"
+      },
+      "type": "Stability"
+    },
+    {
+      "value": 0.0,
+      "unit_label": "1/s",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": 1.53,
+        "temperature_C": null,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": null,
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c"
+        },
+        "page": 4,
+        "bbox_x0": 306.140099244663,
+        "bbox_y0": 195.14272852860427,
+        "bbox_x1": 561.3927166354785,
+        "bbox_y1": 48.31341725500636,
+        "source_text": "Electrochemical double layer capacitance (DLC) measurements were carried out to obtain the electrochemically active surface area (ECSA) of IrO2@TaB2 by estimating the accumulated charge amount at the electrode surface. Generally, the ECSA values become larger with increasing Ir content in IrO2@TaB2 (Fig. 4b, left and Supplementary Table 6). In order to compare the intrinsic activities of different catalysts, we normalized the measured currents by the ECSAs (Fig. 4b, right). The 16 wt% IrO2@TaB2 presents the highest current density ( j ECSA) at 1.53 V versus reversible hydrogen electrode (RHE) among these IrO2@TaB2 samples, which is 5.2 times larger than that of IrO2. We further compared the iridium mass activities of IrO2@TaB2 and IrO2 by normalizing the measured currents over the mass of iridium ( j ir). Although 16% IrO2@TaB2 has 70 wt% less iridium relative to IrO2, it displays a high iridium mass activity of 345 A g -1 at 1.53 V versus RHE",
+        "parser_name": "docling"
+      },
+      "type": "TurnoverFrequency"
+    },
+    {
+      "value": 0.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 10.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "applied",
+        "normalization_basis": "geometric",
+        "cell_type_family": null,
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c"
+        },
+        "page": 4,
+        "bbox_x0": 306.140099244663,
+        "bbox_y0": 195.14272852860427,
+        "bbox_x1": 561.3927166354785,
+        "bbox_y1": 48.31341725500636,
+        "source_text": "Electrochemical double layer capacitance (DLC) measurements were carried out to obtain the electrochemically active surface area (ECSA) of IrO2@TaB2 by estimating the accumulated charge amount at the electrode surface. Generally, the ECSA values become larger with increasing Ir content in IrO2@TaB2 (Fig. 4b, left and Supplementary Table 6). In order to compare the intrinsic activities of different catalysts, we normalized the measured currents by the ECSAs (Fig. 4b, right). The 16 wt% IrO2@TaB2 presents the highest current density ( j ECSA) at 1.53 V versus reversible hydrogen electrode (RHE) among these IrO2@TaB2 samples, which is 5.2 times larger than that of IrO2. We further compared the iridium mass activities of IrO2@TaB2 and IrO2 by normalizing the measured currents over the mass of iridium ( j ir). Although 16% IrO2@TaB2 has 70 wt% less iridium relative to IrO2, it displays a high iridium mass activity of 345 A g -1 at 1.53 V versus RHE",
+        "parser_name": "docling"
+      },
+      "type": "Overpotential"
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,202 @@
+{
+  "schema_version": 1,
+  "paper_sha": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01",
+  "parser": "paddle",
+  "label": "openai-frontier",
+  "mode": "strict",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "openai/gpt-5.4",
+  "temperature": 0.0,
+  "in_tokens": 33522,
+  "out_tokens": 685,
+  "latency_s": 4.73,
+  "items": [
+    {
+      "value": 210.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 0.5,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": "three-electrode set-up",
+        "scan_rate": 10.0,
+        "catalyst_loading": null,
+        "iR_correction": "applied",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": "fast_LSV"
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 2,
+        "bbox_x0": 49.0,
+        "bbox_y0": 503.0,
+        "bbox_x1": 1155.0,
+        "bbox_y1": 777.0,
+        "source_text": "Compared with $\\mathrm{I r O}_{2},$ ,the cyclic voltammograms of $\\mathsf{I r O}_{x}$ show higher redox current densities of around one order of magnitude, when normalized to the geometric area.$\\mathbf{,I r O},$ also shows a hiher activity than $\\mathrm{I r O}_{2}$ ,as reflected in the overpotential required to achieve 0.5 mA cm $^{-2}_{\\mathrm{g e o}}$ (-210 mV and 330 mV for IrOx $\\mathrm{a n d}\\mathrm{I r O}_{2}$ ,respectively; Fig.1d).$\\mathbf{I r O}_{x}$ shows two distinct broad redox peaks at around 0.8 and 1.2 V versus the reversible hydrogen electrode (RHE). By contrast, no distinct redox peak can be observed $\\mathrm{for}\\mathrm{IrO}_{2}$ .The redox features and catalytic activity of both samples are rlatively stable for 20 cycles and 2.5 hof operation (further results on te sability ofthe edox atures,activity and morpholog/structure can be found in Supplementary Note 2). Fig.1Structurompoitindctrochemilhaiouomorphous IrOxdeO.aeluofeO amorphous $\\mathbf{I r}0.$ hydrogen atoms, resectively.$\\mathrm{I r}_{\\mathrm{c u s}}$ site and $\\mathrm{Ir_{br}}$ k2-weightedFourier transform (F)ofES spectracollected attheiridium $\\mathrm{L}_{3}$ edge of amorphous IrOx and rutile $\\mathrm{IrO}_{2}$ showingteiidimco enviromExil li id sd i)eshown.R,interatomic distance.d,Cyclic voltammograms ofamorphous IrOxand rutile $\\mathrm{IrO}_{2}$ ,with the same iridium loading obtained at a scan rate of 10 mV sin 0.1M  $\\mathrm{H C l O_{4}}$ electrolyte(curves areiR-orrected (i,current;R,resistance)).Cyclic voltammograms are obtained afterfive cycles.Theinset shows an expansion of the cyclic voltammogram of rutile ,$\\mathrm{I r O}_{2}$  e, Schematic showing procedures for using ToF-SS to detect proton penetration iniridium oxides.Dark red olgons denote iridium oxides and the darkyellow rectangle represents the wax-covered surface.Light blue and dark bluespheres denote protons (H) and deuteriumons (D), respectively.f, Comparison of the D/H ratio change with ToF-SIMS sputter time in amorphous IrOxand rutile IrO before and after electrochemical cycling in deuterated $\\mathrm{H C l O}_{4}$ ,solution.The downward arrow points to the region where a higher deuterium signal was observed compared to the background.",
+        "parser_name": "paddle"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 330.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 0.5,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": "three-electrode set-up",
+        "scan_rate": 10.0,
+        "catalyst_loading": null,
+        "iR_correction": "applied",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": "fast_LSV"
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 2,
+        "bbox_x0": 49.0,
+        "bbox_y0": 503.0,
+        "bbox_x1": 1155.0,
+        "bbox_y1": 777.0,
+        "source_text": "Compared with $\\mathrm{I r O}_{2},$ ,the cyclic voltammograms of $\\mathsf{I r O}_{x}$ show higher redox current densities of around one order of magnitude, when normalized to the geometric area.$\\mathbf{,I r O},$ also shows a hiher activity than $\\mathrm{I r O}_{2}$ ,as reflected in the overpotential required to achieve 0.5 mA cm $^{-2}_{\\mathrm{g e o}}$ (-210 mV and 330 mV for IrOx $\\mathrm{a n d}\\mathrm{I r O}_{2}$ ,respectively; Fig.1d).$\\mathbf{I r O}_{x}$ shows two distinct broad redox peaks at around 0.8 and 1.2 V versus the reversible hydrogen electrode (RHE). By contrast, no distinct redox peak can be observed $\\mathrm{for}\\mathrm{IrO}_{2}$ .The redox features and catalytic activity of both samples are rlatively stable for 20 cycles and 2.5 hof operation (further results on te sability ofthe edox atures,activity and morpholog/structure can be found in Supplementary Note 2). Fig.1Structurompoitindctrochemilhaiouomorphous IrOxdeO.aeluofeO amorphous $\\mathbf{I r}0.$ hydrogen atoms, resectively.$\\mathrm{I r}_{\\mathrm{c u s}}$ site and $\\mathrm{Ir_{br}}$ k2-weightedFourier transform (F)ofES spectracollected attheiridium $\\mathrm{L}_{3}$ edge of amorphous IrOx and rutile $\\mathrm{IrO}_{2}$ showingteiidimco enviromExil li id sd i)eshown.R,interatomic distance.d,Cyclic voltammograms ofamorphous IrOxand rutile $\\mathrm{IrO}_{2}$ ,with the same iridium loading obtained at a scan rate of 10 mV sin 0.1M  $\\mathrm{H C l O_{4}}$ electrolyte(curves areiR-orrected (i,current;R,resistance)).Cyclic voltammograms are obtained afterfive cycles.Theinset shows an expansion of the cyclic voltammogram of rutile ,$\\mathrm{I r O}_{2}$  e, Schematic showing procedures for using ToF-SS to detect proton penetration iniridium oxides.Dark red olgons denote iridium oxides and the darkyellow rectangle represents the wax-covered surface.Light blue and dark bluespheres denote protons (H) and deuteriumons (D), respectively.f, Comparison of the D/H ratio change with ToF-SIMS sputter time in amorphous IrOxand rutile IrO before and after electrochemical cycling in deuterated $\\mathrm{H C l O}_{4}$ ,solution.The downward arrow points to the region where a higher deuterium signal was observed compared to the background.",
+        "parser_name": "paddle"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 2.5,
+      "unit_label": "h",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": null,
+        "cell_type": "three-electrode set-up",
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "unknown",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": "steady_state"
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 2,
+        "bbox_x0": 603.0,
+        "bbox_y0": 503.0,
+        "bbox_x1": 1155.0,
+        "bbox_y1": 751.0,
+        "source_text": "Compared with $\\mathrm{I r O}_{2},$ ,the cyclic voltammograms of $\\mathsf{I r O}_{x}$ show higher redox current densities of around one order of magnitude, when normalized to the geometric area.$\\mathbf{,I r O},$ also shows a hiher activity than $\\mathrm{I r O}_{2}$ ,as reflected in the overpotential required to achieve 0.5 mA cm $^{-2}_{\\mathrm{g e o}}$ (-210 mV and 330 mV for IrOx $\\mathrm{a n d}\\mathrm{I r O}_{2}$ ,respectively; Fig.1d).$\\mathbf{I r O}_{x}$ shows two distinct broad redox peaks at around 0.8 and 1.2 V versus the reversible hydrogen electrode (RHE). By contrast, no distinct redox peak can be observed $\\mathrm{for}\\mathrm{IrO}_{2}$ .The redox features and catalytic activity of both samples are rlatively stable for 20 cycles and 2.5 hof operation (further results on te sability ofthe edox atures,activity and morpholog/structure can be found in Supplementary Note 2).",
+        "parser_name": "paddle"
+      },
+      "type": "Stability"
+    },
+    {
+      "value": 0.001,
+      "unit_label": "1/s",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": 1.4,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": "three-electrode set-up",
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "applied",
+        "normalization_basis": null,
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 8,
+        "bbox_x0": 134.0,
+        "bbox_y0": 69.0,
+        "bbox_x1": 434.0,
+        "bbox_y1": 432.0,
+        "source_text": "a \n1.0\ncoverage 9'0800.4eeee Rutile 0.2\nTOF (O2 per *Ocus per s)0.0010.01V'00re reecer TOFfromopencircuitdecay 1.401.451.501.551.60Potential (V vs RHE)\n",
+        "parser_name": "paddle"
+      },
+      "type": "TurnoverFrequency"
+    },
+    {
+      "value": 0.01,
+      "unit_label": "1/s",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": 1.45,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": "three-electrode set-up",
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "applied",
+        "normalization_basis": null,
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 8,
+        "bbox_x0": 134.0,
+        "bbox_y0": 69.0,
+        "bbox_x1": 434.0,
+        "bbox_y1": 432.0,
+        "source_text": "a \n1.0\ncoverage 9'0800.4eeee Rutile 0.2\nTOF (O2 per *Ocus per s)0.0010.01V'00re reecer TOFfromopencircuitdecay 1.401.451.501.551.60Potential (V vs RHE)\n",
+        "parser_name": "paddle"
+      },
+      "type": "TurnoverFrequency"
+    }
+  ],
+  "errors": []
+}

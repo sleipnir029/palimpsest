@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "paper_sha": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01",
+  "parser": "mineru",
+  "label": "openai-mini",
+  "mode": "raw",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "openai/gpt-5.4-mini",
+  "temperature": 0.0,
+  "in_tokens": 32099,
+  "out_tokens": 273,
+  "latency_s": 3.62,
+  "items": [
+    {
+      "value": 210.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 0.5,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "unknown",
+        "normalization_basis": "geometric",
+        "cell_type_family": null,
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 2,
+        "bbox_x0": 507.0,
+        "bbox_y0": 317.0,
+        "bbox_x1": 944.0,
+        "bbox_y1": 465.0,
+        "source_text": "Compared with    IrO_{2}  , the cyclic voltammograms of    IrO_{x}   show higher redox current densities of around one order of magnitude, when normalized to the geometric area.    IrO_{x}   also shows a higher activity than    IrO_{2}  , as reflected in the overpotential required to achieve 0.5 mA cm   ^{-2}   geo (~210 mV and 330 mV for    IrO_{x}   and    IrO_{2}  , respectively; Fig. 1d).    IrO_{x}   shows two distinct broad redox peaks at around 0.8 and 1.2 V versus the reversible hydrogen electrode (RHE). By contrast, no distinct redox peak can be observed for    IrO_{2}  . The redox features and catalytic activity of both samples are relatively stable for 20 cycles and 2.5 h of operation (further results on the stability of the redox features, activity and morphology/structure can be found in Supplementary Note 2).",
+        "parser_name": "mineru"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 330.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 0.5,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "unknown",
+        "normalization_basis": "geometric",
+        "cell_type_family": null,
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 2,
+        "bbox_x0": 507.0,
+        "bbox_y0": 317.0,
+        "bbox_x1": 944.0,
+        "bbox_y1": 465.0,
+        "source_text": "Compared with    IrO_{2}  , the cyclic voltammograms of    IrO_{x}   show higher redox current densities of around one order of magnitude, when normalized to the geometric area.    IrO_{x}   also shows a higher activity than    IrO_{2}  , as reflected in the overpotential required to achieve 0.5 mA cm   ^{-2}   geo (~210 mV and 330 mV for    IrO_{x}   and    IrO_{2}  , respectively; Fig. 1d).    IrO_{x}   shows two distinct broad redox peaks at around 0.8 and 1.2 V versus the reversible hydrogen electrode (RHE). By contrast, no distinct redox peak can be observed for    IrO_{2}  . The redox features and catalytic activity of both samples are relatively stable for 20 cycles and 2.5 h of operation (further results on the stability of the redox features, activity and morphology/structure can be found in Supplementary Note 2).",
+        "parser_name": "mineru"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 1.0,
+      "unit_label": "mV/decade",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": 1.0,
+        "catalyst_loading": null,
+        "iR_correction": "applied",
+        "normalization_basis": null,
+        "cell_type_family": null,
+        "electrolyte_family": "acid",
+        "scan_rate_regime": "slow_LSV"
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 4,
+        "bbox_x0": 142.0,
+        "bbox_y0": 65.0,
+        "bbox_x1": 863.0,
+        "bbox_y1": 435.0,
+        "source_text": " Fig. 2 | Redox transition features as function of the potential in amorphous   \\mathrm{IrO}_x  and rutile   \\mathrm{IrO}_2 . a, Differential absorption spectra of amorphous   \\mathrm{IrO}_x  during a linear sweep scan from 0.66 to   1.48\\mathrm{V}_{\\mathrm{RHE}}  in   0.1\\mathrm{M} \\mathrm{HClO_4}  at a scan rate of   1\\mathrm{mVs}^{-1}  (  iR -corrected). Absorbance changes were recorded after five CV cycles, at every   1\\mathrm{mV}  (see Supplementary Fig. 11 for the full spectra) and shown every   20\\mathrm{mV} . The changes in absorbance are calculated with respect to the absorbance at   0.66\\mathrm{V}_{\\mathrm{RHE}} . b, Differential absorption spectra of rutile   \\mathrm{IrO}_2  during a linear sweep scan from 0.66 to   1.60\\mathrm{V}_{\\mathrm{RHE}}  in   0.1\\mathrm{M} \\mathrm{HClO_4}  at a scan rate of   1\\mathrm{mVs}^{-1}  (  iR -corrected). c, Differential analysis of absorption spectra for amorphous   \\mathrm{IrO}_x  at every   20\\mathrm{mV} . The differential absorption spectra are obtained by subtracting adjacent spectra and normalizing the maximum absorbance to unity, representing a change in absorbance that corresponds to a potential change of 20 mV. d, Extracted spectra for individual redox transitions in amorphous    IrO_{x}  . The absorption spectra for redox transition 1 (blue), 2 (green) and 3 (red) in amorphous    IrO_{x}   are extracted from the potential regime where the shapes of the spectra in c are invariant, corresponding to differential spectra between 0.84 and 0.82    V_{RHE}  , 1.18 and 1.16    V_{RHE}  , and 1.46 and 1.44    V_{RHE}  , respectively.",
+        "parser_name": "mineru"
+      },
+      "type": "TafelSlope"
+    }
+  ],
+  "errors": [
+    {
+      "error": "ValidationError: 1 validation error for ECSA\ncondition.method\n  Extra inputs are not permitted [type=extra_forbidden, input_value='unknown', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/extra_forbidden",
+      "raw": {
+        "type": "ECSA",
+        "value": 1,
+        "unit_label": "cm2",
+        "condition": {
+          "method": "unknown"
+        },
+        "evidence": {
+          "spans": [
+            72
+          ]
+        }
+      }
+    }
+  ]
+}

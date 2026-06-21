@@ -1,0 +1,271 @@
+{
+  "schema_version": 1,
+  "paper_sha": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54",
+  "parser": "paddle",
+  "label": "openai-frontier",
+  "mode": "raw",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "openai/gpt-5.4",
+  "temperature": 0.0,
+  "in_tokens": 26443,
+  "out_tokens": 644,
+  "latency_s": 4.62,
+  "items": [
+    {
+      "value": 240.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 10.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": 1.0
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "applied",
+        "normalization_basis": null,
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54"
+        },
+        "page": 3,
+        "bbox_x0": 23.0,
+        "bbox_y0": 61.0,
+        "bbox_x1": 1163.0,
+        "bbox_y1": 1548.0,
+        "source_text": "To better understand the intrinsic characteristics of the Ir $\\mathsf{\\cdot R u O}_{\\mathrm{r}}$ catalysts, OER activities of different as-prepared catalysts were evaluated in a rotating disk electrode (RDE) setup. According to the polarization curves (Fig. 3a), all Ir $\\mathsf{-R u O}_{s}$ catalysts and the pristine $\\mathrm{R u O}_{2}$ showed similarOER activities,with overpotentials of-240 mVto reach10 mA cm-2. All three-electrode electrochemical measurements were performed using RDE equipment (Pine Instruments) at room temperature. To make the catalyst ink, 5 mg of catalyst and 20 ul 5% Nafion ionomer solution were dispersed in 1 ml IPA and sonicated in a bath sonicator (VWR) for1h.To coat the catalyst onglassy carbon electrode (5 mm in diameter), 16 l of the ink was drop-cast on the electrode surface and vacuum dried, which resulted in catalyst loading of 0.4 mg cm-2.The glassy carbon electrode was mounted onto the rotation rod of RDE and was used as working electrode, a saturated calomel electrode (SCE,CH Instruments) was used as the reference electrode and a carbon rod (Beantown Chemical) was used as the counter electrode. All electrodes were immersed in $\\mathrm{O_{2}-s a t u r a t e d O_{4}+M H C l O_{4}}$ ,electrolyte, and the rotation rate was kept at 1,600 rpm. All potentials were measured against the SCE and converted to potentials against reversible hydrogen ectrode (RHE) using _$E(versus RHE)=E(versus BCE)+0.241V+0.0591\\times pH$  The pH of 0.1$\\mathrm{MHClO_{4}}$ ,electrolyte used in this work was 1, which was determidb  r nr l,mociiic).The oc ance was masured uing potentiostatic IS at frquncis ranging from.1HtH1.VsHE.ld pentials in RDE are 0% iR compensated uness otherwise specified. The scan rate in LSV tests was 5 mV s {1\n",
+        "parser_name": "paddle"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 1.939,
+      "unit_label": "V",
+      "condition": {
+        "current_density": 2.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": 60.0,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": 2.3,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": "single_cell_MEA",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54"
+        },
+        "page": 5,
+        "bbox_x0": 25.0,
+        "bbox_y0": 801.0,
+        "bbox_x1": 1155.0,
+        "bbox_y1": 1544.0,
+        "source_text": "To validate the outstanding durability of $\\mathrm{{\\sf{R u}}}_{6}\\mathrm{{\\sf{I r O}}}_{x}$ in a larger PEM electrolyser and under elevated temperature operation, our collaborators at De Nora Tech applied this catalyst to an anode in a 25-cm2 PEM water electrolyser (Fig.4a) following their standard testing protocols (Methods). Compared with commercial iridium black (IrB),$\\mathrm{R u}_{6}\\mathrm{I r O}_{\\mathrm{x}}$ .demonstrated almost identical activity up to 1A cm-2 (Fig. 4b), with slightly higher voltage above1 A cmdespite having only one-third of the Ir.Duringte 1-habiliy tt Fig.4, te curnt asgradually raised to 50 A and maintained at this level. The voltage initially rose from 1.939 V to 2.000 V in the first 500 h, probably indicative of a catalyst layer activation process. The voltage then experienced a slow decrease and reached 1.986 V when the test had to be stopped at 1,600 h due to other uses of the device. The superior durabillity of $\\mathrm{Ru_{6}IrO_{3}}$ is also supported by the similar electrochemical impedance spectroscopy (ElS) curves of beginning and end oftests (Fig.4).Compared with other reported Ir-containing acidic OER catalysts (Supplementary Table 9),$\\mathrm{{\\sf  Ru}}_{6}\\mathrm{{\\sf  IrO}},$ not only delivered stable performance at a high current density of 2$\\mathtt{A c m}^{-2}$ for over 1,500 h but also did  The CCM was fabricated using a combination of spraying coating and slot-die coating techniques. Following sonication, the anode catalyst ink was spray-coated onto a PTFE sheet at 30-35 C while the cathode catalyst ink was coated onto a separate PTFE sheet using a slot-die coater. Both electrodes were then decal-transferred onto a Nafion 117 membrane through hot pressing. The final anode and cathode catalyst loadings were approximately $-2.3\\mathrm{m g}_{\\mathrm{c a t}}\\mathrm{c m}^{-2}$ and $-0.5mg_{Pt}cm^{-2}$ , respectively with an efective area of 25 cm.IrB (TKK)was used as a reference anode catalyst. A CcM was prepared via similar protocol and IrB loading was-1.5mg cm2(1.2mg cm2). The assembled cell was brought to 60 C by pumping preheated DI water to the anode at a flow rate of 300 ml min,and the electrical resistivity of the water was maintained above 2 M\u03a9 cmvia an in-line mixed ion exchange column. No water was fed to the cathode. A current density of 0.2 A cm2was initially applied and then increased in a stepwise maner to reach2 A cm.At each current density step,the cell was held for few days to allow the voltage to stabilize before increasing the current density. After reaching $2\\mathrm{A}\\mathrm{c m}^{-2}$ , linear polarization and EIS studies were conducted. Polarization studies were conducted by scanning the current from 0 to 50 A with a scan rate of 100 mA $\\mathsf{s}^{-1}$ .EIS testing was conducted at 2.5 A with the frequency ranging from 20 kHz to 0.1 Hz to obtain the high-frequency resistance, with an amplitude of 0.1A.Voltae stability was measured by holding current density ",
+        "parser_name": "paddle"
+      },
+      "type": "PEMWECellVoltage"
+    },
+    {
+      "value": 2.0,
+      "unit_label": "V",
+      "condition": {
+        "current_density": 2.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": 60.0,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": 2.3,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": "single_cell_MEA",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54"
+        },
+        "page": 5,
+        "bbox_x0": 25.0,
+        "bbox_y0": 801.0,
+        "bbox_x1": 1155.0,
+        "bbox_y1": 1544.0,
+        "source_text": "To validate the outstanding durability of $\\mathrm{{\\sf{R u}}}_{6}\\mathrm{{\\sf{I r O}}}_{x}$ in a larger PEM electrolyser and under elevated temperature operation, our collaborators at De Nora Tech applied this catalyst to an anode in a 25-cm2 PEM water electrolyser (Fig.4a) following their standard testing protocols (Methods). Compared with commercial iridium black (IrB),$\\mathrm{R u}_{6}\\mathrm{I r O}_{\\mathrm{x}}$ .demonstrated almost identical activity up to 1A cm-2 (Fig. 4b), with slightly higher voltage above1 A cmdespite having only one-third of the Ir.Duringte 1-habiliy tt Fig.4, te curnt asgradually raised to 50 A and maintained at this level. The voltage initially rose from 1.939 V to 2.000 V in the first 500 h, probably indicative of a catalyst layer activation process. The voltage then experienced a slow decrease and reached 1.986 V when the test had to be stopped at 1,600 h due to other uses of the device. The superior durabillity of $\\mathrm{Ru_{6}IrO_{3}}$ is also supported by the similar electrochemical impedance spectroscopy (ElS) curves of beginning and end oftests (Fig.4).Compared with other reported Ir-containing acidic OER catalysts (Supplementary Table 9),$\\mathrm{{\\sf  Ru}}_{6}\\mathrm{{\\sf  IrO}},$ not only delivered stable performance at a high current density of 2$\\mathtt{A c m}^{-2}$ for over 1,500 h but also did  The CCM was fabricated using a combination of spraying coating and slot-die coating techniques. Following sonication, the anode catalyst ink was spray-coated onto a PTFE sheet at 30-35 C while the cathode catalyst ink was coated onto a separate PTFE sheet using a slot-die coater. Both electrodes were then decal-transferred onto a Nafion 117 membrane through hot pressing. The final anode and cathode catalyst loadings were approximately $-2.3\\mathrm{m g}_{\\mathrm{c a t}}\\mathrm{c m}^{-2}$ and $-0.5mg_{Pt}cm^{-2}$ , respectively with an efective area of 25 cm.IrB (TKK)was used as a reference anode catalyst. A CcM was prepared via similar protocol and IrB loading was-1.5mg cm2(1.2mg cm2). The assembled cell was brought to 60 C by pumping preheated DI water to the anode at a flow rate of 300 ml min,and the electrical resistivity of the water was maintained above 2 M\u03a9 cmvia an in-line mixed ion exchange column. No water was fed to the cathode. A current density of 0.2 A cm2was initially applied and then increased in a stepwise maner to reach2 A cm.At each current density step,the cell was held for few days to allow the voltage to stabilize before increasing the current density. After reaching $2\\mathrm{A}\\mathrm{c m}^{-2}$ , linear polarization and EIS studies were conducted. Polarization studies were conducted by scanning the current from 0 to 50 A with a scan rate of 100 mA $\\mathsf{s}^{-1}$ .EIS testing was conducted at 2.5 A with the frequency ranging from 20 kHz to 0.1 Hz to obtain the high-frequency resistance, with an amplitude of 0.1A.Voltae stability was measured by holding current density ",
+        "parser_name": "paddle"
+      },
+      "type": "PEMWECellVoltage"
+    },
+    {
+      "value": 1.986,
+      "unit_label": "V",
+      "condition": {
+        "current_density": 2.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": 60.0,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": 2.3,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": "single_cell_MEA",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54"
+        },
+        "page": 5,
+        "bbox_x0": 25.0,
+        "bbox_y0": 801.0,
+        "bbox_x1": 1155.0,
+        "bbox_y1": 1544.0,
+        "source_text": "To validate the outstanding durability of $\\mathrm{{\\sf{R u}}}_{6}\\mathrm{{\\sf{I r O}}}_{x}$ in a larger PEM electrolyser and under elevated temperature operation, our collaborators at De Nora Tech applied this catalyst to an anode in a 25-cm2 PEM water electrolyser (Fig.4a) following their standard testing protocols (Methods). Compared with commercial iridium black (IrB),$\\mathrm{R u}_{6}\\mathrm{I r O}_{\\mathrm{x}}$ .demonstrated almost identical activity up to 1A cm-2 (Fig. 4b), with slightly higher voltage above1 A cmdespite having only one-third of the Ir.Duringte 1-habiliy tt Fig.4, te curnt asgradually raised to 50 A and maintained at this level. The voltage initially rose from 1.939 V to 2.000 V in the first 500 h, probably indicative of a catalyst layer activation process. The voltage then experienced a slow decrease and reached 1.986 V when the test had to be stopped at 1,600 h due to other uses of the device. The superior durabillity of $\\mathrm{Ru_{6}IrO_{3}}$ is also supported by the similar electrochemical impedance spectroscopy (ElS) curves of beginning and end oftests (Fig.4).Compared with other reported Ir-containing acidic OER catalysts (Supplementary Table 9),$\\mathrm{{\\sf  Ru}}_{6}\\mathrm{{\\sf  IrO}},$ not only delivered stable performance at a high current density of 2$\\mathtt{A c m}^{-2}$ for over 1,500 h but also did  The CCM was fabricated using a combination of spraying coating and slot-die coating techniques. Following sonication, the anode catalyst ink was spray-coated onto a PTFE sheet at 30-35 C while the cathode catalyst ink was coated onto a separate PTFE sheet using a slot-die coater. Both electrodes were then decal-transferred onto a Nafion 117 membrane through hot pressing. The final anode and cathode catalyst loadings were approximately $-2.3\\mathrm{m g}_{\\mathrm{c a t}}\\mathrm{c m}^{-2}$ and $-0.5mg_{Pt}cm^{-2}$ , respectively with an efective area of 25 cm.IrB (TKK)was used as a reference anode catalyst. A CcM was prepared via similar protocol and IrB loading was-1.5mg cm2(1.2mg cm2). The assembled cell was brought to 60 C by pumping preheated DI water to the anode at a flow rate of 300 ml min,and the electrical resistivity of the water was maintained above 2 M\u03a9 cmvia an in-line mixed ion exchange column. No water was fed to the cathode. A current density of 0.2 A cm2was initially applied and then increased in a stepwise maner to reach2 A cm.At each current density step,the cell was held for few days to allow the voltage to stabilize before increasing the current density. After reaching $2\\mathrm{A}\\mathrm{c m}^{-2}$ , linear polarization and EIS studies were conducted. Polarization studies were conducted by scanning the current from 0 to 50 A with a scan rate of 100 mA $\\mathsf{s}^{-1}$ .EIS testing was conducted at 2.5 A with the frequency ranging from 20 kHz to 0.1 Hz to obtain the high-frequency resistance, with an amplitude of 0.1A.Voltae stability was measured by holding current density ",
+        "parser_name": "paddle"
+      },
+      "type": "PEMWECellVoltage"
+    }
+  ],
+  "errors": [
+    {
+      "error": "ValueError: likely mis-citation for Stability: value 1500.0 not found in cited span(s)",
+      "raw": {
+        "type": "Stability",
+        "value": 1500.0,
+        "unit_label": "h",
+        "condition": {
+          "current_density": 2.0,
+          "cell_type_family": "single_cell_MEA",
+          "iR_correction": "not_applied"
+        },
+        "evidence": {
+          "spans": [
+            53,
+            133
+          ]
+        }
+      }
+    },
+    {
+      "error": "ValueError: likely mis-citation for DegradationRate: value 0.0023 not found in cited span(s)",
+      "raw": {
+        "type": "DegradationRate",
+        "value": 0.0023,
+        "unit_label": "mV/h",
+        "condition": {
+          "current_density": 2.0,
+          "cell_type_family": "single_cell_MEA",
+          "iR_correction": "not_applied"
+        },
+        "evidence": {
+          "spans": [
+            53,
+            133
+          ]
+        }
+      }
+    },
+    {
+      "error": "ValueError: likely mis-citation for DegradationRate: value 0.0028 not found in cited span(s)",
+      "raw": {
+        "type": "DegradationRate",
+        "value": 0.0028,
+        "unit_label": "mV/h",
+        "condition": {
+          "current_density": 2.0,
+          "cell_type_family": "single_cell_MEA",
+          "iR_correction": "not_applied"
+        },
+        "evidence": {
+          "spans": [
+            53,
+            133
+          ]
+        }
+      }
+    },
+    {
+      "error": "ValueError: likely mis-citation for Stability: value 20.0 not found in cited span(s)",
+      "raw": {
+        "type": "Stability",
+        "value": 20.0,
+        "unit_label": "h",
+        "condition": {
+          "current_density": 2.0,
+          "cell_type_family": "single_cell_MEA",
+          "iR_correction": "not_applied"
+        },
+        "evidence": {
+          "spans": [
+            50,
+            133
+          ]
+        }
+      }
+    },
+    {
+      "error": "ValueError: likely mis-citation for DegradationRate: value 0.032 not found in cited span(s)",
+      "raw": {
+        "type": "DegradationRate",
+        "value": 0.032,
+        "unit_label": "mV/h",
+        "condition": {
+          "current_density": 2.0,
+          "cell_type_family": "single_cell_MEA",
+          "iR_correction": "not_applied"
+        },
+        "evidence": {
+          "spans": [
+            52,
+            133
+          ]
+        }
+      }
+    },
+    {
+      "error": "ValueError: likely mis-citation for DegradationRate: value 0.126 not found in cited span(s)",
+      "raw": {
+        "type": "DegradationRate",
+        "value": 0.126,
+        "unit_label": "mV/h",
+        "condition": {
+          "current_density": 2.0,
+          "cell_type_family": "single_cell_MEA",
+          "iR_correction": "not_applied"
+        },
+        "evidence": {
+          "spans": [
+            52,
+            133
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+paper_sha8,parser,label,model_id,role,mode,n_valid,n_errors,tp,gt_total,recall,precision,f1,in_tokens,out_tokens,eur_per_paper,eur_per_tp,latency_s,temperature,prompt_hash
+3432d049,docling,openai-frontier,openai/gpt-5.4,OpenAI frontier (closed),raw,21,0,19,19,1.0000,0.9048,0.9500,39264,2028,0.11829,0.00623,8.88,0.0,9f23e7c683a0
+3432d049,docling,openai-frontier,openai/gpt-5.4,OpenAI frontier (closed),strict,21,0,19,19,1.0000,0.9048,0.9500,40008,2996,0.13336,0.00702,12.53,0.0,9f23e7c683a0
+bd86866b,docling,openai-frontier,openai/gpt-5.4,OpenAI frontier (closed),raw,3,0,2,2,1.0000,0.6667,0.8000,42103,247,0.10025,0.05012,1.91,0.0,9f23e7c683a0
+bd86866b,docling,openai-frontier,openai/gpt-5.4,OpenAI frontier (closed),strict,7,0,2,2,1.0000,0.2857,0.4444,42847,952,0.11169,0.05584,4.92,0.0,9f23e7c683a0
+bd9811a5,docling,openai-frontier,openai/gpt-5.4,OpenAI frontier (closed),raw,16,4,7,8,0.8750,0.4375,0.5833,33066,922,0.08878,0.01268,4.29,0.0,9f23e7c683a0
+bd9811a5,docling,openai-frontier,openai/gpt-5.4,OpenAI frontier (closed),strict,16,4,8,8,1.0000,0.5000,0.6667,33810,2640,0.11420,0.01427,11.80,0.0,9f23e7c683a0
+c6319397,docling,openai-frontier,openai/gpt-5.4,OpenAI frontier (closed),raw,6,3,3,4,0.7500,0.5000,0.6000,38836,560,0.09705,0.03235,3.42,0.0,9f23e7c683a0
+c6319397,docling,openai-frontier,openai/gpt-5.4,OpenAI frontier (closed),strict,8,3,3,4,0.7500,0.3750,0.5000,39580,1612,0.11328,0.03776,7.56,0.0,9f23e7c683a0
+c9a68107,docling,openai-frontier,openai/gpt-5.4,OpenAI frontier (closed),raw,7,0,4,7,0.5714,0.5714,0.5714,35867,471,0.08899,0.02225,2.85,0.0,9f23e7c683a0
+c9a68107,docling,openai-frontier,openai/gpt-5.4,OpenAI frontier (closed),strict,11,0,6,7,0.8571,0.5455,0.6667,36611,1444,0.10413,0.01736,6.98,0.0,9f23e7c683a0
+3432d049,docling,openai-mini,openai/gpt-5.4-mini,OpenAI small (closed),raw,20,0,19,19,1.0000,0.9500,0.9744,39264,1545,0.03349,0.00176,6.68,0.0,9f23e7c683a0
+3432d049,docling,openai-mini,openai/gpt-5.4-mini,OpenAI small (closed),strict,18,0,17,19,0.8947,0.9444,0.9189,40008,2561,0.03821,0.00225,11.85,0.0,9f23e7c683a0
+bd86866b,docling,openai-mini,openai/gpt-5.4-mini,OpenAI small (closed),raw,11,6,2,2,1.0000,0.1818,0.3077,42103,1107,0.03363,0.01682,5.08,0.0,9f23e7c683a0
+bd86866b,docling,openai-mini,openai/gpt-5.4-mini,OpenAI small (closed),strict,5,4,2,2,1.0000,0.4000,0.5714,42847,1135,0.03426,0.01713,7.47,0.0,9f23e7c683a0
+bd9811a5,docling,openai-mini,openai/gpt-5.4-mini,OpenAI small (closed),raw,2,0,2,8,0.2500,1.0000,0.4000,33066,146,0.02342,0.01171,1.83,0.0,9f23e7c683a0
+bd9811a5,docling,openai-mini,openai/gpt-5.4-mini,OpenAI small (closed),strict,8,2,7,8,0.8750,0.8750,0.8750,33810,1297,0.02870,0.00410,5.70,0.0,9f23e7c683a0
+c6319397,docling,openai-mini,openai/gpt-5.4-mini,OpenAI small (closed),raw,15,0,2,4,0.5000,0.1333,0.2105,38836,940,0.03069,0.01534,4.60,0.0,9f23e7c683a0
+c6319397,docling,openai-mini,openai/gpt-5.4-mini,OpenAI small (closed),strict,8,3,2,4,0.5000,0.2500,0.3333,39580,1447,0.03330,0.01665,5.82,0.0,9f23e7c683a0
+c9a68107,docling,openai-mini,openai/gpt-5.4-mini,OpenAI small (closed),raw,7,0,4,7,0.5714,0.5714,0.5714,35867,401,0.02641,0.00660,2.64,0.0,9f23e7c683a0
+c9a68107,docling,openai-mini,openai/gpt-5.4-mini,OpenAI small (closed),strict,16,0,6,7,0.8571,0.3750,0.5217,36611,2110,0.03400,0.00567,7.86,0.0,9f23e7c683a0
+3432d049,docling,gemini-lite,google/gemini-3.1-flash-lite,Gemini Flash-Lite (cheap),raw,20,0,19,19,1.0000,0.9500,0.9744,42846,1282,0.01162,0.00061,3.49,0.0,9f23e7c683a0
+3432d049,docling,gemini-lite,google/gemini-3.1-flash-lite,Gemini Flash-Lite (cheap),strict,11,1,11,19,0.5789,1.0000,0.7333,44017,2317,0.01332,0.00121,6.02,0.0,9f23e7c683a0
+bd86866b,docling,gemini-lite,google/gemini-3.1-flash-lite,Gemini Flash-Lite (cheap),raw,3,0,2,2,1.0000,0.6667,0.8000,45495,177,0.01071,0.00535,1.52,0.0,9f23e7c683a0
+bd86866b,docling,gemini-lite,google/gemini-3.1-flash-lite,Gemini Flash-Lite (cheap),strict,3,0,2,2,1.0000,0.6667,0.8000,45495,459,0.01110,0.00555,2.34,0.0,9f23e7c683a0
+bd9811a5,docling,gemini-lite,google/gemini-3.1-flash-lite,Gemini Flash-Lite (cheap),raw,6,2,6,8,0.7500,1.0000,0.8571,36916,594,0.00931,0.00155,2.64,0.0,9f23e7c683a0
+bd9811a5,docling,gemini-lite,google/gemini-3.1-flash-lite,Gemini Flash-Lite (cheap),strict,6,1,6,8,0.7500,1.0000,0.8571,36918,1226,0.01018,0.00170,3.98,0.0,9f23e7c683a0
+c6319397,docling,gemini-lite,google/gemini-3.1-flash-lite,Gemini Flash-Lite (cheap),raw,7,0,3,4,0.7500,0.4286,0.5455,42799,590,0.01066,0.00355,2.75,0.0,9f23e7c683a0
+c6319397,docling,gemini-lite,google/gemini-3.1-flash-lite,Gemini Flash-Lite (cheap),strict,4,2,3,4,0.7500,0.7500,0.7500,42801,1410,0.01179,0.00393,3.89,0.0,9f23e7c683a0
+c9a68107,docling,gemini-lite,google/gemini-3.1-flash-lite,Gemini Flash-Lite (cheap),raw,8,0,7,7,1.0000,0.8750,0.9333,39477,591,0.00990,0.00141,2.74,0.0,9f23e7c683a0
+c9a68107,docling,gemini-lite,google/gemini-3.1-flash-lite,Gemini Flash-Lite (cheap),strict,6,0,4,7,0.5714,0.6667,0.6154,40650,1492,0.01141,0.00285,4.70,0.0,9f23e7c683a0
+3432d049,docling,haiku-4.5,claude-haiku-4-5,frontier-small probe,raw,6,14,5,19,0.2632,0.8333,0.4000,45789,2747,0.05476,0.01095,19.38,,9f23e7c683a0
+bd86866b,docling,haiku-4.5,claude-haiku-4-5,frontier-small probe,raw,3,0,2,2,1.0000,0.6667,0.8000,47994,393,0.04596,0.02298,4.01,,9f23e7c683a0
+bd9811a5,docling,haiku-4.5,claude-haiku-4-5,frontier-small probe,raw,7,1,7,8,0.8750,1.0000,0.9333,38163,937,0.03942,0.00563,5.86,,9f23e7c683a0
+c6319397,docling,haiku-4.5,claude-haiku-4-5,frontier-small probe,raw,6,0,3,4,0.7500,0.5000,0.6000,45764,858,0.04605,0.01535,5.82,,9f23e7c683a0
+c9a68107,docling,haiku-4.5,claude-haiku-4-5,frontier-small probe,raw,10,2,7,7,1.0000,0.7000,0.8235,42055,1331,0.04481,0.00640,7.78,,9f23e7c683a0
+3432d049,docling,sonnet-4.6,claude-sonnet-4-6,mid frontier,raw,19,0,19,19,1.0000,1.0000,1.0000,45790,2727,0.16401,0.00863,28.31,,9f23e7c683a0
+bd86866b,docling,sonnet-4.6,claude-sonnet-4-6,mid frontier,raw,2,0,2,2,1.0000,1.0000,1.0000,47995,319,0.13687,0.06843,5.94,,9f23e7c683a0
+bd9811a5,docling,sonnet-4.6,claude-sonnet-4-6,mid frontier,raw,8,0,7,8,0.8750,0.8750,0.8750,38164,1110,0.12065,0.01724,14.24,,9f23e7c683a0
+c6319397,docling,sonnet-4.6,claude-sonnet-4-6,mid frontier,raw,6,3,4,4,1.0000,0.6667,0.8000,45765,1431,0.14606,0.03651,16.99,,9f23e7c683a0
+c9a68107,docling,sonnet-4.6,claude-sonnet-4-6,mid frontier,raw,11,0,7,7,1.0000,0.6364,0.7778,42056,1527,0.13715,0.01959,18.11,,9f23e7c683a0
+3432d049,docling,deepseek-flash,deepseek-v4-flash,production default under test,raw,18,0,18,19,0.9474,1.0000,0.9730,38681,2510,0.00563,0.00031,14.32,0,9f23e7c683a0
+bd86866b,docling,deepseek-flash,deepseek-v4-flash,production default under test,raw,3,0,2,2,1.0000,0.6667,0.8000,41187,274,0.00538,0.00269,2.86,0,9f23e7c683a0
+bd9811a5,docling,deepseek-flash,deepseek-v4-flash,production default under test,raw,12,2,8,8,1.0000,0.6667,0.8000,32731,1700,0.00465,0.00058,10.02,0,9f23e7c683a0
+c6319397,docling,deepseek-flash,deepseek-v4-flash,production default under test,raw,9,0,4,4,1.0000,0.4444,0.6154,38179,1282,0.00525,0.00131,8.08,0,9f23e7c683a0
+c9a68107,docling,deepseek-flash,deepseek-v4-flash,production default under test,raw,10,0,6,7,0.8571,0.6000,0.7059,35370,1089,0.00484,0.00081,7.05,0,9f23e7c683a0
+3432d049,docling,deepseek-pro,deepseek-v4-pro,within-provider big,raw,20,0,19,19,1.0000,0.9500,0.9744,38681,2734,0.01767,0.00093,16.79,0,9f23e7c683a0
+bd86866b,docling,deepseek-pro,deepseek-v4-pro,within-provider big,raw,3,0,2,2,1.0000,0.6667,0.8000,41187,392,0.01680,0.00840,4.07,0,9f23e7c683a0
+bd9811a5,docling,deepseek-pro,deepseek-v4-pro,within-provider big,raw,12,1,8,8,1.0000,0.6667,0.8000,32731,1482,0.01429,0.00179,10.03,0,9f23e7c683a0
+c6319397,docling,deepseek-pro,deepseek-v4-pro,within-provider big,raw,10,0,4,4,1.0000,0.4000,0.5714,38179,1479,0.01646,0.00412,10.01,0,9f23e7c683a0
+c9a68107,docling,deepseek-pro,deepseek-v4-pro,within-provider big,raw,11,0,7,7,1.0000,0.6364,0.7778,35370,1348,0.01523,0.00218,8.99,0,9f23e7c683a0

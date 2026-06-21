@@ -1,0 +1,51 @@
+paper_sha8,parser,label,model_id,role,mode,n_valid,n_errors,tp,gt_total,recall,precision,f1,in_tokens,out_tokens,eur_per_paper,eur_per_tp,latency_s,temperature,prompt_hash
+3432d049,mineru,openai-frontier,openai/gpt-5.4,OpenAI frontier (closed),raw,22,0,19,19,1.0000,0.8636,0.9268,30303,1821,0.09483,0.00499,9.07,0.0,9f23e7c683a0
+3432d049,mineru,openai-frontier,openai/gpt-5.4,OpenAI frontier (closed),strict,20,0,19,19,1.0000,0.9500,0.9744,31047,2856,0.11082,0.00583,12.00,0.0,9f23e7c683a0
+bd86866b,mineru,openai-frontier,openai/gpt-5.4,OpenAI frontier (closed),raw,3,1,2,2,1.0000,0.6667,0.8000,32099,289,0.07782,0.03891,2.15,0.0,9f23e7c683a0
+bd86866b,mineru,openai-frontier,openai/gpt-5.4,OpenAI frontier (closed),strict,3,0,2,2,1.0000,0.6667,0.8000,32843,460,0.08189,0.04094,3.66,0.0,9f23e7c683a0
+bd9811a5,mineru,openai-frontier,openai/gpt-5.4,OpenAI frontier (closed),raw,12,4,4,8,0.5000,0.3333,0.4000,25662,943,0.07204,0.01801,4.65,0.0,9f23e7c683a0
+bd9811a5,mineru,openai-frontier,openai/gpt-5.4,OpenAI frontier (closed),strict,12,4,4,8,0.5000,0.3333,0.4000,26406,1961,0.08780,0.02195,8.79,0.0,9f23e7c683a0
+c6319397,mineru,openai-frontier,openai/gpt-5.4,OpenAI frontier (closed),raw,9,3,3,4,0.7500,0.3333,0.4615,29980,760,0.07944,0.02648,4.88,0.0,9f23e7c683a0
+c6319397,mineru,openai-frontier,openai/gpt-5.4,OpenAI frontier (closed),strict,9,3,3,4,0.7500,0.3333,0.4615,30724,1768,0.09506,0.03169,9.32,0.0,9f23e7c683a0
+c9a68107,mineru,openai-frontier,openai/gpt-5.4,OpenAI frontier (closed),raw,7,0,4,7,0.5714,0.5714,0.5714,28854,503,0.07331,0.01833,3.42,0.0,9f23e7c683a0
+c9a68107,mineru,openai-frontier,openai/gpt-5.4,OpenAI frontier (closed),strict,13,0,7,7,1.0000,0.5385,0.7000,29598,1830,0.09333,0.01333,9.18,0.0,9f23e7c683a0
+3432d049,mineru,openai-mini,openai/gpt-5.4-mini,OpenAI small (closed),raw,17,4,14,19,0.7368,0.8235,0.7778,30303,1933,0.02891,0.00207,13.73,0.0,9f23e7c683a0
+3432d049,mineru,openai-mini,openai/gpt-5.4-mini,OpenAI small (closed),strict,19,0,18,19,0.9474,0.9474,0.9474,31047,2650,0.03239,0.00180,10.14,0.0,9f23e7c683a0
+bd86866b,mineru,openai-mini,openai/gpt-5.4-mini,OpenAI small (closed),raw,3,1,2,2,1.0000,0.6667,0.8000,32099,273,0.02328,0.01164,3.62,0.0,9f23e7c683a0
+bd86866b,mineru,openai-mini,openai/gpt-5.4-mini,OpenAI small (closed),strict,3,2,2,2,1.0000,0.6667,0.8000,32843,605,0.02517,0.01258,3.28,0.0,9f23e7c683a0
+bd9811a5,mineru,openai-mini,openai/gpt-5.4-mini,OpenAI small (closed),raw,5,2,3,8,0.3750,0.6000,0.4615,25662,558,0.02002,0.00667,4.59,0.0,9f23e7c683a0
+bd9811a5,mineru,openai-mini,openai/gpt-5.4-mini,OpenAI small (closed),strict,5,1,2,8,0.2500,0.4000,0.3077,26406,784,0.02147,0.01073,3.84,0.0,9f23e7c683a0
+c6319397,mineru,openai-mini,openai/gpt-5.4-mini,OpenAI small (closed),raw,13,0,2,4,0.5000,0.1538,0.2353,29980,676,0.02348,0.01174,6.17,0.0,9f23e7c683a0
+c6319397,mineru,openai-mini,openai/gpt-5.4-mini,OpenAI small (closed),strict,16,0,4,4,1.0000,0.2500,0.4000,30724,1868,0.02893,0.00723,7.49,0.0,9f23e7c683a0
+c9a68107,mineru,openai-mini,openai/gpt-5.4-mini,OpenAI small (closed),raw,8,0,4,7,0.5714,0.5000,0.5333,28854,444,0.02175,0.00544,3.27,0.0,9f23e7c683a0
+c9a68107,mineru,openai-mini,openai/gpt-5.4-mini,OpenAI small (closed),strict,10,0,4,7,0.5714,0.4000,0.4706,29598,1252,0.02561,0.00640,5.84,0.0,9f23e7c683a0
+3432d049,mineru,gemini-lite,google/gemini-3.1-flash-lite,Gemini Flash-Lite (cheap),raw,20,0,19,19,1.0000,0.9500,0.9744,32242,1359,0.00929,0.00049,3.98,0.0,9f23e7c683a0
+3432d049,mineru,gemini-lite,google/gemini-3.1-flash-lite,Gemini Flash-Lite (cheap),strict,12,0,12,19,0.6316,1.0000,0.7742,32244,2986,0.01154,0.00096,7.66,0.0,9f23e7c683a0
+bd86866b,mineru,gemini-lite,google/gemini-3.1-flash-lite,Gemini Flash-Lite (cheap),raw,3,0,2,2,1.0000,0.6667,0.8000,33215,200,0.00792,0.00396,2.37,0.0,9f23e7c683a0
+bd86866b,mineru,gemini-lite,google/gemini-3.1-flash-lite,Gemini Flash-Lite (cheap),strict,2,0,2,2,1.0000,1.0000,1.0000,34386,378,0.00843,0.00422,2.72,0.0,9f23e7c683a0
+bd9811a5,mineru,gemini-lite,google/gemini-3.1-flash-lite,Gemini Flash-Lite (cheap),raw,3,2,2,8,0.2500,0.6667,0.3636,27404,329,0.00676,0.00338,1.65,0.0,9f23e7c683a0
+bd9811a5,mineru,gemini-lite,google/gemini-3.1-flash-lite,Gemini Flash-Lite (cheap),strict,2,1,2,8,0.2500,1.0000,0.4000,27404,709,0.00728,0.00364,2.65,0.0,9f23e7c683a0
+c6319397,mineru,gemini-lite,google/gemini-3.1-flash-lite,Gemini Flash-Lite (cheap),raw,6,0,3,4,0.7500,0.5000,0.6000,31939,456,0.00798,0.00266,2.12,0.0,9f23e7c683a0
+c6319397,mineru,gemini-lite,google/gemini-3.1-flash-lite,Gemini Flash-Lite (cheap),strict,4,2,3,4,0.7500,0.7500,0.7500,31941,995,0.00872,0.00291,3.60,0.0,9f23e7c683a0
+c9a68107,mineru,gemini-lite,google/gemini-3.1-flash-lite,Gemini Flash-Lite (cheap),raw,10,0,7,7,1.0000,0.7000,0.8235,30848,714,0.00808,0.00115,2.51,0.0,9f23e7c683a0
+c9a68107,mineru,gemini-lite,google/gemini-3.1-flash-lite,Gemini Flash-Lite (cheap),strict,6,0,6,7,0.8571,1.0000,0.9231,30848,1430,0.00907,0.00151,4.44,0.0,9f23e7c683a0
+3432d049,mineru,haiku-4.5,claude-haiku-4-5,frontier-small probe,raw,19,0,18,19,0.9474,0.9474,0.9474,34991,2137,0.04202,0.00233,10.69,,9f23e7c683a0
+bd86866b,mineru,haiku-4.5,claude-haiku-4-5,frontier-small probe,raw,3,0,2,2,1.0000,0.6667,0.8000,36936,417,0.03590,0.01795,3.84,,9f23e7c683a0
+bd9811a5,mineru,haiku-4.5,claude-haiku-4-5,frontier-small probe,raw,3,1,3,8,0.3750,1.0000,0.5455,30118,446,0.02976,0.00992,3.58,,9f23e7c683a0
+c6319397,mineru,haiku-4.5,claude-haiku-4-5,frontier-small probe,raw,8,0,4,4,1.0000,0.5000,0.6667,35287,1127,0.03765,0.00941,6.55,,9f23e7c683a0
+c9a68107,mineru,haiku-4.5,claude-haiku-4-5,frontier-small probe,raw,12,0,7,7,1.0000,0.5833,0.7368,33677,1368,0.03728,0.00533,8.58,,9f23e7c683a0
+3432d049,mineru,sonnet-4.6,claude-sonnet-4-6,mid frontier,raw,20,0,19,19,1.0000,0.9500,0.9744,34992,3284,0.14190,0.00747,34.76,,9f23e7c683a0
+bd86866b,mineru,sonnet-4.6,claude-sonnet-4-6,mid frontier,raw,0,1,0,2,0.0000,0.0000,0.0000,36937,668,0.11116,,12.83,,9f23e7c683a0
+bd9811a5,mineru,sonnet-4.6,claude-sonnet-4-6,mid frontier,raw,8,1,4,8,0.5000,0.5000,0.5000,30119,1349,0.10174,0.02544,16.61,,9f23e7c683a0
+c6319397,mineru,sonnet-4.6,claude-sonnet-4-6,mid frontier,raw,6,3,4,4,1.0000,0.6667,0.8000,35288,1499,0.11808,0.02952,19.32,,9f23e7c683a0
+c9a68107,mineru,sonnet-4.6,claude-sonnet-4-6,mid frontier,raw,10,0,7,7,1.0000,0.7000,0.8235,33678,1446,0.11291,0.01613,19.36,,9f23e7c683a0
+3432d049,mineru,deepseek-flash,deepseek-v4-flash,production default under test,raw,19,0,18,19,0.9474,0.9474,0.9474,29724,2417,0.00445,0.00025,13.48,0,9f23e7c683a0
+bd86866b,mineru,deepseek-flash,deepseek-v4-flash,production default under test,raw,3,0,2,2,1.0000,0.6667,0.8000,30951,389,0.00409,0.00204,3.40,0,9f23e7c683a0
+bd9811a5,mineru,deepseek-flash,deepseek-v4-flash,production default under test,raw,0,1,0,8,0.0000,0.0000,0.0000,25160,1056,0.00351,,6.85,0,9f23e7c683a0
+c6319397,mineru,deepseek-flash,deepseek-v4-flash,production default under test,raw,7,3,3,4,0.7500,0.4286,0.5455,29175,1504,0.00415,0.00138,9.07,0,9f23e7c683a0
+c9a68107,mineru,deepseek-flash,deepseek-v4-flash,production default under test,raw,0,1,0,7,0.0000,0.0000,0.0000,28369,1034,0.00392,,6.38,0,9f23e7c683a0
+3432d049,mineru,deepseek-pro,deepseek-v4-pro,within-provider big,raw,21,0,19,19,1.0000,0.9048,0.9500,29724,2710,0.01406,0.00074,16.71,0,9f23e7c683a0
+bd86866b,mineru,deepseek-pro,deepseek-v4-pro,within-provider big,raw,3,1,2,2,1.0000,0.6667,0.8000,30951,466,0.01276,0.00638,4.69,0,9f23e7c683a0
+bd9811a5,mineru,deepseek-pro,deepseek-v4-pro,within-provider big,raw,8,1,4,8,0.5000,0.5000,0.5000,25160,1040,0.01090,0.00273,7.43,0,9f23e7c683a0
+c6319397,mineru,deepseek-pro,deepseek-v4-pro,within-provider big,raw,11,0,4,4,1.0000,0.3636,0.5333,29175,1333,0.01274,0.00319,8.79,0,9f23e7c683a0
+c9a68107,mineru,deepseek-pro,deepseek-v4-pro,within-provider big,raw,11,0,7,7,1.0000,0.6364,0.7778,28369,1518,0.01257,0.00180,10.38,0,9f23e7c683a0

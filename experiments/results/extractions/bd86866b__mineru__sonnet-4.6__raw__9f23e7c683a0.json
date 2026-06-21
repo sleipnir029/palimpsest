@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "paper_sha": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01",
+  "parser": "mineru",
+  "label": "sonnet-4.6",
+  "mode": "raw",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "claude-sonnet-4-6",
+  "temperature": "",
+  "in_tokens": 36937,
+  "out_tokens": 668,
+  "latency_s": 12.83,
+  "items": [],
+  "errors": [
+    {
+      "error": "ValueError: LLM response not parseable as {\"items\": [...]}; head: 'Looking at the spans, I need to identify reported OER performance measurements with sufficient conditions to emit.\\n\\n**Span [24]** reports overpotentials at 0.5 mA/cm\u00b2 geometric current density for IrO'",
+      "raw": {
+        "batch": null
+      }
+    }
+  ]
+}

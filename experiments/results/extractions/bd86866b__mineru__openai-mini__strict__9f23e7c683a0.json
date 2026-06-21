@@ -1,0 +1,181 @@
+{
+  "schema_version": 1,
+  "paper_sha": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01",
+  "parser": "mineru",
+  "label": "openai-mini",
+  "mode": "strict",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "openai/gpt-5.4-mini",
+  "temperature": 0.0,
+  "in_tokens": 32843,
+  "out_tokens": 605,
+  "latency_s": 3.28,
+  "items": [
+    {
+      "value": 210.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 0.5,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": "three-electrode half-cell",
+        "scan_rate": 10.0,
+        "catalyst_loading": null,
+        "iR_correction": "applied",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": "slow_LSV"
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 2,
+        "bbox_x0": 507.0,
+        "bbox_y0": 317.0,
+        "bbox_x1": 944.0,
+        "bbox_y1": 465.0,
+        "source_text": "Compared with    IrO_{2}  , the cyclic voltammograms of    IrO_{x}   show higher redox current densities of around one order of magnitude, when normalized to the geometric area.    IrO_{x}   also shows a higher activity than    IrO_{2}  , as reflected in the overpotential required to achieve 0.5 mA cm   ^{-2}   geo (~210 mV and 330 mV for    IrO_{x}   and    IrO_{2}  , respectively; Fig. 1d).    IrO_{x}   shows two distinct broad redox peaks at around 0.8 and 1.2 V versus the reversible hydrogen electrode (RHE). By contrast, no distinct redox peak can be observed for    IrO_{2}  . The redox features and catalytic activity of both samples are relatively stable for 20 cycles and 2.5 h of operation (further results on the stability of the redox features, activity and morphology/structure can be found in Supplementary Note 2).",
+        "parser_name": "mineru"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 330.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 0.5,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": "three-electrode half-cell",
+        "scan_rate": 10.0,
+        "catalyst_loading": null,
+        "iR_correction": "applied",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": "slow_LSV"
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 2,
+        "bbox_x0": 507.0,
+        "bbox_y0": 317.0,
+        "bbox_x1": 944.0,
+        "bbox_y1": 465.0,
+        "source_text": "Compared with    IrO_{2}  , the cyclic voltammograms of    IrO_{x}   show higher redox current densities of around one order of magnitude, when normalized to the geometric area.    IrO_{x}   also shows a higher activity than    IrO_{2}  , as reflected in the overpotential required to achieve 0.5 mA cm   ^{-2}   geo (~210 mV and 330 mV for    IrO_{x}   and    IrO_{2}  , respectively; Fig. 1d).    IrO_{x}   shows two distinct broad redox peaks at around 0.8 and 1.2 V versus the reversible hydrogen electrode (RHE). By contrast, no distinct redox peak can be observed for    IrO_{2}  . The redox features and catalytic activity of both samples are relatively stable for 20 cycles and 2.5 h of operation (further results on the stability of the redox features, activity and morphology/structure can be found in Supplementary Note 2).",
+        "parser_name": "mineru"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 250.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": null,
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 9,
+        "bbox_x0": 63.0,
+        "bbox_y0": 384.0,
+        "bbox_x1": 497.0,
+        "bbox_y1": 779.0,
+        "source_text": "volcano plot at a fixed overpotential of 250 mV (Fig. 6b and Supplementary Fig. 42). The steep part of the left side of the volcano (for example, when    \\Delta G^{\\circ}_{*O}-\\Delta G^{\\circ}_{*OH}(\\theta_{*O}=0)<1.28   eV in the curve of r=0.15 eV) is where the *O coverage is saturated, whereas the less steep part represents where    \\Delta G^{\\circ}_{*O}-\\Delta G^{\\circ}_{*OH}(\\theta_{*O})   is changing due to the Frumkin repulsion term. The Frumkin repulsion term has a higher impact on increasing the activity for a material with a stronger *O binding energy, for a given interaction strength. This is evident from our data on amorphous and rutile iridium oxide catalysts, where the adsorbate\u2013adsorbate interaction increases the relative activity of the two materials by different degrees, although they have a similar interaction parameter (   \\sim0.15   eV). This is because the stronger binding strength of *O on the    IrO_{x}   surface results in a higher coverage for    IrO_{x}   compared with    IrO_{2}   at this potential (Fig. 5a, top panel), and a consequently higher repulsion between adsorbates. However, both show a higher activity than the molecular iridium catalyst analysed previously, which has no adsorbate\u2013adsorbate interaction   ^{28}  . This observation is consistent with our previous suggestion that, although the studied molecular iridium catalyst showed faster kinetics than amorphous    IrO_{x}   at low overpotentials, it is less active than amorphous    IrO_{x}   at higher overpotentials due to a lack of cooperative interactions between active states   ^{28}  . Similar analyses at overpotentials of 200 and 280 mV are also given in Supplementary Fig. 43. These results indicate that the potential can alter the coverage of *O species, which in turn can weaken the binding energies for catalysts that bind oxygen too strongly in a conventional volcano plot, hence improving the OER activity. This analysis elucidates the fundamental origin of the activity discrepancies between different iridium-based catalysts, including amorphous and crystalline iridium oxides.",
+        "parser_name": "mineru"
+      },
+      "type": "Overpotential"
+    }
+  ],
+  "errors": [
+    {
+      "error": "ValueError: likely mis-citation for ECSA: value 5500000000000000.0 not found in cited span(s)",
+      "raw": {
+        "type": "ECSA",
+        "value": 5500000000000000.0,
+        "unit_label": "cm2",
+        "condition": {
+          "catalyst_loading": null,
+          "cell_type": null,
+          "cell_type_family": null,
+          "current_density": null,
+          "electrode_potential_vs_rhe": null,
+          "electrolyte": null,
+          "electrolyte_family": null,
+          "iR_correction": null,
+          "normalization_basis": null,
+          "scan_rate": null,
+          "scan_rate_regime": null,
+          "temperature_C": null
+        },
+        "evidence": {
+          "spans": [
+            41
+          ]
+        }
+      }
+    },
+    {
+      "error": "ValueError: likely mis-citation for ECSA: value 3.5e+16 not found in cited span(s)",
+      "raw": {
+        "type": "ECSA",
+        "value": 3.5e+16,
+        "unit_label": "cm2",
+        "condition": {
+          "catalyst_loading": null,
+          "cell_type": null,
+          "cell_type_family": null,
+          "current_density": null,
+          "electrode_potential_vs_rhe": null,
+          "electrolyte": null,
+          "electrolyte_family": null,
+          "iR_correction": null,
+          "normalization_basis": null,
+          "scan_rate": null,
+          "scan_rate_regime": null,
+          "temperature_C": null
+        },
+        "evidence": {
+          "spans": [
+            41
+          ]
+        }
+      }
+    }
+  ]
+}

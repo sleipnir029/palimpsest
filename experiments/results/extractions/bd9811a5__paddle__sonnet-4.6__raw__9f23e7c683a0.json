@@ -1,0 +1,381 @@
+{
+  "schema_version": 1,
+  "paper_sha": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54",
+  "parser": "paddle",
+  "label": "sonnet-4.6",
+  "mode": "raw",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "claude-sonnet-4-6",
+  "temperature": "",
+  "in_tokens": 31984,
+  "out_tokens": 1469,
+  "latency_s": 17.7,
+  "items": [
+    {
+      "value": 240.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 10.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": "RDE",
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "not_applied",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54"
+        },
+        "page": 3,
+        "bbox_x0": 607.0,
+        "bbox_y0": 1427.0,
+        "bbox_x1": 1163.0,
+        "bbox_y1": 1538.0,
+        "source_text": "To better understand the intrinsic characteristics of the Ir $\\mathsf{\\cdot R u O}_{\\mathrm{r}}$ catalysts, OER activities of different as-prepared catalysts were evaluated in a rotating disk electrode (RDE) setup. According to the polarization curves (Fig. 3a), all Ir $\\mathsf{-R u O}_{s}$ catalysts and the pristine $\\mathrm{R u O}_{2}$ showed similarOER activities,with overpotentials of-240 mVto reach10 mA cm-2.",
+        "parser_name": "paddle"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 48.29,
+      "unit_label": "mV/decade",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "not_applied",
+        "normalization_basis": null,
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54"
+        },
+        "page": 5,
+        "bbox_x0": 105.0,
+        "bbox_y0": 54.0,
+        "bbox_x1": 1089.0,
+        "bbox_y1": 890.0,
+        "source_text": "a 50$RuIrOx$b 0.26\n40R_uO{}$$R_u_{2}}$$R_u_{4}{}$Ru_IrO Ru{}O$Ru_24}O}$H \u2192H\u2082O+O\u2082$ (m)302010 reeee 0.200.240.22RuO\u208248.29 mV dec 45.16 mV dec 46.25 mV dec 51.78 mV dec HER H H H,O OER 0H\u2082O$ \n0.18\n1.11.21.31.41.51.600.20.40.60.81.01.21.4Potential (V versus RHE)log(j/mA cm-2)Cathode PEM Anode d \n2.8Current density=2Acm $Ru_{}rORoom temperature Ru_}rO}-2$ 2.4\nVoltage (V)0080O 00\n09000000000000a8\u221e8q 2.0\n02004006008001,0001,2001,400 2.82.42.02.82.40000o0coo00o0\u2207RuO2-1\u25bcRuO{22Ru2O-22RurO.-1aaee e e 604020Ru_{IrO \u2190Ru{2}rOx RuO RuO\u2082e nee  rn 6543210RuIrOx RuO RuO 2.00\n02004000102030405001020304050Time (h)Time (h)Time (h)",
+        "parser_name": "paddle"
+      },
+      "type": "TafelSlope"
+    },
+    {
+      "value": 45.16,
+      "unit_label": "mV/decade",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "not_applied",
+        "normalization_basis": null,
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54"
+        },
+        "page": 5,
+        "bbox_x0": 105.0,
+        "bbox_y0": 54.0,
+        "bbox_x1": 1089.0,
+        "bbox_y1": 890.0,
+        "source_text": "a 50$RuIrOx$b 0.26\n40R_uO{}$$R_u_{2}}$$R_u_{4}{}$Ru_IrO Ru{}O$Ru_24}O}$H \u2192H\u2082O+O\u2082$ (m)302010 reeee 0.200.240.22RuO\u208248.29 mV dec 45.16 mV dec 46.25 mV dec 51.78 mV dec HER H H H,O OER 0H\u2082O$ \n0.18\n1.11.21.31.41.51.600.20.40.60.81.01.21.4Potential (V versus RHE)log(j/mA cm-2)Cathode PEM Anode d \n2.8Current density=2Acm $Ru_{}rORoom temperature Ru_}rO}-2$ 2.4\nVoltage (V)0080O 00\n09000000000000a8\u221e8q 2.0\n02004006008001,0001,2001,400 2.82.42.02.82.40000o0coo00o0\u2207RuO2-1\u25bcRuO{22Ru2O-22RurO.-1aaee e e 604020Ru_{IrO \u2190Ru{2}rOx RuO RuO\u2082e nee  rn 6543210RuIrOx RuO RuO 2.00\n02004000102030405001020304050Time (h)Time (h)Time (h)",
+        "parser_name": "paddle"
+      },
+      "type": "TafelSlope"
+    },
+    {
+      "value": 46.25,
+      "unit_label": "mV/decade",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "not_applied",
+        "normalization_basis": null,
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54"
+        },
+        "page": 5,
+        "bbox_x0": 105.0,
+        "bbox_y0": 54.0,
+        "bbox_x1": 1089.0,
+        "bbox_y1": 890.0,
+        "source_text": "a 50$RuIrOx$b 0.26\n40R_uO{}$$R_u_{2}}$$R_u_{4}{}$Ru_IrO Ru{}O$Ru_24}O}$H \u2192H\u2082O+O\u2082$ (m)302010 reeee 0.200.240.22RuO\u208248.29 mV dec 45.16 mV dec 46.25 mV dec 51.78 mV dec HER H H H,O OER 0H\u2082O$ \n0.18\n1.11.21.31.41.51.600.20.40.60.81.01.21.4Potential (V versus RHE)log(j/mA cm-2)Cathode PEM Anode d \n2.8Current density=2Acm $Ru_{}rORoom temperature Ru_}rO}-2$ 2.4\nVoltage (V)0080O 00\n09000000000000a8\u221e8q 2.0\n02004006008001,0001,2001,400 2.82.42.02.82.40000o0coo00o0\u2207RuO2-1\u25bcRuO{22Ru2O-22RurO.-1aaee e e 604020Ru_{IrO \u2190Ru{2}rOx RuO RuO\u2082e nee  rn 6543210RuIrOx RuO RuO 2.00\n02004000102030405001020304050Time (h)Time (h)Time (h)",
+        "parser_name": "paddle"
+      },
+      "type": "TafelSlope"
+    },
+    {
+      "value": 51.78,
+      "unit_label": "mV/decade",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "not_applied",
+        "normalization_basis": null,
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54"
+        },
+        "page": 5,
+        "bbox_x0": 105.0,
+        "bbox_y0": 54.0,
+        "bbox_x1": 1089.0,
+        "bbox_y1": 890.0,
+        "source_text": "a 50$RuIrOx$b 0.26\n40R_uO{}$$R_u_{2}}$$R_u_{4}{}$Ru_IrO Ru{}O$Ru_24}O}$H \u2192H\u2082O+O\u2082$ (m)302010 reeee 0.200.240.22RuO\u208248.29 mV dec 45.16 mV dec 46.25 mV dec 51.78 mV dec HER H H H,O OER 0H\u2082O$ \n0.18\n1.11.21.31.41.51.600.20.40.60.81.01.21.4Potential (V versus RHE)log(j/mA cm-2)Cathode PEM Anode d \n2.8Current density=2Acm $Ru_{}rORoom temperature Ru_}rO}-2$ 2.4\nVoltage (V)0080O 00\n09000000000000a8\u221e8q 2.0\n02004006008001,0001,2001,400 2.82.42.02.82.40000o0coo00o0\u2207RuO2-1\u25bcRuO{22Ru2O-22RurO.-1aaee e e 604020Ru_{IrO \u2190Ru{2}rOx RuO RuO\u2082e nee  rn 6543210RuIrOx RuO RuO 2.00\n02004000102030405001020304050Time (h)Time (h)Time (h)",
+        "parser_name": "paddle"
+      },
+      "type": "TafelSlope"
+    },
+    {
+      "value": 1600.0,
+      "unit_label": "h",
+      "condition": {
+        "current_density": 2000.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": 60.0,
+        "electrolyte": null,
+        "cell_type": "25 cm2 PEM water electrolyser (De Nora Tech)",
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "not_applied",
+        "normalization_basis": null,
+        "cell_type_family": "single_cell_MEA",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54"
+        },
+        "page": 5,
+        "bbox_x0": 25.0,
+        "bbox_y0": 758.0,
+        "bbox_x1": 1001.0,
+        "bbox_y1": 1446.0,
+        "source_text": "To validate the outstanding durability of $\\mathrm{{\\sf{R u}}}_{6}\\mathrm{{\\sf{I r O}}}_{x}$ in a larger PEM electrolyser and under elevated temperature operation, our collaborators at De Nora Tech applied this catalyst to an anode in a 25-cm2 PEM water electrolyser (Fig.4a) following their standard testing protocols (Methods). Compared with commercial iridium black (IrB),$\\mathrm{R u}_{6}\\mathrm{I r O}_{\\mathrm{x}}$ .demonstrated almost identical activity up to 1A cm-2 (Fig. 4b), with slightly higher voltage above1 A cmdespite having only one-third of the Ir.Duringte 1-habiliy tt Fig.4, te curnt asgradually raised to 50 A and maintained at this level. The voltage initially rose from 1.939 V to 2.000 V in the first 500 h, probably indicative of a catalyst layer activation process. The voltage then experienced a slow decrease and reached 1.986 V when the test had to be stopped at 1,600 h due to other uses of the device. The superior durabillity of $\\mathrm{Ru_{6}IrO_{3}}$ is also supported by the similar electrochemical impedance spectroscopy (ElS) curves of beginning and end oftests (Fig.4).Compared with other reported Ir-containing acidic OER catalysts (Supplementary Table 9),$\\mathrm{{\\sf  Ru}}_{6}\\mathrm{{\\sf  IrO}},$ not only delivered stable performance at a high current density of 2$\\mathtt{A c m}^{-2}$ for over 1,500 h but also did  d \n2.050 A 80\n751.9\nree 1.81.71.612.5 A 25A 706560Temperature (\u2103)1.56.25A 55\nActive area=25 cm2501.4\n02004006008001,0001,2001,4001,600\nTime (h)\n",
+        "parser_name": "paddle"
+      },
+      "type": "Stability"
+    },
+    {
+      "value": 1.939,
+      "unit_label": "V",
+      "condition": {
+        "current_density": 2000.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": 60.0,
+        "electrolyte": null,
+        "cell_type": "25 cm2 PEM water electrolyser (De Nora Tech)",
+        "scan_rate": null,
+        "catalyst_loading": 0.43,
+        "iR_correction": "not_applied",
+        "normalization_basis": null,
+        "cell_type_family": "single_cell_MEA",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54"
+        },
+        "page": 5,
+        "bbox_x0": 25.0,
+        "bbox_y0": 1022.0,
+        "bbox_x1": 587.0,
+        "bbox_y1": 1446.0,
+        "source_text": "To validate the outstanding durability of $\\mathrm{{\\sf{R u}}}_{6}\\mathrm{{\\sf{I r O}}}_{x}$ in a larger PEM electrolyser and under elevated temperature operation, our collaborators at De Nora Tech applied this catalyst to an anode in a 25-cm2 PEM water electrolyser (Fig.4a) following their standard testing protocols (Methods). Compared with commercial iridium black (IrB),$\\mathrm{R u}_{6}\\mathrm{I r O}_{\\mathrm{x}}$ .demonstrated almost identical activity up to 1A cm-2 (Fig. 4b), with slightly higher voltage above1 A cmdespite having only one-third of the Ir.Duringte 1-habiliy tt Fig.4, te curnt asgradually raised to 50 A and maintained at this level. The voltage initially rose from 1.939 V to 2.000 V in the first 500 h, probably indicative of a catalyst layer activation process. The voltage then experienced a slow decrease and reached 1.986 V when the test had to be stopped at 1,600 h due to other uses of the device. The superior durabillity of $\\mathrm{Ru_{6}IrO_{3}}$ is also supported by the similar electrochemical impedance spectroscopy (ElS) curves of beginning and end oftests (Fig.4).Compared with other reported Ir-containing acidic OER catalysts (Supplementary Table 9),$\\mathrm{{\\sf  Ru}}_{6}\\mathrm{{\\sf  IrO}},$ not only delivered stable performance at a high current density of 2$\\mathtt{A c m}^{-2}$ for over 1,500 h but also did ",
+        "parser_name": "paddle"
+      },
+      "type": "PEMWECellVoltage"
+    },
+    {
+      "value": 2.0,
+      "unit_label": "V",
+      "condition": {
+        "current_density": 2000.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": 60.0,
+        "electrolyte": null,
+        "cell_type": "25 cm2 PEM water electrolyser (De Nora Tech)",
+        "scan_rate": null,
+        "catalyst_loading": 0.43,
+        "iR_correction": "not_applied",
+        "normalization_basis": null,
+        "cell_type_family": "single_cell_MEA",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54"
+        },
+        "page": 5,
+        "bbox_x0": 25.0,
+        "bbox_y0": 1022.0,
+        "bbox_x1": 587.0,
+        "bbox_y1": 1446.0,
+        "source_text": "To validate the outstanding durability of $\\mathrm{{\\sf{R u}}}_{6}\\mathrm{{\\sf{I r O}}}_{x}$ in a larger PEM electrolyser and under elevated temperature operation, our collaborators at De Nora Tech applied this catalyst to an anode in a 25-cm2 PEM water electrolyser (Fig.4a) following their standard testing protocols (Methods). Compared with commercial iridium black (IrB),$\\mathrm{R u}_{6}\\mathrm{I r O}_{\\mathrm{x}}$ .demonstrated almost identical activity up to 1A cm-2 (Fig. 4b), with slightly higher voltage above1 A cmdespite having only one-third of the Ir.Duringte 1-habiliy tt Fig.4, te curnt asgradually raised to 50 A and maintained at this level. The voltage initially rose from 1.939 V to 2.000 V in the first 500 h, probably indicative of a catalyst layer activation process. The voltage then experienced a slow decrease and reached 1.986 V when the test had to be stopped at 1,600 h due to other uses of the device. The superior durabillity of $\\mathrm{Ru_{6}IrO_{3}}$ is also supported by the similar electrochemical impedance spectroscopy (ElS) curves of beginning and end oftests (Fig.4).Compared with other reported Ir-containing acidic OER catalysts (Supplementary Table 9),$\\mathrm{{\\sf  Ru}}_{6}\\mathrm{{\\sf  IrO}},$ not only delivered stable performance at a high current density of 2$\\mathtt{A c m}^{-2}$ for over 1,500 h but also did ",
+        "parser_name": "paddle"
+      },
+      "type": "PEMWECellVoltage"
+    },
+    {
+      "value": 1.986,
+      "unit_label": "V",
+      "condition": {
+        "current_density": 2000.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": 60.0,
+        "electrolyte": null,
+        "cell_type": "25 cm2 PEM water electrolyser (De Nora Tech)",
+        "scan_rate": null,
+        "catalyst_loading": 0.43,
+        "iR_correction": "not_applied",
+        "normalization_basis": null,
+        "cell_type_family": "single_cell_MEA",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54"
+        },
+        "page": 5,
+        "bbox_x0": 25.0,
+        "bbox_y0": 1022.0,
+        "bbox_x1": 587.0,
+        "bbox_y1": 1446.0,
+        "source_text": "To validate the outstanding durability of $\\mathrm{{\\sf{R u}}}_{6}\\mathrm{{\\sf{I r O}}}_{x}$ in a larger PEM electrolyser and under elevated temperature operation, our collaborators at De Nora Tech applied this catalyst to an anode in a 25-cm2 PEM water electrolyser (Fig.4a) following their standard testing protocols (Methods). Compared with commercial iridium black (IrB),$\\mathrm{R u}_{6}\\mathrm{I r O}_{\\mathrm{x}}$ .demonstrated almost identical activity up to 1A cm-2 (Fig. 4b), with slightly higher voltage above1 A cmdespite having only one-third of the Ir.Duringte 1-habiliy tt Fig.4, te curnt asgradually raised to 50 A and maintained at this level. The voltage initially rose from 1.939 V to 2.000 V in the first 500 h, probably indicative of a catalyst layer activation process. The voltage then experienced a slow decrease and reached 1.986 V when the test had to be stopped at 1,600 h due to other uses of the device. The superior durabillity of $\\mathrm{Ru_{6}IrO_{3}}$ is also supported by the similar electrochemical impedance spectroscopy (ElS) curves of beginning and end oftests (Fig.4).Compared with other reported Ir-containing acidic OER catalysts (Supplementary Table 9),$\\mathrm{{\\sf  Ru}}_{6}\\mathrm{{\\sf  IrO}},$ not only delivered stable performance at a high current density of 2$\\mathtt{A c m}^{-2}$ for over 1,500 h but also did ",
+        "parser_name": "paddle"
+      },
+      "type": "PEMWECellVoltage"
+    }
+  ],
+  "errors": [
+    {
+      "error": "ValueError: likely mis-citation for Stability: value 1500 not found in cited span(s)",
+      "raw": {
+        "type": "Stability",
+        "value": 1500,
+        "unit_label": "h",
+        "condition": {
+          "current_density": 2000,
+          "cell_type": "single-cell PEM water electrolyser (laboratory scale, 1 cm2)",
+          "cell_type_family": "single_cell_MEA",
+          "iR_correction": "not_applied"
+        },
+        "evidence": {
+          "spans": [
+            8,
+            53
+          ]
+        }
+      }
+    },
+    {
+      "error": "ValueError: likely mis-citation for DegradationRate: value 2.55 not found in cited span(s)",
+      "raw": {
+        "type": "DegradationRate",
+        "value": 2.55,
+        "unit_label": "mV/h",
+        "condition": {
+          "current_density": 2000,
+          "cell_type_family": "single_cell_MEA",
+          "iR_correction": "not_applied"
+        },
+        "evidence": {
+          "spans": [
+            53
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,540 @@
+{
+  "schema_version": 1,
+  "paper_sha": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01",
+  "parser": "docling",
+  "label": "openai-mini",
+  "mode": "raw",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "openai/gpt-5.4-mini",
+  "temperature": 0.0,
+  "in_tokens": 42103,
+  "out_tokens": 1107,
+  "latency_s": 5.08,
+  "items": [
+    {
+      "value": 210.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 0.5,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "unknown",
+        "normalization_basis": "geometric",
+        "cell_type_family": null,
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 2,
+        "bbox_x0": 306.141815185,
+        "bbox_y0": 537.0568085930313,
+        "bbox_x1": 562.7924033711711,
+        "bbox_y1": 421.90034628903123,
+        "source_text": "Compared with IrO2, the cyclic voltammograms of IrO x show higher redox current densities of around one order of magnitude, when normalized to the geometric area. IrO x also shows a higher activity than IrO 2 , as reflected in the overpotential required to achieve 0.5 mA cm -2 geo (~210 mV and 330 mV for IrO x and IrO 2 , respectively; Fig. 1d). IrO x shows two distinct broad redox peaks at around 0.8 and 1.2 V versus the reversible hydrogen electrode (RHE). By contrast, no distinct redox peak can be observed for IrO 2 . The redox features and catalytic activity of both samples are relatively stable for 20 cycles and 2.5 h of operation (further results on the stability of the redox features, activity and morphology/ structure can be found in Supplementary Note 2).",
+        "parser_name": "docling"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 330.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 0.5,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "unknown",
+        "normalization_basis": "geometric",
+        "cell_type_family": null,
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 2,
+        "bbox_x0": 306.141815185,
+        "bbox_y0": 537.0568085930313,
+        "bbox_x1": 562.7924033711711,
+        "bbox_y1": 421.90034628903123,
+        "source_text": "Compared with IrO2, the cyclic voltammograms of IrO x show higher redox current densities of around one order of magnitude, when normalized to the geometric area. IrO x also shows a higher activity than IrO 2 , as reflected in the overpotential required to achieve 0.5 mA cm -2 geo (~210 mV and 330 mV for IrO x and IrO 2 , respectively; Fig. 1d). IrO x shows two distinct broad redox peaks at around 0.8 and 1.2 V versus the reversible hydrogen electrode (RHE). By contrast, no distinct redox peak can be observed for IrO 2 . The redox features and catalytic activity of both samples are relatively stable for 20 cycles and 2.5 h of operation (further results on the stability of the redox features, activity and morphology/ structure can be found in Supplementary Note 2).",
+        "parser_name": "docling"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 2.5,
+      "unit_label": "h",
+      "condition": {
+        "current_density": 1.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": null,
+        "cell_type": "cyclic voltammetry operation",
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "unknown",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 2,
+        "bbox_x0": 306.141815185,
+        "bbox_y0": 537.0568085930313,
+        "bbox_x1": 562.7924033711711,
+        "bbox_y1": 421.90034628903123,
+        "source_text": "Compared with IrO2, the cyclic voltammograms of IrO x show higher redox current densities of around one order of magnitude, when normalized to the geometric area. IrO x also shows a higher activity than IrO 2 , as reflected in the overpotential required to achieve 0.5 mA cm -2 geo (~210 mV and 330 mV for IrO x and IrO 2 , respectively; Fig. 1d). IrO x shows two distinct broad redox peaks at around 0.8 and 1.2 V versus the reversible hydrogen electrode (RHE). By contrast, no distinct redox peak can be observed for IrO 2 . The redox features and catalytic activity of both samples are relatively stable for 20 cycles and 2.5 h of operation (further results on the stability of the redox features, activity and morphology/ structure can be found in Supplementary Note 2).",
+        "parser_name": "docling"
+      },
+      "type": "Stability"
+    },
+    {
+      "value": 210.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 0.5,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": 10.0,
+        "catalyst_loading": null,
+        "iR_correction": "applied",
+        "normalization_basis": "geometric",
+        "cell_type_family": null,
+        "electrolyte_family": "acid",
+        "scan_rate_regime": "fast_LSV"
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 3,
+        "bbox_x0": 39.68069648900001,
+        "bbox_y0": 508.3047297360312,
+        "bbox_x1": 293.3644000080218,
+        "bbox_y1": 410.9852383713908,
+        "source_text": "Fig. 1 | Structure, composition and electrochemical behaviour of amorphous IrO x and rutile IrO 2 . a , b , Possible crystal structures of rutile IrO 2 ( a ) and amorphous IrO x ( b ). Grey, red and white spheres represent iridium, oxygen and hydrogen atoms, respectively. Ir cus denotes a coordinatively unsaturated iridium site and Ir bri denotes an iridium site bound to the bridging oxygen. c , Ex situ k 2 -weighted Fourier transform (FT) of EXAFS spectra collected at the iridium L3 edge of amorphous IrO x and rutile IrO 2 , showing the iridium coordination environment. Experimental data (solid lines) and fits (dotted lines) are shown. R , interatomic distance. d , Cyclic voltammograms of amorphous IrO x and rutile IrO2 with the same iridium loading obtained at a scan rate of 10 mV s -1 in 0.1 M",
+        "parser_name": "docling"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 100.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 0.5,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": 10.0,
+        "catalyst_loading": null,
+        "iR_correction": "applied",
+        "normalization_basis": "geometric",
+        "cell_type_family": null,
+        "electrolyte_family": "acid",
+        "scan_rate_regime": "fast_LSV"
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 5,
+        "bbox_x0": 39.685001373,
+        "bbox_y0": 268.30693066403126,
+        "bbox_x1": 562.7427569412908,
+        "bbox_y1": 259.68038618139076,
+        "source_text": "The transient rate of potential-associated redox transitions is determined by the derivative of the density of redox transitions over the potential (Fig. 3a,b, bottom panels). The peak positions for redox transitions on the amorphous and crystalline iridium oxides, obtained from a deconvolution analysis of the optical signal, were found to be at about 0.82 and 0.90 V RHE for redox transition 1, 1.22 and 1.26 V RHE for redox transition 2 and 1.47 and 1.57 V RHE for redox transition 3 (Supplementary Table 3 and Fig. 3a,b). These optically determined redox transition waves match well with the less-well-resolved redox transitions observed in the linear sweep voltammetry curves for amorphous IrO x . In addition, the predicted linear sweep voltammetry curves from the redox transitions are comparable to the experimentally observed curve, in terms of both curve shape and amplitude for both the amorphous and crystalline iridium oxides (grey line in the bottom panel of Fig. 3a,b and in Supplementary Fig. 21). The positions of redox transition 1 and redox transition 2 are also in agreement with the redox peak positions on amorphous IrO x and perovskite SrIrO x determined by Geiger et al. (both are at around 0.8 and 1.2 V) 8 . Notably, the redox current for redox transition 3, corresponding to the optical data at OER-relevant potentials, is masked by the OER current measured electrochemically in the cyclic voltammogram. A redox peak at a similar potential (1.63 V RHE ) has also been observed by Kuo et al. on an IrO 2 (110) surface 30 . It is clear that amorphous IrO x undergoes the redox transition 3 process (~1.3 V RHE ) at a potential approximately 100 mV lower than rutile IrO 2 (~1.4 V RHE ; see Supplementary Fig. 22 for a direct comparison of the absorbance signals). This suggests that the differences in coordination between the iridium centres in amorphous and crystalline iridium oxides result in stronger binding of the oxygenated intermediates in IrO x compared with IrO 2 . The transient rate of potential-associated redox transitions is determined by the derivative of the density of redox transitions over the potential (Fig. 3a,b, bottom panels). The peak positions for redox transitions on the amorphous and crystalline iridium oxides, obtained from a deconvolution analysis of the optical signal, were found to be at about 0.82 and 0.90 V RHE for redox transition 1, 1.22 and 1.26 V RHE for redox transition 2 and 1.47 and 1.57 V RHE for redox transition 3 (Supplementary Table 3 and Fig. 3a,b). These optically determined redox transition waves match well with the less-well-resolved redox transitions observed in the linear sweep voltammetry curves for amorphous IrO x . In addition, the predicted linear sweep voltammetry curves from the redox transitions are comparable to the experimentally observed curve, in terms of both curve shape and amplitude for both the amorphous and crystalline iridium oxides (grey line in the bottom panel of Fig. 3a,b and in Supplementary Fig. 21). The positions of redox transition 1 and redox transition 2 are also in agreement with the redox peak positions on amorphous IrO x and perovskite SrIrO x determined by Geiger et al. (both are at around 0.8 and 1.2 V) 8 . Notably, the redox current for redox transition 3, corresponding to the optical data at OER-relevant potentials, is masked by the OER current measured electrochemically in the cyclic voltammogram. A redox peak at a similar potential (1.63 V RHE ) has also been observed by Kuo et al. on an IrO 2 (110) surface 30 . It is clear that amorphous IrO x undergoes the redox transition 3 process (~1.3 V RHE ) at a potential approximately 100 mV lower than rutile IrO 2 (~1.4 V RHE ; see Supplementary Fig. 22 for a direct comparison of the absorbance signals). This suggests that the differences in coordination between the iridium centres in amorphous and crystalline iridium oxides result in stronger binding of the oxygenated intermediates in IrO x compared with IrO 2 .",
+        "parser_name": "docling"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 90.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 0.5,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": 10.0,
+        "catalyst_loading": null,
+        "iR_correction": "applied",
+        "normalization_basis": "geometric",
+        "cell_type_family": null,
+        "electrolyte_family": "acid",
+        "scan_rate_regime": "fast_LSV"
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 5,
+        "bbox_x0": 39.685001373,
+        "bbox_y0": 268.30693066403126,
+        "bbox_x1": 562.7427569412908,
+        "bbox_y1": 259.68038618139076,
+        "source_text": "The transient rate of potential-associated redox transitions is determined by the derivative of the density of redox transitions over the potential (Fig. 3a,b, bottom panels). The peak positions for redox transitions on the amorphous and crystalline iridium oxides, obtained from a deconvolution analysis of the optical signal, were found to be at about 0.82 and 0.90 V RHE for redox transition 1, 1.22 and 1.26 V RHE for redox transition 2 and 1.47 and 1.57 V RHE for redox transition 3 (Supplementary Table 3 and Fig. 3a,b). These optically determined redox transition waves match well with the less-well-resolved redox transitions observed in the linear sweep voltammetry curves for amorphous IrO x . In addition, the predicted linear sweep voltammetry curves from the redox transitions are comparable to the experimentally observed curve, in terms of both curve shape and amplitude for both the amorphous and crystalline iridium oxides (grey line in the bottom panel of Fig. 3a,b and in Supplementary Fig. 21). The positions of redox transition 1 and redox transition 2 are also in agreement with the redox peak positions on amorphous IrO x and perovskite SrIrO x determined by Geiger et al. (both are at around 0.8 and 1.2 V) 8 . Notably, the redox current for redox transition 3, corresponding to the optical data at OER-relevant potentials, is masked by the OER current measured electrochemically in the cyclic voltammogram. A redox peak at a similar potential (1.63 V RHE ) has also been observed by Kuo et al. on an IrO 2 (110) surface 30 . It is clear that amorphous IrO x undergoes the redox transition 3 process (~1.3 V RHE ) at a potential approximately 100 mV lower than rutile IrO 2 (~1.4 V RHE ; see Supplementary Fig. 22 for a direct comparison of the absorbance signals). This suggests that the differences in coordination between the iridium centres in amorphous and crystalline iridium oxides result in stronger binding of the oxygenated intermediates in IrO x compared with IrO 2 . The transient rate of potential-associated redox transitions is determined by the derivative of the density of redox transitions over the potential (Fig. 3a,b, bottom panels). The peak positions for redox transitions on the amorphous and crystalline iridium oxides, obtained from a deconvolution analysis of the optical signal, were found to be at about 0.82 and 0.90 V RHE for redox transition 1, 1.22 and 1.26 V RHE for redox transition 2 and 1.47 and 1.57 V RHE for redox transition 3 (Supplementary Table 3 and Fig. 3a,b). These optically determined redox transition waves match well with the less-well-resolved redox transitions observed in the linear sweep voltammetry curves for amorphous IrO x . In addition, the predicted linear sweep voltammetry curves from the redox transitions are comparable to the experimentally observed curve, in terms of both curve shape and amplitude for both the amorphous and crystalline iridium oxides (grey line in the bottom panel of Fig. 3a,b and in Supplementary Fig. 21). The positions of redox transition 1 and redox transition 2 are also in agreement with the redox peak positions on amorphous IrO x and perovskite SrIrO x determined by Geiger et al. (both are at around 0.8 and 1.2 V) 8 . Notably, the redox current for redox transition 3, corresponding to the optical data at OER-relevant potentials, is masked by the OER current measured electrochemically in the cyclic voltammogram. A redox peak at a similar potential (1.63 V RHE ) has also been observed by Kuo et al. on an IrO 2 (110) surface 30 . It is clear that amorphous IrO x undergoes the redox transition 3 process (~1.3 V RHE ) at a potential approximately 100 mV lower than rutile IrO 2 (~1.4 V RHE ; see Supplementary Fig. 22 for a direct comparison of the absorbance signals). This suggests that the differences in coordination between the iridium centres in amorphous and crystalline iridium oxides result in stronger binding of the oxygenated intermediates in IrO x compared with IrO 2 .",
+        "parser_name": "docling"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 250.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "unknown",
+        "normalization_basis": null,
+        "cell_type_family": null,
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 9,
+        "bbox_x0": 39.681692999999996,
+        "bbox_y0": 483.30693066403126,
+        "bbox_x1": 296.4042306990879,
+        "bbox_y1": 174.6503462890313,
+        "source_text": "volcano plot at a fixed overpotential of 250 mV (Fig. 6b and Supplementary Fig. 42). The steep part of the left side of the volcano (for example, when \u2206 G \u00b0 *O - \u2206 G \u00b0 *OH ( \u03b8 *O = 0) < 1.28 eV in the curve of r = 0.15 eV) is where the *O coverage is saturated, whereas the less steep part represents where \u2206 G \u00b0 *O - \u2206 G \u00b0 *OH ( \u03b8 *O ) is changing due to the Frumkin repulsion term. The Frumkin repulsion term has a higher impact on increasing the activity for a material with a stronger *O binding energy, for a given interaction strength. This is evident from our data on amorphous and rutile iridium oxide catalysts, where the adsorbate-adsorbate interaction increases the relative activity of the two materials by different degrees, although they have a similar interaction parameter (~0.15 eV). This is because the stronger binding strength of *O on the IrO x surface results in a higher coverage for IrO x compared with IrO 2 at this potential (Fig. 5a, top panel), and a consequently higher repulsion between adsorbates. However, both show a higher activity than the molecular iridium catalyst analysed previously, which has no adsorbate-adsorbate interaction 28 . This observation is consistent with our previous suggestion that, although the studied molecular iridium catalyst showed faster kinetics than amorphous IrO x at low overpotentials, it is less active than amorphous IrO x at higher overpotentials due to a lack of cooperative interactions between active states 28 . Similar analyses at overpotentials of 200 and 280 mV are also given in Supplementary Fig. 43. These results indicate that the potential can alter the coverage of *O species, which in turn can weaken the binding energies for catalysts that bind oxygen too strongly in a conventional volcano plot, hence improving the OER activity. This analysis elucidates the fundamental origin of the activity discrepancies between different iridium-based catalysts, including amorphous and crystalline iridium oxides.",
+        "parser_name": "docling"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 200.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "unknown",
+        "normalization_basis": null,
+        "cell_type_family": null,
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 9,
+        "bbox_x0": 39.681692999999996,
+        "bbox_y0": 483.30693066403126,
+        "bbox_x1": 296.4042306990879,
+        "bbox_y1": 174.6503462890313,
+        "source_text": "volcano plot at a fixed overpotential of 250 mV (Fig. 6b and Supplementary Fig. 42). The steep part of the left side of the volcano (for example, when \u2206 G \u00b0 *O - \u2206 G \u00b0 *OH ( \u03b8 *O = 0) < 1.28 eV in the curve of r = 0.15 eV) is where the *O coverage is saturated, whereas the less steep part represents where \u2206 G \u00b0 *O - \u2206 G \u00b0 *OH ( \u03b8 *O ) is changing due to the Frumkin repulsion term. The Frumkin repulsion term has a higher impact on increasing the activity for a material with a stronger *O binding energy, for a given interaction strength. This is evident from our data on amorphous and rutile iridium oxide catalysts, where the adsorbate-adsorbate interaction increases the relative activity of the two materials by different degrees, although they have a similar interaction parameter (~0.15 eV). This is because the stronger binding strength of *O on the IrO x surface results in a higher coverage for IrO x compared with IrO 2 at this potential (Fig. 5a, top panel), and a consequently higher repulsion between adsorbates. However, both show a higher activity than the molecular iridium catalyst analysed previously, which has no adsorbate-adsorbate interaction 28 . This observation is consistent with our previous suggestion that, although the studied molecular iridium catalyst showed faster kinetics than amorphous IrO x at low overpotentials, it is less active than amorphous IrO x at higher overpotentials due to a lack of cooperative interactions between active states 28 . Similar analyses at overpotentials of 200 and 280 mV are also given in Supplementary Fig. 43. These results indicate that the potential can alter the coverage of *O species, which in turn can weaken the binding energies for catalysts that bind oxygen too strongly in a conventional volcano plot, hence improving the OER activity. This analysis elucidates the fundamental origin of the activity discrepancies between different iridium-based catalysts, including amorphous and crystalline iridium oxides.",
+        "parser_name": "docling"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 280.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "unknown",
+        "normalization_basis": null,
+        "cell_type_family": null,
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 9,
+        "bbox_x0": 39.681692999999996,
+        "bbox_y0": 483.30693066403126,
+        "bbox_x1": 296.4042306990879,
+        "bbox_y1": 174.6503462890313,
+        "source_text": "volcano plot at a fixed overpotential of 250 mV (Fig. 6b and Supplementary Fig. 42). The steep part of the left side of the volcano (for example, when \u2206 G \u00b0 *O - \u2206 G \u00b0 *OH ( \u03b8 *O = 0) < 1.28 eV in the curve of r = 0.15 eV) is where the *O coverage is saturated, whereas the less steep part represents where \u2206 G \u00b0 *O - \u2206 G \u00b0 *OH ( \u03b8 *O ) is changing due to the Frumkin repulsion term. The Frumkin repulsion term has a higher impact on increasing the activity for a material with a stronger *O binding energy, for a given interaction strength. This is evident from our data on amorphous and rutile iridium oxide catalysts, where the adsorbate-adsorbate interaction increases the relative activity of the two materials by different degrees, although they have a similar interaction parameter (~0.15 eV). This is because the stronger binding strength of *O on the IrO x surface results in a higher coverage for IrO x compared with IrO 2 at this potential (Fig. 5a, top panel), and a consequently higher repulsion between adsorbates. However, both show a higher activity than the molecular iridium catalyst analysed previously, which has no adsorbate-adsorbate interaction 28 . This observation is consistent with our previous suggestion that, although the studied molecular iridium catalyst showed faster kinetics than amorphous IrO x at low overpotentials, it is less active than amorphous IrO x at higher overpotentials due to a lack of cooperative interactions between active states 28 . Similar analyses at overpotentials of 200 and 280 mV are also given in Supplementary Fig. 43. These results indicate that the potential can alter the coverage of *O species, which in turn can weaken the binding energies for catalysts that bind oxygen too strongly in a conventional volcano plot, hence improving the OER activity. This analysis elucidates the fundamental origin of the activity discrepancies between different iridium-based catalysts, including amorphous and crystalline iridium oxides.",
+        "parser_name": "docling"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 220.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "unknown",
+        "normalization_basis": null,
+        "cell_type_family": null,
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 1,
+        "bbox_x0": 39.685001373,
+        "bbox_y0": 128.55693066403126,
+        "bbox_x1": 562.80189697594,
+        "bbox_y1": 711.1803556633909,
+        "source_text": "A number of iridium-based oxides have been studied, ranging from crystalline rutile oxides, amorphous oxides and alloyed oxides 9-12 to perovskites 13,14 .  The catalytic activity is usually compared by normalizing the current density to the geometric area or the mass of iridium. Amorphous IrO x is more active but less stable than crystalline rutile IrO 2 , and shows a 220 mV reduction in overpotential as well as an approximately two orders of magnitude lower lifetime at 1 mA cm -2 geo (ref. 8). Recent studies on highly active IrNiO x (refs. 10,11), Li-IrO x (ref. 9) and SrIrO x (refs. 8,13,15) have demonstrated that the surface of these materials is converted to an amorphous phase on exposure to oxygen evolution reaction (OER) potentials. Amorphous IrO x is easier to oxidize and undergoes greater Ir-O bond shortening with increased potential compared with crystalline IrO 2 (refs. 9,10,16,17). These differences in coordination environment of the iridium centre have been suggested to influence the binding energetics of key OER intermediates, possibly resulting in the differences in activity observed 11,16,18-21 . However, the detailed mechanistic origins of the differences in activity between amorphous IrO x and rutile IrO 2 remain poorly understood. A number of iridium-based oxides have been studied, ranging from crystalline rutile oxides, amorphous oxides and alloyed oxides 9-12 to perovskites 13,14 .  The catalytic activity is usually compared by normalizing the current density to the geometric area or the mass of iridium. Amorphous IrO x is more active but less stable than crystalline rutile IrO 2 , and shows a 220 mV reduction in overpotential as well as an approximately two orders of magnitude lower lifetime at 1 mA cm -2 geo (ref. 8). Recent studies on highly active IrNiO x (refs. 10,11), Li-IrO x (ref. 9) and SrIrO x (refs. 8,13,15) have demonstrated that the surface of these materials is converted to an amorphous phase on exposure to oxygen evolution reaction (OER) potentials. Amorphous IrO x is easier to oxidize and undergoes greater Ir-O bond shortening with increased potential compared with crystalline IrO 2 (refs. 9,10,16,17). These differences in coordination environment of the iridium centre have been suggested to influence the binding energetics of key OER intermediates, possibly resulting in the differences in activity observed 11,16,18-21 . However, the detailed mechanistic origins of the differences in activity between amorphous IrO x and rutile IrO 2 remain poorly understood. A number of iridium-based oxides have been studied, ranging from crystalline rutile oxides, amorphous oxides and alloyed oxides 9-12 to perovskites 13,14 .  The catalytic activity is usually compared by normalizing the current density to the geometric area or the mass of iridium. Amorphous IrO x is more active but less stable than crystalline rutile IrO 2 , and shows a 220 mV reduction in overpotential as well as an approximately two orders of magnitude lower lifetime at 1 mA cm -2 geo (ref. 8). Recent studies on highly active IrNiO x (refs. 10,11), Li-IrO x (ref. 9) and SrIrO x (refs. 8,13,15) have demonstrated that the surface of these materials is converted to an amorphous phase on exposure to oxygen evolution reaction (OER) potentials. Amorphous IrO x is easier to oxidize and undergoes greater Ir-O bond shortening with increased potential compared with crystalline IrO 2 (refs. 9,10,16,17). These differences in coordination environment of the iridium centre have been suggested to influence the binding energetics of key OER intermediates, possibly resulting in the differences in activity observed 11,16,18-21 . However, the detailed mechanistic origins of the differences in activity between amorphous IrO x and rutile IrO 2 remain poorly understood.",
+        "parser_name": "docling"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 0.0,
+      "unit_label": "A/g",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": 1.48,
+        "temperature_C": null,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "unknown",
+        "normalization_basis": null,
+        "cell_type_family": null,
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 8,
+        "bbox_x0": 306.13818871999996,
+        "bbox_y0": 311.30693066403126,
+        "bbox_x1": 564.199870335,
+        "bbox_y1": 76.93037855239083,
+        "source_text": "To include the influence of adsorbate-adsorbate interactions on \u2206 G \u00b0 *O - \u2206 G \u00b0 *OH values, and thus the intrinsic activity per state, we construct a new three-dimensional volcano plot. This volcano plot can be seen as a deconvolution of the previous descriptor \u2206 G \u00b0 *O - \u2206 G \u00b0 *OH into two components: the binding energetics on a surface with zero *O coverage (\u2206 G \u00b0 *O - \u2206 G \u00b0 *OH ( \u03b8 *O = 0)), and the interaction strength between *O species, following a Frumkin-isotherm-related equation (\u2206 G \u00b0 *O -\u2206 G \u00b0 *OH = \u2206 G \u00b0 *O - \u2206 G \u00b0 *OH ( \u03b8 *O = 0) + r\u03b8 *O ). The relative activity per state is represented by the thermodynamic overpotential of the OER on the active state, and is calculated from the absolute difference between the \u2206 G \u00b0 *O - \u2206 G \u00b0 *OH value of the catalysts and the predicted optimal value of 1.60 eV (that is, relative activity = -|\u2206 G \u00b0 *O - \u2206 G \u00b0 *OH - 1.6 eV|), as reported in the studies of Rossmeisl, N\u00f8rskov and colleagues 24,25 . We first construct this plot assuming a near-saturated coverage, \u03b8 *O = 0.9. As shown in Fig. 6a, the optimal activity of the states can be achieved either via optimal *O binding at low coverage without any *O interaction (that is, \u2206 G \u00b0 *O - \u2206 G \u00b0 *OH \u2248 1.6 eV at \u03b8 *O \u2248 0, r = 0 eV), which is the top of a conventional volcano plot, or via a stronger than optimal *O binding and strong interaction (for example, \u2206 G \u00b0 *O - \u2206 G \u00b0 *OH = 1.0 eV at \u03b8 *O \u2248 0, r \u2248 0.7 eV). In the latter case, although each state binds *O much more strongly than optimal at zero coverage, the strong interaction strength results in weaker binding and optimum \u2206 G \u00b0 *O - \u2206 G \u00b0 *OH at high coverage.",
+        "parser_name": "docling"
+      },
+      "type": "MassActivity"
+    }
+  ],
+  "errors": [
+    {
+      "error": "ValueError: likely mis-citation for Overpotential: value 330 not found in cited span(s)",
+      "raw": {
+        "type": "Overpotential",
+        "value": 330,
+        "unit_label": "mV",
+        "condition": {
+          "current_density": 0.5,
+          "normalization_basis": "geometric",
+          "electrolyte": {
+            "formula": "HClO4",
+            "concentration": 0.1
+          },
+          "electrolyte_family": "acid",
+          "iR_correction": "applied",
+          "scan_rate": 10,
+          "scan_rate_regime": "fast_LSV"
+        },
+        "evidence": {
+          "spans": [
+            32
+          ]
+        }
+      }
+    },
+    {
+      "error": "ValueError: likely mis-citation for Stability: value 1000 not found in cited span(s)",
+      "raw": {
+        "type": "Stability",
+        "value": 1000,
+        "unit_label": "h",
+        "condition": {
+          "current_density": 1,
+          "normalization_basis": "geometric",
+          "cell_type_family": "RDE",
+          "cell_type": "lifetime at 1 mA cm-2 geo",
+          "iR_correction": "unknown"
+        },
+        "evidence": {
+          "spans": [
+            11,
+            12,
+            13
+          ]
+        }
+      }
+    },
+    {
+      "error": "ValidationError: 1 validation error for ECSA\ncondition.method\n  Extra inputs are not permitted [type=extra_forbidden, input_value='EXAFS first-shell coordination number proxy', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/extra_forbidden",
+      "raw": {
+        "type": "ECSA",
+        "value": 5.8,
+        "unit_label": "cm2",
+        "condition": {
+          "method": "EXAFS first-shell coordination number proxy"
+        },
+        "evidence": {
+          "spans": [
+            25
+          ]
+        }
+      }
+    },
+    {
+      "error": "ValidationError: 1 validation error for ECSA\ncondition.method\n  Extra inputs are not permitted [type=extra_forbidden, input_value='EXAFS first-shell coordination number proxy', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/extra_forbidden",
+      "raw": {
+        "type": "ECSA",
+        "value": 6.0,
+        "unit_label": "cm2",
+        "condition": {
+          "method": "EXAFS first-shell coordination number proxy"
+        },
+        "evidence": {
+          "spans": [
+            25
+          ]
+        }
+      }
+    },
+    {
+      "error": "ValueError: likely mis-citation for Overpotential: value 210 not found in cited span(s)",
+      "raw": {
+        "type": "Overpotential",
+        "value": 210,
+        "unit_label": "mV",
+        "condition": {
+          "current_density": 0.5,
+          "normalization_basis": "geometric",
+          "electrolyte": {
+            "formula": "HClO4",
+            "concentration": 0.1
+          },
+          "electrolyte_family": "acid",
+          "iR_correction": "applied",
+          "scan_rate": 1,
+          "scan_rate_regime": "slow_LSV"
+        },
+        "evidence": {
+          "spans": [
+            154
+          ]
+        }
+      }
+    },
+    {
+      "error": "ValueError: likely mis-citation for Overpotential: value 330 not found in cited span(s)",
+      "raw": {
+        "type": "Overpotential",
+        "value": 330,
+        "unit_label": "mV",
+        "condition": {
+          "current_density": 0.5,
+          "normalization_basis": "geometric",
+          "electrolyte": {
+            "formula": "HClO4",
+            "concentration": 0.1
+          },
+          "electrolyte_family": "acid",
+          "iR_correction": "applied",
+          "scan_rate": 1,
+          "scan_rate_regime": "slow_LSV"
+        },
+        "evidence": {
+          "spans": [
+            154
+          ]
+        }
+      }
+    }
+  ]
+}

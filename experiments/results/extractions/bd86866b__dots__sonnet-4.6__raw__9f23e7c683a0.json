@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "paper_sha": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01",
+  "parser": "dots",
+  "label": "sonnet-4.6",
+  "mode": "raw",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "claude-sonnet-4-6",
+  "temperature": "",
+  "in_tokens": 34242,
+  "out_tokens": 804,
+  "latency_s": 15.92,
+  "items": [],
+  "errors": [
+    {
+      "error": "ValueError: LLM response not parseable as {\"items\": [...]}; head: 'Looking at the spans, I need to identify reported measurements with sufficient conditions to emit them.\\n\\n**Span [24]**: Reports overpotential to achieve 0.5 mA/cm\u00b2 geo for IrO\u2093 (~210 mV) and IrO\u2082 (~33'",
+      "raw": {
+        "batch": null
+      }
+    }
+  ]
+}

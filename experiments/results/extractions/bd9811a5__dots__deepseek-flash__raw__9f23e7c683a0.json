@@ -1,0 +1,331 @@
+{
+  "schema_version": 1,
+  "paper_sha": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54",
+  "parser": "dots",
+  "label": "deepseek-flash",
+  "mode": "raw",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "deepseek-v4-flash",
+  "temperature": 0,
+  "in_tokens": 24338,
+  "out_tokens": 1011,
+  "latency_s": 5.14,
+  "items": [
+    {
+      "value": 240.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 10.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": 1.0
+        },
+        "cell_type": null,
+        "scan_rate": 5.0,
+        "catalyst_loading": 0.4,
+        "iR_correction": "applied",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": null,
+        "scan_rate_regime": "slow_LSV"
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54"
+        },
+        "page": 3,
+        "bbox_x0": 629.0,
+        "bbox_y0": 1446.0,
+        "bbox_x1": 1163.0,
+        "bbox_y1": 1559.0,
+        "source_text": "To better understand the intrinsic characteristics of the Ir-RuO\u2093 catalysts, OER activities of different as-prepared catalysts were evaluated in a rotating disk electrode (RDE) setup. According to the polarization curves (Fig. 3a), all Ir-RuO\u2093 catalysts and the pristine RuO\u2082 showed similar OER activities, with overpotentials of ~240 mV to reach 10 mA cm\u207b\u00b2.",
+        "parser_name": "dots"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 1500.0,
+      "unit_label": "h",
+      "condition": {
+        "current_density": 2000.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": 25.0,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "not_applied",
+        "normalization_basis": null,
+        "cell_type_family": "single_cell_MEA",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54"
+        },
+        "page": 1,
+        "bbox_x0": 445.0,
+        "bbox_y0": 682.0,
+        "bbox_x1": 1164.0,
+        "bbox_y1": 1559.0,
+        "source_text": "While mixing iridium (Ir) with ruthenium oxide (RuO\u2082) has proven to be an effective strategy for reducing Ir loading in anode catalysts for proton-exchange membrane (PEM) water electrolyses, achieving industrially relevant long-term stability typically requires an Ir-rich, Ru-lean combination. Here, by combining density functional theory with Metropolis Monte Carlo methods, we discovered that sufficient stabilization in the RuO\u2082 lattice could be achieved with less than 50 at.% of Ir, and that Ir in the first subsurface layer plays a critical role. By effectively dispersing Ir dopants within the RuO\u2082 lattice, we demonstrated an Ir:Ru atomic ratio of only 1:6 that exhibited exceptional stability for over 1,500 h of continuous water electrolysis at 2 A cm\u207b\u00b2. Our Ru\u2086IrO\u2093 catalyst has the potential to reduce Ir loading by 80% compared with current commercial PEM water electrolyses, and its stability was further validated under industrial testing conditions in a 25-cm\u00b2 PEM electrolyser. When Ir content was further increased to 14 at.%, the Ru\u2086IrO\u2093 became stable enough to retain the potential though the 1,500-h test with minimal degradation rate of 2.3\u20132.8 \u00b5V h\u207b\u00b9. To provide a comprehensive evaluation of the durability, the stability tests were also carried out under constant voltage, in which Ru\u2086IrO\u2093 maintained stable voltage over the testing period, while RuO\u2082 exhibited rapid deactivation (Supplementary Fig. 19). Given the supreme durability, it was not surprising that Ru dissolution plateaued at less than one-third the amount observed for Ru\u2081\u2082IrO\u2093, and Ir dissolution was barely detectable. This minimal dissolution, combined with the well-preserved structure and composition observed in the post-operation analysis (Supplementary Fig. 20 and Supplementary Table 8), demonstrated the superior structure durability and resistance of Ru\u2086IrO\u2093 to the highly acidic and oxidative environment. Stable performance of Ru\u2083IrO\u2093 and IrO\u2082 at 2 A cm\u207b\u00b2 (Supplementary Figs. 21 and 22) further supports the stabilizing effect of higher Ir content.",
+        "parser_name": "dots"
+      },
+      "type": "Stability"
+    },
+    {
+      "value": 1600.0,
+      "unit_label": "h",
+      "condition": {
+        "current_density": 2000.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": 60.0,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "not_applied",
+        "normalization_basis": null,
+        "cell_type_family": "single_cell_MEA",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54"
+        },
+        "page": 5,
+        "bbox_x0": 77.0,
+        "bbox_y0": 1041.0,
+        "bbox_x1": 613.0,
+        "bbox_y1": 1469.0,
+        "source_text": "To validate the outstanding durability of Ru<sub>6</sub>IrO<sub>x</sub> in a larger PEM electrolyser and under elevated temperature operation, our collaborators at De Nora Tech applied this catalyst to an anode in a 25-cm\u00b2 PEM water electrolyser (Fig. 4a) following their standard testing protocols (Methods). Compared with commercial iridium black (IrB), Ru<sub>6</sub>IrO<sub>x</sub> demonstrated almost identical activity up to 1 A cm<sup>-2</sup> (Fig. 4b), with slightly higher voltage above 1 A cm<sup>-2</sup> despite having only one-third of the Ir. During the 1,600-h stability test (Fig. 4d), the current was gradually raised to 50 A and maintained at this level. The voltage initially rose from 1.939 V to 2.000 V in the first 500 h, probably indicative of a catalyst layer activation process. The voltage then experienced a slow decrease and reached 1.986 V when the test had to be stopped at 1,600 h due to other uses of the device. The superior durability of Ru<sub>6</sub>IrO<sub>x</sub> is also supported by the similar electrochemical impedance spectroscopy (EIS) curves of beginning and end of tests (Fig. 4c). Compared with other reported Ir-containing acidic OER catalysts (Supplementary Table 9), Ru<sub>6</sub>IrO<sub>x</sub> not only delivered stable performance at a high current density of 2 A cm<sup>-2</sup> for over 1,500 h but also did so with dramatically lower Ir loading and weight percentage.",
+        "parser_name": "dots"
+      },
+      "type": "Stability"
+    },
+    {
+      "value": 1.939,
+      "unit_label": "V",
+      "condition": {
+        "current_density": 2000.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": 60.0,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "not_applied",
+        "normalization_basis": null,
+        "cell_type_family": "single_cell_MEA",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54"
+        },
+        "page": 5,
+        "bbox_x0": 77.0,
+        "bbox_y0": 1041.0,
+        "bbox_x1": 613.0,
+        "bbox_y1": 1469.0,
+        "source_text": "To validate the outstanding durability of Ru<sub>6</sub>IrO<sub>x</sub> in a larger PEM electrolyser and under elevated temperature operation, our collaborators at De Nora Tech applied this catalyst to an anode in a 25-cm\u00b2 PEM water electrolyser (Fig. 4a) following their standard testing protocols (Methods). Compared with commercial iridium black (IrB), Ru<sub>6</sub>IrO<sub>x</sub> demonstrated almost identical activity up to 1 A cm<sup>-2</sup> (Fig. 4b), with slightly higher voltage above 1 A cm<sup>-2</sup> despite having only one-third of the Ir. During the 1,600-h stability test (Fig. 4d), the current was gradually raised to 50 A and maintained at this level. The voltage initially rose from 1.939 V to 2.000 V in the first 500 h, probably indicative of a catalyst layer activation process. The voltage then experienced a slow decrease and reached 1.986 V when the test had to be stopped at 1,600 h due to other uses of the device. The superior durability of Ru<sub>6</sub>IrO<sub>x</sub> is also supported by the similar electrochemical impedance spectroscopy (EIS) curves of beginning and end of tests (Fig. 4c). Compared with other reported Ir-containing acidic OER catalysts (Supplementary Table 9), Ru<sub>6</sub>IrO<sub>x</sub> not only delivered stable performance at a high current density of 2 A cm<sup>-2</sup> for over 1,500 h but also did so with dramatically lower Ir loading and weight percentage.",
+        "parser_name": "dots"
+      },
+      "type": "PEMWECellVoltage"
+    },
+    {
+      "value": 2.0,
+      "unit_label": "V",
+      "condition": {
+        "current_density": 2000.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": 60.0,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "not_applied",
+        "normalization_basis": null,
+        "cell_type_family": "single_cell_MEA",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54"
+        },
+        "page": 5,
+        "bbox_x0": 77.0,
+        "bbox_y0": 1041.0,
+        "bbox_x1": 613.0,
+        "bbox_y1": 1469.0,
+        "source_text": "To validate the outstanding durability of Ru<sub>6</sub>IrO<sub>x</sub> in a larger PEM electrolyser and under elevated temperature operation, our collaborators at De Nora Tech applied this catalyst to an anode in a 25-cm\u00b2 PEM water electrolyser (Fig. 4a) following their standard testing protocols (Methods). Compared with commercial iridium black (IrB), Ru<sub>6</sub>IrO<sub>x</sub> demonstrated almost identical activity up to 1 A cm<sup>-2</sup> (Fig. 4b), with slightly higher voltage above 1 A cm<sup>-2</sup> despite having only one-third of the Ir. During the 1,600-h stability test (Fig. 4d), the current was gradually raised to 50 A and maintained at this level. The voltage initially rose from 1.939 V to 2.000 V in the first 500 h, probably indicative of a catalyst layer activation process. The voltage then experienced a slow decrease and reached 1.986 V when the test had to be stopped at 1,600 h due to other uses of the device. The superior durability of Ru<sub>6</sub>IrO<sub>x</sub> is also supported by the similar electrochemical impedance spectroscopy (EIS) curves of beginning and end of tests (Fig. 4c). Compared with other reported Ir-containing acidic OER catalysts (Supplementary Table 9), Ru<sub>6</sub>IrO<sub>x</sub> not only delivered stable performance at a high current density of 2 A cm<sup>-2</sup> for over 1,500 h but also did so with dramatically lower Ir loading and weight percentage.",
+        "parser_name": "dots"
+      },
+      "type": "PEMWECellVoltage"
+    },
+    {
+      "value": 1.986,
+      "unit_label": "V",
+      "condition": {
+        "current_density": 2000.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": 60.0,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "not_applied",
+        "normalization_basis": null,
+        "cell_type_family": "single_cell_MEA",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54"
+        },
+        "page": 5,
+        "bbox_x0": 77.0,
+        "bbox_y0": 1041.0,
+        "bbox_x1": 613.0,
+        "bbox_y1": 1469.0,
+        "source_text": "To validate the outstanding durability of Ru<sub>6</sub>IrO<sub>x</sub> in a larger PEM electrolyser and under elevated temperature operation, our collaborators at De Nora Tech applied this catalyst to an anode in a 25-cm\u00b2 PEM water electrolyser (Fig. 4a) following their standard testing protocols (Methods). Compared with commercial iridium black (IrB), Ru<sub>6</sub>IrO<sub>x</sub> demonstrated almost identical activity up to 1 A cm<sup>-2</sup> (Fig. 4b), with slightly higher voltage above 1 A cm<sup>-2</sup> despite having only one-third of the Ir. During the 1,600-h stability test (Fig. 4d), the current was gradually raised to 50 A and maintained at this level. The voltage initially rose from 1.939 V to 2.000 V in the first 500 h, probably indicative of a catalyst layer activation process. The voltage then experienced a slow decrease and reached 1.986 V when the test had to be stopped at 1,600 h due to other uses of the device. The superior durability of Ru<sub>6</sub>IrO<sub>x</sub> is also supported by the similar electrochemical impedance spectroscopy (EIS) curves of beginning and end of tests (Fig. 4c). Compared with other reported Ir-containing acidic OER catalysts (Supplementary Table 9), Ru<sub>6</sub>IrO<sub>x</sub> not only delivered stable performance at a high current density of 2 A cm<sup>-2</sup> for over 1,500 h but also did so with dramatically lower Ir loading and weight percentage.",
+        "parser_name": "dots"
+      },
+      "type": "PEMWECellVoltage"
+    },
+    {
+      "value": 200.0,
+      "unit_label": "h",
+      "condition": {
+        "current_density": 2000.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": 25.0,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "not_applied",
+        "normalization_basis": null,
+        "cell_type_family": "single_cell_MEA",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54"
+        },
+        "page": 4,
+        "bbox_x0": 77.0,
+        "bbox_y0": 1468.0,
+        "bbox_x1": 612.0,
+        "bbox_y1": 1559.0,
+        "source_text": "By contrast, a small fraction of Ir incorporation started to induce a notable improvement in operation durability. For example, the Ru\u2082\u2084IrO\u2093 catalyst maintained its cell voltage for over 200 h. However, its deficient stability was reflected in dissolution test results, as neither Ir nor Ru",
+        "parser_name": "dots"
+      },
+      "type": "Stability"
+    },
+    {
+      "value": 1000.0,
+      "unit_label": "h",
+      "condition": {
+        "current_density": 2000.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": 25.0,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "not_applied",
+        "normalization_basis": null,
+        "cell_type_family": "single_cell_MEA",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54"
+        },
+        "page": 4,
+        "bbox_x0": 629.0,
+        "bbox_y0": 974.0,
+        "bbox_x1": 1164.0,
+        "bbox_y1": 1200.0,
+        "source_text": "A major improvement was observed with Ru\u2081\u2082IrO\u2093, which showed voltage degradation ranging from 32 mV to 126 mV over 1,000 h. As suggested by the simulation results, if a catalyst has an Ir level near the threshold required to stabilize sufficient surface Ru atoms, its stability can become sensitive to subtle changes in Ir distribution. This sensitivity may explain the discrepancies in degradation rates observed between different batches of Ru\u2081\u2082IrO\u2093. An impressive suppression in dissolution was observed in Ru\u2081\u2082IrO\u2093, as both Ir and Ru dissolution readily reached equilibrium, which were 0.5 \u00b5g mgtr\u207b\u00b9 and 20 \u00b5g mgRu\u207b\u00b9, respectively.",
+        "parser_name": "dots"
+      },
+      "type": "Stability"
+    }
+  ],
+  "errors": [
+    {
+      "error": "ValueError: likely mis-citation for DegradationRate: value 0.0023 not found in cited span(s)",
+      "raw": {
+        "type": "DegradationRate",
+        "value": 0.0023,
+        "unit_label": "mV/h",
+        "condition": {
+          "current_density": 2000,
+          "cell_type_family": "single_cell_MEA",
+          "iR_correction": "not_applied",
+          "temperature_C": 25
+        },
+        "evidence": {
+          "spans": [
+            49
+          ]
+        }
+      }
+    },
+    {
+      "error": "ValueError: likely mis-citation for DegradationRate: value 0.0028 not found in cited span(s)",
+      "raw": {
+        "type": "DegradationRate",
+        "value": 0.0028,
+        "unit_label": "mV/h",
+        "condition": {
+          "current_density": 2000,
+          "cell_type_family": "single_cell_MEA",
+          "iR_correction": "not_applied",
+          "temperature_C": 25
+        },
+        "evidence": {
+          "spans": [
+            49
+          ]
+        }
+      }
+    }
+  ]
+}

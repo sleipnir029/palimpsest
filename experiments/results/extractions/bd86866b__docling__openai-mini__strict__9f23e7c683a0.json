@@ -1,0 +1,315 @@
+{
+  "schema_version": 1,
+  "paper_sha": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01",
+  "parser": "docling",
+  "label": "openai-mini",
+  "mode": "strict",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "openai/gpt-5.4-mini",
+  "temperature": 0.0,
+  "in_tokens": 42847,
+  "out_tokens": 1135,
+  "latency_s": 7.47,
+  "items": [
+    {
+      "value": 210.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 0.5,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": "three-electrode half-cell",
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "unknown",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 2,
+        "bbox_x0": 306.141815185,
+        "bbox_y0": 537.0568085930313,
+        "bbox_x1": 562.7924033711711,
+        "bbox_y1": 421.90034628903123,
+        "source_text": "Compared with IrO2, the cyclic voltammograms of IrO x show higher redox current densities of around one order of magnitude, when normalized to the geometric area. IrO x also shows a higher activity than IrO 2 , as reflected in the overpotential required to achieve 0.5 mA cm -2 geo (~210 mV and 330 mV for IrO x and IrO 2 , respectively; Fig. 1d). IrO x shows two distinct broad redox peaks at around 0.8 and 1.2 V versus the reversible hydrogen electrode (RHE). By contrast, no distinct redox peak can be observed for IrO 2 . The redox features and catalytic activity of both samples are relatively stable for 20 cycles and 2.5 h of operation (further results on the stability of the redox features, activity and morphology/ structure can be found in Supplementary Note 2).",
+        "parser_name": "docling"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 330.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 0.5,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": "three-electrode half-cell",
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "unknown",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 2,
+        "bbox_x0": 306.141815185,
+        "bbox_y0": 537.0568085930313,
+        "bbox_x1": 562.7924033711711,
+        "bbox_y1": 421.90034628903123,
+        "source_text": "Compared with IrO2, the cyclic voltammograms of IrO x show higher redox current densities of around one order of magnitude, when normalized to the geometric area. IrO x also shows a higher activity than IrO 2 , as reflected in the overpotential required to achieve 0.5 mA cm -2 geo (~210 mV and 330 mV for IrO x and IrO 2 , respectively; Fig. 1d). IrO x shows two distinct broad redox peaks at around 0.8 and 1.2 V versus the reversible hydrogen electrode (RHE). By contrast, no distinct redox peak can be observed for IrO 2 . The redox features and catalytic activity of both samples are relatively stable for 20 cycles and 2.5 h of operation (further results on the stability of the redox features, activity and morphology/ structure can be found in Supplementary Note 2).",
+        "parser_name": "docling"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 2.5,
+      "unit_label": "h",
+      "condition": {
+        "current_density": 1.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": null,
+        "cell_type": "three-electrode half-cell",
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 2,
+        "bbox_x0": 306.141815185,
+        "bbox_y0": 537.0568085930313,
+        "bbox_x1": 562.7924033711711,
+        "bbox_y1": 421.90034628903123,
+        "source_text": "Compared with IrO2, the cyclic voltammograms of IrO x show higher redox current densities of around one order of magnitude, when normalized to the geometric area. IrO x also shows a higher activity than IrO 2 , as reflected in the overpotential required to achieve 0.5 mA cm -2 geo (~210 mV and 330 mV for IrO x and IrO 2 , respectively; Fig. 1d). IrO x shows two distinct broad redox peaks at around 0.8 and 1.2 V versus the reversible hydrogen electrode (RHE). By contrast, no distinct redox peak can be observed for IrO 2 . The redox features and catalytic activity of both samples are relatively stable for 20 cycles and 2.5 h of operation (further results on the stability of the redox features, activity and morphology/ structure can be found in Supplementary Note 2).",
+        "parser_name": "docling"
+      },
+      "type": "Stability"
+    },
+    {
+      "value": 220.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": null,
+        "cell_type": "three-electrode half-cell",
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "unknown",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 1,
+        "bbox_x0": 39.685001373,
+        "bbox_y0": 128.55693066403126,
+        "bbox_x1": 296.3321092124289,
+        "bbox_y1": 99.40034628903129,
+        "source_text": "A number of iridium-based oxides have been studied, ranging from crystalline rutile oxides, amorphous oxides and alloyed oxides 9-12 to perovskites 13,14 .  The catalytic activity is usually compared by normalizing the current density to the geometric area or the mass of iridium. Amorphous IrO x is more active but less stable than crystalline rutile IrO 2 , and shows a 220 mV reduction in overpotential as well as an approximately two orders of magnitude lower lifetime at 1 mA cm -2 geo (ref. 8). Recent studies on highly active IrNiO x (refs. 10,11), Li-IrO x (ref. 9) and SrIrO x (refs. 8,13,15) have demonstrated that the surface of these materials is converted to an amorphous phase on exposure to oxygen evolution reaction (OER) potentials. Amorphous IrO x is easier to oxidize and undergoes greater Ir-O bond shortening with increased potential compared with crystalline IrO 2 (refs. 9,10,16,17). These differences in coordination environment of the iridium centre have been suggested to influence the binding energetics of key OER intermediates, possibly resulting in the differences in activity observed 11,16,18-21 . However, the detailed mechanistic origins of the differences in activity between amorphous IrO x and rutile IrO 2 remain poorly understood.",
+        "parser_name": "docling"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 35.0,
+      "unit_label": "A/g",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": "three-electrode half-cell",
+        "scan_rate": null,
+        "catalyst_loading": 0.08,
+        "iR_correction": "unknown",
+        "normalization_basis": "mass",
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 10,
+        "bbox_x0": 39.68240070575001,
+        "bbox_y0": 741.3069306640313,
+        "bbox_x1": 296.2990236307934,
+        "bbox_y1": 560.684527203435,
+        "source_text": "\u226599.0%). The volume of the solution was then increased to 50 ml by adding more water (20 ml). The solution was left to rest for four days at 35 \u00b0C and then stored in a refrigerator at 4 \u00b0C. The electrodeposition of IrO x was conducted with a typical three-electrode set-up using this solution. A clean FTO glass substrate was used as the working electrode, and a platinum mesh and Ag/AgCl were used as the counter and reference electrodes, respectively. Polyimide tape was attached to the FTO surface to limit the conductive surface to ~1 \u00d7 1 cm. The electrodeposition was carried out by applying an anodic current density of 35 \u00b5A cm -2 for 1,000 s. The mass loading of the obtained IrO x was around 80 \u00b5g cm -2 . For ToF-SIMS and XPS measurements, IrO x was deposited on a titanium substrate for a longer deposition time of 12,000 s to obtain a thicker layer sample. SEM images were obtained from the sample deposited on both titanium substrates and FTO substrates. Rutile IrO 2 is obtained via thermal annealing of the IrO x sample in the atmosphere at 550 \u00b0C for 8 h, at a heating rate of 10 \u00b0C min -1 . Thus, rutile IrO 2 sample has the same iridium mass loading as the amorphous IrO x sample.",
+        "parser_name": "docling"
+      },
+      "type": "MassActivity"
+    }
+  ],
+  "errors": [
+    {
+      "error": "ValueError: likely mis-citation for Stability: value 2.5 not found in cited span(s)",
+      "raw": {
+        "type": "Stability",
+        "value": 2.5,
+        "unit_label": "h",
+        "condition": {
+          "catalyst_loading": null,
+          "cell_type": "three-electrode half-cell",
+          "cell_type_family": "RDE",
+          "current_density": 1.0,
+          "electrode_potential_vs_rhe": null,
+          "electrolyte": null,
+          "electrolyte_family": null,
+          "iR_correction": null,
+          "normalization_basis": "geometric",
+          "scan_rate": null,
+          "scan_rate_regime": null,
+          "temperature_C": null
+        },
+        "evidence": {
+          "spans": [
+            11
+          ]
+        }
+      }
+    },
+    {
+      "error": "ValueError: likely mis-citation for Overpotential: value 210 not found in cited span(s)",
+      "raw": {
+        "type": "Overpotential",
+        "value": 210,
+        "unit_label": "mV",
+        "condition": {
+          "catalyst_loading": null,
+          "cell_type": "three-electrode half-cell",
+          "cell_type_family": "RDE",
+          "current_density": 0.5,
+          "electrode_potential_vs_rhe": null,
+          "electrolyte": {
+            "concentration": 0.1,
+            "electrolyte_ph": null,
+            "formula": "HClO4"
+          },
+          "electrolyte_family": "acid",
+          "iR_correction": "unknown",
+          "normalization_basis": "geometric",
+          "scan_rate": 1.0,
+          "scan_rate_regime": "slow_LSV",
+          "temperature_C": null
+        },
+        "evidence": {
+          "spans": [
+            154
+          ]
+        }
+      }
+    },
+    {
+      "error": "ValueError: likely mis-citation for Overpotential: value 330 not found in cited span(s)",
+      "raw": {
+        "type": "Overpotential",
+        "value": 330,
+        "unit_label": "mV",
+        "condition": {
+          "catalyst_loading": null,
+          "cell_type": "three-electrode half-cell",
+          "cell_type_family": "RDE",
+          "current_density": 0.5,
+          "electrode_potential_vs_rhe": null,
+          "electrolyte": {
+            "concentration": 0.1,
+            "electrolyte_ph": null,
+            "formula": "HClO4"
+          },
+          "electrolyte_family": "acid",
+          "iR_correction": "unknown",
+          "normalization_basis": "geometric",
+          "scan_rate": 1.0,
+          "scan_rate_regime": "slow_LSV",
+          "temperature_C": null
+        },
+        "evidence": {
+          "spans": [
+            154
+          ]
+        }
+      }
+    },
+    {
+      "error": "ValueError: likely mis-citation for ECSA: value 3.5e+16 not found in cited span(s)",
+      "raw": {
+        "type": "ECSA",
+        "value": 3.5e+16,
+        "unit_label": "cm2",
+        "condition": {
+          "catalyst_loading": null,
+          "cell_type": "three-electrode half-cell",
+          "cell_type_family": "RDE",
+          "current_density": null,
+          "electrode_potential_vs_rhe": null,
+          "electrolyte": null,
+          "electrolyte_family": null,
+          "iR_correction": "unknown",
+          "normalization_basis": "geometric",
+          "scan_rate": null,
+          "scan_rate_regime": null,
+          "temperature_C": null
+        },
+        "evidence": {
+          "spans": [
+            262
+          ]
+        }
+      }
+    }
+  ]
+}

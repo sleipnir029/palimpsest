@@ -1,0 +1,776 @@
+{
+  "schema_version": 1,
+  "paper_sha": "3432d04920eb6649d15d8883e64dc7f3d54700ecd5050d09e31ae286f1d4f53d",
+  "parser": "dots",
+  "label": "deepseek-pro",
+  "mode": "raw",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "deepseek-v4-pro",
+  "temperature": 0,
+  "in_tokens": 27948,
+  "out_tokens": 2626,
+  "latency_s": 21.36,
+  "items": [
+    {
+      "value": 236.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 10.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "H2SO4",
+          "concentration": 0.5,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": 5.0,
+        "catalyst_loading": 0.255,
+        "iR_correction": "applied",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": "slow_LSV"
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "3432d04920eb6649d15d8883e64dc7f3d54700ecd5050d09e31ae286f1d4f53d"
+        },
+        "page": 5,
+        "bbox_x0": 77.0,
+        "bbox_y0": 121.0,
+        "bbox_x1": 613.0,
+        "bbox_y1": 525.0,
+        "source_text": "The OER performances of Ir-Co\u2083O\u2084 and as-prepared Co\u2083O\u2084 in 0.5 M H\u2082SO\u2084 were investigated on glassy carbon electrode (GCE) together with the commercial IrO\u2082 and commercial Co\u2083O\u2084 (denoted as IrO\u2082 and C-Co\u2083O\u2084, respectively) for comparison (Supplementary Fig. 11). All measured potentials in this study were calibrated to the reversible hydrogen electrode (RHE) scale (Supplementary Fig. 12). As shown in Supplementary Fig. 13, Ir-Co\u2083O\u2084 exhibits a negatively shifted Co redox peak (III/IV) in the cyclic voltammetry (CV) curves compared to the Co\u2083O\u2084, indicating the isolated Ir sites can expedite the proton-electron transfer-mediated activation of Co to OER-active Co\u2074\u207a\u2075\u00b3. As expected, Ir-Co\u2083O\u2084 exhibits the best OER performances among all studied samples. In terms of reaching the current density of 10 mA cm\u207b\u00b2, Ir-Co\u2083O\u2084 requires an overpotential (\u03b7) of 236 mV, which is lower than that of Co\u2083O\u2084 (412 mV) and C-Co\u2083O\u2084 (511 mV). Notably, the low overpotential of Ir-Co\u2083O\u2084 even suppresses that of benchmark IrO\u2082 (298 mV) with the same amounts of catalysts loading on electrode, as shown in Fig. 3a. Likewise, Ir-Co\u2083O\u2084 displays the lowest onset potential among these catalysts, showing that it has the fastest OER activation rate (Supple-",
+        "parser_name": "dots"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 412.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 10.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "H2SO4",
+          "concentration": 0.5,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": 5.0,
+        "catalyst_loading": 0.255,
+        "iR_correction": "applied",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": "slow_LSV"
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "3432d04920eb6649d15d8883e64dc7f3d54700ecd5050d09e31ae286f1d4f53d"
+        },
+        "page": 5,
+        "bbox_x0": 77.0,
+        "bbox_y0": 121.0,
+        "bbox_x1": 613.0,
+        "bbox_y1": 525.0,
+        "source_text": "The OER performances of Ir-Co\u2083O\u2084 and as-prepared Co\u2083O\u2084 in 0.5 M H\u2082SO\u2084 were investigated on glassy carbon electrode (GCE) together with the commercial IrO\u2082 and commercial Co\u2083O\u2084 (denoted as IrO\u2082 and C-Co\u2083O\u2084, respectively) for comparison (Supplementary Fig. 11). All measured potentials in this study were calibrated to the reversible hydrogen electrode (RHE) scale (Supplementary Fig. 12). As shown in Supplementary Fig. 13, Ir-Co\u2083O\u2084 exhibits a negatively shifted Co redox peak (III/IV) in the cyclic voltammetry (CV) curves compared to the Co\u2083O\u2084, indicating the isolated Ir sites can expedite the proton-electron transfer-mediated activation of Co to OER-active Co\u2074\u207a\u2075\u00b3. As expected, Ir-Co\u2083O\u2084 exhibits the best OER performances among all studied samples. In terms of reaching the current density of 10 mA cm\u207b\u00b2, Ir-Co\u2083O\u2084 requires an overpotential (\u03b7) of 236 mV, which is lower than that of Co\u2083O\u2084 (412 mV) and C-Co\u2083O\u2084 (511 mV). Notably, the low overpotential of Ir-Co\u2083O\u2084 even suppresses that of benchmark IrO\u2082 (298 mV) with the same amounts of catalysts loading on electrode, as shown in Fig. 3a. Likewise, Ir-Co\u2083O\u2084 displays the lowest onset potential among these catalysts, showing that it has the fastest OER activation rate (Supple-",
+        "parser_name": "dots"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 298.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 10.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "H2SO4",
+          "concentration": 0.5,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": 5.0,
+        "catalyst_loading": 0.255,
+        "iR_correction": "applied",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": "slow_LSV"
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "3432d04920eb6649d15d8883e64dc7f3d54700ecd5050d09e31ae286f1d4f53d"
+        },
+        "page": 5,
+        "bbox_x0": 77.0,
+        "bbox_y0": 121.0,
+        "bbox_x1": 613.0,
+        "bbox_y1": 525.0,
+        "source_text": "The OER performances of Ir-Co\u2083O\u2084 and as-prepared Co\u2083O\u2084 in 0.5 M H\u2082SO\u2084 were investigated on glassy carbon electrode (GCE) together with the commercial IrO\u2082 and commercial Co\u2083O\u2084 (denoted as IrO\u2082 and C-Co\u2083O\u2084, respectively) for comparison (Supplementary Fig. 11). All measured potentials in this study were calibrated to the reversible hydrogen electrode (RHE) scale (Supplementary Fig. 12). As shown in Supplementary Fig. 13, Ir-Co\u2083O\u2084 exhibits a negatively shifted Co redox peak (III/IV) in the cyclic voltammetry (CV) curves compared to the Co\u2083O\u2084, indicating the isolated Ir sites can expedite the proton-electron transfer-mediated activation of Co to OER-active Co\u2074\u207a\u2075\u00b3. As expected, Ir-Co\u2083O\u2084 exhibits the best OER performances among all studied samples. In terms of reaching the current density of 10 mA cm\u207b\u00b2, Ir-Co\u2083O\u2084 requires an overpotential (\u03b7) of 236 mV, which is lower than that of Co\u2083O\u2084 (412 mV) and C-Co\u2083O\u2084 (511 mV). Notably, the low overpotential of Ir-Co\u2083O\u2084 even suppresses that of benchmark IrO\u2082 (298 mV) with the same amounts of catalysts loading on electrode, as shown in Fig. 3a. Likewise, Ir-Co\u2083O\u2084 displays the lowest onset potential among these catalysts, showing that it has the fastest OER activation rate (Supple-",
+        "parser_name": "dots"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 511.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 10.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "H2SO4",
+          "concentration": 0.5,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": 5.0,
+        "catalyst_loading": 0.255,
+        "iR_correction": "applied",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": "slow_LSV"
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "3432d04920eb6649d15d8883e64dc7f3d54700ecd5050d09e31ae286f1d4f53d"
+        },
+        "page": 5,
+        "bbox_x0": 77.0,
+        "bbox_y0": 121.0,
+        "bbox_x1": 613.0,
+        "bbox_y1": 525.0,
+        "source_text": "The OER performances of Ir-Co\u2083O\u2084 and as-prepared Co\u2083O\u2084 in 0.5 M H\u2082SO\u2084 were investigated on glassy carbon electrode (GCE) together with the commercial IrO\u2082 and commercial Co\u2083O\u2084 (denoted as IrO\u2082 and C-Co\u2083O\u2084, respectively) for comparison (Supplementary Fig. 11). All measured potentials in this study were calibrated to the reversible hydrogen electrode (RHE) scale (Supplementary Fig. 12). As shown in Supplementary Fig. 13, Ir-Co\u2083O\u2084 exhibits a negatively shifted Co redox peak (III/IV) in the cyclic voltammetry (CV) curves compared to the Co\u2083O\u2084, indicating the isolated Ir sites can expedite the proton-electron transfer-mediated activation of Co to OER-active Co\u2074\u207a\u2075\u00b3. As expected, Ir-Co\u2083O\u2084 exhibits the best OER performances among all studied samples. In terms of reaching the current density of 10 mA cm\u207b\u00b2, Ir-Co\u2083O\u2084 requires an overpotential (\u03b7) of 236 mV, which is lower than that of Co\u2083O\u2084 (412 mV) and C-Co\u2083O\u2084 (511 mV). Notably, the low overpotential of Ir-Co\u2083O\u2084 even suppresses that of benchmark IrO\u2082 (298 mV) with the same amounts of catalysts loading on electrode, as shown in Fig. 3a. Likewise, Ir-Co\u2083O\u2084 displays the lowest onset potential among these catalysts, showing that it has the fastest OER activation rate (Supple-",
+        "parser_name": "dots"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 52.6,
+      "unit_label": "mV/decade",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "H2SO4",
+          "concentration": 0.5,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "applied",
+        "normalization_basis": null,
+        "cell_type_family": null,
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "3432d04920eb6649d15d8883e64dc7f3d54700ecd5050d09e31ae286f1d4f53d"
+        },
+        "page": 5,
+        "bbox_x0": 628.0,
+        "bbox_y0": 98.0,
+        "bbox_x1": 1165.0,
+        "bbox_y1": 525.0,
+        "source_text": "mentary Fig. 14). The LSV curves of those catalysts without iR com-\npensation are also displayed in Supplementary Fig. 15. In addition, the\noutstanding OER activity of Ir-Co\u2083O\u2084 is also reflected by the smallest\nTafel slope of 52.6 mV dec\u207b\u00b9 compared to that of IrO\u2082 (75.8 mV dec\u207b\u00b9),\nCo\u2083O\u2084 (109.8 mV dec\u207b\u00b9) and C-Co\u2083O\u2084 (131.3 mV dec\u207b\u00b9), indicating that\nthe OER kinetic of Ir-Co\u2083O\u2084 is significantly accelerated (Fig. 3b). Cor-\nresponding graphs that plot the Tafel slope as a function of the over-\npotential on these catalysts are depicted in Supplementary Fig. 16,\nfrom which the boundary between kinetically-limited and mass trans-\nport limited currents can be clear distinguished. An obvious tendency\nof the boundary is followed as: Ir-Co\u2083O\u2084 < IrO\u2082 < Co\u2083O\u2084 < C-Co\u2083O\u2084. The\nevaluation of an electrocatalyst system is generally assessed by two key\nfactors: specific activity and turnover frequency (TOF). The electro-\nchemical active surface area (ECSA) was firstly estimated from the\ndouble-layer capacitance (C<sub>dl</sub>) measurements as shown in Supple-\nmentary Fig. 17<sup>54</sup>. By normalizing the OER current to ECSA at \u03b7 =\n300 mV, Ir-Co\u2083O\u2084 shows the highest specific activity (0.098 mA cm\n\u207b\u00b2<sup>-2</sup>ECSA), almost 2.8 and 9.8 times higher than those of IrO\u2082 (0.035 mA\ncm\u207b\u00b2<sup>-2</sup>ECSA) and Co\u2083O\u2084 (0.01 mA cm\u207b\u00b2<sup>-2</sup>ECSA). Moreover, Ir-Co\u2083O\u2084 delivers a",
+        "parser_name": "dots"
+      },
+      "type": "TafelSlope"
+    },
+    {
+      "value": 75.8,
+      "unit_label": "mV/decade",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "H2SO4",
+          "concentration": 0.5,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "applied",
+        "normalization_basis": null,
+        "cell_type_family": null,
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "3432d04920eb6649d15d8883e64dc7f3d54700ecd5050d09e31ae286f1d4f53d"
+        },
+        "page": 5,
+        "bbox_x0": 628.0,
+        "bbox_y0": 98.0,
+        "bbox_x1": 1165.0,
+        "bbox_y1": 525.0,
+        "source_text": "mentary Fig. 14). The LSV curves of those catalysts without iR com-\npensation are also displayed in Supplementary Fig. 15. In addition, the\noutstanding OER activity of Ir-Co\u2083O\u2084 is also reflected by the smallest\nTafel slope of 52.6 mV dec\u207b\u00b9 compared to that of IrO\u2082 (75.8 mV dec\u207b\u00b9),\nCo\u2083O\u2084 (109.8 mV dec\u207b\u00b9) and C-Co\u2083O\u2084 (131.3 mV dec\u207b\u00b9), indicating that\nthe OER kinetic of Ir-Co\u2083O\u2084 is significantly accelerated (Fig. 3b). Cor-\nresponding graphs that plot the Tafel slope as a function of the over-\npotential on these catalysts are depicted in Supplementary Fig. 16,\nfrom which the boundary between kinetically-limited and mass trans-\nport limited currents can be clear distinguished. An obvious tendency\nof the boundary is followed as: Ir-Co\u2083O\u2084 < IrO\u2082 < Co\u2083O\u2084 < C-Co\u2083O\u2084. The\nevaluation of an electrocatalyst system is generally assessed by two key\nfactors: specific activity and turnover frequency (TOF). The electro-\nchemical active surface area (ECSA) was firstly estimated from the\ndouble-layer capacitance (C<sub>dl</sub>) measurements as shown in Supple-\nmentary Fig. 17<sup>54</sup>. By normalizing the OER current to ECSA at \u03b7 =\n300 mV, Ir-Co\u2083O\u2084 shows the highest specific activity (0.098 mA cm\n\u207b\u00b2<sup>-2</sup>ECSA), almost 2.8 and 9.8 times higher than those of IrO\u2082 (0.035 mA\ncm\u207b\u00b2<sup>-2</sup>ECSA) and Co\u2083O\u2084 (0.01 mA cm\u207b\u00b2<sup>-2</sup>ECSA). Moreover, Ir-Co\u2083O\u2084 delivers a",
+        "parser_name": "dots"
+      },
+      "type": "TafelSlope"
+    },
+    {
+      "value": 109.8,
+      "unit_label": "mV/decade",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "H2SO4",
+          "concentration": 0.5,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "applied",
+        "normalization_basis": null,
+        "cell_type_family": null,
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "3432d04920eb6649d15d8883e64dc7f3d54700ecd5050d09e31ae286f1d4f53d"
+        },
+        "page": 5,
+        "bbox_x0": 628.0,
+        "bbox_y0": 98.0,
+        "bbox_x1": 1165.0,
+        "bbox_y1": 525.0,
+        "source_text": "mentary Fig. 14). The LSV curves of those catalysts without iR com-\npensation are also displayed in Supplementary Fig. 15. In addition, the\noutstanding OER activity of Ir-Co\u2083O\u2084 is also reflected by the smallest\nTafel slope of 52.6 mV dec\u207b\u00b9 compared to that of IrO\u2082 (75.8 mV dec\u207b\u00b9),\nCo\u2083O\u2084 (109.8 mV dec\u207b\u00b9) and C-Co\u2083O\u2084 (131.3 mV dec\u207b\u00b9), indicating that\nthe OER kinetic of Ir-Co\u2083O\u2084 is significantly accelerated (Fig. 3b). Cor-\nresponding graphs that plot the Tafel slope as a function of the over-\npotential on these catalysts are depicted in Supplementary Fig. 16,\nfrom which the boundary between kinetically-limited and mass trans-\nport limited currents can be clear distinguished. An obvious tendency\nof the boundary is followed as: Ir-Co\u2083O\u2084 < IrO\u2082 < Co\u2083O\u2084 < C-Co\u2083O\u2084. The\nevaluation of an electrocatalyst system is generally assessed by two key\nfactors: specific activity and turnover frequency (TOF). The electro-\nchemical active surface area (ECSA) was firstly estimated from the\ndouble-layer capacitance (C<sub>dl</sub>) measurements as shown in Supple-\nmentary Fig. 17<sup>54</sup>. By normalizing the OER current to ECSA at \u03b7 =\n300 mV, Ir-Co\u2083O\u2084 shows the highest specific activity (0.098 mA cm\n\u207b\u00b2<sup>-2</sup>ECSA), almost 2.8 and 9.8 times higher than those of IrO\u2082 (0.035 mA\ncm\u207b\u00b2<sup>-2</sup>ECSA) and Co\u2083O\u2084 (0.01 mA cm\u207b\u00b2<sup>-2</sup>ECSA). Moreover, Ir-Co\u2083O\u2084 delivers a",
+        "parser_name": "dots"
+      },
+      "type": "TafelSlope"
+    },
+    {
+      "value": 131.3,
+      "unit_label": "mV/decade",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "H2SO4",
+          "concentration": 0.5,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "applied",
+        "normalization_basis": null,
+        "cell_type_family": null,
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "3432d04920eb6649d15d8883e64dc7f3d54700ecd5050d09e31ae286f1d4f53d"
+        },
+        "page": 5,
+        "bbox_x0": 628.0,
+        "bbox_y0": 98.0,
+        "bbox_x1": 1165.0,
+        "bbox_y1": 525.0,
+        "source_text": "mentary Fig. 14). The LSV curves of those catalysts without iR com-\npensation are also displayed in Supplementary Fig. 15. In addition, the\noutstanding OER activity of Ir-Co\u2083O\u2084 is also reflected by the smallest\nTafel slope of 52.6 mV dec\u207b\u00b9 compared to that of IrO\u2082 (75.8 mV dec\u207b\u00b9),\nCo\u2083O\u2084 (109.8 mV dec\u207b\u00b9) and C-Co\u2083O\u2084 (131.3 mV dec\u207b\u00b9), indicating that\nthe OER kinetic of Ir-Co\u2083O\u2084 is significantly accelerated (Fig. 3b). Cor-\nresponding graphs that plot the Tafel slope as a function of the over-\npotential on these catalysts are depicted in Supplementary Fig. 16,\nfrom which the boundary between kinetically-limited and mass trans-\nport limited currents can be clear distinguished. An obvious tendency\nof the boundary is followed as: Ir-Co\u2083O\u2084 < IrO\u2082 < Co\u2083O\u2084 < C-Co\u2083O\u2084. The\nevaluation of an electrocatalyst system is generally assessed by two key\nfactors: specific activity and turnover frequency (TOF). The electro-\nchemical active surface area (ECSA) was firstly estimated from the\ndouble-layer capacitance (C<sub>dl</sub>) measurements as shown in Supple-\nmentary Fig. 17<sup>54</sup>. By normalizing the OER current to ECSA at \u03b7 =\n300 mV, Ir-Co\u2083O\u2084 shows the highest specific activity (0.098 mA cm\n\u207b\u00b2<sup>-2</sup>ECSA), almost 2.8 and 9.8 times higher than those of IrO\u2082 (0.035 mA\ncm\u207b\u00b2<sup>-2</sup>ECSA) and Co\u2083O\u2084 (0.01 mA cm\u207b\u00b2<sup>-2</sup>ECSA). Moreover, Ir-Co\u2083O\u2084 delivers a",
+        "parser_name": "dots"
+      },
+      "type": "TafelSlope"
+    },
+    {
+      "value": 0.098,
+      "unit_label": "mA/cm2",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": 1.53,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "H2SO4",
+          "concentration": 0.5,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": "ECSA",
+        "cell_type_family": null,
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "3432d04920eb6649d15d8883e64dc7f3d54700ecd5050d09e31ae286f1d4f53d"
+        },
+        "page": 5,
+        "bbox_x0": 628.0,
+        "bbox_y0": 98.0,
+        "bbox_x1": 1165.0,
+        "bbox_y1": 525.0,
+        "source_text": "mentary Fig. 14). The LSV curves of those catalysts without iR com-\npensation are also displayed in Supplementary Fig. 15. In addition, the\noutstanding OER activity of Ir-Co\u2083O\u2084 is also reflected by the smallest\nTafel slope of 52.6 mV dec\u207b\u00b9 compared to that of IrO\u2082 (75.8 mV dec\u207b\u00b9),\nCo\u2083O\u2084 (109.8 mV dec\u207b\u00b9) and C-Co\u2083O\u2084 (131.3 mV dec\u207b\u00b9), indicating that\nthe OER kinetic of Ir-Co\u2083O\u2084 is significantly accelerated (Fig. 3b). Cor-\nresponding graphs that plot the Tafel slope as a function of the over-\npotential on these catalysts are depicted in Supplementary Fig. 16,\nfrom which the boundary between kinetically-limited and mass trans-\nport limited currents can be clear distinguished. An obvious tendency\nof the boundary is followed as: Ir-Co\u2083O\u2084 < IrO\u2082 < Co\u2083O\u2084 < C-Co\u2083O\u2084. The\nevaluation of an electrocatalyst system is generally assessed by two key\nfactors: specific activity and turnover frequency (TOF). The electro-\nchemical active surface area (ECSA) was firstly estimated from the\ndouble-layer capacitance (C<sub>dl</sub>) measurements as shown in Supple-\nmentary Fig. 17<sup>54</sup>. By normalizing the OER current to ECSA at \u03b7 =\n300 mV, Ir-Co\u2083O\u2084 shows the highest specific activity (0.098 mA cm\n\u207b\u00b2<sup>-2</sup>ECSA), almost 2.8 and 9.8 times higher than those of IrO\u2082 (0.035 mA\ncm\u207b\u00b2<sup>-2</sup>ECSA) and Co\u2083O\u2084 (0.01 mA cm\u207b\u00b2<sup>-2</sup>ECSA). Moreover, Ir-Co\u2083O\u2084 delivers a",
+        "parser_name": "dots"
+      },
+      "type": "SpecificActivity"
+    },
+    {
+      "value": 0.035,
+      "unit_label": "mA/cm2",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": 1.53,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "H2SO4",
+          "concentration": 0.5,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": "ECSA",
+        "cell_type_family": null,
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "3432d04920eb6649d15d8883e64dc7f3d54700ecd5050d09e31ae286f1d4f53d"
+        },
+        "page": 5,
+        "bbox_x0": 628.0,
+        "bbox_y0": 98.0,
+        "bbox_x1": 1165.0,
+        "bbox_y1": 525.0,
+        "source_text": "mentary Fig. 14). The LSV curves of those catalysts without iR com-\npensation are also displayed in Supplementary Fig. 15. In addition, the\noutstanding OER activity of Ir-Co\u2083O\u2084 is also reflected by the smallest\nTafel slope of 52.6 mV dec\u207b\u00b9 compared to that of IrO\u2082 (75.8 mV dec\u207b\u00b9),\nCo\u2083O\u2084 (109.8 mV dec\u207b\u00b9) and C-Co\u2083O\u2084 (131.3 mV dec\u207b\u00b9), indicating that\nthe OER kinetic of Ir-Co\u2083O\u2084 is significantly accelerated (Fig. 3b). Cor-\nresponding graphs that plot the Tafel slope as a function of the over-\npotential on these catalysts are depicted in Supplementary Fig. 16,\nfrom which the boundary between kinetically-limited and mass trans-\nport limited currents can be clear distinguished. An obvious tendency\nof the boundary is followed as: Ir-Co\u2083O\u2084 < IrO\u2082 < Co\u2083O\u2084 < C-Co\u2083O\u2084. The\nevaluation of an electrocatalyst system is generally assessed by two key\nfactors: specific activity and turnover frequency (TOF). The electro-\nchemical active surface area (ECSA) was firstly estimated from the\ndouble-layer capacitance (C<sub>dl</sub>) measurements as shown in Supple-\nmentary Fig. 17<sup>54</sup>. By normalizing the OER current to ECSA at \u03b7 =\n300 mV, Ir-Co\u2083O\u2084 shows the highest specific activity (0.098 mA cm\n\u207b\u00b2<sup>-2</sup>ECSA), almost 2.8 and 9.8 times higher than those of IrO\u2082 (0.035 mA\ncm\u207b\u00b2<sup>-2</sup>ECSA) and Co\u2083O\u2084 (0.01 mA cm\u207b\u00b2<sup>-2</sup>ECSA). Moreover, Ir-Co\u2083O\u2084 delivers a",
+        "parser_name": "dots"
+      },
+      "type": "SpecificActivity"
+    },
+    {
+      "value": 0.01,
+      "unit_label": "mA/cm2",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": 1.53,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "H2SO4",
+          "concentration": 0.5,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": "ECSA",
+        "cell_type_family": null,
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "3432d04920eb6649d15d8883e64dc7f3d54700ecd5050d09e31ae286f1d4f53d"
+        },
+        "page": 5,
+        "bbox_x0": 628.0,
+        "bbox_y0": 98.0,
+        "bbox_x1": 1165.0,
+        "bbox_y1": 525.0,
+        "source_text": "mentary Fig. 14). The LSV curves of those catalysts without iR com-\npensation are also displayed in Supplementary Fig. 15. In addition, the\noutstanding OER activity of Ir-Co\u2083O\u2084 is also reflected by the smallest\nTafel slope of 52.6 mV dec\u207b\u00b9 compared to that of IrO\u2082 (75.8 mV dec\u207b\u00b9),\nCo\u2083O\u2084 (109.8 mV dec\u207b\u00b9) and C-Co\u2083O\u2084 (131.3 mV dec\u207b\u00b9), indicating that\nthe OER kinetic of Ir-Co\u2083O\u2084 is significantly accelerated (Fig. 3b). Cor-\nresponding graphs that plot the Tafel slope as a function of the over-\npotential on these catalysts are depicted in Supplementary Fig. 16,\nfrom which the boundary between kinetically-limited and mass trans-\nport limited currents can be clear distinguished. An obvious tendency\nof the boundary is followed as: Ir-Co\u2083O\u2084 < IrO\u2082 < Co\u2083O\u2084 < C-Co\u2083O\u2084. The\nevaluation of an electrocatalyst system is generally assessed by two key\nfactors: specific activity and turnover frequency (TOF). The electro-\nchemical active surface area (ECSA) was firstly estimated from the\ndouble-layer capacitance (C<sub>dl</sub>) measurements as shown in Supple-\nmentary Fig. 17<sup>54</sup>. By normalizing the OER current to ECSA at \u03b7 =\n300 mV, Ir-Co\u2083O\u2084 shows the highest specific activity (0.098 mA cm\n\u207b\u00b2<sup>-2</sup>ECSA), almost 2.8 and 9.8 times higher than those of IrO\u2082 (0.035 mA\ncm\u207b\u00b2<sup>-2</sup>ECSA) and Co\u2083O\u2084 (0.01 mA cm\u207b\u00b2<sup>-2</sup>ECSA). Moreover, Ir-Co\u2083O\u2084 delivers a",
+        "parser_name": "dots"
+      },
+      "type": "SpecificActivity"
+    },
+    {
+      "value": 1.665,
+      "unit_label": "1/s",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": 1.53,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "H2SO4",
+          "concentration": 0.5,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": "geometric",
+        "cell_type_family": null,
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "3432d04920eb6649d15d8883e64dc7f3d54700ecd5050d09e31ae286f1d4f53d"
+        },
+        "page": 6,
+        "bbox_x0": 77.0,
+        "bbox_y0": 97.0,
+        "bbox_x1": 1107.0,
+        "bbox_y1": 1168.0,
+        "source_text": "high intrinsic activity of TOF value normalized to Ir sites per geometric area of 1.665 s\u207b\u00b9, which is nearly 70-fold higher than that of IrO\u2082 (0.0237 s\u207b\u00b9) (Fig. 3c). Also, Ir-Co\u2083O\u2084 shows a higher TOF value than both Co\u2083O\u2084 and C-Co\u2083O\u2084 when normalized to Co sites per geometric area. In addition, ECSA-normalized TOF values further indicate the better intrinsic activity of Ir-Co\u2083O\u2084 (Supplementary Fig. 18). BET-normalized specific activities were calculated to exclude the morphology effects on activity assessment, in which Ir-Co\u2083O\u2084 also outperforms that of Co\u2083O\u2084 (Supplementary Fig. 19). The above results confirm the incorporated Ir single atoms can efficiently boost the catalytic performances of Co spinel oxide beyond that of the noble IrO\u2082. A synopsis of previous literatures in Fig. 3d, highlights the merits of Ir-Co\u2083O\u2084, including low overpotential and Tafel slope are shown to be superior to most reported Ir-based OER electrocatalysts (Supplementary Table 4). In addition to the consideration of catalytic performance, cost-effectiveness is also of great significance for catalysts for practical applications. Thereafter the OER polarization currents of Ir-Co\u2083O\u2084 and commercial IrO\u2082 were normalized by the loading mass of Ir at \u03b7 = 300 mV. In addition, the mass activities were calculated from the LSV on carbon paper electrodes with higher electrode surface areas (1 cm\u00b2) (Supplementary Fig. 20). As revealed in Fig. 3e, the mass activity of Ir-Co\u2083O\u2084 is 3343.37 A g\u207b\u00b9Ir, which is 51.16 times higher than that of IrO\u2082 (65.35 A g\u207b\u00b9Ir) at the overpotential of 300 mV. The superb mass activity derived from each Ir atoms indicates the remarkable economic efficiency of Ir-Co\u2083O\u2084 towards OER. Electrochemical impedance spectroscopy (EIS) measurements of these four samples were tested under the same condition, as shown in Fig. 3f. In comparison with the charge transfer resistance (Rct) among IrO\u2082 (4.18 \u03a9), Co\u2083O\u2084 (20.55 \u03a9) and C-Co\u2083O\u2084 (115.5 \u03a9), Ir-Co\u2083O\u2084 displays the smallest Rct of 2.37 \u03a9 by establishing the equivalent circuit and fitting the Nyquist plots, implying that it has the lowest charge transfer resistance and the fastest charge transfer rate for the OER reaction (Supplementary Fig. 21 & Supplementary Table 5)\u2075\u2075. $$TOF_{\\text{geo}} = \\frac{1.56 \\times 10^{15} \\frac{O_2}{\\text{cm}^2} \\text{ s}^{-1} \\text{per} \\frac{\\text{mA}}{\\text{cm}^2} \\times 58.84 \\frac{\\text{mA}}{\\text{cm}^2}}{5.51 \\times 10^{16} \\frac{\\text{site}}{\\text{cm}^2}} = 1.665 \\text{ s}^{-1}$$",
+        "parser_name": "dots"
+      },
+      "type": "TurnoverFrequency"
+    },
+    {
+      "value": 0.0237,
+      "unit_label": "1/s",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": 1.53,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "H2SO4",
+          "concentration": 0.5,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": "geometric",
+        "cell_type_family": null,
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "3432d04920eb6649d15d8883e64dc7f3d54700ecd5050d09e31ae286f1d4f53d"
+        },
+        "page": 6,
+        "bbox_x0": 77.0,
+        "bbox_y0": 97.0,
+        "bbox_x1": 613.0,
+        "bbox_y1": 837.0,
+        "source_text": "high intrinsic activity of TOF value normalized to Ir sites per geometric area of 1.665 s\u207b\u00b9, which is nearly 70-fold higher than that of IrO\u2082 (0.0237 s\u207b\u00b9) (Fig. 3c). Also, Ir-Co\u2083O\u2084 shows a higher TOF value than both Co\u2083O\u2084 and C-Co\u2083O\u2084 when normalized to Co sites per geometric area. In addition, ECSA-normalized TOF values further indicate the better intrinsic activity of Ir-Co\u2083O\u2084 (Supplementary Fig. 18). BET-normalized specific activities were calculated to exclude the morphology effects on activity assessment, in which Ir-Co\u2083O\u2084 also outperforms that of Co\u2083O\u2084 (Supplementary Fig. 19). The above results confirm the incorporated Ir single atoms can efficiently boost the catalytic performances of Co spinel oxide beyond that of the noble IrO\u2082. A synopsis of previous literatures in Fig. 3d, highlights the merits of Ir-Co\u2083O\u2084, including low overpotential and Tafel slope are shown to be superior to most reported Ir-based OER electrocatalysts (Supplementary Table 4). In addition to the consideration of catalytic performance, cost-effectiveness is also of great significance for catalysts for practical applications. Thereafter the OER polarization currents of Ir-Co\u2083O\u2084 and commercial IrO\u2082 were normalized by the loading mass of Ir at \u03b7 = 300 mV. In addition, the mass activities were calculated from the LSV on carbon paper electrodes with higher electrode surface areas (1 cm\u00b2) (Supplementary Fig. 20). As revealed in Fig. 3e, the mass activity of Ir-Co\u2083O\u2084 is 3343.37 A g\u207b\u00b9Ir, which is 51.16 times higher than that of IrO\u2082 (65.35 A g\u207b\u00b9Ir) at the overpotential of 300 mV. The superb mass activity derived from each Ir atoms indicates the remarkable economic efficiency of Ir-Co\u2083O\u2084 towards OER. Electrochemical impedance spectroscopy (EIS) measurements of these four samples were tested under the same condition, as shown in Fig. 3f. In comparison with the charge transfer resistance (Rct) among IrO\u2082 (4.18 \u03a9), Co\u2083O\u2084 (20.55 \u03a9) and C-Co\u2083O\u2084 (115.5 \u03a9), Ir-Co\u2083O\u2084 displays the smallest Rct of 2.37 \u03a9 by establishing the equivalent circuit and fitting the Nyquist plots, implying that it has the lowest charge transfer resistance and the fastest charge transfer rate for the OER reaction (Supplementary Fig. 21 & Supplementary Table 5)\u2075\u2075.",
+        "parser_name": "dots"
+      },
+      "type": "TurnoverFrequency"
+    },
+    {
+      "value": 3343.37,
+      "unit_label": "A/g",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": 1.53,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "H2SO4",
+          "concentration": 0.5,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": null,
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "3432d04920eb6649d15d8883e64dc7f3d54700ecd5050d09e31ae286f1d4f53d"
+        },
+        "page": 6,
+        "bbox_x0": 77.0,
+        "bbox_y0": 97.0,
+        "bbox_x1": 613.0,
+        "bbox_y1": 837.0,
+        "source_text": "high intrinsic activity of TOF value normalized to Ir sites per geometric area of 1.665 s\u207b\u00b9, which is nearly 70-fold higher than that of IrO\u2082 (0.0237 s\u207b\u00b9) (Fig. 3c). Also, Ir-Co\u2083O\u2084 shows a higher TOF value than both Co\u2083O\u2084 and C-Co\u2083O\u2084 when normalized to Co sites per geometric area. In addition, ECSA-normalized TOF values further indicate the better intrinsic activity of Ir-Co\u2083O\u2084 (Supplementary Fig. 18). BET-normalized specific activities were calculated to exclude the morphology effects on activity assessment, in which Ir-Co\u2083O\u2084 also outperforms that of Co\u2083O\u2084 (Supplementary Fig. 19). The above results confirm the incorporated Ir single atoms can efficiently boost the catalytic performances of Co spinel oxide beyond that of the noble IrO\u2082. A synopsis of previous literatures in Fig. 3d, highlights the merits of Ir-Co\u2083O\u2084, including low overpotential and Tafel slope are shown to be superior to most reported Ir-based OER electrocatalysts (Supplementary Table 4). In addition to the consideration of catalytic performance, cost-effectiveness is also of great significance for catalysts for practical applications. Thereafter the OER polarization currents of Ir-Co\u2083O\u2084 and commercial IrO\u2082 were normalized by the loading mass of Ir at \u03b7 = 300 mV. In addition, the mass activities were calculated from the LSV on carbon paper electrodes with higher electrode surface areas (1 cm\u00b2) (Supplementary Fig. 20). As revealed in Fig. 3e, the mass activity of Ir-Co\u2083O\u2084 is 3343.37 A g\u207b\u00b9Ir, which is 51.16 times higher than that of IrO\u2082 (65.35 A g\u207b\u00b9Ir) at the overpotential of 300 mV. The superb mass activity derived from each Ir atoms indicates the remarkable economic efficiency of Ir-Co\u2083O\u2084 towards OER. Electrochemical impedance spectroscopy (EIS) measurements of these four samples were tested under the same condition, as shown in Fig. 3f. In comparison with the charge transfer resistance (Rct) among IrO\u2082 (4.18 \u03a9), Co\u2083O\u2084 (20.55 \u03a9) and C-Co\u2083O\u2084 (115.5 \u03a9), Ir-Co\u2083O\u2084 displays the smallest Rct of 2.37 \u03a9 by establishing the equivalent circuit and fitting the Nyquist plots, implying that it has the lowest charge transfer resistance and the fastest charge transfer rate for the OER reaction (Supplementary Fig. 21 & Supplementary Table 5)\u2075\u2075.",
+        "parser_name": "dots"
+      },
+      "type": "MassActivity"
+    },
+    {
+      "value": 65.35,
+      "unit_label": "A/g",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": 1.53,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "H2SO4",
+          "concentration": 0.5,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": null,
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "3432d04920eb6649d15d8883e64dc7f3d54700ecd5050d09e31ae286f1d4f53d"
+        },
+        "page": 6,
+        "bbox_x0": 77.0,
+        "bbox_y0": 97.0,
+        "bbox_x1": 613.0,
+        "bbox_y1": 837.0,
+        "source_text": "high intrinsic activity of TOF value normalized to Ir sites per geometric area of 1.665 s\u207b\u00b9, which is nearly 70-fold higher than that of IrO\u2082 (0.0237 s\u207b\u00b9) (Fig. 3c). Also, Ir-Co\u2083O\u2084 shows a higher TOF value than both Co\u2083O\u2084 and C-Co\u2083O\u2084 when normalized to Co sites per geometric area. In addition, ECSA-normalized TOF values further indicate the better intrinsic activity of Ir-Co\u2083O\u2084 (Supplementary Fig. 18). BET-normalized specific activities were calculated to exclude the morphology effects on activity assessment, in which Ir-Co\u2083O\u2084 also outperforms that of Co\u2083O\u2084 (Supplementary Fig. 19). The above results confirm the incorporated Ir single atoms can efficiently boost the catalytic performances of Co spinel oxide beyond that of the noble IrO\u2082. A synopsis of previous literatures in Fig. 3d, highlights the merits of Ir-Co\u2083O\u2084, including low overpotential and Tafel slope are shown to be superior to most reported Ir-based OER electrocatalysts (Supplementary Table 4). In addition to the consideration of catalytic performance, cost-effectiveness is also of great significance for catalysts for practical applications. Thereafter the OER polarization currents of Ir-Co\u2083O\u2084 and commercial IrO\u2082 were normalized by the loading mass of Ir at \u03b7 = 300 mV. In addition, the mass activities were calculated from the LSV on carbon paper electrodes with higher electrode surface areas (1 cm\u00b2) (Supplementary Fig. 20). As revealed in Fig. 3e, the mass activity of Ir-Co\u2083O\u2084 is 3343.37 A g\u207b\u00b9Ir, which is 51.16 times higher than that of IrO\u2082 (65.35 A g\u207b\u00b9Ir) at the overpotential of 300 mV. The superb mass activity derived from each Ir atoms indicates the remarkable economic efficiency of Ir-Co\u2083O\u2084 towards OER. Electrochemical impedance spectroscopy (EIS) measurements of these four samples were tested under the same condition, as shown in Fig. 3f. In comparison with the charge transfer resistance (Rct) among IrO\u2082 (4.18 \u03a9), Co\u2083O\u2084 (20.55 \u03a9) and C-Co\u2083O\u2084 (115.5 \u03a9), Ir-Co\u2083O\u2084 displays the smallest Rct of 2.37 \u03a9 by establishing the equivalent circuit and fitting the Nyquist plots, implying that it has the lowest charge transfer resistance and the fastest charge transfer rate for the OER reaction (Supplementary Fig. 21 & Supplementary Table 5)\u2075\u2075.",
+        "parser_name": "dots"
+      },
+      "type": "MassActivity"
+    },
+    {
+      "value": 30.0,
+      "unit_label": "h",
+      "condition": {
+        "current_density": 10.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "H2SO4",
+          "concentration": 0.5,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "3432d04920eb6649d15d8883e64dc7f3d54700ecd5050d09e31ae286f1d4f53d"
+        },
+        "page": 6,
+        "bbox_x0": 77.0,
+        "bbox_y0": 836.0,
+        "bbox_x1": 613.0,
+        "bbox_y1": 1555.0,
+        "source_text": "In addition to the activity, durability is another crucial criterion for the electrocatalytic performance of catalysts towards OER under operating conditions. As plotted in Fig. 3g, Ir-Co\u2083O\u2084 shows long-term stability with a current density of 10 mA cm\u207b\u00b2 for almost 30 h, which is superior to that of IrO\u2082, Co\u2083O\u2084 and C-Co\u2083O\u2084 catalysts. Specifically, the commercial IrO\u2082 and as-synthesized Co\u2083O\u2084 can only maintain the current densities for nearly 15 h and 9 h, respectively, before they deactivate. CV scanning experiments further highlight that Ir-Co\u2083O\u2084 exhibits a negligible increase of overpotential after 3000 cycles, whereas both Co\u2083O\u2084 and C-Co\u2083O\u2084 lost most of their activities (Supplementary Fig. 22). Both chronopotentiometric and CV scanning measurements demonstrate that the isolated Ir single sites enable activating the spinel Co oxide more durable in harsh OER environment. Further ICP-OES investigations show that leaching occurs preferentially at the Co species in Ir-Co\u2083O\u2084, but the dissolution effect of hosting Co\u2083O\u2084 is alleviated by dispersed Ir single sites during OER reaction. In contrast, IrO\u2082, Co\u2083O\u2084 and C-Co\u2083O\u2084 suffer from severe Ir and Co ions leaching after the OER durability test (Fig. 3h & Supplementary Fig. 23)\u2075\u2076. The enhanced stability of Ir-Co\u2083O\u2084 is induced by the doped effect of Ir single atoms, which is the main reason for the observed long-term stability in the acidic medium. In addition, the morphology characterizations by means of SEM and TEM reveal that Ir-Co\u2083O\u2084 preserves the original ultrathin nanosheets with slight fractures after the chronopotentiometry at 10 mA cm\u207b\u00b2. No obvious structural changes can be found from the XRD pattern and HR-TEM images. Elemental mapping images show that Ir, Co and O elements are still homogeneously distributed over the entire Ir-Co\u2083O\u2084 sample after OER (Supplementary Fig. 24). However, both the Ir 4f and Co 2p XPS spectra of post-OER Ir-Co\u2083O\u2084 show increased valence states of Ir and Co, which is common for OER catalysts under oxidative voltages. The O 1s XPS binding energy of post-OER Ir-Co\u2083O\u2084 shifts to a more positive position, further confirming the increase of valence state on overall catalyst",
+        "parser_name": "dots"
+      },
+      "type": "Stability"
+    },
+    {
+      "value": 15.0,
+      "unit_label": "h",
+      "condition": {
+        "current_density": 10.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "H2SO4",
+          "concentration": 0.5,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "3432d04920eb6649d15d8883e64dc7f3d54700ecd5050d09e31ae286f1d4f53d"
+        },
+        "page": 6,
+        "bbox_x0": 77.0,
+        "bbox_y0": 836.0,
+        "bbox_x1": 613.0,
+        "bbox_y1": 1555.0,
+        "source_text": "In addition to the activity, durability is another crucial criterion for the electrocatalytic performance of catalysts towards OER under operating conditions. As plotted in Fig. 3g, Ir-Co\u2083O\u2084 shows long-term stability with a current density of 10 mA cm\u207b\u00b2 for almost 30 h, which is superior to that of IrO\u2082, Co\u2083O\u2084 and C-Co\u2083O\u2084 catalysts. Specifically, the commercial IrO\u2082 and as-synthesized Co\u2083O\u2084 can only maintain the current densities for nearly 15 h and 9 h, respectively, before they deactivate. CV scanning experiments further highlight that Ir-Co\u2083O\u2084 exhibits a negligible increase of overpotential after 3000 cycles, whereas both Co\u2083O\u2084 and C-Co\u2083O\u2084 lost most of their activities (Supplementary Fig. 22). Both chronopotentiometric and CV scanning measurements demonstrate that the isolated Ir single sites enable activating the spinel Co oxide more durable in harsh OER environment. Further ICP-OES investigations show that leaching occurs preferentially at the Co species in Ir-Co\u2083O\u2084, but the dissolution effect of hosting Co\u2083O\u2084 is alleviated by dispersed Ir single sites during OER reaction. In contrast, IrO\u2082, Co\u2083O\u2084 and C-Co\u2083O\u2084 suffer from severe Ir and Co ions leaching after the OER durability test (Fig. 3h & Supplementary Fig. 23)\u2075\u2076. The enhanced stability of Ir-Co\u2083O\u2084 is induced by the doped effect of Ir single atoms, which is the main reason for the observed long-term stability in the acidic medium. In addition, the morphology characterizations by means of SEM and TEM reveal that Ir-Co\u2083O\u2084 preserves the original ultrathin nanosheets with slight fractures after the chronopotentiometry at 10 mA cm\u207b\u00b2. No obvious structural changes can be found from the XRD pattern and HR-TEM images. Elemental mapping images show that Ir, Co and O elements are still homogeneously distributed over the entire Ir-Co\u2083O\u2084 sample after OER (Supplementary Fig. 24). However, both the Ir 4f and Co 2p XPS spectra of post-OER Ir-Co\u2083O\u2084 show increased valence states of Ir and Co, which is common for OER catalysts under oxidative voltages. The O 1s XPS binding energy of post-OER Ir-Co\u2083O\u2084 shifts to a more positive position, further confirming the increase of valence state on overall catalyst",
+        "parser_name": "dots"
+      },
+      "type": "Stability"
+    },
+    {
+      "value": 9.0,
+      "unit_label": "h",
+      "condition": {
+        "current_density": 10.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "H2SO4",
+          "concentration": 0.5,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "3432d04920eb6649d15d8883e64dc7f3d54700ecd5050d09e31ae286f1d4f53d"
+        },
+        "page": 6,
+        "bbox_x0": 77.0,
+        "bbox_y0": 836.0,
+        "bbox_x1": 613.0,
+        "bbox_y1": 1555.0,
+        "source_text": "In addition to the activity, durability is another crucial criterion for the electrocatalytic performance of catalysts towards OER under operating conditions. As plotted in Fig. 3g, Ir-Co\u2083O\u2084 shows long-term stability with a current density of 10 mA cm\u207b\u00b2 for almost 30 h, which is superior to that of IrO\u2082, Co\u2083O\u2084 and C-Co\u2083O\u2084 catalysts. Specifically, the commercial IrO\u2082 and as-synthesized Co\u2083O\u2084 can only maintain the current densities for nearly 15 h and 9 h, respectively, before they deactivate. CV scanning experiments further highlight that Ir-Co\u2083O\u2084 exhibits a negligible increase of overpotential after 3000 cycles, whereas both Co\u2083O\u2084 and C-Co\u2083O\u2084 lost most of their activities (Supplementary Fig. 22). Both chronopotentiometric and CV scanning measurements demonstrate that the isolated Ir single sites enable activating the spinel Co oxide more durable in harsh OER environment. Further ICP-OES investigations show that leaching occurs preferentially at the Co species in Ir-Co\u2083O\u2084, but the dissolution effect of hosting Co\u2083O\u2084 is alleviated by dispersed Ir single sites during OER reaction. In contrast, IrO\u2082, Co\u2083O\u2084 and C-Co\u2083O\u2084 suffer from severe Ir and Co ions leaching after the OER durability test (Fig. 3h & Supplementary Fig. 23)\u2075\u2076. The enhanced stability of Ir-Co\u2083O\u2084 is induced by the doped effect of Ir single atoms, which is the main reason for the observed long-term stability in the acidic medium. In addition, the morphology characterizations by means of SEM and TEM reveal that Ir-Co\u2083O\u2084 preserves the original ultrathin nanosheets with slight fractures after the chronopotentiometry at 10 mA cm\u207b\u00b2. No obvious structural changes can be found from the XRD pattern and HR-TEM images. Elemental mapping images show that Ir, Co and O elements are still homogeneously distributed over the entire Ir-Co\u2083O\u2084 sample after OER (Supplementary Fig. 24). However, both the Ir 4f and Co 2p XPS spectra of post-OER Ir-Co\u2083O\u2084 show increased valence states of Ir and Co, which is common for OER catalysts under oxidative voltages. The O 1s XPS binding energy of post-OER Ir-Co\u2083O\u2084 shifts to a more positive position, further confirming the increase of valence state on overall catalyst",
+        "parser_name": "dots"
+      },
+      "type": "Stability"
+    },
+    {
+      "value": 6.0,
+      "unit_label": "h",
+      "condition": {
+        "current_density": 50.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "H2SO4",
+          "concentration": 0.5,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "3432d04920eb6649d15d8883e64dc7f3d54700ecd5050d09e31ae286f1d4f53d"
+        },
+        "page": 6,
+        "bbox_x0": 628.0,
+        "bbox_y0": 97.0,
+        "bbox_x1": 1164.0,
+        "bbox_y1": 1040.0,
+        "source_text": "after the stability test (Supplementary Fig. 25). The stabilities of Ir-Co\u2083O\u2084 and IrO\u2082 were further tested at a higher current density of 50 mA cm\u207b\u00b2. As shown in Supplementary Fig. 26, Ir-Co\u2083O\u2084 maintains the long-term stability up to 6 h, while IrO\u2082 loses its activity after only 2 hours, further indicating the activity retention of Ir-Co\u2083O\u2084 even at a high current density. On the other hand, complex OER is always accompanied with other side reactions such as catalyst/support oxidation, material dissolution and capacitive current effects, which may lead to the overestimation of actual activity and thus it is essential to estimate the associated OER Faradaic efficiency (FE) of the catalyst\u2075\u2077. Gas chromatography (GC) was used to continuously monitor the generated O\u2082 amount and calculate the FE on Ir-Co\u2083O\u2084 over a wide range of overpotentials (Supplementary Fig. 27). As depicted in Fig. 3i, the corresponding O\u2082 production increases with the increasing OER overpotentials; the calculated FE for OER remains at almost 100% at small overpotentials but drops slightly to 97% for large overpotentials. The relatively high FE values signify that the majority of energy is applied to drive OER and almost no side reactions occur on Ir-Co\u2083O\u2084. Overall, the high electrode/intrinsic activity and electrochemical durability conjointly endow Ir-Co\u2083O\u2084 as a promising OER electrocatalyst candidate for practical applications in the acidic water electrolyzer, namely proton exchange membrane water electrolyzer. Going further, practical applications usually demand that the catalysts preparation process is contamination-free and non-toxic, as well as can easily realize gram-level preparation of catalysts in one batch\u2075\u2078. Nevertheless, traditional synthesis methods for single-atom materials, including impregnation and solvothermal strategies usually require pollution-carrying organic solvent and their productions are seriously limited. For example, the similar atomic Ir-doped Co oxides have also been reported, but in which the multistep impregnation methods they employed can only prepare the electrocatalysts with milligram-level productions\u2075\u2079,\u2076\u2070. In contrast, the mechanochemical protocol we adopted for synthesizing Ir-Co\u2083O\u2084 is environmental-friendly, adding only NaCl and NaOH for preparation besides metal precursors; the production can be readily scaled up to 2.5 g per batch. Resulting SEM, TEM, HR-TEM images, XRD pattern and SEM-EDS spectrum reveal no obvious structural and compositional changes on the mass-produced Ir-Co\u2083O\u2084. Elemental mappings show that Ir, Co and O are homogeneously distributed over the Ir-Co\u2083O\u2084. In addition, this mass-produced sample can largely maintain its original OER activity, demonstrating the potential of Ir-Co\u2083O\u2084 for application in practical water electrolyzer (Supplementary Fig. 28).",
+        "parser_name": "dots"
+      },
+      "type": "Stability"
+    },
+    {
+      "value": 2.0,
+      "unit_label": "h",
+      "condition": {
+        "current_density": 50.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "H2SO4",
+          "concentration": 0.5,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "3432d04920eb6649d15d8883e64dc7f3d54700ecd5050d09e31ae286f1d4f53d"
+        },
+        "page": 6,
+        "bbox_x0": 628.0,
+        "bbox_y0": 97.0,
+        "bbox_x1": 1164.0,
+        "bbox_y1": 1040.0,
+        "source_text": "after the stability test (Supplementary Fig. 25). The stabilities of Ir-Co\u2083O\u2084 and IrO\u2082 were further tested at a higher current density of 50 mA cm\u207b\u00b2. As shown in Supplementary Fig. 26, Ir-Co\u2083O\u2084 maintains the long-term stability up to 6 h, while IrO\u2082 loses its activity after only 2 hours, further indicating the activity retention of Ir-Co\u2083O\u2084 even at a high current density. On the other hand, complex OER is always accompanied with other side reactions such as catalyst/support oxidation, material dissolution and capacitive current effects, which may lead to the overestimation of actual activity and thus it is essential to estimate the associated OER Faradaic efficiency (FE) of the catalyst\u2075\u2077. Gas chromatography (GC) was used to continuously monitor the generated O\u2082 amount and calculate the FE on Ir-Co\u2083O\u2084 over a wide range of overpotentials (Supplementary Fig. 27). As depicted in Fig. 3i, the corresponding O\u2082 production increases with the increasing OER overpotentials; the calculated FE for OER remains at almost 100% at small overpotentials but drops slightly to 97% for large overpotentials. The relatively high FE values signify that the majority of energy is applied to drive OER and almost no side reactions occur on Ir-Co\u2083O\u2084. Overall, the high electrode/intrinsic activity and electrochemical durability conjointly endow Ir-Co\u2083O\u2084 as a promising OER electrocatalyst candidate for practical applications in the acidic water electrolyzer, namely proton exchange membrane water electrolyzer. Going further, practical applications usually demand that the catalysts preparation process is contamination-free and non-toxic, as well as can easily realize gram-level preparation of catalysts in one batch\u2075\u2078. Nevertheless, traditional synthesis methods for single-atom materials, including impregnation and solvothermal strategies usually require pollution-carrying organic solvent and their productions are seriously limited. For example, the similar atomic Ir-doped Co oxides have also been reported, but in which the multistep impregnation methods they employed can only prepare the electrocatalysts with milligram-level productions\u2075\u2079,\u2076\u2070. In contrast, the mechanochemical protocol we adopted for synthesizing Ir-Co\u2083O\u2084 is environmental-friendly, adding only NaCl and NaOH for preparation besides metal precursors; the production can be readily scaled up to 2.5 g per batch. Resulting SEM, TEM, HR-TEM images, XRD pattern and SEM-EDS spectrum reveal no obvious structural and compositional changes on the mass-produced Ir-Co\u2083O\u2084. Elemental mappings show that Ir, Co and O are homogeneously distributed over the Ir-Co\u2083O\u2084. In addition, this mass-produced sample can largely maintain its original OER activity, demonstrating the potential of Ir-Co\u2083O\u2084 for application in practical water electrolyzer (Supplementary Fig. 28).",
+        "parser_name": "dots"
+      },
+      "type": "Stability"
+    }
+  ],
+  "errors": []
+}

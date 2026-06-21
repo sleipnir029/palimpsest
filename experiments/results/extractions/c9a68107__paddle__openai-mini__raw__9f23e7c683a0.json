@@ -1,0 +1,509 @@
+{
+  "schema_version": 1,
+  "paper_sha": "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c",
+  "parser": "paddle",
+  "label": "openai-mini",
+  "mode": "raw",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "openai/gpt-5.4-mini",
+  "temperature": 0.0,
+  "in_tokens": 30472,
+  "out_tokens": 865,
+  "latency_s": 4.4,
+  "items": [
+    {
+      "value": 288.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 10.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "applied",
+        "normalization_basis": "geometric",
+        "cell_type_family": null,
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c"
+        },
+        "page": 4,
+        "bbox_x0": 604.0,
+        "bbox_y0": 933.0,
+        "bbox_x1": 1147.0,
+        "bbox_y1": 1217.0,
+        "source_text": "Electrocatalytic performance in a three-electrode confi guration The electrocatalytic activities toward OER of $\\mathrm{IrO_{2}@TaB_{2}}$ 2 were measured using a standard three-electrode configuration in $0.1\\:\\mathrm{M}\\:\\mathrm{H C l O}_{4}$ electrolyte. As the $\\mathrm{IrO}_{2}$ content increases,the electrocatalytic activity for OER increased rapidly (Fig. 4a), and reaches its optimization when the Ir content is 16 wt%. However, a further increase in the Ir content of the $\\mathrm{IrO_{2}@TaB_{2}}$ results in a slight deterioration of the electrocatalytic activity. The required overpotential to generate a current density of $10\\mathrm{m A}\\mathrm{c m}^{-2}$ (normalized over the electrode geometric area) for 16 wt%$\\mathrm{IrO_{2}@TaB_{2}}$ is 288 mV, lower than that of unsupported $\\mathrm{I r O}_{2}\\left(307\\mathrm{m V}\\right)$ The Tafel slope of 16 wt%$\\mathrm{IrO_{2}@TaB_{2}}$ 2is 42.6 mV dec-1 (Supplementary Fig. 8), close to that of unsupported $\\mathbf{I r O}_{2}$ (45.1mV dec-1),indicating that the the $\\mathsf{T a B}_{2}$ _support has no change to OER pathway of $\\mathrm{I r O}_{2}$ ",
+        "parser_name": "paddle"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 42.6,
+      "unit_label": "mV/decade",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "applied",
+        "normalization_basis": null,
+        "cell_type_family": null,
+        "electrolyte_family": "acid",
+        "scan_rate_regime": "slow_LSV"
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c"
+        },
+        "page": 4,
+        "bbox_x0": 604.0,
+        "bbox_y0": 933.0,
+        "bbox_x1": 1147.0,
+        "bbox_y1": 1217.0,
+        "source_text": "Electrocatalytic performance in a three-electrode confi guration The electrocatalytic activities toward OER of $\\mathrm{IrO_{2}@TaB_{2}}$ 2 were measured using a standard three-electrode configuration in $0.1\\:\\mathrm{M}\\:\\mathrm{H C l O}_{4}$ electrolyte. As the $\\mathrm{IrO}_{2}$ content increases,the electrocatalytic activity for OER increased rapidly (Fig. 4a), and reaches its optimization when the Ir content is 16 wt%. However, a further increase in the Ir content of the $\\mathrm{IrO_{2}@TaB_{2}}$ results in a slight deterioration of the electrocatalytic activity. The required overpotential to generate a current density of $10\\mathrm{m A}\\mathrm{c m}^{-2}$ (normalized over the electrode geometric area) for 16 wt%$\\mathrm{IrO_{2}@TaB_{2}}$ is 288 mV, lower than that of unsupported $\\mathrm{I r O}_{2}\\left(307\\mathrm{m V}\\right)$ The Tafel slope of 16 wt%$\\mathrm{IrO_{2}@TaB_{2}}$ 2is 42.6 mV dec-1 (Supplementary Fig. 8), close to that of unsupported $\\mathbf{I r O}_{2}$ (45.1mV dec-1),indicating that the the $\\mathsf{T a B}_{2}$ _support has no change to OER pathway of $\\mathrm{I r O}_{2}$ ",
+        "parser_name": "paddle"
+      },
+      "type": "TafelSlope"
+    },
+    {
+      "value": 307.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 10.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "applied",
+        "normalization_basis": "geometric",
+        "cell_type_family": null,
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c"
+        },
+        "page": 4,
+        "bbox_x0": 604.0,
+        "bbox_y0": 933.0,
+        "bbox_x1": 1147.0,
+        "bbox_y1": 1217.0,
+        "source_text": "Electrocatalytic performance in a three-electrode confi guration The electrocatalytic activities toward OER of $\\mathrm{IrO_{2}@TaB_{2}}$ 2 were measured using a standard three-electrode configuration in $0.1\\:\\mathrm{M}\\:\\mathrm{H C l O}_{4}$ electrolyte. As the $\\mathrm{IrO}_{2}$ content increases,the electrocatalytic activity for OER increased rapidly (Fig. 4a), and reaches its optimization when the Ir content is 16 wt%. However, a further increase in the Ir content of the $\\mathrm{IrO_{2}@TaB_{2}}$ results in a slight deterioration of the electrocatalytic activity. The required overpotential to generate a current density of $10\\mathrm{m A}\\mathrm{c m}^{-2}$ (normalized over the electrode geometric area) for 16 wt%$\\mathrm{IrO_{2}@TaB_{2}}$ is 288 mV, lower than that of unsupported $\\mathrm{I r O}_{2}\\left(307\\mathrm{m V}\\right)$ The Tafel slope of 16 wt%$\\mathrm{IrO_{2}@TaB_{2}}$ 2is 42.6 mV dec-1 (Supplementary Fig. 8), close to that of unsupported $\\mathbf{I r O}_{2}$ (45.1mV dec-1),indicating that the the $\\mathsf{T a B}_{2}$ _support has no change to OER pathway of $\\mathrm{I r O}_{2}$ ",
+        "parser_name": "paddle"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 45.1,
+      "unit_label": "mV/decade",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "applied",
+        "normalization_basis": null,
+        "cell_type_family": null,
+        "electrolyte_family": "acid",
+        "scan_rate_regime": "slow_LSV"
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c"
+        },
+        "page": 4,
+        "bbox_x0": 604.0,
+        "bbox_y0": 933.0,
+        "bbox_x1": 1147.0,
+        "bbox_y1": 1217.0,
+        "source_text": "Electrocatalytic performance in a three-electrode confi guration The electrocatalytic activities toward OER of $\\mathrm{IrO_{2}@TaB_{2}}$ 2 were measured using a standard three-electrode configuration in $0.1\\:\\mathrm{M}\\:\\mathrm{H C l O}_{4}$ electrolyte. As the $\\mathrm{IrO}_{2}$ content increases,the electrocatalytic activity for OER increased rapidly (Fig. 4a), and reaches its optimization when the Ir content is 16 wt%. However, a further increase in the Ir content of the $\\mathrm{IrO_{2}@TaB_{2}}$ results in a slight deterioration of the electrocatalytic activity. The required overpotential to generate a current density of $10\\mathrm{m A}\\mathrm{c m}^{-2}$ (normalized over the electrode geometric area) for 16 wt%$\\mathrm{IrO_{2}@TaB_{2}}$ is 288 mV, lower than that of unsupported $\\mathrm{I r O}_{2}\\left(307\\mathrm{m V}\\right)$ The Tafel slope of 16 wt%$\\mathrm{IrO_{2}@TaB_{2}}$ 2is 42.6 mV dec-1 (Supplementary Fig. 8), close to that of unsupported $\\mathbf{I r O}_{2}$ (45.1mV dec-1),indicating that the the $\\mathsf{T a B}_{2}$ _support has no change to OER pathway of $\\mathrm{I r O}_{2}$ ",
+        "parser_name": "paddle"
+      },
+      "type": "TafelSlope"
+    },
+    {
+      "value": 5.2,
+      "unit_label": "mA/cm2",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": 1.53,
+        "temperature_C": null,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": "ECSA",
+        "cell_type_family": null,
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c"
+        },
+        "page": 4,
+        "bbox_x0": 602.0,
+        "bbox_y0": 1219.0,
+        "bbox_x1": 1152.0,
+        "bbox_y1": 1530.0,
+        "source_text": "Electrochemical double layer capacitance (DLC) measurements were carried out to obtain the electrochemically active surface area $\\left(\\mathrm{E C S A}\\right)\\mathrm{o f}\\mathrm{I r O}_{2}@\\mathrm{T a B}_{2}$ by estimating the accumulated charge amount at the electrode surface. Generally, the ECSA values become larger with increasing Ir content in $\\mathrm{IrO_{2}@TaB_{2}}$ 2 (Fig. 4b, left and Supplementary Table 6). In order to compare the intrinsic activities of different catalysts, we normalized the measured currents by the ECSAs (Fig. 4b,right). The 16 wt%$\\mathrm{IrO_{2}@TaB_{2}}$ presents the highest current density $(j_{ECSA})$ at 1.53V versus reversible hydrogen electrode (RHE) among these $\\mathrm{IrO_{2}@TaB_{2}}$ ,samples, which is 5.2 times larger than that of $\\mathbf{I r O}_{2},$ We further compared the iridium mass activities of $\\mathrm{IrO_{2}@TaB_{2}}$ and $\\mathrm{I r O}_{2}$ by normalizing the measured currents over the mass of iridium $(j_{\\mathrm{i r}})$ . Although 16%$\\mathrm{IrO_{2}@TaB_{2}}$ has 70 wt% less iridium relative to $\\mathbf{I r O}_{2}$ ,it displays a high iridium mass activity of $345\\mathrm{A g^{-1}}$ at $1.53\\mathrm{V}$ versus RHE ",
+        "parser_name": "paddle"
+      },
+      "type": "SpecificActivity"
+    },
+    {
+      "value": 345.0,
+      "unit_label": "A/g",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": 1.53,
+        "temperature_C": null,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": null,
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c"
+        },
+        "page": 4,
+        "bbox_x0": 602.0,
+        "bbox_y0": 1219.0,
+        "bbox_x1": 1152.0,
+        "bbox_y1": 1530.0,
+        "source_text": "Electrochemical double layer capacitance (DLC) measurements were carried out to obtain the electrochemically active surface area $\\left(\\mathrm{E C S A}\\right)\\mathrm{o f}\\mathrm{I r O}_{2}@\\mathrm{T a B}_{2}$ by estimating the accumulated charge amount at the electrode surface. Generally, the ECSA values become larger with increasing Ir content in $\\mathrm{IrO_{2}@TaB_{2}}$ 2 (Fig. 4b, left and Supplementary Table 6). In order to compare the intrinsic activities of different catalysts, we normalized the measured currents by the ECSAs (Fig. 4b,right). The 16 wt%$\\mathrm{IrO_{2}@TaB_{2}}$ presents the highest current density $(j_{ECSA})$ at 1.53V versus reversible hydrogen electrode (RHE) among these $\\mathrm{IrO_{2}@TaB_{2}}$ ,samples, which is 5.2 times larger than that of $\\mathbf{I r O}_{2},$ We further compared the iridium mass activities of $\\mathrm{IrO_{2}@TaB_{2}}$ and $\\mathrm{I r O}_{2}$ by normalizing the measured currents over the mass of iridium $(j_{\\mathrm{i r}})$ . Although 16%$\\mathrm{IrO_{2}@TaB_{2}}$ has 70 wt% less iridium relative to $\\mathbf{I r O}_{2}$ ,it displays a high iridium mass activity of $345\\mathrm{A g^{-1}}$ at $1.53\\mathrm{V}$ versus RHE ",
+        "parser_name": "paddle"
+      },
+      "type": "MassActivity"
+    },
+    {
+      "value": 57.3,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 1.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": null,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "unknown",
+        "normalization_basis": "geometric",
+        "cell_type_family": null,
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c"
+        },
+        "page": 5,
+        "bbox_x0": 601.0,
+        "bbox_y0": 1373.0,
+        "bbox_x1": 1161.0,
+        "bbox_y1": 1526.0,
+        "source_text": "To investigate the catalytic mechanism, OER performance of $\\mathrm{IrO}_{2}@\\mathrm{TaB}_{2}\\text{and}\\mathrm{IrO}_{2}$ :were examined in $\\mathrm{HClO_{4}}$ electrolytes with different pH. The catalytic activities of $\\mathrm{IrO_{2}@TaB_{2}~and~IrO_{2}}$ 2 show strong pH dependence in the pH range of 0-1.5 on the standard hydrogen electrode (SHE) scale (Fig. 5a). The potential-pH dependence value of $\\mathrm{IrO_{2}@TaB_{2}\\quad is-57.3mV\\ dec^{-1}}$ ,which is near to that of $\\mathrm{IrO_{2}(-58.0~mV)}$ $\\mathbf{\\mathsf{d e c}}^{-1}$ ,Fig. 5b). Such a near -60mV $\\mathbf{\\mathsf{d e c}}^{-1}$ Nernstian potential shift ",
+        "parser_name": "paddle"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 57.0,
+      "unit_label": "mV/decade",
+      "condition": {
+        "current_density": 1.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": null,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "unknown",
+        "normalization_basis": null,
+        "cell_type_family": null,
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c"
+        },
+        "page": 6,
+        "bbox_x0": 58.0,
+        "bbox_y0": 45.0,
+        "bbox_x1": 1132.0,
+        "bbox_y1": 1083.0,
+        "source_text": "a 50b C 600.071000Ir 4%\n40Ir 10%Ir 16%50\u25a1\u2192-0.06IrO\u2082@TaB2(This work)\u2605Pr2Ir2O7(3020IrO_{2}$Ir 40%Ir 25%T C 4030-0.03-0.05-0.04Ce IrO\u2082/NbO.2T0.8O2IrOx/ATO Ir/WxTi1xO26H-SrlrO\u2083 Sr2}rO48Li-IrOx 100102012AI -0.01-0.02-0.0010High activity Low Iridium content IrO\u20822-TiO\u2082$Ca_{2}O4$3C-SrlrO\u2083K_0.25rO{2}$IrO\u2082d Potential (V vs. RHE)Ir 4%Ir 10%Ir 16%Ir 25%Ir 40%$rO_{2}$e 020Iridium content (%)406080100Potential (V RHE)$91.31.821.51.4$0IrO2}@TaB2eeeee e 2.01.00.50.010.02.0\u00d710S-number O 4.0\u00d71046.0\u00d710IrO2@TaB2IrO20204060801001200246810Time (h)Time (h)f g h 1.60\nI 1mA/cm2 IrO2@TaB232O_21\u00d710-10IrO2$IrO{2}$2,pH0b 1.50,\u5de5\u4eab57mVpH 58 mVipHH IO{}$20$^{36}\\mathrm{O}_{2}$ (ci)5\u00d710-135\u00d710-13pH 0@1 mA/cm2\n1.45\n1.31.41.51.60.00.51.01.5123Potential (V vs. RHE)pH Cycle number ",
+        "parser_name": "paddle"
+      },
+      "type": "TafelSlope"
+    },
+    {
+      "value": 58.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 1.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": null,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "unknown",
+        "normalization_basis": "geometric",
+        "cell_type_family": null,
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c"
+        },
+        "page": 6,
+        "bbox_x0": 58.0,
+        "bbox_y0": 45.0,
+        "bbox_x1": 1132.0,
+        "bbox_y1": 1083.0,
+        "source_text": "a 50b C 600.071000Ir 4%\n40Ir 10%Ir 16%50\u25a1\u2192-0.06IrO\u2082@TaB2(This work)\u2605Pr2Ir2O7(3020IrO_{2}$Ir 40%Ir 25%T C 4030-0.03-0.05-0.04Ce IrO\u2082/NbO.2T0.8O2IrOx/ATO Ir/WxTi1xO26H-SrlrO\u2083 Sr2}rO48Li-IrOx 100102012AI -0.01-0.02-0.0010High activity Low Iridium content IrO\u20822-TiO\u2082$Ca_{2}O4$3C-SrlrO\u2083K_0.25rO{2}$IrO\u2082d Potential (V vs. RHE)Ir 4%Ir 10%Ir 16%Ir 25%Ir 40%$rO_{2}$e 020Iridium content (%)406080100Potential (V RHE)$91.31.821.51.4$0IrO2}@TaB2eeeee e 2.01.00.50.010.02.0\u00d710S-number O 4.0\u00d71046.0\u00d710IrO2@TaB2IrO20204060801001200246810Time (h)Time (h)f g h 1.60\nI 1mA/cm2 IrO2@TaB232O_21\u00d710-10IrO2$IrO{2}$2,pH0b 1.50,\u5de5\u4eab57mVpH 58 mVipHH IO{}$20$^{36}\\mathrm{O}_{2}$ (ci)5\u00d710-135\u00d710-13pH 0@1 mA/cm2\n1.45\n1.31.41.51.60.00.51.01.5123Potential (V vs. RHE)pH Cycle number ",
+        "parser_name": "paddle"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 2.0,
+      "unit_label": "V",
+      "condition": {
+        "current_density": 3.06,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": 80.0,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": 0.15,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": "single_cell_MEA",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c"
+        },
+        "page": 8,
+        "bbox_x0": 40.0,
+        "bbox_y0": 68.0,
+        "bbox_x1": 585.0,
+        "bbox_y1": 629.0,
+        "source_text": "Even such low noble metals used in our CCM, the polarization curve of PEMWE reveals a current density of $3.06\\mathrm{A}\\mathrm{c m}^{-2}$ with a cell potential of 2.0 V, operating at $80^{\\circ}\\mathrm{C}$ and ambient pressure (Fig. 5c). It is surprising that the performance of our PEMwE has reached that of US DOE 2023 target $(1.9V_{\\Omega}2.5A cm^{-2})$ , under such low PGM loadings $\\left(0.15mg_{lr}cm^{-2}and0.27mg_{Pt}cm^{-2}\\right)$ ). We note that the traditional CCMs in commercial PEMWE achieve reasonable activity and stability using a high Ir loading of $2-4mg_{11}/cm^2$ to ensure sufficient in-plane conductivity and mechanical stability of catalyst $\\mathbf{l a y e r}^{59}$ . In fact, the performance of PEMWE using $\\mathrm{IrO_{2}@TaB_{2}}$ as anode electrocatalyst exceeds the most recent reports of PEMWEs using novel anode electrocatalysts (e.g.,$\\mathrm{Sr}_{2}\\mathrm{CalrO}_{6},\\ \\mathrm{Ta}_{0.1}\\mathrm{Tr}_{0.1}\\mathrm{Ir}_{0.8}\\mathrm{O}_{2.8},\\ \\mathrm{Ir}@\\mathrm{WO}_{x})^{16,18,60-67}$ ,as shown in Fig.5d and Supplementary Table 8.Even if several supported catalysts (e.g.,$\\mathrm{Ir}(@\\mathrm{B}_{4}\\mathrm{C},\\mathrm{Ir}(@\\mathrm{Nb}_{2}\\mathrm{O}_{5-x})$ have reported to reach the DOE 2023target,they require everal times higher iidium loadng 68,69 catalyst ink.Thanodecalt k andchoecaalt nk we sprayed on polytetrafluoroethylene (PTFE) film respectively. Then the PFE fmuppred with catt and a 5 embae wee hot pressed under 10 Mpa at 135C for 10 min.After cooling, the PTFE flms re iedto obin Ce loagof thecathode was $0.27\\mathrm{m g}_{\\mathrm{p t}}\\mathrm{c m}^{-2}$ and the loading of the anode was $0.15\\mathrm{m g}_{\\mathrm{I r}}\\mathrm{c m}^{-2}$ -*for $\\mathrm{IrO_{2}@TaB_{2}}$ \u2193or $0.2\\mathrm{m g}_{\\mathrm{l r}}\\mathrm{c m}^{-2}$ for $\\mathrm{I r O}_{2}$ . The actual catalyst loading was determined by ICP-OES test. In order to construct a PEM electrolyzer, a wll-defined pore Ti plate (provided by Hefei conservation of momentum green energy $\\mathsf{C o}.$ ,)  t porous transport layer (PTL) of the anode, and a piece of carbon paper was used as the PTL of the cathode. The active area was  cm2.The PEM electrolyzer was operated at 80 C and the reactant was deionized water, which was circulated through a peristaltic pump.The polarization curve of the PEM electrolyzer was collected at the cell voltage of 1.4-2.0V,and the stability was tested by chronopotentiometry at 1A cm-2.\n",
+        "parser_name": "paddle"
+      },
+      "type": "PEMWECellVoltage"
+    },
+    {
+      "value": 1.9,
+      "unit_label": "V",
+      "condition": {
+        "current_density": 2.5,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": "single_cell_MEA",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c"
+        },
+        "page": 8,
+        "bbox_x0": 44.0,
+        "bbox_y0": 294.0,
+        "bbox_x1": 585.0,
+        "bbox_y1": 629.0,
+        "source_text": "Even such low noble metals used in our CCM, the polarization curve of PEMWE reveals a current density of $3.06\\mathrm{A}\\mathrm{c m}^{-2}$ with a cell potential of 2.0 V, operating at $80^{\\circ}\\mathrm{C}$ and ambient pressure (Fig. 5c). It is surprising that the performance of our PEMwE has reached that of US DOE 2023 target $(1.9V_{\\Omega}2.5A cm^{-2})$ , under such low PGM loadings $\\left(0.15mg_{lr}cm^{-2}and0.27mg_{Pt}cm^{-2}\\right)$ ). We note that the traditional CCMs in commercial PEMWE achieve reasonable activity and stability using a high Ir loading of $2-4mg_{11}/cm^2$ to ensure sufficient in-plane conductivity and mechanical stability of catalyst $\\mathbf{l a y e r}^{59}$ . In fact, the performance of PEMWE using $\\mathrm{IrO_{2}@TaB_{2}}$ as anode electrocatalyst exceeds the most recent reports of PEMWEs using novel anode electrocatalysts (e.g.,$\\mathrm{Sr}_{2}\\mathrm{CalrO}_{6},\\ \\mathrm{Ta}_{0.1}\\mathrm{Tr}_{0.1}\\mathrm{Ir}_{0.8}\\mathrm{O}_{2.8},\\ \\mathrm{Ir}@\\mathrm{WO}_{x})^{16,18,60-67}$ ,as shown in Fig.5d and Supplementary Table 8.Even if several supported catalysts (e.g.,$\\mathrm{Ir}(@\\mathrm{B}_{4}\\mathrm{C},\\mathrm{Ir}(@\\mathrm{Nb}_{2}\\mathrm{O}_{5-x})$ have reported to reach the DOE 2023target,they require everal times higher iidium loadng 68,69",
+        "parser_name": "paddle"
+      },
+      "type": "PEMWECellVoltage"
+    },
+    {
+      "value": 120.0,
+      "unit_label": "h",
+      "condition": {
+        "current_density": 10.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": null,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "unknown",
+        "normalization_basis": null,
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c"
+        },
+        "page": 5,
+        "bbox_x0": 26.0,
+        "bbox_y0": 1120.0,
+        "bbox_x1": 585.0,
+        "bbox_y1": 1431.0,
+        "source_text": "Besides high activity,$\\mathrm{IrO_{2}@TaB_{2}}$ displays great catalytic and structural stability for acidic OER. The galvanostatic measurements (Fig. 4d) demonstrate that $\\mathrm{IrO_{2}@TaB_{2}}$ remains steadily catalytic activity for more than 120h of continuous operation at a current density of 10 mA cm{,while $\\mathrm{I r O}_{2}$ :lost its catalytic activity after 40 h in the acidic electrolyte.Supplementary $\\mathsf{F i g}.$ 9 exhibits the polarization curve for OER obtained from $\\mathrm{IrO_{2}@TaB_{2}}$ and $\\mathrm{I r O_{2}}$  before and after 5000 cycles.$\\mathrm{IrO_{2}@TaB_{2}}$ presents no measurable loss of catalyic activity after the continuous polarization measurements, while $\\mathrm{I r O}_{2}$ F ae eeeeaeeeeeeer eere ere $\\mathrm{TaB_{2}}$ 7ne raerreeeee cee re $\\mathrm{I r O}_{2}$ e $\\mathrm{IrO_{2}@TaB_{2}}$ e rre e rr e   nee OER(Supplmtary g.oming tt te b cnt an be entirely attributed to the oxygen generation.\n",
+        "parser_name": "paddle"
+      },
+      "type": "Stability"
+    },
+    {
+      "value": 120.0,
+      "unit_label": "h",
+      "condition": {
+        "current_density": 1.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": "single_cell_MEA",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c"
+        },
+        "page": 8,
+        "bbox_x0": 47.0,
+        "bbox_y0": 632.0,
+        "bbox_x1": 584.0,
+        "bbox_y1": 1049.0,
+        "source_text": "We further compare the performance of PEMWEs using $\\mathrm{IrO_{2}@TaB_{2}}$ and commercial $\\mathrm{I r O}_{2}$ as anode electrocatalysts (Fig. 5c),under the similar Ir loading in CCM. While $\\mathsf{I r O}_{2}$ employing as anode layer, the PEMWE delivers a significantly lower current density of $1.9\\mathrm{A}\\mathrm{c m}^{-2}$ relative to $\\mathrm{IrO_{2}@TaB_{2}}$ :catalyst $(3.06\\mathrm{A}\\mathrm{c m}^{-2})$ at 2.0Vcell potential. To evaluate catalyst stability, the $\\mathrm{I r O}_{2}$ and IrO\u2082@TaB2 anode cells were tested at a constant current density of 1$1\\mathrm{A}\\mathrm{cm}^{-2}$ The PEMWE using $\\mathrm{I r O}_{2}$ anode undergoes a severe deactivation under the low Ir loading of $0.2\\mathrm{m g}\\mathrm{c m}^{-2}$ , and the $\\mathrm{I r O_{2}}$ anode cell exhibits reasonable stability when the Ir loading increases to 2mg $\\mathrm{cm^{-2}}$ (Fig. 5e and Supplementary Fig.21-24).By comparison, the PEMWE using $\\mathrm{IrO_{2}@TaB_{2}}$ 1anode provides a steady operation for more than 120 h under a low Ir loading of 0.15 mgcm2(Fig.5e),confirming excellentcatalytic stability. We can speculate that the $\\mathrm{IrO_{2}@TaB_{2}}$  with larger material volume can forms a thicker catalyst layer relative to bare $\\mathrm{I r O}_{2},$ ,so that the former possesses sufficient layer conductivity and stability at such a low Ir loading. The great activity and stability demonstrate the great potential of $\\mathrm{IrO_{2}@TaB_{2}}$ as a practical anode of real PEMwE for commercial application.\n",
+        "parser_name": "paddle"
+      },
+      "type": "Stability"
+    }
+  ],
+  "errors": [
+    {
+      "error": "ValueError: unit_label 'V' != canonical 'mV' for Overpotential",
+      "raw": {
+        "type": "Overpotential",
+        "value": 0,
+        "unit_label": "V",
+        "condition": {
+          "current_density": 3.06,
+          "temperature_C": 80,
+          "cell_type_family": "single_cell_MEA"
+        },
+        "evidence": {
+          "spans": [
+            80
+          ]
+        }
+      }
+    }
+  ]
+}

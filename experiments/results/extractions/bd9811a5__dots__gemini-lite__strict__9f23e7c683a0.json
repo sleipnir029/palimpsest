@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "paper_sha": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54",
+  "parser": "dots",
+  "label": "gemini-lite",
+  "mode": "strict",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "google/gemini-3.1-flash-lite",
+  "temperature": 0.0,
+  "in_tokens": 25979,
+  "out_tokens": 712,
+  "latency_s": 2.35,
+  "items": [
+    {
+      "value": 240.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 10.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": 25.0,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": 1.0
+        },
+        "cell_type": "three-electrode half-cell",
+        "scan_rate": 5.0,
+        "catalyst_loading": 0.4,
+        "iR_correction": "applied",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": "slow_LSV"
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54"
+        },
+        "page": 3,
+        "bbox_x0": 629.0,
+        "bbox_y0": 1446.0,
+        "bbox_x1": 1163.0,
+        "bbox_y1": 1559.0,
+        "source_text": "To better understand the intrinsic characteristics of the Ir-RuO\u2093 catalysts, OER activities of different as-prepared catalysts were evaluated in a rotating disk electrode (RDE) setup. According to the polarization curves (Fig. 3a), all Ir-RuO\u2093 catalysts and the pristine RuO\u2082 showed similar OER activities, with overpotentials of ~240 mV to reach 10 mA cm\u207b\u00b2.",
+        "parser_name": "dots"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 1500.0,
+      "unit_label": "h",
+      "condition": {
+        "current_density": 2000.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": 25.0,
+        "electrolyte": {
+          "formula": "H2O",
+          "concentration": 0.0,
+          "electrolyte_ph": 7.0
+        },
+        "cell_type": "PEM electrolyser",
+        "scan_rate": 0.0,
+        "catalyst_loading": 2.0,
+        "iR_correction": "not_applied",
+        "normalization_basis": "geometric",
+        "cell_type_family": "single_cell_MEA",
+        "electrolyte_family": "neutral",
+        "scan_rate_regime": "steady_state"
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54"
+        },
+        "page": 1,
+        "bbox_x0": 77.0,
+        "bbox_y0": 255.0,
+        "bbox_x1": 1164.0,
+        "bbox_y1": 1559.0,
+        "source_text": "While mixing iridium (Ir) with ruthenium oxide (RuO\u2082) has proven to be an effective strategy for reducing Ir loading in anode catalysts for proton-exchange membrane (PEM) water electrolyses, achieving industrially relevant long-term stability typically requires an Ir-rich, Ru-lean combination. Here, by combining density functional theory with Metropolis Monte Carlo methods, we discovered that sufficient stabilization in the RuO\u2082 lattice could be achieved with less than 50 at.% of Ir, and that Ir in the first subsurface layer plays a critical role. By effectively dispersing Ir dopants within the RuO\u2082 lattice, we demonstrated an Ir:Ru atomic ratio of only 1:6 that exhibited exceptional stability for over 1,500 h of continuous water electrolysis at 2 A cm\u207b\u00b2. Our Ru\u2086IrO\u2093 catalyst has the potential to reduce Ir loading by 80% compared with current commercial PEM water electrolyses, and its stability was further validated under industrial testing conditions in a 25-cm\u00b2 PEM electrolyser. Here, we report a new lower limit of Ir loading required to stabilize the RuO\u2082 catalyst under industrial testing standards for PEM water electrolysis, as validated by an industrial partner. We used density functional theory (DFT) and a lattice-based Metropolis Monte Carlo (MMC) to understand the distribution of Ir in RuO\u2082 surface and subsurface regions and the effect of Ir on the vacancy formation of Ru. These simulations suggest that Ir predominantly resides in and stabilizes Ru from the subsurface, and that most Ru atoms in the RuO\u2082 surface can be stabilized with a relatively small amount of total Ir (<50 at.%). Experimentally, by uniformly dispersing Ir dopants in RuO\u2082 lattice, we were able to reach a low Ir to Ru atomic ratio of 1:6 (Ru\u2086IrO\u2093) before signs of instability started to show. Under 2 A cm\u207b\u00b2 in a PEM electrolyser, our Ru\u2086IrO\u2093 catalyst demonstrated an outstanding stability of over 1,500 h without obvious signs of degradation. This stability was further confirmed by De Nora Tech in their 25-cm\u00b2 PEM electrolyser while delivering a total water splitting current of 50 A. Our catalyst showed the potential to reduce Ir usage by more than 80% in both scenarios: when compared with standard commercial PEM water electrolyzers and with a commercially available RuIrO\u2093 catalyst\u00b2\u2075 (Supplementary Figs. 1 and 2 and Supplementary Table 1). When Ir content was further increased to 14 at.%, the Ru\u2086IrO\u2093 became stable enough to retain the potential though the 1,500-h test with minimal degradation rate of 2.3\u20132.8 \u00b5V h\u207b\u00b9. To provide a comprehensive evaluation of the durability, the stability tests were also carried out under constant voltage, in which Ru\u2086IrO\u2093 maintained stable voltage over the testing period, while RuO\u2082 exhibited rapid deactivation (Supplementary Fig. 19). Given the supreme durability, it was not surprising that Ru dissolution plateaued at less than one-third the amount observed for Ru\u2081\u2082IrO\u2093, and Ir dissolution was barely detectable. This minimal dissolution, combined with the well-preserved structure and composition observed in the post-operation analysis (Supplementary Fig. 20 and Supplementary Table 8), demonstrated the superior structure durability and resistance of Ru\u2086IrO\u2093 to the highly acidic and oxidative environment. Stable performance of Ru\u2083IrO\u2093 and IrO\u2082 at 2 A cm\u207b\u00b2 (Supplementary Figs. 21 and 22) further supports the stabilizing effect of higher Ir content. In this study, we explored the lower limit of Ir incorporation level in RuO$_{2}$ lattice for durable PEM water electrolysis under industrially relevant operation conditions, coupling DFT and MMC methods. Ir incorporated in the first subsurface layer not only demonstrated the largest effect on stability, which was reflected by substantial increases in the vacancy formation energy of Ru$_{CUS}$, but was also the most favoured site under synthesis conditions. Our DFT and MMC computed results indicated that total surface stabilization could be achieved with less than 50 at.% Ir. By homogeneous mixing Ir into RuO$_{2}$ lattice, Ru$_{6}$IrO$_{x}$ with 14 at.% Ir successfully sustained 2 \u00c5 cm$^{-2}$ for more than 1,500 h, the stability of which was further validated at total current of 50 A in a scaled-up cell by De Nora.",
+        "parser_name": "dots"
+      },
+      "type": "Stability"
+    }
+  ],
+  "errors": [
+    {
+      "error": "ValueError: likely mis-citation for DegradationRate: value 2.55 not found in cited span(s)",
+      "raw": {
+        "type": "DegradationRate",
+        "value": 2.55,
+        "unit_label": "mV/h",
+        "condition": {
+          "catalyst_loading": 2.0,
+          "cell_type": "PEM electrolyser",
+          "cell_type_family": "single_cell_MEA",
+          "current_density": 2000.0,
+          "electrode_potential_vs_rhe": null,
+          "electrolyte": {
+            "concentration": 0.0,
+            "electrolyte_ph": 7.0,
+            "formula": "H2O"
+          },
+          "electrolyte_family": "neutral",
+          "iR_correction": "not_applied",
+          "normalization_basis": "geometric",
+          "scan_rate": 0.0,
+          "scan_rate_regime": "steady_state",
+          "temperature_C": 25.0
+        },
+        "evidence": {
+          "spans": [
+            49
+          ]
+        }
+      }
+    }
+  ]
+}

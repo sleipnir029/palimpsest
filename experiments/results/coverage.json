@@ -1,0 +1,1170 @@
+{
+  "mineru": {
+    "3432d04920eb6649d15d8883e64dc7f3d54700ecd5050d09e31ae286f1d4f53d": {
+      "cached": true,
+      "covered": 19,
+      "total": 19,
+      "ceiling": 1.0,
+      "distinctive_covered": 15,
+      "distinctive_total": 15,
+      "tuples": [
+        {
+          "type": "Overpotential",
+          "value": 236.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Overpotential",
+          "value": 298.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Overpotential",
+          "value": 412.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Overpotential",
+          "value": 511.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 52.6,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 75.8,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 109.8,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 131.3,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "MassActivity",
+          "value": 3343.37,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "MassActivity",
+          "value": 65.35,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 1.665,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 0.0237,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.098,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.035,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.01,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Stability",
+          "value": 30.0,
+          "present": true,
+          "distinctive": false
+        },
+        {
+          "type": "Stability",
+          "value": 15.0,
+          "present": true,
+          "distinctive": false
+        },
+        {
+          "type": "Stability",
+          "value": 9.0,
+          "present": true,
+          "distinctive": false
+        },
+        {
+          "type": "Stability",
+          "value": 6.0,
+          "present": true,
+          "distinctive": false
+        }
+      ]
+    },
+    "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c": {
+      "cached": true,
+      "covered": 7,
+      "total": 7,
+      "ceiling": 1.0,
+      "distinctive_covered": 6,
+      "distinctive_total": 6,
+      "tuples": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "present": true,
+          "distinctive": false
+        }
+      ]
+    },
+    "c63193979cec7f3d44d6d989fab9f7a7ba60590b18545f9129a982e578b8dc17": {
+      "cached": true,
+      "covered": 4,
+      "total": 4,
+      "ceiling": 1.0,
+      "distinctive_covered": 2,
+      "distinctive_total": 2,
+      "tuples": [
+        {
+          "type": "MassActivity",
+          "value": 192.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "MassActivity",
+          "value": 81.0,
+          "present": true,
+          "distinctive": false
+        },
+        {
+          "type": "Stability",
+          "value": 1700.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "present": true,
+          "distinctive": false
+        }
+      ]
+    },
+    "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54": {
+      "cached": true,
+      "covered": 4,
+      "total": 8,
+      "ceiling": 0.5,
+      "distinctive_covered": 4,
+      "distinctive_total": 8,
+      "tuples": [
+        {
+          "type": "Overpotential",
+          "value": 240.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.16,
+          "present": false,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 46.25,
+          "present": false,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 48.29,
+          "present": false,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 51.78,
+          "present": false,
+          "distinctive": true
+        },
+        {
+          "type": "Stability",
+          "value": 1500.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Stability",
+          "value": 1600.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Stability",
+          "value": 200.0,
+          "present": true,
+          "distinctive": true
+        }
+      ]
+    },
+    "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01": {
+      "cached": true,
+      "covered": 2,
+      "total": 2,
+      "ceiling": 1.0,
+      "distinctive_covered": 2,
+      "distinctive_total": 2,
+      "tuples": [
+        {
+          "type": "Overpotential",
+          "value": 210.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Overpotential",
+          "value": 330.0,
+          "present": true,
+          "distinctive": true
+        }
+      ]
+    }
+  },
+  "docling": {
+    "3432d04920eb6649d15d8883e64dc7f3d54700ecd5050d09e31ae286f1d4f53d": {
+      "cached": true,
+      "covered": 19,
+      "total": 19,
+      "ceiling": 1.0,
+      "distinctive_covered": 15,
+      "distinctive_total": 15,
+      "tuples": [
+        {
+          "type": "Overpotential",
+          "value": 236.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Overpotential",
+          "value": 298.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Overpotential",
+          "value": 412.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Overpotential",
+          "value": 511.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 52.6,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 75.8,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 109.8,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 131.3,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "MassActivity",
+          "value": 3343.37,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "MassActivity",
+          "value": 65.35,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 1.665,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 0.0237,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.098,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.035,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.01,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Stability",
+          "value": 30.0,
+          "present": true,
+          "distinctive": false
+        },
+        {
+          "type": "Stability",
+          "value": 15.0,
+          "present": true,
+          "distinctive": false
+        },
+        {
+          "type": "Stability",
+          "value": 9.0,
+          "present": true,
+          "distinctive": false
+        },
+        {
+          "type": "Stability",
+          "value": 6.0,
+          "present": true,
+          "distinctive": false
+        }
+      ]
+    },
+    "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c": {
+      "cached": true,
+      "covered": 7,
+      "total": 7,
+      "ceiling": 1.0,
+      "distinctive_covered": 6,
+      "distinctive_total": 6,
+      "tuples": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "present": true,
+          "distinctive": false
+        }
+      ]
+    },
+    "c63193979cec7f3d44d6d989fab9f7a7ba60590b18545f9129a982e578b8dc17": {
+      "cached": true,
+      "covered": 4,
+      "total": 4,
+      "ceiling": 1.0,
+      "distinctive_covered": 2,
+      "distinctive_total": 2,
+      "tuples": [
+        {
+          "type": "MassActivity",
+          "value": 192.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "MassActivity",
+          "value": 81.0,
+          "present": true,
+          "distinctive": false
+        },
+        {
+          "type": "Stability",
+          "value": 1700.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "present": true,
+          "distinctive": false
+        }
+      ]
+    },
+    "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54": {
+      "cached": true,
+      "covered": 8,
+      "total": 8,
+      "ceiling": 1.0,
+      "distinctive_covered": 8,
+      "distinctive_total": 8,
+      "tuples": [
+        {
+          "type": "Overpotential",
+          "value": 240.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.16,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 46.25,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 48.29,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 51.78,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Stability",
+          "value": 1500.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Stability",
+          "value": 1600.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Stability",
+          "value": 200.0,
+          "present": true,
+          "distinctive": true
+        }
+      ]
+    },
+    "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01": {
+      "cached": true,
+      "covered": 2,
+      "total": 2,
+      "ceiling": 1.0,
+      "distinctive_covered": 2,
+      "distinctive_total": 2,
+      "tuples": [
+        {
+          "type": "Overpotential",
+          "value": 210.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Overpotential",
+          "value": 330.0,
+          "present": true,
+          "distinctive": true
+        }
+      ]
+    }
+  },
+  "dots": {
+    "3432d04920eb6649d15d8883e64dc7f3d54700ecd5050d09e31ae286f1d4f53d": {
+      "cached": true,
+      "covered": 19,
+      "total": 19,
+      "ceiling": 1.0,
+      "distinctive_covered": 15,
+      "distinctive_total": 15,
+      "tuples": [
+        {
+          "type": "Overpotential",
+          "value": 236.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Overpotential",
+          "value": 298.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Overpotential",
+          "value": 412.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Overpotential",
+          "value": 511.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 52.6,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 75.8,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 109.8,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 131.3,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "MassActivity",
+          "value": 3343.37,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "MassActivity",
+          "value": 65.35,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 1.665,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 0.0237,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.098,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.035,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.01,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Stability",
+          "value": 30.0,
+          "present": true,
+          "distinctive": false
+        },
+        {
+          "type": "Stability",
+          "value": 15.0,
+          "present": true,
+          "distinctive": false
+        },
+        {
+          "type": "Stability",
+          "value": 9.0,
+          "present": true,
+          "distinctive": false
+        },
+        {
+          "type": "Stability",
+          "value": 6.0,
+          "present": true,
+          "distinctive": false
+        }
+      ]
+    },
+    "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c": {
+      "cached": true,
+      "covered": 7,
+      "total": 7,
+      "ceiling": 1.0,
+      "distinctive_covered": 6,
+      "distinctive_total": 6,
+      "tuples": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "present": true,
+          "distinctive": false
+        }
+      ]
+    },
+    "c63193979cec7f3d44d6d989fab9f7a7ba60590b18545f9129a982e578b8dc17": {
+      "cached": true,
+      "covered": 4,
+      "total": 4,
+      "ceiling": 1.0,
+      "distinctive_covered": 2,
+      "distinctive_total": 2,
+      "tuples": [
+        {
+          "type": "MassActivity",
+          "value": 192.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "MassActivity",
+          "value": 81.0,
+          "present": true,
+          "distinctive": false
+        },
+        {
+          "type": "Stability",
+          "value": 1700.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "present": true,
+          "distinctive": false
+        }
+      ]
+    },
+    "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54": {
+      "cached": true,
+      "covered": 4,
+      "total": 8,
+      "ceiling": 0.5,
+      "distinctive_covered": 4,
+      "distinctive_total": 8,
+      "tuples": [
+        {
+          "type": "Overpotential",
+          "value": 240.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.16,
+          "present": false,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 46.25,
+          "present": false,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 48.29,
+          "present": false,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 51.78,
+          "present": false,
+          "distinctive": true
+        },
+        {
+          "type": "Stability",
+          "value": 1500.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Stability",
+          "value": 1600.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Stability",
+          "value": 200.0,
+          "present": true,
+          "distinctive": true
+        }
+      ]
+    },
+    "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01": {
+      "cached": true,
+      "covered": 2,
+      "total": 2,
+      "ceiling": 1.0,
+      "distinctive_covered": 2,
+      "distinctive_total": 2,
+      "tuples": [
+        {
+          "type": "Overpotential",
+          "value": 210.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Overpotential",
+          "value": 330.0,
+          "present": true,
+          "distinctive": true
+        }
+      ]
+    }
+  },
+  "paddle": {
+    "3432d04920eb6649d15d8883e64dc7f3d54700ecd5050d09e31ae286f1d4f53d": {
+      "cached": true,
+      "covered": 19,
+      "total": 19,
+      "ceiling": 1.0,
+      "distinctive_covered": 15,
+      "distinctive_total": 15,
+      "tuples": [
+        {
+          "type": "Overpotential",
+          "value": 236.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Overpotential",
+          "value": 298.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Overpotential",
+          "value": 412.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Overpotential",
+          "value": 511.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 52.6,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 75.8,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 109.8,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 131.3,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "MassActivity",
+          "value": 3343.37,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "MassActivity",
+          "value": 65.35,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 1.665,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 0.0237,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.098,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.035,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.01,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Stability",
+          "value": 30.0,
+          "present": true,
+          "distinctive": false
+        },
+        {
+          "type": "Stability",
+          "value": 15.0,
+          "present": true,
+          "distinctive": false
+        },
+        {
+          "type": "Stability",
+          "value": 9.0,
+          "present": true,
+          "distinctive": false
+        },
+        {
+          "type": "Stability",
+          "value": 6.0,
+          "present": true,
+          "distinctive": false
+        }
+      ]
+    },
+    "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c": {
+      "cached": true,
+      "covered": 7,
+      "total": 7,
+      "ceiling": 1.0,
+      "distinctive_covered": 6,
+      "distinctive_total": 6,
+      "tuples": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "present": true,
+          "distinctive": false
+        }
+      ]
+    },
+    "c63193979cec7f3d44d6d989fab9f7a7ba60590b18545f9129a982e578b8dc17": {
+      "cached": true,
+      "covered": 4,
+      "total": 4,
+      "ceiling": 1.0,
+      "distinctive_covered": 2,
+      "distinctive_total": 2,
+      "tuples": [
+        {
+          "type": "MassActivity",
+          "value": 192.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "MassActivity",
+          "value": 81.0,
+          "present": true,
+          "distinctive": false
+        },
+        {
+          "type": "Stability",
+          "value": 1700.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "present": true,
+          "distinctive": false
+        }
+      ]
+    },
+    "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54": {
+      "cached": true,
+      "covered": 8,
+      "total": 8,
+      "ceiling": 1.0,
+      "distinctive_covered": 8,
+      "distinctive_total": 8,
+      "tuples": [
+        {
+          "type": "Overpotential",
+          "value": 240.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.16,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 46.25,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 48.29,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "TafelSlope",
+          "value": 51.78,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Stability",
+          "value": 1500.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Stability",
+          "value": 1600.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Stability",
+          "value": 200.0,
+          "present": true,
+          "distinctive": true
+        }
+      ]
+    },
+    "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01": {
+      "cached": true,
+      "covered": 2,
+      "total": 2,
+      "ceiling": 1.0,
+      "distinctive_covered": 2,
+      "distinctive_total": 2,
+      "tuples": [
+        {
+          "type": "Overpotential",
+          "value": 210.0,
+          "present": true,
+          "distinctive": true
+        },
+        {
+          "type": "Overpotential",
+          "value": 330.0,
+          "present": true,
+          "distinctive": true
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "paper_sha": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01",
+  "parser": "dots",
+  "label": "gemini-free",
+  "mode": "raw",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "gemini-3.5-flash",
+  "temperature": 0.0,
+  "in_tokens": 30073,
+  "out_tokens": 308,
+  "latency_s": 20.56,
+  "items": [
+    {
+      "value": 210.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 0.5,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": 0.08,
+        "iR_correction": "applied",
+        "normalization_basis": "geometric",
+        "cell_type_family": null,
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 2,
+        "bbox_x0": 77.0,
+        "bbox_y0": 98.0,
+        "bbox_x1": 1163.0,
+        "bbox_y1": 795.0,
+        "source_text": "Compared with IrO\u2082, the cyclic voltammograms of IrO\u2093 show higher redox current densities of around one order of magnitude, when normalized to the geometric area. IrO\u2093 also shows a higher activity than IrO\u2082, as reflected in the overpotential required to achieve 0.5 mA cm\u207b\u00b2 geo (~210 mV and 330 mV for IrO\u2093 and IrO\u2082, respectively; Fig. 1d). IrO\u2093 shows two distinct broad redox peaks at around 0.8 and 1.2 V versus the reversible hydrogen electrode (RHE). By contrast, no distinct redox peak can be observed for IrO\u2082. The redox features and catalytic activity of both samples are relatively stable for 20 cycles and 2.5 h of operation (further results on the stability of the redox features, activity and morphology/structure can be found in Supplementary Note 2). HClO\u2084 electrolyte (curves are *iR*-corrected (*i*, current; *R*, resistance)). Cyclic voltammograms are obtained after five cycles. The inset shows an expansion of the cyclic voltammogram of rutile IrO\u2082, *e*, Schematic showing procedures for using ToF-SIMS to detect proton penetration in iridium oxides. Dark red polygons denote iridium oxides and the dark yellow rectangle represents the wax-covered surface. Light blue and dark blue spheres denote protons (H\u207a) and deuterium ions (D\u207b), respectively. *f*, Comparison of the D/H ratio change with ToF-SIMS sputter time in amorphous IrO\u2082 and rutile IrO\u2082 before and after electrochemical cycling in deuterated HClO\u2084 solution. The downward arrow points to the region where a higher deuterium signal was observed compared to the background. \u226599.0%). The volume of the solution was then increased to 50 ml by adding more water (20 ml). The solution was left to rest for four days at 35 \u00b0C and then stored in a refrigerator at 4 \u00b0C. The electrodeposition of IrO\u2093 was conducted with a typical three-electrode set-up using this solution. A clean FTO glass substrate was used as the working electrode, and a platinum mesh and Ag/AgCl were used as the counter and reference electrodes, respectively. Polyimide tape was attached to the FTO surface to limit the conductive surface to ~1 \u00d7 1 cm. The electrodeposition was carried out by applying an anodic current density of 35 \u00b5A cm\u207b\u00b2 for 1,000 s. The mass loading of the obtained IrO\u2093 was around 80 \u00b5g cm\u207b\u00b2. For ToF-SIMS and XPS measurements, IrO\u2093 was deposited on a titanium substrate for a longer deposition time of 12,000 s to obtain a thicker layer sample. SEM images were obtained from the sample deposited on both titanium substrates and FTO substrates. Rutile IrO\u2082 is obtained via thermal annealing of the IrO\u2093 sample in the atmosphere at 550 \u00b0C for 8 h, at a heating rate of 10 \u00b0C min\u207b\u00b9. Thus, rutile IrO\u2082 sample has the same iridium mass loading as the amorphous IrO\u2093 sample.",
+        "parser_name": "dots"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 330.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 0.5,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": 0.08,
+        "iR_correction": "applied",
+        "normalization_basis": "geometric",
+        "cell_type_family": null,
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 2,
+        "bbox_x0": 77.0,
+        "bbox_y0": 98.0,
+        "bbox_x1": 1163.0,
+        "bbox_y1": 795.0,
+        "source_text": "Compared with IrO\u2082, the cyclic voltammograms of IrO\u2093 show higher redox current densities of around one order of magnitude, when normalized to the geometric area. IrO\u2093 also shows a higher activity than IrO\u2082, as reflected in the overpotential required to achieve 0.5 mA cm\u207b\u00b2 geo (~210 mV and 330 mV for IrO\u2093 and IrO\u2082, respectively; Fig. 1d). IrO\u2093 shows two distinct broad redox peaks at around 0.8 and 1.2 V versus the reversible hydrogen electrode (RHE). By contrast, no distinct redox peak can be observed for IrO\u2082. The redox features and catalytic activity of both samples are relatively stable for 20 cycles and 2.5 h of operation (further results on the stability of the redox features, activity and morphology/structure can be found in Supplementary Note 2). HClO\u2084 electrolyte (curves are *iR*-corrected (*i*, current; *R*, resistance)). Cyclic voltammograms are obtained after five cycles. The inset shows an expansion of the cyclic voltammogram of rutile IrO\u2082, *e*, Schematic showing procedures for using ToF-SIMS to detect proton penetration in iridium oxides. Dark red polygons denote iridium oxides and the dark yellow rectangle represents the wax-covered surface. Light blue and dark blue spheres denote protons (H\u207a) and deuterium ions (D\u207b), respectively. *f*, Comparison of the D/H ratio change with ToF-SIMS sputter time in amorphous IrO\u2082 and rutile IrO\u2082 before and after electrochemical cycling in deuterated HClO\u2084 solution. The downward arrow points to the region where a higher deuterium signal was observed compared to the background. \u226599.0%). The volume of the solution was then increased to 50 ml by adding more water (20 ml). The solution was left to rest for four days at 35 \u00b0C and then stored in a refrigerator at 4 \u00b0C. The electrodeposition of IrO\u2093 was conducted with a typical three-electrode set-up using this solution. A clean FTO glass substrate was used as the working electrode, and a platinum mesh and Ag/AgCl were used as the counter and reference electrodes, respectively. Polyimide tape was attached to the FTO surface to limit the conductive surface to ~1 \u00d7 1 cm. The electrodeposition was carried out by applying an anodic current density of 35 \u00b5A cm\u207b\u00b2 for 1,000 s. The mass loading of the obtained IrO\u2093 was around 80 \u00b5g cm\u207b\u00b2. For ToF-SIMS and XPS measurements, IrO\u2093 was deposited on a titanium substrate for a longer deposition time of 12,000 s to obtain a thicker layer sample. SEM images were obtained from the sample deposited on both titanium substrates and FTO substrates. Rutile IrO\u2082 is obtained via thermal annealing of the IrO\u2093 sample in the atmosphere at 550 \u00b0C for 8 h, at a heating rate of 10 \u00b0C min\u207b\u00b9. Thus, rutile IrO\u2082 sample has the same iridium mass loading as the amorphous IrO\u2093 sample.",
+        "parser_name": "dots"
+      },
+      "type": "Overpotential"
+    }
+  ],
+  "errors": []
+}

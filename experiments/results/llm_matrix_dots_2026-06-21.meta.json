@@ -1,0 +1,24 @@
+{
+  "date": "2026-06-21",
+  "git_commit": "579c5f2",
+  "parser": "dots",
+  "models": [
+    "deepseek-flash",
+    "deepseek-pro",
+    "gemini-lite",
+    "haiku-4.5",
+    "openai-frontier",
+    "openai-mini",
+    "sonnet-4.6"
+  ],
+  "rows": 50,
+  "modes": [
+    "raw",
+    "strict"
+  ],
+  "budget_before_eur": 24.0414,
+  "budget_after_eur": 24.0975,
+  "run_spend_eur": 0.056,
+  "prompt_hash": "9f23e7c683a0",
+  "csv": "llm_matrix_dots_2026-06-21.csv"
+}

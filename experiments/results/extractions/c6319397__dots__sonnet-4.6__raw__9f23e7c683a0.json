@@ -1,0 +1,300 @@
+{
+  "schema_version": 1,
+  "paper_sha": "c63193979cec7f3d44d6d989fab9f7a7ba60590b18545f9129a982e578b8dc17",
+  "parser": "dots",
+  "label": "sonnet-4.6",
+  "mode": "raw",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "claude-sonnet-4-6",
+  "temperature": "",
+  "in_tokens": 34265,
+  "out_tokens": 1488,
+  "latency_s": 10.22,
+  "items": [
+    {
+      "value": 192.0,
+      "unit_label": "A/g",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": 1.53,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": "three-electrode half-cell",
+        "scan_rate": null,
+        "catalyst_loading": 0.18,
+        "iR_correction": "applied",
+        "normalization_basis": "mass",
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c63193979cec7f3d44d6d989fab9f7a7ba60590b18545f9129a982e578b8dc17"
+        },
+        "page": 3,
+        "bbox_x0": 77.0,
+        "bbox_y0": 994.0,
+        "bbox_x1": 612.0,
+        "bbox_y1": 1263.0,
+        "source_text": "The OER performance of Ir/TiO\u2093@Ti catalysts with varying Ir loadings (wt%) was systematically evaluated in 0.1 M HClO\u2084 using a three-electrode system (Fig. 3a, inset). As shown in Fig. 3a and Supplementary Fig. 14, geometric activity (current normalized by electrode area) exhibits a volcano-shaped dependence on Ir content, peaking at 24 wt% Ir/TiO\u2093@Ti. This optimal sample demonstrates a mass activity of 192 A/gIr at 1.53 V versus reversible hydrogen electrode (RHE, Fig. 3b), 2.4-fold higher than unsupported Ir nanoparticles (81 A/gIr). The activity trend correlates directly with Ir utilization efficiency (Fig. 3b, inset): At <24 wt%, incomplete TiO\u2093@Ti surface coverage limits active site exposure; at >24 wt%, Ir nanoparticle agglomeration shields internal particles, reducing accessible active sites.",
+        "parser_name": "dots"
+      },
+      "type": "MassActivity"
+    },
+    {
+      "value": 81.0,
+      "unit_label": "A/g",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": 1.53,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": "three-electrode half-cell",
+        "scan_rate": null,
+        "catalyst_loading": 0.18,
+        "iR_correction": "applied",
+        "normalization_basis": "mass",
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c63193979cec7f3d44d6d989fab9f7a7ba60590b18545f9129a982e578b8dc17"
+        },
+        "page": 3,
+        "bbox_x0": 77.0,
+        "bbox_y0": 994.0,
+        "bbox_x1": 612.0,
+        "bbox_y1": 1263.0,
+        "source_text": "The OER performance of Ir/TiO\u2093@Ti catalysts with varying Ir loadings (wt%) was systematically evaluated in 0.1 M HClO\u2084 using a three-electrode system (Fig. 3a, inset). As shown in Fig. 3a and Supplementary Fig. 14, geometric activity (current normalized by electrode area) exhibits a volcano-shaped dependence on Ir content, peaking at 24 wt% Ir/TiO\u2093@Ti. This optimal sample demonstrates a mass activity of 192 A/gIr at 1.53 V versus reversible hydrogen electrode (RHE, Fig. 3b), 2.4-fold higher than unsupported Ir nanoparticles (81 A/gIr). The activity trend correlates directly with Ir utilization efficiency (Fig. 3b, inset): At <24 wt%, incomplete TiO\u2093@Ti surface coverage limits active site exposure; at >24 wt%, Ir nanoparticle agglomeration shields internal particles, reducing accessible active sites.",
+        "parser_name": "dots"
+      },
+      "type": "MassActivity"
+    },
+    {
+      "value": 1700.0,
+      "unit_label": "h",
+      "condition": {
+        "current_density": 10.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": "three-electrode half-cell",
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "not_applied",
+        "normalization_basis": null,
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c63193979cec7f3d44d6d989fab9f7a7ba60590b18545f9129a982e578b8dc17"
+        },
+        "page": 3,
+        "bbox_x0": 77.0,
+        "bbox_y0": 1262.0,
+        "bbox_x1": 612.0,
+        "bbox_y1": 1555.0,
+        "source_text": "To probe the structural stability under harsh acidic OER conditions, inductively coupled plasma optical emission spectroscopy (ICP-OES) was employed to quantify Ir dissolution during electrolysis. As shown in Fig. 3c, Ir/TiO\u2093@Ti exhibits a rapid initial dissolution phase (0\u20132 h) followed by stabilization (2\u201310 h, total dissolution: 0.16 mg/L), whereas unsupported Ir NPs show continuous dissolution over 8 h (total dissolution: 0.61 mg/L). This 3.8-fold reduction in Ir leaching highlights the TiO\u2093@Ti support's critical role in anchoring Ir NPs and suppressing corrosion. Long-term chronopotentiometric testing at 10 mA/cm\u00b2 further reveals durability. Ir/TiO\u2093@Ti undergoes an initial 10-hour activation phase, likely due to surface reconstruction into another active phase, and subsequently maintains stable operation for over 1700 h without degradation (Fig. 3d and Supplementary Fig. 15).",
+        "parser_name": "dots"
+      },
+      "type": "Stability"
+    },
+    {
+      "value": 40.0,
+      "unit_label": "h",
+      "condition": {
+        "current_density": 10.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": "three-electrode half-cell",
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "not_applied",
+        "normalization_basis": null,
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c63193979cec7f3d44d6d989fab9f7a7ba60590b18545f9129a982e578b8dc17"
+        },
+        "page": 3,
+        "bbox_x0": 629.0,
+        "bbox_y0": 836.0,
+        "bbox_x1": 1164.0,
+        "bbox_y1": 1016.0,
+        "source_text": "In contrast, unsupported Ir NPs gradually lose their initial activity within 40 h. Notably, Ir/TiO\u2093@Ti's stability outperforms the most recent reports of supported Ir catalysts (typically <200 h, Supplementary Table 1)\u00b2\u00b3,\u00b2\u2075,\u00b3\u2079\u207b\u2074\u00b2, including TiO\u2082-supported Ir (100 h), Ir/Nb\u2082O\u2085-x (100 h), and Ir/Sb-SnO\u2082 (15 h). These results collectively establish the TiO\u2093@Ti support's dual function: (1) maximizing Ir utilization via optimized nanoparticle dispersion and (2) mitigating Ir dissolution.",
+        "parser_name": "dots"
+      },
+      "type": "Stability"
+    },
+    {
+      "value": 2.0,
+      "unit_label": "V",
+      "condition": {
+        "current_density": 4000.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": 80.0,
+        "electrolyte": null,
+        "cell_type": "single-cell PEMWE",
+        "scan_rate": null,
+        "catalyst_loading": 0.3,
+        "iR_correction": "not_applied",
+        "normalization_basis": null,
+        "cell_type_family": "single_cell_MEA",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c63193979cec7f3d44d6d989fab9f7a7ba60590b18545f9129a982e578b8dc17"
+        },
+        "page": 8,
+        "bbox_x0": 77.0,
+        "bbox_y0": 1284.0,
+        "bbox_x1": 613.0,
+        "bbox_y1": 1554.0,
+        "source_text": "Leveraging the enhanced OER activity and stability of Ir/TiO\u2093@Ti, we fabricated proton exchange membrane water electrolyzers (PEMWEs) with an Ir loading of 0.3 mgIr/cm\u00b2 via catalyst-coated membrane (CCM) assembly (Fig. 7a). The anode (Ir/TiO\u2093@Ti) and cathode (Pt/C) layers, uniformly deposited on Nafion 115 membranes (Supplementary Figs. 33\u201336), form porous agglomerates with a controlled thickness of ~2.5 \u00b5m, as verified by cross-sectional SEM and X-ray fluorescence spectroscopy (XRF) quantification. At 80 \u00b0C, the Ir/TiO\u2093@Ti-based cell achieves a current density of 4.0 A/cm\u00b2 at 2.0 V, outperforming unsupported Ir NPs (3.5 A/cm\u00b2@2.0 V, Fig. 7b) and delivering a high Ir-specific power of \u224814 kW/gIr at 70% LHV efficiency<sup>58</sup> (1.79 V). This performance benchmark places Ir/TiO\u2093@Ti ahead of the most recent",
+        "parser_name": "dots"
+      },
+      "type": "PEMWECellVoltage"
+    },
+    {
+      "value": 400.0,
+      "unit_label": "h",
+      "condition": {
+        "current_density": 1000.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": 80.0,
+        "electrolyte": null,
+        "cell_type": "single-cell PEMWE",
+        "scan_rate": null,
+        "catalyst_loading": 0.3,
+        "iR_correction": "not_applied",
+        "normalization_basis": null,
+        "cell_type_family": "single_cell_MEA",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c63193979cec7f3d44d6d989fab9f7a7ba60590b18545f9129a982e578b8dc17"
+        },
+        "page": 8,
+        "bbox_x0": 629.0,
+        "bbox_y0": 1283.0,
+        "bbox_x1": 1163.0,
+        "bbox_y1": 1554.0,
+        "source_text": "The operational stability of Ir/TiO\u2093@Ti-based PEMWEs was evaluated via chronopotentiometry at industrially relevant current densities (1\u20132 A/cm\u00b2, Fig. 7d). The cell exhibits very low voltage degradation over 400 h at both 1 A/cm\u00b2 (degradation rate: 22 \u00b5V/h, Figs. 7e) and 2 A/cm\u00b2 (degradation rate: 52 \u00b5V/h), achieving an 89% reduction in degradation rate compared to unsupported Ir NPs (460 \u00b5V/h). Additionally, commercial Ir black and IrO\u2082/TiO\u2082 catalysts were tested. Under low Ir loadings, Ir/TiO\u2093@Ti still demonstrates markedly higher activity and stability advantages compared to both commercial Ir black and IrO\u2082/TiO\u2082 (Supplementary Figs. 39 and 40). The combined metrics, including low Ir loading, high current density, and good catalytic durability, establish",
+        "parser_name": "dots"
+      },
+      "type": "Stability"
+    }
+  ],
+  "errors": [
+    {
+      "error": "ValueError: likely mis-citation for DegradationRate: value 0.022 not found in cited span(s)",
+      "raw": {
+        "type": "DegradationRate",
+        "value": 0.022,
+        "unit_label": "mV/h",
+        "condition": {
+          "current_density": 1000.0,
+          "temperature_C": 80,
+          "cell_type": "single-cell PEMWE",
+          "cell_type_family": "single_cell_MEA",
+          "catalyst_loading": 0.3,
+          "iR_correction": "not_applied"
+        },
+        "evidence": {
+          "spans": [
+            88
+          ]
+        }
+      }
+    },
+    {
+      "error": "ValueError: likely mis-citation for DegradationRate: value 0.052 not found in cited span(s)",
+      "raw": {
+        "type": "DegradationRate",
+        "value": 0.052,
+        "unit_label": "mV/h",
+        "condition": {
+          "current_density": 2000.0,
+          "temperature_C": 80,
+          "cell_type": "single-cell PEMWE",
+          "cell_type_family": "single_cell_MEA",
+          "catalyst_loading": 0.3,
+          "iR_correction": "not_applied"
+        },
+        "evidence": {
+          "spans": [
+            88
+          ]
+        }
+      }
+    },
+    {
+      "error": "ValueError: likely mis-citation for DegradationRate: value 0.46 not found in cited span(s)",
+      "raw": {
+        "type": "DegradationRate",
+        "value": 0.46,
+        "unit_label": "mV/h",
+        "condition": {
+          "current_density": 1000.0,
+          "temperature_C": 80,
+          "cell_type": "single-cell PEMWE",
+          "cell_type_family": "single_cell_MEA",
+          "catalyst_loading": 0.3,
+          "iR_correction": "not_applied"
+        },
+        "evidence": {
+          "spans": [
+            88
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,143 @@
+{
+  "schema_version": 1,
+  "paper_sha": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01",
+  "parser": "mineru",
+  "label": "deepseek-pro",
+  "mode": "raw",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "deepseek-v4-pro",
+  "temperature": 0,
+  "in_tokens": 30951,
+  "out_tokens": 466,
+  "latency_s": 4.69,
+  "items": [
+    {
+      "value": 210.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 0.5,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "applied",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": null,
+        "scan_rate_regime": "slow_LSV"
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 2,
+        "bbox_x0": 507.0,
+        "bbox_y0": 317.0,
+        "bbox_x1": 944.0,
+        "bbox_y1": 465.0,
+        "source_text": "Compared with    IrO_{2}  , the cyclic voltammograms of    IrO_{x}   show higher redox current densities of around one order of magnitude, when normalized to the geometric area.    IrO_{x}   also shows a higher activity than    IrO_{2}  , as reflected in the overpotential required to achieve 0.5 mA cm   ^{-2}   geo (~210 mV and 330 mV for    IrO_{x}   and    IrO_{2}  , respectively; Fig. 1d).    IrO_{x}   shows two distinct broad redox peaks at around 0.8 and 1.2 V versus the reversible hydrogen electrode (RHE). By contrast, no distinct redox peak can be observed for    IrO_{2}  . The redox features and catalytic activity of both samples are relatively stable for 20 cycles and 2.5 h of operation (further results on the stability of the redox features, activity and morphology/structure can be found in Supplementary Note 2).",
+        "parser_name": "mineru"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 330.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 0.5,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "applied",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": null,
+        "scan_rate_regime": "slow_LSV"
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 2,
+        "bbox_x0": 507.0,
+        "bbox_y0": 317.0,
+        "bbox_x1": 944.0,
+        "bbox_y1": 465.0,
+        "source_text": "Compared with    IrO_{2}  , the cyclic voltammograms of    IrO_{x}   show higher redox current densities of around one order of magnitude, when normalized to the geometric area.    IrO_{x}   also shows a higher activity than    IrO_{2}  , as reflected in the overpotential required to achieve 0.5 mA cm   ^{-2}   geo (~210 mV and 330 mV for    IrO_{x}   and    IrO_{2}  , respectively; Fig. 1d).    IrO_{x}   shows two distinct broad redox peaks at around 0.8 and 1.2 V versus the reversible hydrogen electrode (RHE). By contrast, no distinct redox peak can be observed for    IrO_{2}  . The redox features and catalytic activity of both samples are relatively stable for 20 cycles and 2.5 h of operation (further results on the stability of the redox features, activity and morphology/structure can be found in Supplementary Note 2).",
+        "parser_name": "mineru"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 220.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 1.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "unknown",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 1,
+        "bbox_x0": 507.0,
+        "bbox_y0": 711.0,
+        "bbox_x1": 947.0,
+        "bbox_y1": 875.0,
+        "source_text": "normalizing the current density to the geometric area or the mass of iridium. Amorphous    IrO_{x}   is more active but less stable than crystalline rutile    IrO_{2} , and shows a 220 mV reduction in overpotential as well as an approximately two orders of magnitude lower lifetime at 1 mA cm   ^{-2}_{geo}   (ref. 8). Recent studies on highly active    IrNiO_{x}   (refs. 10,11),    Li-IrO_{x}   (ref. 9) and    SrIrO_{x}   (refs. 8,13,15) have demonstrated that the surface of these materials is converted to an amorphous phase on exposure to oxygen evolution reaction (OER) potentials. Amorphous    IrO_{x}   is easier to oxidize and undergoes greater Ir\u2013O bond shortening with increased potential compared with crystalline    IrO_{2}   (refs. 9,10,16,17). These differences in coordination environment of the iridium centre have been suggested to influence the binding energetics of key OER intermediates, possibly",
+        "parser_name": "mineru"
+      },
+      "type": "Overpotential"
+    }
+  ],
+  "errors": [
+    {
+      "error": "ValueError: no valid span citation for TafelSlope; evidence={'spans': []}",
+      "raw": {
+        "type": "TafelSlope",
+        "value": null,
+        "unit_label": "mV/decade",
+        "condition": null,
+        "evidence": {
+          "spans": []
+        }
+      }
+    }
+  ]
+}

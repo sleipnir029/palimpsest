@@ -1,0 +1,206 @@
+{
+  "schema_version": 1,
+  "paper_sha": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01",
+  "parser": "paddle",
+  "label": "haiku-4.5",
+  "mode": "raw",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "claude-haiku-4-5",
+  "temperature": "",
+  "in_tokens": 39403,
+  "out_tokens": 669,
+  "latency_s": 4.95,
+  "items": [
+    {
+      "value": 20.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 0.5,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "unknown",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 1,
+        "bbox_x0": 595.0,
+        "bbox_y0": 1139.0,
+        "bbox_x1": 1153.0,
+        "bbox_y1": 1414.0,
+        "source_text": "normalizing the current density to the geometric area or the mass of iridium. Amorphous $\\mathrm{I r O}_{x}$ rutile IrO, and shows a 20 mV reduction in overpotential as well as an approximately two orders of magnitude lower lifetime at l mA cm $^{-2}_{\\mathrm{g e o}}$ (ref. 8). Recent studies on highly active $\\mathrm{IrNiO}_{x}$ (refs.10,11),$\\mathsf{L i}-\\mathsf{I r O}$ $x (ref.9)and $\\mathsf{S r I r O}_{s}$ (res.8,3,5) ae motad tt te race of t materials is converted to an amorphous phase on exposure to oxygen e $\\mathbf{I r}0,$ is asier to oxidize and undergoes greater Ir-O bond shortening with increased potential compared with crystalline $\\mathrm{I r O}_{2}$ (refs. 9,10,16,17).These differences in coordination environment of the iridium centre have been suggested to influence the binding energetics of key OER intermediates, possibly ",
+        "parser_name": "paddle"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 210.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 0.5,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "unknown",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 2,
+        "bbox_x0": 603.0,
+        "bbox_y0": 503.0,
+        "bbox_x1": 1155.0,
+        "bbox_y1": 751.0,
+        "source_text": "Compared with $\\mathrm{I r O}_{2},$ ,the cyclic voltammograms of $\\mathsf{I r O}_{x}$ show higher redox current densities of around one order of magnitude, when normalized to the geometric area.$\\mathbf{,I r O},$ also shows a hiher activity than $\\mathrm{I r O}_{2}$ ,as reflected in the overpotential required to achieve 0.5 mA cm $^{-2}_{\\mathrm{g e o}}$ (-210 mV and 330 mV for IrOx $\\mathrm{a n d}\\mathrm{I r O}_{2}$ ,respectively; Fig.1d).$\\mathbf{I r O}_{x}$ shows two distinct broad redox peaks at around 0.8 and 1.2 V versus the reversible hydrogen electrode (RHE). By contrast, no distinct redox peak can be observed $\\mathrm{for}\\mathrm{IrO}_{2}$ .The redox features and catalytic activity of both samples are rlatively stable for 20 cycles and 2.5 hof operation (further results on te sability ofthe edox atures,activity and morpholog/structure can be found in Supplementary Note 2).",
+        "parser_name": "paddle"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 330.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 0.5,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "unknown",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 2,
+        "bbox_x0": 603.0,
+        "bbox_y0": 503.0,
+        "bbox_x1": 1155.0,
+        "bbox_y1": 751.0,
+        "source_text": "Compared with $\\mathrm{I r O}_{2},$ ,the cyclic voltammograms of $\\mathsf{I r O}_{x}$ show higher redox current densities of around one order of magnitude, when normalized to the geometric area.$\\mathbf{,I r O},$ also shows a hiher activity than $\\mathrm{I r O}_{2}$ ,as reflected in the overpotential required to achieve 0.5 mA cm $^{-2}_{\\mathrm{g e o}}$ (-210 mV and 330 mV for IrOx $\\mathrm{a n d}\\mathrm{I r O}_{2}$ ,respectively; Fig.1d).$\\mathbf{I r O}_{x}$ shows two distinct broad redox peaks at around 0.8 and 1.2 V versus the reversible hydrogen electrode (RHE). By contrast, no distinct redox peak can be observed $\\mathrm{for}\\mathrm{IrO}_{2}$ .The redox features and catalytic activity of both samples are rlatively stable for 20 cycles and 2.5 hof operation (further results on te sability ofthe edox atures,activity and morpholog/structure can be found in Supplementary Note 2).",
+        "parser_name": "paddle"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 0.01,
+      "unit_label": "1/s",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": 1.4,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": "RDE",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 8,
+        "bbox_x0": 134.0,
+        "bbox_y0": 69.0,
+        "bbox_x1": 434.0,
+        "bbox_y1": 432.0,
+        "source_text": "a \n1.0\ncoverage 9'0800.4eeee Rutile 0.2\nTOF (O2 per *Ocus per s)0.0010.01V'00re reecer TOFfromopencircuitdecay 1.401.451.501.551.60Potential (V vs RHE)\n",
+        "parser_name": "paddle"
+      },
+      "type": "TurnoverFrequency"
+    },
+    {
+      "value": 0.001,
+      "unit_label": "1/s",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": 1.4,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": "RDE",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 8,
+        "bbox_x0": 134.0,
+        "bbox_y0": 69.0,
+        "bbox_x1": 434.0,
+        "bbox_y1": 432.0,
+        "source_text": "a \n1.0\ncoverage 9'0800.4eeee Rutile 0.2\nTOF (O2 per *Ocus per s)0.0010.01V'00re reecer TOFfromopencircuitdecay 1.401.451.501.551.60Potential (V vs RHE)\n",
+        "parser_name": "paddle"
+      },
+      "type": "TurnoverFrequency"
+    }
+  ],
+  "errors": []
+}

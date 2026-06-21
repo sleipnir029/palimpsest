@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "paper_sha": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54",
+  "parser": "mineru",
+  "label": "deepseek-flash",
+  "mode": "raw",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "deepseek-v4-flash",
+  "temperature": 0,
+  "in_tokens": 25160,
+  "out_tokens": 1056,
+  "latency_s": 6.85,
+  "items": [],
+  "errors": [
+    {
+      "error": "ValueError: LLM response not parseable as {\"items\": [...]}; head: '```json\\n{\"items\": [\\n  {\\n    \"type\": \"Overpotential\",\\n    \"value\": 240,\\n    \"unit_label\": \"mV\",\\n    \"condition\": {\\n      \"current_density\": 10,\\n      \"electrolyte\": {\\n        \"formula\": \"HClO4\",\\n      '",
+      "raw": {
+        "batch": null
+      }
+    }
+  ]
+}

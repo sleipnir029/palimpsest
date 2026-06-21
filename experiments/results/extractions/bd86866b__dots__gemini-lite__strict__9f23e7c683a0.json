@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "paper_sha": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01",
+  "parser": "dots",
+  "label": "gemini-lite",
+  "mode": "strict",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "google/gemini-3.1-flash-lite",
+  "temperature": 0.0,
+  "in_tokens": 30073,
+  "out_tokens": 444,
+  "latency_s": 1.79,
+  "items": [
+    {
+      "value": 210.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 0.5,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": 25.0,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": "three-electrode half-cell",
+        "scan_rate": 10.0,
+        "catalyst_loading": 0.08,
+        "iR_correction": "unknown",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": "slow_LSV"
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 2,
+        "bbox_x0": 629.0,
+        "bbox_y0": 525.0,
+        "bbox_x1": 1163.0,
+        "bbox_y1": 772.0,
+        "source_text": "Compared with IrO\u2082, the cyclic voltammograms of IrO\u2093 show higher redox current densities of around one order of magnitude, when normalized to the geometric area. IrO\u2093 also shows a higher activity than IrO\u2082, as reflected in the overpotential required to achieve 0.5 mA cm\u207b\u00b2 geo (~210 mV and 330 mV for IrO\u2093 and IrO\u2082, respectively; Fig. 1d). IrO\u2093 shows two distinct broad redox peaks at around 0.8 and 1.2 V versus the reversible hydrogen electrode (RHE). By contrast, no distinct redox peak can be observed for IrO\u2082. The redox features and catalytic activity of both samples are relatively stable for 20 cycles and 2.5 h of operation (further results on the stability of the redox features, activity and morphology/structure can be found in Supplementary Note 2).",
+        "parser_name": "dots"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 330.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 0.5,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": 25.0,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": "three-electrode half-cell",
+        "scan_rate": 10.0,
+        "catalyst_loading": 0.08,
+        "iR_correction": "unknown",
+        "normalization_basis": "geometric",
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": "slow_LSV"
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 2,
+        "bbox_x0": 629.0,
+        "bbox_y0": 525.0,
+        "bbox_x1": 1163.0,
+        "bbox_y1": 772.0,
+        "source_text": "Compared with IrO\u2082, the cyclic voltammograms of IrO\u2093 show higher redox current densities of around one order of magnitude, when normalized to the geometric area. IrO\u2093 also shows a higher activity than IrO\u2082, as reflected in the overpotential required to achieve 0.5 mA cm\u207b\u00b2 geo (~210 mV and 330 mV for IrO\u2093 and IrO\u2082, respectively; Fig. 1d). IrO\u2093 shows two distinct broad redox peaks at around 0.8 and 1.2 V versus the reversible hydrogen electrode (RHE). By contrast, no distinct redox peak can be observed for IrO\u2082. The redox features and catalytic activity of both samples are relatively stable for 20 cycles and 2.5 h of operation (further results on the stability of the redox features, activity and morphology/structure can be found in Supplementary Note 2).",
+        "parser_name": "dots"
+      },
+      "type": "Overpotential"
+    }
+  ],
+  "errors": []
+}

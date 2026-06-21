@@ -1,0 +1,206 @@
+{
+  "schema_version": 1,
+  "paper_sha": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01",
+  "parser": "dots",
+  "label": "haiku-4.5",
+  "mode": "raw",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "claude-haiku-4-5",
+  "temperature": "",
+  "in_tokens": 34241,
+  "out_tokens": 605,
+  "latency_s": 5.12,
+  "items": [
+    {
+      "value": 210.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 0.5,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "applied",
+        "normalization_basis": null,
+        "cell_type_family": "RDE",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 2,
+        "bbox_x0": 629.0,
+        "bbox_y0": 525.0,
+        "bbox_x1": 1163.0,
+        "bbox_y1": 772.0,
+        "source_text": "Compared with IrO\u2082, the cyclic voltammograms of IrO\u2093 show higher redox current densities of around one order of magnitude, when normalized to the geometric area. IrO\u2093 also shows a higher activity than IrO\u2082, as reflected in the overpotential required to achieve 0.5 mA cm\u207b\u00b2 geo (~210 mV and 330 mV for IrO\u2093 and IrO\u2082, respectively; Fig. 1d). IrO\u2093 shows two distinct broad redox peaks at around 0.8 and 1.2 V versus the reversible hydrogen electrode (RHE). By contrast, no distinct redox peak can be observed for IrO\u2082. The redox features and catalytic activity of both samples are relatively stable for 20 cycles and 2.5 h of operation (further results on the stability of the redox features, activity and morphology/structure can be found in Supplementary Note 2).",
+        "parser_name": "dots"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 330.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 0.5,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "applied",
+        "normalization_basis": null,
+        "cell_type_family": "RDE",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 2,
+        "bbox_x0": 629.0,
+        "bbox_y0": 525.0,
+        "bbox_x1": 1163.0,
+        "bbox_y1": 772.0,
+        "source_text": "Compared with IrO\u2082, the cyclic voltammograms of IrO\u2093 show higher redox current densities of around one order of magnitude, when normalized to the geometric area. IrO\u2093 also shows a higher activity than IrO\u2082, as reflected in the overpotential required to achieve 0.5 mA cm\u207b\u00b2 geo (~210 mV and 330 mV for IrO\u2093 and IrO\u2082, respectively; Fig. 1d). IrO\u2093 shows two distinct broad redox peaks at around 0.8 and 1.2 V versus the reversible hydrogen electrode (RHE). By contrast, no distinct redox peak can be observed for IrO\u2082. The redox features and catalytic activity of both samples are relatively stable for 20 cycles and 2.5 h of operation (further results on the stability of the redox features, activity and morphology/structure can be found in Supplementary Note 2).",
+        "parser_name": "dots"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": null,
+      "unit_label": "1/s",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": 1.46,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": null,
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 6,
+        "bbox_x0": 77.0,
+        "bbox_y0": 525.0,
+        "bbox_x1": 1163.0,
+        "bbox_y1": 1560.0,
+        "source_text": "Next, we investigated the lifetime of these accumulated redox states and their correlation with the water oxidation reaction on IrO\u2093. We measured the decay kinetics of the accumulated states when the potential was released from an oxygen-evolving potential to an open-circuit potential using time-resolved UV-visible absorption spectroscopy (see Supplementary Note 9 for details of the decay kinetics measurements)\u00b2\u2078,\u00b3\u2077,\u2075\u2076. This experiment is shown in Fig. 4a, where two spectrally distinct decay phases were observed during open-circuit decay\u2014a fast decay component (initial 1 s) with a dominant absorption decay peak at around 500 nm, and a slow decay component (100\u2013200 s) with the maximum signal at around 800 nm (see Supplementary Note 9 and Supplementary Fig. 33 for detailed deconvolution of the decay data). The differential absorption spectra for these two phases are in excellent agreement with the differential absorption spectra of redox transition 3 and redox transition 2, respectively (Fig. 4b), indicating that the fast decay of absorbance arises primarily from the decay of state<sub>b</sub> to state<sub>c</sub> (that is, the decay of *O*<sub>cus</sub>), whereas the slow decay arises mainly from the decay of state<sub>c</sub> to state<sub>b</sub> (that is, the decay of bridge oxygen O<sub>brl</sub>). Further comparison of the optical signal decay in different potential regimes shows that state<sub>b</sub> (*OH*<sub>cus</sub>) and state<sub>c</sub> (O<sub>brl</sub>) remain stable even after the applied potential is switched off, indicating that these states are very stable once generated and will not be the catalytically relevant species (Supplementary Fig. 34). Conversely, the *O*<sub>cus</sub> species decays rapidly once the applied potential is removed, indicating the reactivity of *O*<sub>cus</sub> for forming molecular oxygen. Based on the established DFT calculations on IrO\u2082 (110)\u00b2\u2076,\u2075\u2077,\u2075\u2078, which suggest that the formation of *OOH from *O is the RDS, we interpret the fast decay process as described in Fig. 4c: a site in the active state (*O*<sub>cus</sub>) proceeds along the reaction path via nucleophilic attack from a water molecule, forming the O\u2013O bond and followed by the release of oxygen. Here, the charge is balanced by other active states through accepting a proton and becoming reduced to regenerate *OH*<sub>cus</sub> on the surface (as no charge is passed through the external circuit during open-circuit conditions). To validate this decay mechanism, we measured oxygen using highly sensitive on-chip electrochemical mass spectrometry (EC-MS). This technique enables the in situ measurement of gas products during electrochemistry with a resolution down to subpicomole per second sensitivity\u2075\u2079,\u2076\u2070. The net amount of O\u2082 produced during open-circuit decay from 1.46 to 1.40 V*<sub>RHE</sub>, detected using EC-MS, is ~0.87 nmol cm\u207b\u00b2. This amount of oxygen is in good agreement with the O\u2082 release expected from decay of the accumulated *O*<sub>cus</sub> from 1.46 to 1.40 V*<sub>RHE</sub> (0.70\u20130.96 nmol cm\u207b\u00b2) (see supplementary Note 10 and Supplementary Fig. 37 for details). This analysis confirms that the decay of *O*<sub>cus</sub> is coupled with O\u2082 release, with four *O*<sub>cus</sub> atoms being consumed per molecule of O\u2082 generated. As a result, where \u03c4 is the time constant of this active-state decay, it implies an intrinsic rate for the RDS of 1/4\u03c4 for O\u2082 released per second. Having confirmed that the optically detected accumulated *O*<sub>cus</sub> are reactive towards O\u2013O coupling and O<sub>2</sub> release, we explored how these active states control the reaction rate on amorphous IrO<sub>x</sub> and rutile IrO<sub>2</sub>. We used two methods to estimate the intrinsic rate of the RDS as a function of the potential (and thus as a function of the *O*<sub>cus</sub> coverage). First, we normalized the O<sub>2</sub> generation rate (obtained from the current) to the density of *O*<sub>cus</sub>, the active states from which the RDS (that is, O\u2013O bond formation) proceeds. Such an RDS on IrO<sub>2</sub> has also been supported by other literature reports<sup>25,26,57,58</sup> Second, we accessed the *O*<sub>cus</sub> decay rate resulting from O\u2013O bond formation using the previously described potential-decay measurement. The above two analyses yield the intrinsic rate of the RDS, which are described using TOF (O<sub>2</sub> per *O*<sub>cus</sub> per s) and TOF<sub>decay</sub>, respectively.",
+        "parser_name": "dots"
+      },
+      "type": "TurnoverFrequency"
+    },
+    {
+      "value": null,
+      "unit_label": "1/s",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": 1.48,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": null,
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 7,
+        "bbox_x0": 77.0,
+        "bbox_y0": 1064.0,
+        "bbox_x1": 612.0,
+        "bbox_y1": 1559.0,
+        "source_text": "Figure 5a shows the active-state *O*<sub>cus</sub> coverage and the intrinsic rate of the RDS for amorphous IrO<sub>x</sub> and rutile IrO<sub>2</sub>. We find that whereas rutile IrO<sub>2</sub> has fewer active states at a given potential, it has a similar intrinsic rate of the RDS as measured by the O<sub>2</sub> evolution rate and a slightly lower intrinsic rate of the RDS as measured via the open-circuit decay within the studied potential regime. At more positive potentials (thus higher current densities), the coverage of *O*<sub>cus</sub> cannot be measured due to the impact of severe bubble formation on the optical signal. We thus extrapolated the activity per *O*<sub>cus</sub> in the higher potential range using the measured current density at the higher potential From Fig. 5b, it is also apparent that, at the same *O~cus~* coverage, the intrinsic activity of the RDS on rutile IrO~2~ is around one order of magnitude higher (as measured by TOF (O~2~ per *O~cus~* per s)) and factor of five higher (as measured by TOF~decay~) than on amorphous IrO~x~. We rationalize this difference in activity to the potential-dependent binding energetics of *O~cus~*. From the experimentally observed energetics of *O~cus~*, the values of \u0394G\u00b0~O~ \u2013 \u0394G\u00b0~OH~ at *O~cus~* (*\u03b8~O~ = 0*) for rutile IrO~2~ is around 0.1 eV larger than that of amorphous IrO~x~ (that is, an extra 0.1 V is required to form *O~cus~* on rutile IrO~2~), and the values for both increase with *O~cus~* coverage at a slope of roughly 0.15 eV per coverage increment due to the similar Frumkin interaction strengths (Fig. 5c). As a result, at a constant coverage of *O~cus~*, compared with amorphous IrO~x~, rutile IrO~2~ binds oxygen more weakly, which facilitates O\u2013O bond formation from *O~cus~* in the RDS, leading to a higher intrinsic activity per active state. On the other hand, at a constant potential, for example, at 1.48 V~RHE~, this binding energy difference decreases to around 0.05 eV because amorphous IrO~x~ has a higher coverage of *O~cus~* at this potential, thus weakening the *O~cus~* binding more greatly. Therefore, the intrinsic activity at a constant potential is similar, and the order of magnitude greater geometric-area-normalized current density observed for amorphous IrO~x~ is mainly because it has a higher density of active states, as shown in Fig. 3a,b.",
+        "parser_name": "dots"
+      },
+      "type": "TurnoverFrequency"
+    },
+    {
+      "value": null,
+      "unit_label": "mA/cm2",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": 1.48,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": "ECSA",
+        "cell_type_family": null,
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 8,
+        "bbox_x0": 77.0,
+        "bbox_y0": 1064.0,
+        "bbox_x1": 612.0,
+        "bbox_y1": 1559.0,
+        "source_text": "From Fig. 5b, it is also apparent that, at the same *O~cus~* coverage, the intrinsic activity of the RDS on rutile IrO~2~ is around one order of magnitude higher (as measured by TOF (O~2~ per *O~cus~* per s)) and factor of five higher (as measured by TOF~decay~) than on amorphous IrO~x~. We rationalize this difference in activity to the potential-dependent binding energetics of *O~cus~*. From the experimentally observed energetics of *O~cus~*, the values of \u0394G\u00b0~O~ \u2013 \u0394G\u00b0~OH~ at *O~cus~* (*\u03b8~O~ = 0*) for rutile IrO~2~ is around 0.1 eV larger than that of amorphous IrO~x~ (that is, an extra 0.1 V is required to form *O~cus~* on rutile IrO~2~), and the values for both increase with *O~cus~* coverage at a slope of roughly 0.15 eV per coverage increment due to the similar Frumkin interaction strengths (Fig. 5c). As a result, at a constant coverage of *O~cus~*, compared with amorphous IrO~x~, rutile IrO~2~ binds oxygen more weakly, which facilitates O\u2013O bond formation from *O~cus~* in the RDS, leading to a higher intrinsic activity per active state. On the other hand, at a constant potential, for example, at 1.48 V~RHE~, this binding energy difference decreases to around 0.05 eV because amorphous IrO~x~ has a higher coverage of *O~cus~* at this potential, thus weakening the *O~cus~* binding more greatly. Therefore, the intrinsic activity at a constant potential is similar, and the order of magnitude greater geometric-area-normalized current density observed for amorphous IrO~x~ is mainly because it has a higher density of active states, as shown in Fig. 3a,b.",
+        "parser_name": "dots"
+      },
+      "type": "SpecificActivity"
+    }
+  ],
+  "errors": []
+}
