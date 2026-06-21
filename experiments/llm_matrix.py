@@ -38,7 +38,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from dotenv import load_dotenv
 
-from ab_extract import GOLD, _score  # reuse the deterministic scorer + multi-paper gold
+import extraction_cache  # T72: persist every paid extraction; cache-hit skips the call
+from ab_extract import GOLD, _score, _score_preds  # deterministic scorer + multi-paper gold
 from palimpsest.agent import _USD_TO_EUR
 from palimpsest.cache import ParserCache
 from palimpsest.cost import BudgetExceeded, CostMeter
@@ -48,6 +49,7 @@ from palimpsest.providers import (
     GeminiProvider,
     OpenAICompatProvider,
 )
+from palimpsest.normalize import build_normalization_prompt
 from palimpsest.skills import SkillLoader
 from palimpsest.tools.extract import _JSONSCHEMA_PATH, _MEASUREMENT_NAMES, extract
 
@@ -210,9 +212,18 @@ def _temperature(inner) -> object:
 
 
 def _prompt_hash() -> str:
-    """Reproducibility anchor: the skill body is the prompt's domain content."""
+    """Reproducibility + cache anchor: hash EVERYTHING the model's system prompt embeds.
+
+    This keys the extraction cache, so it must cover every input that changes the output:
+    the skill body, the JSON schema, the normalization rules, and the emittable-class set
+    (`extract._build_system_prompt` embeds all four). Hashing only the skill body would let
+    a schema/normalization edit return stale cached extractions under an unchanged key (B1).
+    """
     body = SkillLoader().load(_SKILL)
-    return hashlib.sha256(body.encode()).hexdigest()[:12]
+    schema = _JSONSCHEMA_PATH.read_text(encoding="utf-8")
+    norm = build_normalization_prompt([Path("skills") / _SKILL])
+    blob = "\0".join([body, schema, norm, ",".join(sorted(_MEASUREMENT_NAMES))])
+    return hashlib.sha256(blob.encode()).hexdigest()[:12]
 
 
 def _strict_response_format() -> dict:
@@ -329,6 +340,11 @@ def main(dry_run: bool = False, parser: str = _PARSER) -> None:
     meter = CostMeter()
     cap = meter.cap
     spent_before = meter.total_eur()  # ALL prior LLM+GPU spend, every run (not just this one)
+    # Skip-list (env): exclude specs whose key exists but is unusable — e.g. the
+    # Anthropic key is still in .env but its credits are drained, so haiku/sonnet calls
+    # would only fail (no money lost, but wasted wall-clock + hangs). Lets a run target
+    # the affordable providers without editing the roster.
+    skip_labels = {s.strip() for s in os.environ.get("MATRIX_SKIP_LABELS", "").split(",") if s.strip()}
     rows: list[dict] = []
     ran: list[str] = []
     skipped: list[str] = []
@@ -348,6 +364,9 @@ def main(dry_run: bool = False, parser: str = _PARSER) -> None:
               file=sys.stderr)
 
     for spec in SPECS:
+        if spec.label in skip_labels:
+            skipped.append(f"{spec.label} (MATRIX_SKIP_LABELS)")
+            continue
         if spec.key_env and not os.environ.get(spec.key_env):
             skipped.append(f"{spec.label} (no ${spec.key_env})")
             continue
@@ -363,62 +382,90 @@ def main(dry_run: bool = False, parser: str = _PARSER) -> None:
         modes = ["raw"] + (["strict"] if spec.strict_capable else [])
         for sha, truth in gt.items():
             for mode in modes:
-                try:
-                    meter.check_or_raise(_PER_PAPER_CEILING_EUR)  # €50 gate — refuse before spend
-                except BudgetExceeded as e:
-                    skipped.append(f"{spec.label} (budget: {e})")
-                    stopped = True
-                    break
-                try:
-                    inner = spec.factory()
-                    if spec.price_in is not None and spec.price_out is not None:
-                        # Accurate per-model ledger cost (else _cost_eur falls back to the
-                        # Sonnet table — fine as a ceiling, but set it right when we know it).
-                        inner.prices = {
-                            "input_tokens": spec.price_in / 1_000_000,
-                            "output_tokens": spec.price_out / 1_000_000,
-                            "cache_read_input_tokens": spec.price_in / 1_000_000,
-                            "cache_creation_input_tokens": spec.price_in / 1_000_000,
-                        }
-                    provider = _UsageRecorder(inner)
-                    t0 = time.monotonic()
-                    valid, errors = extract(
-                        paper_sha=sha, parser_name=parser, skill_name=_SKILL,
-                        provider=provider, cache=cache, cost_meter=meter,
-                        response_format=strict_rf if mode == "strict" else None,
-                    )
-                    latency = time.monotonic() - t0
-                    # Score + append INSIDE the try: a scoring edge case (e.g. a
-                    # null-value extraction) must drop only this cell, never kill the
-                    # whole paid run (rows are written once at the end).
-                    tp, n_preds, recall, precision = _score(valid, truth)
-                    f1 = _f1(recall, precision)
-                    if spec.price_in is not None and spec.price_out is not None:
-                        usd = (provider.in_tokens * spec.price_in
-                               + provider.out_tokens * spec.price_out) / 1_000_000
-                        eur_val = usd * _USD_TO_EUR
-                        eur = f"{eur_val:.5f}"
-                        eur_tp = f"{eur_val / tp:.5f}" if tp else ""  # cost per CORRECT extraction
-                    else:
-                        eur = ""  # rate not verified — record tokens, leave cost blank
-                        eur_tp = ""
-                    rows.append({
-                        "paper_sha8": sha[:8], "parser": parser, "label": spec.label,
-                        "model_id": model_id, "role": spec.role, "mode": mode,
-                        "n_valid": n_preds, "n_errors": len(errors),
-                        "tp": tp, "gt_total": len(truth),
-                        "recall": f"{recall:.4f}", "precision": f"{precision:.4f}", "f1": f"{f1:.4f}",
-                        "in_tokens": provider.in_tokens, "out_tokens": provider.out_tokens,
-                        "eur_per_paper": eur, "eur_per_tp": eur_tp, "latency_s": f"{latency:.2f}",
-                        "temperature": _temperature(provider._inner),
-                        "prompt_hash": prompt_hash,
-                    })
-                    ran.append(f"{spec.label}/{mode} on {sha[:8]}: "
-                               f"recall={recall:.0%} f1={f1:.2f} €={eur or 'n/a'}")
-                except Exception as e:  # noqa: BLE001 — one bad model/mode/score must not kill the matrix
-                    skipped.append(
-                        f"{spec.label}/{mode} on {sha[:8]} (error: {type(e).__name__}: {e})")
-                    continue
+                # Cache FIRST: a hit re-scores the persisted output with no provider
+                # call (no spend, no budget gate) — re-runs are idempotent/resumable.
+                cached = extraction_cache.load(
+                    sha, parser, spec.label, mode, prompt_hash, model_id=model_id)
+                if cached is not None:
+                    try:
+                        preds = extraction_cache.preds_from_items(cached["items"])
+                        tp, n_preds, recall, precision = _score_preds(preds, truth)
+                    except Exception as e:  # noqa: BLE001 — a bad cache record must not kill the matrix
+                        skipped.append(f"{spec.label}/{mode} on {sha[:8]} "
+                                       f"(cache score error: {type(e).__name__}: {e})")
+                        continue
+                    in_tok, out_tok = cached.get("in_tokens", 0), cached.get("out_tokens", 0)
+                    latency = cached.get("latency_s", 0.0)
+                    n_errors = len(cached.get("errors", []))
+                    temperature = cached.get("temperature", "")
+                    hit = True
+                else:
+                    try:
+                        meter.check_or_raise(_PER_PAPER_CEILING_EUR)  # €50 gate — refuse before spend
+                    except BudgetExceeded as e:
+                        skipped.append(f"{spec.label} (budget: {e})")
+                        stopped = True
+                        break
+                    try:
+                        inner = spec.factory()
+                        if spec.price_in is not None and spec.price_out is not None:
+                            # Accurate per-model ledger cost (else _cost_eur falls back to the
+                            # Sonnet table — fine as a ceiling, but set it right when we know it).
+                            inner.prices = {
+                                "input_tokens": spec.price_in / 1_000_000,
+                                "output_tokens": spec.price_out / 1_000_000,
+                                "cache_read_input_tokens": spec.price_in / 1_000_000,
+                                "cache_creation_input_tokens": spec.price_in / 1_000_000,
+                            }
+                        provider = _UsageRecorder(inner)
+                        t0 = time.monotonic()
+                        valid, errors = extract(
+                            paper_sha=sha, parser_name=parser, skill_name=_SKILL,
+                            provider=provider, cache=cache, cost_meter=meter,
+                            response_format=strict_rf if mode == "strict" else None,
+                        )
+                        latency = time.monotonic() - t0
+                        in_tok, out_tok = provider.in_tokens, provider.out_tokens
+                        n_errors = len(errors)
+                        temperature = _temperature(provider._inner)
+                        # Persist BEFORE scoring: a paid call's output must survive even a
+                        # scoring edge case (e.g. a null-value extraction) — the exact data
+                        # loss this cache exists to prevent.
+                        extraction_cache.save(
+                            paper_sha=sha, parser=parser, label=spec.label, mode=mode,
+                            prompt_hash=prompt_hash, model_id=model_id,
+                            valid=valid, errors=errors, in_tokens=in_tok, out_tokens=out_tok,
+                            latency_s=latency, temperature=temperature)
+                        tp, n_preds, recall, precision = _score(valid, truth)
+                    except Exception as e:  # noqa: BLE001 — one bad model/mode/score must not kill the matrix
+                        skipped.append(
+                            f"{spec.label}/{mode} on {sha[:8]} (error: {type(e).__name__}: {e})")
+                        continue
+                    hit = False
+
+                # Shared row build (cache hit or fresh run) — cost re-derives from the
+                # (possibly cached) token counts × this spec's verified rate.
+                f1 = _f1(recall, precision)
+                if spec.price_in is not None and spec.price_out is not None:
+                    usd = (in_tok * spec.price_in + out_tok * spec.price_out) / 1_000_000
+                    eur_val = usd * _USD_TO_EUR
+                    eur = f"{eur_val:.5f}"
+                    eur_tp = f"{eur_val / tp:.5f}" if tp else ""  # cost per CORRECT extraction
+                else:
+                    eur = ""  # rate not verified — record tokens, leave cost blank
+                    eur_tp = ""
+                rows.append({
+                    "paper_sha8": sha[:8], "parser": parser, "label": spec.label,
+                    "model_id": model_id, "role": spec.role, "mode": mode,
+                    "n_valid": n_preds, "n_errors": n_errors,
+                    "tp": tp, "gt_total": len(truth),
+                    "recall": f"{recall:.4f}", "precision": f"{precision:.4f}", "f1": f"{f1:.4f}",
+                    "in_tokens": in_tok, "out_tokens": out_tok,
+                    "eur_per_paper": eur, "eur_per_tp": eur_tp, "latency_s": f"{latency:.2f}",
+                    "temperature": temperature, "prompt_hash": prompt_hash,
+                })
+                ran.append(f"{spec.label}/{mode} on {sha[:8]}: recall={recall:.0%} "
+                           f"f1={f1:.2f} €={eur or 'n/a'}" + (" [cache]" if hit else ""))
             if stopped:
                 break
         if stopped:
