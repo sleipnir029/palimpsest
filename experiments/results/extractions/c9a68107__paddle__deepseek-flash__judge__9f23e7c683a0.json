@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "paper_sha": "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c",
+  "parser": "paddle",
+  "label": "deepseek-flash",
+  "mode": "judge",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "deepseek-v4-flash",
+  "temperature": "",
+  "in_tokens": 0,
+  "out_tokens": 0,
+  "latency_s": 0.0,
+  "items": [],
+  "errors": []
+}

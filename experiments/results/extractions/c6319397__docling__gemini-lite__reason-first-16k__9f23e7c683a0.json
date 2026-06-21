@@ -1,0 +1,381 @@
+{
+  "schema_version": 1,
+  "paper_sha": "c63193979cec7f3d44d6d989fab9f7a7ba60590b18545f9129a982e578b8dc17",
+  "parser": "docling",
+  "label": "gemini-lite",
+  "mode": "reason-first-16k",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "google/gemini-3.1-flash-lite",
+  "temperature": 0.0,
+  "in_tokens": 42885,
+  "out_tokens": 1279,
+  "latency_s": 5.86,
+  "items": [
+    {
+      "value": 192.0,
+      "unit_label": "A/g",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": 1.53,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": "RDE",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c63193979cec7f3d44d6d989fab9f7a7ba60590b18545f9129a982e578b8dc17"
+        },
+        "page": 3,
+        "bbox_x0": 39.68310432565022,
+        "bbox_y0": 312.95097127903125,
+        "bbox_x1": 294.8333281725912,
+        "bbox_y1": 187.55088172243336,
+        "source_text": "The OER performance of Ir/TiOx@Ti catalysts with varying Ir loadings (wt%) was systematically evaluated in 0.1 M HClO4 using a threeelectrode system (Fig. 3a, inset). As shown in Fig. 3a and Supplementary Fig. 14, geometric activity (current normalized by electrode area) exhibits a volcano-shaped dependence on Ir content, peaking at 24 wt% Ir/TiOx@Ti. This optimal sample demonstrates a mass activity of 192 A/ gIr at 1.53 V versus reversible hydrogen electrode (RHE, Fig. 3b), 2.4-fold higher than unsupported Ir nanoparticles (81 A/gIr ). The activity trend correlates directly with Ir utilization ef fi ciency (Fig. 3b, inset): At <24wt%, incomplete TiOx@Ti surface coverage limits active site exposure; at >24 wt%, Ir nanoparticle agglomeration shields internal particles, reducing accessible active sites.",
+        "parser_name": "docling"
+      },
+      "type": "MassActivity"
+    },
+    {
+      "value": 81.0,
+      "unit_label": "A/g",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": 1.53,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": "RDE",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c63193979cec7f3d44d6d989fab9f7a7ba60590b18545f9129a982e578b8dc17"
+        },
+        "page": 3,
+        "bbox_x0": 39.68310432565022,
+        "bbox_y0": 312.95097127903125,
+        "bbox_x1": 294.8333281725912,
+        "bbox_y1": 187.55088172243336,
+        "source_text": "The OER performance of Ir/TiOx@Ti catalysts with varying Ir loadings (wt%) was systematically evaluated in 0.1 M HClO4 using a threeelectrode system (Fig. 3a, inset). As shown in Fig. 3a and Supplementary Fig. 14, geometric activity (current normalized by electrode area) exhibits a volcano-shaped dependence on Ir content, peaking at 24 wt% Ir/TiOx@Ti. This optimal sample demonstrates a mass activity of 192 A/ gIr at 1.53 V versus reversible hydrogen electrode (RHE, Fig. 3b), 2.4-fold higher than unsupported Ir nanoparticles (81 A/gIr ). The activity trend correlates directly with Ir utilization ef fi ciency (Fig. 3b, inset): At <24wt%, incomplete TiOx@Ti surface coverage limits active site exposure; at >24 wt%, Ir nanoparticle agglomeration shields internal particles, reducing accessible active sites.",
+        "parser_name": "docling"
+      },
+      "type": "MassActivity"
+    },
+    {
+      "value": 1700.0,
+      "unit_label": "h",
+      "condition": {
+        "current_density": 10.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": "RDE",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c63193979cec7f3d44d6d989fab9f7a7ba60590b18545f9129a982e578b8dc17"
+        },
+        "page": 3,
+        "bbox_x0": 39.683916434696215,
+        "bbox_y0": 184.42725854603123,
+        "bbox_x1": 294.9330972231055,
+        "bbox_y1": 48.31283582843332,
+        "source_text": "To probe the structural stability under harsh acidic OER conditions, inductively coupled plasma optical emission spectroscopy (ICPOES) was employed to quantify Ir dissolution during electrolysis. As shown in Fig. 3c, Ir/TiOx@Ti exhibits a rapid initial dissolution phase (0 -2h) followed by stabilization (2 -10 h, total dissolution: 0.16 mg/L), whereas unsupported Ir NPs show continuous dissolution over 8 h (total dissolution: 0.61 mg/L). This 3.8-fold reduction in Ir leaching highlights the TiOx@Ti support ' s critical role in anchoring Ir NPs and suppressing corrosion. Long-term chronopotentiometric testing at 10 mA/cm 2 further reveals durability. Ir/TiOx@Ti undergoes an initial 10-hour activation phase, likely due to surface reconstruction into another active phase, and subsequently maintains stable operation for over 1700 h without degradation (Fig. 3d and Supplementary Fig. 15).",
+        "parser_name": "docling"
+      },
+      "type": "Stability"
+    },
+    {
+      "value": 40.0,
+      "unit_label": "h",
+      "condition": {
+        "current_density": 10.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": "RDE",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c63193979cec7f3d44d6d989fab9f7a7ba60590b18545f9129a982e578b8dc17"
+        },
+        "page": 3,
+        "bbox_x0": 306.14030973588166,
+        "bbox_y0": 387.9002034420312,
+        "bbox_x1": 561.3826891672879,
+        "bbox_y1": 305.35877356843326,
+        "source_text": "In contrast, unsupported Ir NPs gradually loses their initial activity within 40h. Notably, Ir/TiOx@Ti ' s stability outperforms the most recent reports of supported Ir catalysts (typically <200h, Supplementary Table 1) 23,25,39 -42 , including TiO2-supported Ir (100 h), Ir/ Nb2O5-x (100 h), and Ir/Sb-SnO2 (15 h). These results collectively establish the TiOx@Ti support ' s dual function: (1) maximizing Ir utilization via optimized nanoparticle dispersion and (2) mitigating Ir dissolution.",
+        "parser_name": "docling"
+      },
+      "type": "Stability"
+    },
+    {
+      "value": 2.0,
+      "unit_label": "V",
+      "condition": {
+        "current_density": 4000.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": "single_cell_MEA",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c63193979cec7f3d44d6d989fab9f7a7ba60590b18545f9129a982e578b8dc17"
+        },
+        "page": 8,
+        "bbox_x0": 39.683504087207126,
+        "bbox_y0": 173.71317831003125,
+        "bbox_x1": 294.9132512773447,
+        "bbox_y1": 48.31341700943335,
+        "source_text": "Leveraging the enhanced OER activity and stability of Ir/TiOx@Ti, we fabricated proton exchange membrane water electrolyzers (PEMWEs) with an Ir loading of 0.3 mgIr/cm 2 via catalyst-coated membrane (CCM) assembly (Fig. 7a). The anode (Ir/TiOx@Ti) and cathode (Pt/C) layers, uniformly deposited on Nafi on 115 membranes (Supplementary Figs. 33 -36), form porous agglomerates with a controlled thickness of ~2.5 \u03bc m, as veri fi ed by cross-sectional SEM and X-ray fl uorescence spectroscopy (XRF) quanti fi cation. At 80 \u00b0C, the Ir/TiOx@Ti-based cell achieves a current density of 4.0 A/cm 2 at 2.0 V, outperforming unsupported Ir NPs (3.5 A/cm 2 @2.0V, Fig. 7b) and delivering a high Irspeci fi c power of \u2248 14 kW/gIr at 70% LHV ef fi ciency 58 (1.79 V). This performance benchmark places Ir/TiOx@Ti ahead of the most recent reports of supported Ir catalysts, such as Ir/TiO2, Ir/Sb-SnO2 and Ir/ Nb2O5 -x (Supplementary Table 4) 23,25,42,59 -66 .",
+        "parser_name": "docling"
+      },
+      "type": "PEMWECellVoltage"
+    },
+    {
+      "value": 294.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 2000.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": "single_cell_MEA",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c63193979cec7f3d44d6d989fab9f7a7ba60590b18545f9129a982e578b8dc17"
+        },
+        "page": 8,
+        "bbox_x0": 306.14048469700003,
+        "bbox_y0": 334.38053651703126,
+        "bbox_x1": 561.368196997,
+        "bbox_y1": 176.83622126943328,
+        "source_text": "Electrochemical impedance spectroscopy (EIS) deconvolution reveals the origin of Ir/TiOx@Ti ' s higher PEMWE performance, distinguishing contributions from ohmic resistance, mass transport, and kinetic overpotentials (Supplementary Figs. 37 and 38) 67 -69 . As shown in Fig. 7c, the Ir/TiOx@Ti anode exhibits a 30 mV reduction in kinetic overpotential compared to Ir NPs (294 versus 324 mV at 2 A/cm 2 ), contributing to 61% of the total overpotential mitigation, directly attributable to its high intrinsic activity and high Ir utilization ef fi ciency. Concurrently, the mass transport overpotential is reduced by 27% (6 mV versus 12 mV), enabled by the hierarchical porosity of Ir/ TiOx@Ti agglomerates -a 2.5 \u03bc m-thick catalyst layer with interconnected pores facilitating rapid bubble detachment and proton diffusion. These dual enhancements collectively enable the Ir/ TiOx@Ti-based cell to achieve industry-leading current densities (4.0 A/cm 2 @2.0V).",
+        "parser_name": "docling"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 324.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 2000.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": "single_cell_MEA",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c63193979cec7f3d44d6d989fab9f7a7ba60590b18545f9129a982e578b8dc17"
+        },
+        "page": 8,
+        "bbox_x0": 306.14048469700003,
+        "bbox_y0": 334.38053651703126,
+        "bbox_x1": 561.368196997,
+        "bbox_y1": 176.83622126943328,
+        "source_text": "Electrochemical impedance spectroscopy (EIS) deconvolution reveals the origin of Ir/TiOx@Ti ' s higher PEMWE performance, distinguishing contributions from ohmic resistance, mass transport, and kinetic overpotentials (Supplementary Figs. 37 and 38) 67 -69 . As shown in Fig. 7c, the Ir/TiOx@Ti anode exhibits a 30 mV reduction in kinetic overpotential compared to Ir NPs (294 versus 324 mV at 2 A/cm 2 ), contributing to 61% of the total overpotential mitigation, directly attributable to its high intrinsic activity and high Ir utilization ef fi ciency. Concurrently, the mass transport overpotential is reduced by 27% (6 mV versus 12 mV), enabled by the hierarchical porosity of Ir/ TiOx@Ti agglomerates -a 2.5 \u03bc m-thick catalyst layer with interconnected pores facilitating rapid bubble detachment and proton diffusion. These dual enhancements collectively enable the Ir/ TiOx@Ti-based cell to achieve industry-leading current densities (4.0 A/cm 2 @2.0V).",
+        "parser_name": "docling"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 6.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 2000.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": "single_cell_MEA",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c63193979cec7f3d44d6d989fab9f7a7ba60590b18545f9129a982e578b8dc17"
+        },
+        "page": 8,
+        "bbox_x0": 306.14048469700003,
+        "bbox_y0": 334.38053651703126,
+        "bbox_x1": 561.368196997,
+        "bbox_y1": 176.83622126943328,
+        "source_text": "Electrochemical impedance spectroscopy (EIS) deconvolution reveals the origin of Ir/TiOx@Ti ' s higher PEMWE performance, distinguishing contributions from ohmic resistance, mass transport, and kinetic overpotentials (Supplementary Figs. 37 and 38) 67 -69 . As shown in Fig. 7c, the Ir/TiOx@Ti anode exhibits a 30 mV reduction in kinetic overpotential compared to Ir NPs (294 versus 324 mV at 2 A/cm 2 ), contributing to 61% of the total overpotential mitigation, directly attributable to its high intrinsic activity and high Ir utilization ef fi ciency. Concurrently, the mass transport overpotential is reduced by 27% (6 mV versus 12 mV), enabled by the hierarchical porosity of Ir/ TiOx@Ti agglomerates -a 2.5 \u03bc m-thick catalyst layer with interconnected pores facilitating rapid bubble detachment and proton diffusion. These dual enhancements collectively enable the Ir/ TiOx@Ti-based cell to achieve industry-leading current densities (4.0 A/cm 2 @2.0V).",
+        "parser_name": "docling"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 12.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 2000.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": "single_cell_MEA",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c63193979cec7f3d44d6d989fab9f7a7ba60590b18545f9129a982e578b8dc17"
+        },
+        "page": 8,
+        "bbox_x0": 306.14048469700003,
+        "bbox_y0": 334.38053651703126,
+        "bbox_x1": 561.368196997,
+        "bbox_y1": 176.83622126943328,
+        "source_text": "Electrochemical impedance spectroscopy (EIS) deconvolution reveals the origin of Ir/TiOx@Ti ' s higher PEMWE performance, distinguishing contributions from ohmic resistance, mass transport, and kinetic overpotentials (Supplementary Figs. 37 and 38) 67 -69 . As shown in Fig. 7c, the Ir/TiOx@Ti anode exhibits a 30 mV reduction in kinetic overpotential compared to Ir NPs (294 versus 324 mV at 2 A/cm 2 ), contributing to 61% of the total overpotential mitigation, directly attributable to its high intrinsic activity and high Ir utilization ef fi ciency. Concurrently, the mass transport overpotential is reduced by 27% (6 mV versus 12 mV), enabled by the hierarchical porosity of Ir/ TiOx@Ti agglomerates -a 2.5 \u03bc m-thick catalyst layer with interconnected pores facilitating rapid bubble detachment and proton diffusion. These dual enhancements collectively enable the Ir/ TiOx@Ti-based cell to achieve industry-leading current densities (4.0 A/cm 2 @2.0V).",
+        "parser_name": "docling"
+      },
+      "type": "Overpotential"
+    }
+  ],
+  "errors": [
+    {
+      "error": "ValueError: likely mis-citation for DegradationRate: value 0.022 not found in cited span(s)",
+      "raw": {
+        "type": "DegradationRate",
+        "value": 0.022,
+        "unit_label": "mV/h",
+        "condition": {
+          "current_density": 1000,
+          "cell_type_family": "single_cell_MEA"
+        },
+        "evidence": {
+          "spans": [
+            675
+          ]
+        }
+      }
+    },
+    {
+      "error": "ValueError: likely mis-citation for DegradationRate: value 0.052 not found in cited span(s)",
+      "raw": {
+        "type": "DegradationRate",
+        "value": 0.052,
+        "unit_label": "mV/h",
+        "condition": {
+          "current_density": 2000,
+          "cell_type_family": "single_cell_MEA"
+        },
+        "evidence": {
+          "spans": [
+            675
+          ]
+        }
+      }
+    },
+    {
+      "error": "ValueError: likely mis-citation for DegradationRate: value 0.46 not found in cited span(s)",
+      "raw": {
+        "type": "DegradationRate",
+        "value": 0.46,
+        "unit_label": "mV/h",
+        "condition": {
+          "cell_type_family": "single_cell_MEA"
+        },
+        "evidence": {
+          "spans": [
+            675
+          ]
+        }
+      }
+    }
+  ]
+}

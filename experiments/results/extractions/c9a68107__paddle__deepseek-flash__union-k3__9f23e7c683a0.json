@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "paper_sha": "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c",
+  "parser": "paddle",
+  "label": "deepseek-flash",
+  "mode": "union-k3",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "deepseek-v4-flash",
+  "temperature": 0.7,
+  "in_tokens": 88152,
+  "out_tokens": 3607,
+  "latency_s": 21.73,
+  "items": [],
+  "errors": [
+    {
+      "error": "ValueError: LLM response not parseable as {\"items\": [...]}; head: '```json\\n{\"items\": [\\n  {\\n    \"type\": \"Overpotential\",\\n    \"value\": 288,\\n    \"unit_label\": \"mV\",\\n    \"condition\": {\\n      \"current_density\": 10,\\n      \"electrolyte\": {\"formula\": \"HClO4\", \"concentration\"'",
+      "raw": {
+        "batch": null
+      }
+    },
+    {
+      "error": "ValueError: LLM response not parseable as {\"items\": [...]}; head: '```json\\n{\"items\": [\\n  {\\n    \"type\": \"Overpotential\",\\n    \"value\": 288,\\n    \"unit_label\": \"mV\",\\n    \"condition\": {\\n      \"current_density\": 10,\\n      \"electrolyte\": {\\n        \"formula\": \"HClO4\",\\n      '",
+      "raw": {
+        "batch": null
+      }
+    },
+    {
+      "error": "ValueError: LLM response not parseable as {\"items\": [...]}; head: '```json\\n{\"items\": [\\n  {\\n    \"type\": \"Overpotential\",\\n    \"value\": 288,\\n    \"unit_label\": \"mV\",\\n    \"condition\": {\\n      \"current_density\": 10,\\n      \"electrolyte\": {\"formula\": \"HClO4\", \"concentration\"'",
+      "raw": {
+        "batch": null
+      }
+    }
+  ]
+}

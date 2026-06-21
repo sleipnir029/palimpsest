@@ -70,8 +70,15 @@ def save(
     out_tokens: int,
     latency_s: float,
     temperature: Any = "",
+    items: list[dict] | None = None,
 ) -> Path:
-    """Persist one extraction cell. Returns the file path."""
+    """Persist one extraction cell. Returns the file path.
+
+    `items` (T74): pre-serialized item dicts to store verbatim instead of
+    serializing `valid`. Lets the judge arm (F) persist its filtered SUBSET of an
+    upstream arm's items — which are already dicts, not Pydantic — so a re-run
+    re-scores at €0 like any other cell. `valid` is ignored when `items` is given.
+    """
     _DIR.mkdir(parents=True, exist_ok=True)
     payload = {
         "schema_version": _SCHEMA_VERSION,
@@ -85,7 +92,7 @@ def save(
         "in_tokens": in_tokens,
         "out_tokens": out_tokens,
         "latency_s": round(latency_s, 2),
-        "items": _serialize_items(valid),
+        "items": _serialize_items(valid) if items is None else items,
         "errors": _serialize_errors(errors),
     }
     p = path(paper_sha, parser, label, mode, prompt_hash)

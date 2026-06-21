@@ -332,3 +332,127 @@ Change the locked runtime default `deepseek-v4-flash` (T50) → either
 `deepseek-v4-pro` (safe drop-in, steady ~88%) or `gemini-3.1-flash-lite` (best
 overall, needs the runtime pointed at the Gemini provider). Deferred to the user;
 this is a CLAUDE.md-locked default, so it changes only on explicit approval.
+
+---
+
+## Finding #5 — T74: multi-pass & ensemble vs single-shot (cheap tier)
+
+*Data: `llm_matrix_t74_2026-06-21.csv` (+`.meta.json`), `reachable.json`,
+`rescore.json` (285 cells), git d8b411f. Spend +€0.67 (DeepSeek+Gemini only;
+frontier rows are cached T72 single-shot, never re-called). 6 arms on docling+paddle
+(100% ceiling), 5 gold papers. Arms A (raw) and E (parser-union) are €0 cache-derived.*
+
+**New metric — reachable-recall** = `hit / (gt_total − coverage_gap)`: recall
+normalized by what the parser actually surfaced, isolating model skill from parser
+limits (lineage: oracle-normalized recall / Retriever Potential Attainment /
+SQuAD-2.0 answerable-subset). Computed €0 in `reachable.py` from `rescore.json`.
+
+### Headline: cheap + loop ≥ expensive + single-shot — SUPPORTED, but conditional
+
+| combo | recall | cost vs frontier |
+|---|---|---|
+| **gemini-lite + union-k3 (docling)** | **98%** (39/40) | = sonnet-4.6 single-shot (98%), **~12× cheaper** |
+| **gemini-lite + requery (docling)** | **98%** (39/40) | > openai-frontier single-shot (88%) |
+| gemini-lite raw (docling) | 92% | already > openai-frontier (88%) |
+| deepseek-flash + any loop | 72–95% | does NOT reach frontier via these loops |
+
+A *good* cheap model (gemini-3.1-flash-lite) + a cheap loop **matches frontier
+single-shot** on the best parser. The *ultra*-cheap model (deepseek-v4-flash) does
+**not** close the gap with loops — consistent with Finding #4's "replace the flash
+default". The thesis claim holds for the right cheap model, not unconditionally.
+
+### Per-arm verdict (each attacks one T72 miss quadrant)
+
+- **union-k3 (stochastic model_gap).** Modest, model/parser-dependent: gemini-lite
+  docling **92→98** (+6, recovered 2–3 stochastic misses), paddle 92=92;
+  deepseek-flash paddle **72→78** (+6), docling 95→92 (slight loss, low-variance
+  baseline). Union helps where there is stochastic headroom; can't manufacture it.
+  Matches the literature (union recovers stochastic misses only).
+- **requery (systematic model_gap — the UNbenchmarked loop; T74's contribution).**
+  Two-faced: **helped the stronger cheap model** (gemini-lite docling 92→**98**, the
+  best single result) but **hurt the weaker one** (deepseek-flash docling 95→90,
+  paddle 72→68). Confirms the predicted failure — a cheap model asked "what did you
+  miss?" mis-extracts/false-stops. **Not a free win; can degrade the weakest model.**
+- **reason-first (format-induced; CRANE/dottxt).** **Backfired catastrophically on
+  the cheapest model**: deepseek-flash docling **95→40** (the reasoning field eats
+  the 8192-token output budget → truncated items). Neutral elsewhere (gemini-lite
+  92=92 / 92→90). **Reason-then-format does NOT transfer to a token-budget-limited
+  cheap model** — the one place naive CRANE application is most tempting.
+- **parser-union (coverage_gap).** The clean coverage win: **deepseek-flash recovers
+  the figure-Tafel paper 4/8→8/8** and reaches **recall 1.0 on 4/5 papers** by
+  unioning raw cells across all 4 parsers — the values absent from any single text
+  parser are recovered from a figure-aware one. *Precision caveat:* `dedup_by_value`
+  collapses on exact (type,value) while the scorer matches within ±1%, so
+  near-duplicate cross-parser values survive as FPs and **deflate parser-union
+  precision** (0.28–0.95) — the recall/coverage claim is sound, precision is a
+  lower bound (see N2).
+- **judge (precision filter, DROP-only).** Near-no-op here: recall preserved
+  (union-k3→judge: 37=37, 31=31, 39→38, 37=37 — DROP-only invariant held) but
+  precision barely moved (0.45→0.46, 0.56→0.57, 0.73=0.73). A cheap judge rarely
+  refutes a numeric value, and the high FP count (406 grid-wide) is mostly
+  **gold-thinness** (real values the gold omits), which a judge cannot fix.
+
+### Honest caveats
+- Recall is the trustworthy axis; precision on union/parser-union is understated by
+  exact-vs-tolerant dedup (N2) and gold-thinness — don't headline arm-E precision.
+- T74 measures the *cheap tier*; frontier is T72-cached single-shot (no multi-pass
+  frontier arm — out of scope and out of the DeepSeek+Gemini spend fence).
+- One transient OpenRouter/Gemini stall during the run; resumed from cache at €0
+  (every paid call — each union sample, each requery pass, the judge — is persisted).
+
+### Takeaway for the thesis
+"Cheap + loop beats expensive + single-shot" is **true for the right cheap model and
+the right loop** (gemini-lite + union/requery on docling = frontier, ~12× cheaper),
+and **parser-union is the reliable coverage closer**. But multi-pass is **not a free
+lunch**: reason-first can be catastrophic and requery can hurt the weakest model —
+the loop must be matched to the model, which is itself the nuance worth reporting.
+
+### Finding #5 addendum — model-union, reason-first retest, gold-thinness
+
+*Added after a follow-up round (+€0.15; `llm_matrix_t74.csv` now 140 rows,
+`gold_thinness.json`, refreshed `reachable.json`/`rescore.json`).*
+
+**Arm G — model-union (cheap ∪ cheap, single-shot each). THE standout, and €0.**
+
+| parser | model-union | precision | best frontier single-shot |
+|---|---|---|---|
+| **docling** | **100% (40/40)** | 0.71 | sonnet-4.6 98%, openai-frontier 88% |
+| **paddle** | **95% (38/40)** | 0.66 | sonnet-4.6 95%, openai-frontier 75% |
+
+deepseek-flash ∪ gemini-lite, one shot each, unioned → **beats the best frontier
+model on docling, ties it on paddle**, because the two cheap models miss *different*
+values (decorrelated errors). Cleaner than the within-model loops (union-k3/requery)
+and than parser-union (precision 0.71 vs 0.28–0.95 — only 2 sources, fewer FPs).
+This is the strongest support for "cheap + ensemble ≥ expensive single-shot", and it
+reuses cells already paid for — marginal cost €0.
+
+**Reason-first retest (was the catastrophe truncation?).** Partly. deepseek-flash
+docling: reason-first @8k **40%** → @16k **75%** — raising the output cap recovered
+most of the collapse (the reasoning field had been eating the items JSON). BUT 75% is
+**still below plain raw (95%)**. So: truncation caused the *catastrophe*, but
+reason-then-format **genuinely underperforms plain extraction** for this cheap model
+even with adequate tokens. gemini-lite unaffected throughout (92%). Verdict: CRANE's
+reason-before-format does NOT transfer to cheap *extraction* models — at best neutral,
+at worst harmful; not worth the tokens here.
+
+**Gold-thinness audit (`gold_thinness.py`) — precision was understated.** Of 105
+distinct FP (type,value,paper) groups across the grid, by cross-model agreement:
+- **32 likely REAL** (≥3 independent models extract it, gold lacks it) — candidate
+  gold additions, NOT model errors. Dominated by **measurement types the gold never
+  scoped**: `PEMWECellVoltage` (1.939/1.986/2.0 V, 7 models agree) and
+  `DegradationRate` (22/52/460 µV/h, 5 models) — real PEMWE metrics outside the
+  original 8-class OER gold.
+- 21 ambiguous (2 models); **52 likely hallucination** (1 model only) — the true
+  precision loss.
+
+So the "406 FPs" conflated ~30% gold-scope gaps with ~50% real hallucinations:
+**precision is meaningfully understated**, and the schema/gold could be extended
+(PEMWECellVoltage, DegradationRate) to capture what the cheap models already extract.
+Cross-model agreement is a label-free oracle for gold completeness — the same
+decorrelated-error principle that powers model-union, reused for QA.
+
+**Updated thesis takeaway.** The best gap-closer is not a within-model loop — it is
+**model-union of two cheap models** (docling 100%, paddle 95% = frontier, ~10× cheaper),
+backed by **parser-union** for the figure-only coverage gap. Within-model passes are
+modest and model-dependent (union-k3), two-faced (requery), or unhelpful (reason-first).
+And a chunk of the apparent precision gap is gold-thinness, not model error.

@@ -1,0 +1,1091 @@
+{
+  "candidates": [
+    {
+      "type": "Stability",
+      "value": 2.0,
+      "sha8": "3432d049",
+      "n_models_agree": 8,
+      "models": [
+        "deepseek-flash",
+        "deepseek-pro",
+        "gemini-free",
+        "gemini-lite",
+        "haiku-4.5",
+        "openai-frontier",
+        "openai-mini",
+        "sonnet-4.6"
+      ]
+    },
+    {
+      "type": "PEMWECellVoltage",
+      "value": 1.939,
+      "sha8": "bd9811a5",
+      "n_models_agree": 7,
+      "models": [
+        "deepseek-flash",
+        "deepseek-pro",
+        "gemini-lite",
+        "haiku-4.5",
+        "openai-frontier",
+        "openai-mini",
+        "sonnet-4.6"
+      ]
+    },
+    {
+      "type": "PEMWECellVoltage",
+      "value": 2.0,
+      "sha8": "bd9811a5",
+      "n_models_agree": 7,
+      "models": [
+        "deepseek-flash",
+        "deepseek-pro",
+        "gemini-lite",
+        "haiku-4.5",
+        "openai-frontier",
+        "openai-mini",
+        "sonnet-4.6"
+      ]
+    },
+    {
+      "type": "PEMWECellVoltage",
+      "value": 1.986,
+      "sha8": "bd9811a5",
+      "n_models_agree": 7,
+      "models": [
+        "deepseek-flash",
+        "deepseek-pro",
+        "gemini-lite",
+        "haiku-4.5",
+        "openai-frontier",
+        "openai-mini",
+        "sonnet-4.6"
+      ]
+    },
+    {
+      "type": "Stability",
+      "value": 1000.0,
+      "sha8": "bd9811a5",
+      "n_models_agree": 7,
+      "models": [
+        "deepseek-flash",
+        "deepseek-pro",
+        "gemini-lite",
+        "haiku-4.5",
+        "openai-frontier",
+        "openai-mini",
+        "sonnet-4.6"
+      ]
+    },
+    {
+      "type": "Overpotential",
+      "value": 294.0,
+      "sha8": "c6319397",
+      "n_models_agree": 7,
+      "models": [
+        "deepseek-flash",
+        "deepseek-pro",
+        "gemini-free",
+        "gemini-lite",
+        "openai-frontier",
+        "openai-mini",
+        "sonnet-4.6"
+      ]
+    },
+    {
+      "type": "Overpotential",
+      "value": 324.0,
+      "sha8": "c6319397",
+      "n_models_agree": 7,
+      "models": [
+        "deepseek-flash",
+        "deepseek-pro",
+        "gemini-free",
+        "gemini-lite",
+        "openai-frontier",
+        "openai-mini",
+        "sonnet-4.6"
+      ]
+    },
+    {
+      "type": "Stability",
+      "value": 400.0,
+      "sha8": "c6319397",
+      "n_models_agree": 7,
+      "models": [
+        "deepseek-flash",
+        "deepseek-pro",
+        "gemini-free",
+        "gemini-lite",
+        "openai-frontier",
+        "openai-mini",
+        "sonnet-4.6"
+      ]
+    },
+    {
+      "type": "Stability",
+      "value": 120.0,
+      "sha8": "c9a68107",
+      "n_models_agree": 7,
+      "models": [
+        "deepseek-flash",
+        "deepseek-pro",
+        "gemini-lite",
+        "haiku-4.5",
+        "openai-frontier",
+        "openai-mini",
+        "sonnet-4.6"
+      ]
+    },
+    {
+      "type": "TurnoverFrequency",
+      "value": 0.013,
+      "sha8": "3432d049",
+      "n_models_agree": 5,
+      "models": [
+        "deepseek-flash",
+        "deepseek-pro",
+        "openai-frontier",
+        "openai-mini",
+        "sonnet-4.6"
+      ]
+    },
+    {
+      "type": "Stability",
+      "value": 2.5,
+      "sha8": "bd86866b",
+      "n_models_agree": 5,
+      "models": [
+        "deepseek-flash",
+        "deepseek-pro",
+        "gemini-lite",
+        "openai-frontier",
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "Stability",
+      "value": 1500.0,
+      "sha8": "bd9811a5",
+      "n_models_agree": 5,
+      "models": [
+        "deepseek-flash",
+        "gemini-lite",
+        "haiku-4.5",
+        "openai-frontier",
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "PEMWECellVoltage",
+      "value": 1.79,
+      "sha8": "c6319397",
+      "n_models_agree": 5,
+      "models": [
+        "deepseek-flash",
+        "deepseek-pro",
+        "haiku-4.5",
+        "openai-frontier",
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "DegradationRate",
+      "value": 22.0,
+      "sha8": "c6319397",
+      "n_models_agree": 5,
+      "models": [
+        "deepseek-flash",
+        "deepseek-pro",
+        "gemini-lite",
+        "haiku-4.5",
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "DegradationRate",
+      "value": 52.0,
+      "sha8": "c6319397",
+      "n_models_agree": 5,
+      "models": [
+        "deepseek-flash",
+        "deepseek-pro",
+        "gemini-lite",
+        "haiku-4.5",
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "DegradationRate",
+      "value": 460.0,
+      "sha8": "c6319397",
+      "n_models_agree": 5,
+      "models": [
+        "deepseek-flash",
+        "deepseek-pro",
+        "gemini-lite",
+        "haiku-4.5",
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "Overpotential",
+      "value": 220.0,
+      "sha8": "bd86866b",
+      "n_models_agree": 4,
+      "models": [
+        "deepseek-flash",
+        "deepseek-pro",
+        "haiku-4.5",
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "TurnoverFrequency",
+      "value": 0.001,
+      "sha8": "bd86866b",
+      "n_models_agree": 4,
+      "models": [
+        "deepseek-flash",
+        "deepseek-pro",
+        "haiku-4.5",
+        "openai-frontier"
+      ]
+    },
+    {
+      "type": "TurnoverFrequency",
+      "value": 0.01,
+      "sha8": "bd86866b",
+      "n_models_agree": 4,
+      "models": [
+        "deepseek-flash",
+        "deepseek-pro",
+        "haiku-4.5",
+        "openai-frontier"
+      ]
+    },
+    {
+      "type": "DegradationRate",
+      "value": 2.8,
+      "sha8": "bd9811a5",
+      "n_models_agree": 4,
+      "models": [
+        "deepseek-flash",
+        "gemini-lite",
+        "haiku-4.5",
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "PEMWECellVoltage",
+      "value": 1.9,
+      "sha8": "c9a68107",
+      "n_models_agree": 4,
+      "models": [
+        "deepseek-flash",
+        "gemini-lite",
+        "haiku-4.5",
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "SpecificActivity",
+      "value": 5.2,
+      "sha8": "c9a68107",
+      "n_models_agree": 4,
+      "models": [
+        "deepseek-pro",
+        "gemini-lite",
+        "haiku-4.5",
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "Overpotential",
+      "value": 236.0,
+      "sha8": "3432d049",
+      "n_models_agree": 3,
+      "models": [
+        "deepseek-flash",
+        "gemini-lite",
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "Overpotential",
+      "value": 412.0,
+      "sha8": "3432d049",
+      "n_models_agree": 3,
+      "models": [
+        "deepseek-flash",
+        "gemini-lite",
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "TurnoverFrequency",
+      "value": 1.665,
+      "sha8": "3432d049",
+      "n_models_agree": 3,
+      "models": [
+        "deepseek-flash",
+        "gemini-lite",
+        "openai-frontier"
+      ]
+    },
+    {
+      "type": "Stability",
+      "value": 20.0,
+      "sha8": "bd9811a5",
+      "n_models_agree": 3,
+      "models": [
+        "deepseek-flash",
+        "openai-frontier",
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "DegradationRate",
+      "value": 2.3,
+      "sha8": "bd9811a5",
+      "n_models_agree": 3,
+      "models": [
+        "deepseek-flash",
+        "gemini-lite",
+        "sonnet-4.6"
+      ]
+    },
+    {
+      "type": "Overpotential",
+      "value": 260.0,
+      "sha8": "c6319397",
+      "n_models_agree": 3,
+      "models": [
+        "deepseek-flash",
+        "openai-frontier",
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "Overpotential",
+      "value": 6.0,
+      "sha8": "c6319397",
+      "n_models_agree": 3,
+      "models": [
+        "deepseek-flash",
+        "openai-frontier",
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "Overpotential",
+      "value": 12.0,
+      "sha8": "c6319397",
+      "n_models_agree": 3,
+      "models": [
+        "deepseek-flash",
+        "openai-frontier",
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "PEMWECellVoltage",
+      "value": 1.67,
+      "sha8": "c9a68107",
+      "n_models_agree": 3,
+      "models": [
+        "deepseek-flash",
+        "openai-mini",
+        "sonnet-4.6"
+      ]
+    },
+    {
+      "type": "PEMWECellVoltage",
+      "value": 1.83,
+      "sha8": "c9a68107",
+      "n_models_agree": 3,
+      "models": [
+        "deepseek-flash",
+        "openai-mini",
+        "sonnet-4.6"
+      ]
+    },
+    {
+      "type": "Overpotential",
+      "value": 298.0,
+      "sha8": "3432d049",
+      "n_models_agree": 2,
+      "models": [
+        "deepseek-flash",
+        "gemini-lite"
+      ]
+    },
+    {
+      "type": "TafelSlope",
+      "value": 52.6,
+      "sha8": "3432d049",
+      "n_models_agree": 2,
+      "models": [
+        "deepseek-flash",
+        "gemini-lite"
+      ]
+    },
+    {
+      "type": "TafelSlope",
+      "value": 75.8,
+      "sha8": "3432d049",
+      "n_models_agree": 2,
+      "models": [
+        "deepseek-flash",
+        "gemini-lite"
+      ]
+    },
+    {
+      "type": "TafelSlope",
+      "value": 109.8,
+      "sha8": "3432d049",
+      "n_models_agree": 2,
+      "models": [
+        "deepseek-flash",
+        "gemini-lite"
+      ]
+    },
+    {
+      "type": "TafelSlope",
+      "value": 131.3,
+      "sha8": "3432d049",
+      "n_models_agree": 2,
+      "models": [
+        "deepseek-flash",
+        "gemini-lite"
+      ]
+    },
+    {
+      "type": "SpecificActivity",
+      "value": 0.098,
+      "sha8": "3432d049",
+      "n_models_agree": 2,
+      "models": [
+        "deepseek-flash",
+        "gemini-lite"
+      ]
+    },
+    {
+      "type": "SpecificActivity",
+      "value": 0.035,
+      "sha8": "3432d049",
+      "n_models_agree": 2,
+      "models": [
+        "deepseek-flash",
+        "gemini-lite"
+      ]
+    },
+    {
+      "type": "SpecificActivity",
+      "value": 0.01,
+      "sha8": "3432d049",
+      "n_models_agree": 2,
+      "models": [
+        "deepseek-flash",
+        "gemini-lite"
+      ]
+    },
+    {
+      "type": "TurnoverFrequency",
+      "value": 0.024,
+      "sha8": "3432d049",
+      "n_models_agree": 2,
+      "models": [
+        "deepseek-flash",
+        "gemini-lite"
+      ]
+    },
+    {
+      "type": "MassActivity",
+      "value": 3343.37,
+      "sha8": "3432d049",
+      "n_models_agree": 2,
+      "models": [
+        "deepseek-flash",
+        "gemini-lite"
+      ]
+    },
+    {
+      "type": "MassActivity",
+      "value": 65.35,
+      "sha8": "3432d049",
+      "n_models_agree": 2,
+      "models": [
+        "deepseek-flash",
+        "gemini-lite"
+      ]
+    },
+    {
+      "type": "Stability",
+      "value": 30.0,
+      "sha8": "3432d049",
+      "n_models_agree": 2,
+      "models": [
+        "deepseek-flash",
+        "gemini-lite"
+      ]
+    },
+    {
+      "type": "Stability",
+      "value": 15.0,
+      "sha8": "3432d049",
+      "n_models_agree": 2,
+      "models": [
+        "deepseek-flash",
+        "gemini-lite"
+      ]
+    },
+    {
+      "type": "Stability",
+      "value": 9.0,
+      "sha8": "3432d049",
+      "n_models_agree": 2,
+      "models": [
+        "deepseek-flash",
+        "gemini-lite"
+      ]
+    },
+    {
+      "type": "Stability",
+      "value": 6.0,
+      "sha8": "3432d049",
+      "n_models_agree": 2,
+      "models": [
+        "deepseek-flash",
+        "gemini-lite"
+      ]
+    },
+    {
+      "type": "ECSA",
+      "value": 125.9,
+      "sha8": "3432d049",
+      "n_models_agree": 2,
+      "models": [
+        "gemini-lite",
+        "openai-frontier"
+      ]
+    },
+    {
+      "type": "Overpotential",
+      "value": 250.0,
+      "sha8": "bd86866b",
+      "n_models_agree": 2,
+      "models": [
+        "openai-frontier",
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "Overpotential",
+      "value": 20.0,
+      "sha8": "bd86866b",
+      "n_models_agree": 2,
+      "models": [
+        "deepseek-flash",
+        "haiku-4.5"
+      ]
+    },
+    {
+      "type": "PEMWECellVoltage",
+      "value": 1.88,
+      "sha8": "c6319397",
+      "n_models_agree": 2,
+      "models": [
+        "deepseek-pro",
+        "openai-frontier"
+      ]
+    },
+    {
+      "type": "Overpotential",
+      "value": 420.0,
+      "sha8": "c6319397",
+      "n_models_agree": 2,
+      "models": [
+        "openai-frontier",
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "Overpotential",
+      "value": 530.0,
+      "sha8": "c6319397",
+      "n_models_agree": 2,
+      "models": [
+        "openai-frontier",
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "Overpotential",
+      "value": 511.0,
+      "sha8": "3432d049",
+      "n_models_agree": 1,
+      "models": [
+        "gemini-lite"
+      ]
+    },
+    {
+      "type": "TurnoverFrequency",
+      "value": 0.1,
+      "sha8": "bd86866b",
+      "n_models_agree": 1,
+      "models": [
+        "openai-frontier"
+      ]
+    },
+    {
+      "type": "TurnoverFrequency",
+      "value": 1.0,
+      "sha8": "bd86866b",
+      "n_models_agree": 1,
+      "models": [
+        "openai-frontier"
+      ]
+    },
+    {
+      "type": "Overpotential",
+      "value": 210.0,
+      "sha8": "bd86866b",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "Overpotential",
+      "value": 100.0,
+      "sha8": "bd86866b",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "Overpotential",
+      "value": 90.0,
+      "sha8": "bd86866b",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "Overpotential",
+      "value": 200.0,
+      "sha8": "bd86866b",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "Overpotential",
+      "value": 280.0,
+      "sha8": "bd86866b",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "MassActivity",
+      "value": 0.0,
+      "sha8": "bd86866b",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "MassActivity",
+      "value": 35.0,
+      "sha8": "bd86866b",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "TurnoverFrequency",
+      "value": 0.0,
+      "sha8": "bd86866b",
+      "n_models_agree": 1,
+      "models": [
+        "deepseek-pro"
+      ]
+    },
+    {
+      "type": "TafelSlope",
+      "value": 1.0,
+      "sha8": "bd86866b",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "MassActivity",
+      "value": 80.0,
+      "sha8": "bd86866b",
+      "n_models_agree": 1,
+      "models": [
+        "deepseek-pro"
+      ]
+    },
+    {
+      "type": "ECSA",
+      "value": 0.0,
+      "sha8": "bd86866b",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "ECSA",
+      "value": 0.035,
+      "sha8": "bd9811a5",
+      "n_models_agree": 1,
+      "models": [
+        "openai-frontier"
+      ]
+    },
+    {
+      "type": "ExchangeCurrentDensity",
+      "value": 400.0,
+      "sha8": "bd9811a5",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "Stability",
+      "value": 80.0,
+      "sha8": "bd9811a5",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "Stability",
+      "value": 50.0,
+      "sha8": "bd9811a5",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "PEMWECellVoltage",
+      "value": 1.45,
+      "sha8": "bd9811a5",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "DegradationRate",
+      "value": 32.0,
+      "sha8": "bd9811a5",
+      "n_models_agree": 1,
+      "models": [
+        "deepseek-flash"
+      ]
+    },
+    {
+      "type": "DegradationRate",
+      "value": 126.0,
+      "sha8": "bd9811a5",
+      "n_models_agree": 1,
+      "models": [
+        "deepseek-flash"
+      ]
+    },
+    {
+      "type": "PEMWECellVoltage",
+      "value": 1.5,
+      "sha8": "bd9811a5",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "PEMWECellVoltage",
+      "value": 1.6,
+      "sha8": "bd9811a5",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "PEMWECellVoltage",
+      "value": 1.7,
+      "sha8": "bd9811a5",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "PEMWECellVoltage",
+      "value": 1.8,
+      "sha8": "bd9811a5",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "PEMWECellVoltage",
+      "value": 2.5,
+      "sha8": "bd9811a5",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "ECSA",
+      "value": 1.0,
+      "sha8": "bd9811a5",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "Stability",
+      "value": 10.0,
+      "sha8": "c6319397",
+      "n_models_agree": 1,
+      "models": [
+        "deepseek-flash"
+      ]
+    },
+    {
+      "type": "Overpotential",
+      "value": 0.42,
+      "sha8": "c6319397",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "Overpotential",
+      "value": 0.53,
+      "sha8": "c6319397",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "Overpotential",
+      "value": 0.59,
+      "sha8": "c6319397",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "PEMWECellVoltage",
+      "value": 4.0,
+      "sha8": "c6319397",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "Overpotential",
+      "value": 42.0,
+      "sha8": "c6319397",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "Overpotential",
+      "value": 53.0,
+      "sha8": "c6319397",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "Overpotential",
+      "value": 59.0,
+      "sha8": "c6319397",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "SpecificActivity",
+      "value": 14.0,
+      "sha8": "c6319397",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "ECSA",
+      "value": 4.8,
+      "sha8": "c6319397",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "ECSA",
+      "value": 5.4,
+      "sha8": "c6319397",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "MassActivity",
+      "value": 200.0,
+      "sha8": "c6319397",
+      "n_models_agree": 1,
+      "models": [
+        "openai-frontier"
+      ]
+    },
+    {
+      "type": "ECSA",
+      "value": 4.0,
+      "sha8": "c6319397",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "ExchangeCurrentDensity",
+      "value": 0.0,
+      "sha8": "c6319397",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "Overpotential",
+      "value": 0.0,
+      "sha8": "c9a68107",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "Stability",
+      "value": 5.2,
+      "sha8": "c9a68107",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "Stability",
+      "value": 2.9,
+      "sha8": "c9a68107",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "Overpotential",
+      "value": 57.3,
+      "sha8": "c9a68107",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "Overpotential",
+      "value": 58.0,
+      "sha8": "c9a68107",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "DegradationRate",
+      "value": 0.0,
+      "sha8": "c9a68107",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "ECSA",
+      "value": 54.6,
+      "sha8": "c9a68107",
+      "n_models_agree": 1,
+      "models": [
+        "haiku-4.5"
+      ]
+    },
+    {
+      "type": "Overpotential",
+      "value": -57.3,
+      "sha8": "c9a68107",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "Overpotential",
+      "value": -58.0,
+      "sha8": "c9a68107",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "MassActivity",
+      "value": 10.0,
+      "sha8": "c9a68107",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    },
+    {
+      "type": "TafelSlope",
+      "value": 57.0,
+      "sha8": "c9a68107",
+      "n_models_agree": 1,
+      "models": [
+        "openai-mini"
+      ]
+    }
+  ]
+}

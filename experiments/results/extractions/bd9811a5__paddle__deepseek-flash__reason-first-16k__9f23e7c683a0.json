@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "paper_sha": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54",
+  "parser": "paddle",
+  "label": "deepseek-flash",
+  "mode": "reason-first-16k",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "deepseek-v4-flash",
+  "temperature": 0.0,
+  "in_tokens": 25845,
+  "out_tokens": 1266,
+  "latency_s": 12.18,
+  "items": [
+    {
+      "value": 1000.0,
+      "unit_label": "h",
+      "condition": {
+        "current_density": 2000.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "not_applied",
+        "normalization_basis": null,
+        "cell_type_family": "single_cell_MEA",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54"
+        },
+        "page": 4,
+        "bbox_x0": 605.0,
+        "bbox_y0": 965.0,
+        "bbox_x1": 1179.0,
+        "bbox_y1": 1187.0,
+        "source_text": "A major improvement was observed with I $\\mathrm{Ru_{12}IrO_x}$ ,which showed voltage degradation ranging from 32 mV to 126 mV over 1,000 h. As suggested by the simulation results, if a catalyst has an Ir level near the threshold required to stabilize sufficient surface Ru atoms, its stability can become sensitive to subtle changes in Ir distribution.This sensitivity may explain the discrepancies in degradation rates observed between different batches of $\\mathrm{Ru}_{12}\\mathrm{IrO}_{x}$ An impressive suppression in dissolution was observed in $\\mathrm{{\\sf{R u}}}_{12}\\mathrm{{\\sf{I r O}}}_{x}$ ,as both Ir and Ru dissolution readily reached equilibrium, which were $:0.5\\upmu\\mathrm{g}\\mathrm{m g}_{\\mathrm{i r}}^{-1}$ and 20\u03bcg $\\mathrm{mg}_{\\mathrm{Ru}}$ 1, respectively.\n",
+        "parser_name": "paddle"
+      },
+      "type": "Stability"
+    }
+  ],
+  "errors": [
+    {
+      "error": "ValueError: likely mis-citation for Stability: value 20 not found in cited span(s)",
+      "raw": {
+        "type": "Stability",
+        "value": 20,
+        "unit_label": "h",
+        "condition": {
+          "current_density": 2000,
+          "cell_type_family": "single_cell_MEA",
+          "iR_correction": "not_applied"
+        },
+        "evidence": {
+          "spans": [
+            50
+          ]
+        }
+      }
+    },
+    {
+      "error": "ValueError: likely mis-citation for Stability: value 1500 not found in cited span(s)",
+      "raw": {
+        "type": "Stability",
+        "value": 1500,
+        "unit_label": "h",
+        "condition": {
+          "current_density": 2000,
+          "cell_type_family": "single_cell_MEA",
+          "iR_correction": "not_applied"
+        },
+        "evidence": {
+          "spans": [
+            53
+          ]
+        }
+      }
+    },
+    {
+      "error": "ValueError: likely mis-citation for DegradationRate: value 0.00255 not found in cited span(s)",
+      "raw": {
+        "type": "DegradationRate",
+        "value": 0.00255,
+        "unit_label": "mV/h",
+        "condition": {
+          "current_density": 2000,
+          "cell_type_family": "single_cell_MEA",
+          "iR_correction": "not_applied"
+        },
+        "evidence": {
+          "spans": [
+            53
+          ]
+        }
+      }
+    }
+  ]
+}

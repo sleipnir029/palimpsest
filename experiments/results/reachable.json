@@ -1,0 +1,624 @@
+{
+  "rows": [
+    {
+      "parser": "docling",
+      "label": "deepseek-flash",
+      "mode": "judge",
+      "hit": 37,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.925,
+      "reachable_recall": 0.925
+    },
+    {
+      "parser": "docling",
+      "label": "deepseek-flash",
+      "mode": "raw",
+      "hit": 38,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.95,
+      "reachable_recall": 0.95
+    },
+    {
+      "parser": "docling",
+      "label": "deepseek-flash",
+      "mode": "reason-first",
+      "hit": 16,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.4,
+      "reachable_recall": 0.4
+    },
+    {
+      "parser": "docling",
+      "label": "deepseek-flash",
+      "mode": "reason-first-16k",
+      "hit": 30,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.75,
+      "reachable_recall": 0.75
+    },
+    {
+      "parser": "docling",
+      "label": "deepseek-flash",
+      "mode": "requery",
+      "hit": 36,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.9,
+      "reachable_recall": 0.9
+    },
+    {
+      "parser": "docling",
+      "label": "deepseek-flash",
+      "mode": "union-k3",
+      "hit": 37,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.925,
+      "reachable_recall": 0.925
+    },
+    {
+      "parser": "docling",
+      "label": "deepseek-pro",
+      "mode": "raw",
+      "hit": 40,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 1.0,
+      "reachable_recall": 1.0
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
+      "mode": "judge",
+      "hit": 38,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.95,
+      "reachable_recall": 0.95
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
+      "mode": "raw",
+      "hit": 37,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.925,
+      "reachable_recall": 0.925
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
+      "mode": "reason-first",
+      "hit": 37,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.925,
+      "reachable_recall": 0.925
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
+      "mode": "reason-first-16k",
+      "hit": 37,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.925,
+      "reachable_recall": 0.925
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
+      "mode": "requery",
+      "hit": 39,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.975,
+      "reachable_recall": 0.975
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
+      "mode": "strict",
+      "hit": 26,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.65,
+      "reachable_recall": 0.65
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
+      "mode": "union-k3",
+      "hit": 39,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.975,
+      "reachable_recall": 0.975
+    },
+    {
+      "parser": "docling",
+      "label": "haiku-4.5",
+      "mode": "raw",
+      "hit": 24,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.6,
+      "reachable_recall": 0.6
+    },
+    {
+      "parser": "docling",
+      "label": "openai-frontier",
+      "mode": "raw",
+      "hit": 35,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.875,
+      "reachable_recall": 0.875
+    },
+    {
+      "parser": "docling",
+      "label": "openai-frontier",
+      "mode": "strict",
+      "hit": 38,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.95,
+      "reachable_recall": 0.95
+    },
+    {
+      "parser": "docling",
+      "label": "openai-mini",
+      "mode": "raw",
+      "hit": 29,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.725,
+      "reachable_recall": 0.725
+    },
+    {
+      "parser": "docling",
+      "label": "openai-mini",
+      "mode": "strict",
+      "hit": 34,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.85,
+      "reachable_recall": 0.85
+    },
+    {
+      "parser": "docling",
+      "label": "sonnet-4.6",
+      "mode": "raw",
+      "hit": 39,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.975,
+      "reachable_recall": 0.975
+    },
+    {
+      "parser": "dots",
+      "label": "deepseek-flash",
+      "mode": "raw",
+      "hit": 28,
+      "gt_total": 40,
+      "coverage_gap": 4,
+      "recall": 0.7,
+      "reachable_recall": 0.7778
+    },
+    {
+      "parser": "dots",
+      "label": "deepseek-pro",
+      "mode": "raw",
+      "hit": 36,
+      "gt_total": 40,
+      "coverage_gap": 4,
+      "recall": 0.9,
+      "reachable_recall": 1.0
+    },
+    {
+      "parser": "dots",
+      "label": "gemini-free",
+      "mode": "raw",
+      "hit": 19,
+      "gt_total": 21,
+      "coverage_gap": 0,
+      "recall": 0.9048,
+      "reachable_recall": 0.9048
+    },
+    {
+      "parser": "dots",
+      "label": "gemini-lite",
+      "mode": "raw",
+      "hit": 33,
+      "gt_total": 40,
+      "coverage_gap": 4,
+      "recall": 0.825,
+      "reachable_recall": 0.9167
+    },
+    {
+      "parser": "dots",
+      "label": "gemini-lite",
+      "mode": "strict",
+      "hit": 19,
+      "gt_total": 40,
+      "coverage_gap": 4,
+      "recall": 0.475,
+      "reachable_recall": 0.5278
+    },
+    {
+      "parser": "dots",
+      "label": "haiku-4.5",
+      "mode": "raw",
+      "hit": 35,
+      "gt_total": 40,
+      "coverage_gap": 4,
+      "recall": 0.875,
+      "reachable_recall": 0.9722
+    },
+    {
+      "parser": "dots",
+      "label": "openai-frontier",
+      "mode": "raw",
+      "hit": 32,
+      "gt_total": 40,
+      "coverage_gap": 4,
+      "recall": 0.8,
+      "reachable_recall": 0.8889
+    },
+    {
+      "parser": "dots",
+      "label": "openai-frontier",
+      "mode": "strict",
+      "hit": 36,
+      "gt_total": 40,
+      "coverage_gap": 4,
+      "recall": 0.9,
+      "reachable_recall": 1.0
+    },
+    {
+      "parser": "dots",
+      "label": "openai-mini",
+      "mode": "raw",
+      "hit": 23,
+      "gt_total": 40,
+      "coverage_gap": 4,
+      "recall": 0.575,
+      "reachable_recall": 0.6389
+    },
+    {
+      "parser": "dots",
+      "label": "openai-mini",
+      "mode": "strict",
+      "hit": 31,
+      "gt_total": 40,
+      "coverage_gap": 4,
+      "recall": 0.775,
+      "reachable_recall": 0.8611
+    },
+    {
+      "parser": "dots",
+      "label": "sonnet-4.6",
+      "mode": "raw",
+      "hit": 34,
+      "gt_total": 40,
+      "coverage_gap": 4,
+      "recall": 0.85,
+      "reachable_recall": 0.9444
+    },
+    {
+      "parser": "mineru",
+      "label": "deepseek-flash",
+      "mode": "raw",
+      "hit": 23,
+      "gt_total": 40,
+      "coverage_gap": 4,
+      "recall": 0.575,
+      "reachable_recall": 0.6389
+    },
+    {
+      "parser": "mineru",
+      "label": "deepseek-pro",
+      "mode": "raw",
+      "hit": 36,
+      "gt_total": 40,
+      "coverage_gap": 4,
+      "recall": 0.9,
+      "reachable_recall": 1.0
+    },
+    {
+      "parser": "mineru",
+      "label": "gemini-free",
+      "mode": "raw",
+      "hit": 25,
+      "gt_total": 25,
+      "coverage_gap": 0,
+      "recall": 1.0,
+      "reachable_recall": 1.0
+    },
+    {
+      "parser": "mineru",
+      "label": "gemini-lite",
+      "mode": "raw",
+      "hit": 33,
+      "gt_total": 40,
+      "coverage_gap": 4,
+      "recall": 0.825,
+      "reachable_recall": 0.9167
+    },
+    {
+      "parser": "mineru",
+      "label": "gemini-lite",
+      "mode": "strict",
+      "hit": 25,
+      "gt_total": 40,
+      "coverage_gap": 4,
+      "recall": 0.625,
+      "reachable_recall": 0.6944
+    },
+    {
+      "parser": "mineru",
+      "label": "haiku-4.5",
+      "mode": "raw",
+      "hit": 34,
+      "gt_total": 40,
+      "coverage_gap": 4,
+      "recall": 0.85,
+      "reachable_recall": 0.9444
+    },
+    {
+      "parser": "mineru",
+      "label": "openai-frontier",
+      "mode": "raw",
+      "hit": 32,
+      "gt_total": 40,
+      "coverage_gap": 4,
+      "recall": 0.8,
+      "reachable_recall": 0.8889
+    },
+    {
+      "parser": "mineru",
+      "label": "openai-frontier",
+      "mode": "strict",
+      "hit": 35,
+      "gt_total": 40,
+      "coverage_gap": 4,
+      "recall": 0.875,
+      "reachable_recall": 0.9722
+    },
+    {
+      "parser": "mineru",
+      "label": "openai-mini",
+      "mode": "raw",
+      "hit": 25,
+      "gt_total": 40,
+      "coverage_gap": 4,
+      "recall": 0.625,
+      "reachable_recall": 0.6944
+    },
+    {
+      "parser": "mineru",
+      "label": "openai-mini",
+      "mode": "strict",
+      "hit": 30,
+      "gt_total": 40,
+      "coverage_gap": 4,
+      "recall": 0.75,
+      "reachable_recall": 0.8333
+    },
+    {
+      "parser": "mineru",
+      "label": "sonnet-4.6",
+      "mode": "raw",
+      "hit": 34,
+      "gt_total": 40,
+      "coverage_gap": 4,
+      "recall": 0.85,
+      "reachable_recall": 0.9444
+    },
+    {
+      "parser": "paddle",
+      "label": "deepseek-flash",
+      "mode": "judge",
+      "hit": 31,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.775,
+      "reachable_recall": 0.775
+    },
+    {
+      "parser": "paddle",
+      "label": "deepseek-flash",
+      "mode": "raw",
+      "hit": 29,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.725,
+      "reachable_recall": 0.725
+    },
+    {
+      "parser": "paddle",
+      "label": "deepseek-flash",
+      "mode": "reason-first",
+      "hit": 29,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.725,
+      "reachable_recall": 0.725
+    },
+    {
+      "parser": "paddle",
+      "label": "deepseek-flash",
+      "mode": "reason-first-16k",
+      "hit": 29,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.725,
+      "reachable_recall": 0.725
+    },
+    {
+      "parser": "paddle",
+      "label": "deepseek-flash",
+      "mode": "requery",
+      "hit": 27,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.675,
+      "reachable_recall": 0.675
+    },
+    {
+      "parser": "paddle",
+      "label": "deepseek-flash",
+      "mode": "union-k3",
+      "hit": 31,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.775,
+      "reachable_recall": 0.775
+    },
+    {
+      "parser": "paddle",
+      "label": "deepseek-pro",
+      "mode": "raw",
+      "hit": 35,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.875,
+      "reachable_recall": 0.875
+    },
+    {
+      "parser": "paddle",
+      "label": "gemini-lite",
+      "mode": "judge",
+      "hit": 37,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.925,
+      "reachable_recall": 0.925
+    },
+    {
+      "parser": "paddle",
+      "label": "gemini-lite",
+      "mode": "raw",
+      "hit": 37,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.925,
+      "reachable_recall": 0.925
+    },
+    {
+      "parser": "paddle",
+      "label": "gemini-lite",
+      "mode": "reason-first",
+      "hit": 36,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.9,
+      "reachable_recall": 0.9
+    },
+    {
+      "parser": "paddle",
+      "label": "gemini-lite",
+      "mode": "reason-first-16k",
+      "hit": 38,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.95,
+      "reachable_recall": 0.95
+    },
+    {
+      "parser": "paddle",
+      "label": "gemini-lite",
+      "mode": "requery",
+      "hit": 37,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.925,
+      "reachable_recall": 0.925
+    },
+    {
+      "parser": "paddle",
+      "label": "gemini-lite",
+      "mode": "strict",
+      "hit": 32,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.8,
+      "reachable_recall": 0.8
+    },
+    {
+      "parser": "paddle",
+      "label": "gemini-lite",
+      "mode": "union-k3",
+      "hit": 37,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.925,
+      "reachable_recall": 0.925
+    },
+    {
+      "parser": "paddle",
+      "label": "haiku-4.5",
+      "mode": "raw",
+      "hit": 36,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.9,
+      "reachable_recall": 0.9
+    },
+    {
+      "parser": "paddle",
+      "label": "openai-frontier",
+      "mode": "raw",
+      "hit": 30,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.75,
+      "reachable_recall": 0.75
+    },
+    {
+      "parser": "paddle",
+      "label": "openai-frontier",
+      "mode": "strict",
+      "hit": 39,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.975,
+      "reachable_recall": 0.975
+    },
+    {
+      "parser": "paddle",
+      "label": "openai-mini",
+      "mode": "raw",
+      "hit": 35,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.875,
+      "reachable_recall": 0.875
+    },
+    {
+      "parser": "paddle",
+      "label": "openai-mini",
+      "mode": "strict",
+      "hit": 31,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.775,
+      "reachable_recall": 0.775
+    },
+    {
+      "parser": "paddle",
+      "label": "sonnet-4.6",
+      "mode": "raw",
+      "hit": 38,
+      "gt_total": 40,
+      "coverage_gap": 0,
+      "recall": 0.95,
+      "reachable_recall": 0.95
+    }
+  ]
+}

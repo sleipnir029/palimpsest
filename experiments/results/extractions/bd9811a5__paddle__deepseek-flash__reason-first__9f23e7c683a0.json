@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "paper_sha": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54",
+  "parser": "paddle",
+  "label": "deepseek-flash",
+  "mode": "reason-first",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "deepseek-v4-flash",
+  "temperature": 0.0,
+  "in_tokens": 25845,
+  "out_tokens": 207,
+  "latency_s": 3.07,
+  "items": [],
+  "errors": [
+    {
+      "error": "ValueError: likely mis-citation for Stability: value 1500 not found in cited span(s)",
+      "raw": {
+        "type": "Stability",
+        "value": 1500,
+        "unit_label": "h",
+        "condition": {
+          "current_density": 2000,
+          "cell_type_family": "single_cell_MEA",
+          "iR_correction": "unknown"
+        },
+        "evidence": {
+          "spans": [
+            8
+          ]
+        }
+      }
+    }
+  ]
+}

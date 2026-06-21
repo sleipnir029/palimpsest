@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "paper_sha": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54",
+  "parser": "docling",
+  "label": "deepseek-flash",
+  "mode": "reason-first",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "deepseek-v4-flash",
+  "temperature": 0.0,
+  "in_tokens": 32816,
+  "out_tokens": 290,
+  "latency_s": 4.04,
+  "items": [
+    {
+      "value": 240.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 10.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": 5.0,
+        "catalyst_loading": null,
+        "iR_correction": "applied",
+        "normalization_basis": null,
+        "cell_type_family": "RDE",
+        "electrolyte_family": "acid",
+        "scan_rate_regime": "slow_LSV"
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd9811a577ff2ec3d6e9eee65c9edf954d0e5059f5470835ed4c498f4cc22a54"
+        },
+        "page": 3,
+        "bbox_x0": 306.141601562,
+        "bbox_y0": 96.30693066403126,
+        "bbox_x1": 562.7127495110004,
+        "bbox_y1": 45.65034247403128,
+        "source_text": "To better understand the intrinsic characteristics of the Ir-RuO x catalysts, OER activities of different as-prepared catalysts were evaluated in a rotating disk electrode (RDE) setup. According to the polarization curves (Fig. 3a), all Ir-RuO x catalysts and the pristine RuO 2 showed similar OER activities, with overpotentials of ~240 mV to reach 10 mA cm -2 .",
+        "parser_name": "docling"
+      },
+      "type": "Overpotential"
+    }
+  ],
+  "errors": []
+}

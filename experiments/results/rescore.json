@@ -3,11 +3,562 @@
     {
       "parser": "docling",
       "label": "deepseek-flash",
+      "mode": "judge",
+      "sha8": "3432d049",
+      "gt_total": 19,
+      "n_preds": 44,
+      "fp": 26,
+      "hit": 18,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 1,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 236.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 298.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 412.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 511.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 52.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 75.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 109.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 131.3,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 3343.37,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 65.35,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 1.665,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 0.0237,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.098,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.035,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.01,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 30.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 15.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 9.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 6.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "deepseek-flash",
       "mode": "raw",
       "sha8": "3432d049",
       "gt_total": 19,
       "n_preds": 18,
       "fp": 0,
+      "hit": 18,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 1,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 236.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 298.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 412.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 511.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 52.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 75.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 109.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 131.3,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 3343.37,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 65.35,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 1.665,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 0.0237,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.098,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.035,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.01,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 30.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 15.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 9.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 6.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "deepseek-flash",
+      "mode": "reason-first-16k",
+      "sha8": "3432d049",
+      "gt_total": 19,
+      "n_preds": 21,
+      "fp": 2,
+      "hit": 19,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 236.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 298.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 412.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 511.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 52.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 75.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 109.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 131.3,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 3343.37,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 65.35,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 1.665,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 0.0237,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.098,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.035,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.01,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 30.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 15.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 9.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 6.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "deepseek-flash",
+      "mode": "reason-first",
+      "sha8": "3432d049",
+      "gt_total": 19,
+      "n_preds": 5,
+      "fp": 0,
+      "hit": 4,
+      "wrong_type": 1,
+      "coverage_gap": 0,
+      "model_gap": 14,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 236.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Overpotential",
+          "value": 298.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Overpotential",
+          "value": 412.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Overpotential",
+          "value": 511.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 52.6,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 75.8,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 109.8,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 131.3,
+          "status": "model_gap"
+        },
+        {
+          "type": "MassActivity",
+          "value": 3343.37,
+          "status": "model_gap"
+        },
+        {
+          "type": "MassActivity",
+          "value": 65.35,
+          "status": "model_gap"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 1.665,
+          "status": "wrong_type",
+          "predicted_as": "Stability"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 0.0237,
+          "status": "model_gap"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.098,
+          "status": "model_gap"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.035,
+          "status": "model_gap"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.01,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 30.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 15.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 9.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 6.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "deepseek-flash",
+      "mode": "requery",
+      "sha8": "3432d049",
+      "gt_total": 19,
+      "n_preds": 18,
+      "fp": 0,
+      "hit": 18,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 1,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 236.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 298.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 412.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 511.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 52.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 75.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 109.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 131.3,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 3343.37,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 65.35,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 1.665,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 0.0237,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.098,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.035,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.01,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 30.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 15.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 9.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 6.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "deepseek-flash",
+      "mode": "union-k3",
+      "sha8": "3432d049",
+      "gt_total": 19,
+      "n_preds": 44,
+      "fp": 26,
       "hit": 18,
       "wrong_type": 0,
       "coverage_gap": 0,
@@ -223,11 +774,451 @@
     {
       "parser": "docling",
       "label": "gemini-lite",
+      "mode": "judge",
+      "sha8": "3432d049",
+      "gt_total": 19,
+      "n_preds": 40,
+      "fp": 21,
+      "hit": 19,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 236.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 298.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 412.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 511.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 52.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 75.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 109.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 131.3,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 3343.37,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 65.35,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 1.665,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 0.0237,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.098,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.035,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.01,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 30.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 15.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 9.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 6.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
       "mode": "raw",
       "sha8": "3432d049",
       "gt_total": 19,
       "n_preds": 20,
       "fp": 1,
+      "hit": 19,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 236.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 298.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 412.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 511.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 52.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 75.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 109.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 131.3,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 3343.37,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 65.35,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 1.665,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 0.0237,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.098,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.035,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.01,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 30.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 15.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 9.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 6.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
+      "mode": "reason-first-16k",
+      "sha8": "3432d049",
+      "gt_total": 19,
+      "n_preds": 18,
+      "fp": 0,
+      "hit": 18,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 1,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 236.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 298.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 412.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 511.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 52.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 75.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 109.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 131.3,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 3343.37,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 65.35,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 1.665,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 0.0237,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.098,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.035,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.01,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 30.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 15.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 9.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 6.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
+      "mode": "reason-first",
+      "sha8": "3432d049",
+      "gt_total": 19,
+      "n_preds": 18,
+      "fp": 0,
+      "hit": 18,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 1,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 236.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 298.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 412.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 511.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 52.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 75.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 109.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 131.3,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 3343.37,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 65.35,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 1.665,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 0.0237,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.098,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.035,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.01,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 30.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 15.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 9.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 6.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
+      "mode": "requery",
+      "sha8": "3432d049",
+      "gt_total": 19,
+      "n_preds": 21,
+      "fp": 2,
       "hit": 19,
       "wrong_type": 0,
       "coverage_gap": 0,
@@ -437,6 +1428,116 @@
           "type": "Stability",
           "value": 6.0,
           "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
+      "mode": "union-k3",
+      "sha8": "3432d049",
+      "gt_total": 19,
+      "n_preds": 40,
+      "fp": 21,
+      "hit": 19,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 236.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 298.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 412.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 511.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 52.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 75.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 109.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 131.3,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 3343.37,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 65.35,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 1.665,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 0.0237,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.098,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.035,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.01,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 30.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 15.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 9.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 6.0,
+          "status": "hit"
         }
       ]
     },
@@ -3525,6 +4626,116 @@
     {
       "parser": "paddle",
       "label": "deepseek-flash",
+      "mode": "judge",
+      "sha8": "3432d049",
+      "gt_total": 19,
+      "n_preds": 24,
+      "fp": 5,
+      "hit": 19,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 236.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 298.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 412.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 511.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 52.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 75.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 109.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 131.3,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 3343.37,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 65.35,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 1.665,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 0.0237,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.098,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.035,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.01,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 30.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 15.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 9.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 6.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "deepseek-flash",
       "mode": "raw",
       "sha8": "3432d049",
       "gt_total": 19,
@@ -3554,6 +4765,446 @@
           "type": "Overpotential",
           "value": 511.0,
           "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 52.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 75.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 109.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 131.3,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 3343.37,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 65.35,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 1.665,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 0.0237,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.098,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.035,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.01,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 30.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 15.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 9.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 6.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "deepseek-flash",
+      "mode": "reason-first-16k",
+      "sha8": "3432d049",
+      "gt_total": 19,
+      "n_preds": 18,
+      "fp": 0,
+      "hit": 18,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 1,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 236.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 298.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 412.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 511.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 52.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 75.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 109.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 131.3,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 3343.37,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 65.35,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 1.665,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 0.0237,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.098,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.035,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.01,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 30.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 15.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 9.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 6.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "deepseek-flash",
+      "mode": "reason-first",
+      "sha8": "3432d049",
+      "gt_total": 19,
+      "n_preds": 20,
+      "fp": 2,
+      "hit": 18,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 1,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 236.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 298.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 412.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 511.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 52.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 75.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 109.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 131.3,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 3343.37,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 65.35,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 1.665,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 0.0237,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.098,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.035,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.01,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 30.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 15.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 9.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 6.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "deepseek-flash",
+      "mode": "requery",
+      "sha8": "3432d049",
+      "gt_total": 19,
+      "n_preds": 19,
+      "fp": 1,
+      "hit": 18,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 1,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 236.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 298.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 412.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 511.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 52.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 75.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 109.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 131.3,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 3343.37,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 65.35,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 1.665,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 0.0237,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.098,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.035,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.01,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 30.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 15.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 9.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 6.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "deepseek-flash",
+      "mode": "union-k3",
+      "sha8": "3432d049",
+      "gt_total": 19,
+      "n_preds": 24,
+      "fp": 5,
+      "hit": 19,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 236.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 298.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 412.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 511.0,
+          "status": "hit"
         },
         {
           "type": "TafelSlope",
@@ -3745,11 +5396,451 @@
     {
       "parser": "paddle",
       "label": "gemini-lite",
+      "mode": "judge",
+      "sha8": "3432d049",
+      "gt_total": 19,
+      "n_preds": 20,
+      "fp": 1,
+      "hit": 19,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 236.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 298.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 412.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 511.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 52.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 75.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 109.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 131.3,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 3343.37,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 65.35,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 1.665,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 0.0237,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.098,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.035,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.01,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 30.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 15.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 9.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 6.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "gemini-lite",
       "mode": "raw",
       "sha8": "3432d049",
       "gt_total": 19,
       "n_preds": 20,
       "fp": 1,
+      "hit": 19,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 236.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 298.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 412.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 511.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 52.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 75.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 109.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 131.3,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 3343.37,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 65.35,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 1.665,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 0.0237,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.098,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.035,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.01,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 30.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 15.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 9.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 6.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "gemini-lite",
+      "mode": "reason-first-16k",
+      "sha8": "3432d049",
+      "gt_total": 19,
+      "n_preds": 20,
+      "fp": 1,
+      "hit": 19,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 236.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 298.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 412.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 511.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 52.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 75.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 109.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 131.3,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 3343.37,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 65.35,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 1.665,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 0.0237,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.098,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.035,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.01,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 30.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 15.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 9.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 6.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "gemini-lite",
+      "mode": "reason-first",
+      "sha8": "3432d049",
+      "gt_total": 19,
+      "n_preds": 20,
+      "fp": 1,
+      "hit": 19,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 236.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 298.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 412.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 511.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 52.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 75.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 109.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 131.3,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 3343.37,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 65.35,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 1.665,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 0.0237,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.098,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.035,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.01,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 30.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 15.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 9.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 6.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "gemini-lite",
+      "mode": "requery",
+      "sha8": "3432d049",
+      "gt_total": 19,
+      "n_preds": 21,
+      "fp": 2,
       "hit": 19,
       "wrong_type": 0,
       "coverage_gap": 0,
@@ -3940,6 +6031,116 @@
           "type": "SpecificActivity",
           "value": 0.01,
           "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 30.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 15.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 9.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 6.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "gemini-lite",
+      "mode": "union-k3",
+      "sha8": "3432d049",
+      "gt_total": 19,
+      "n_preds": 20,
+      "fp": 1,
+      "hit": 19,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 236.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 298.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 412.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 511.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 52.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 75.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 109.8,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 131.3,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 3343.37,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 65.35,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 1.665,
+          "status": "hit"
+        },
+        {
+          "type": "TurnoverFrequency",
+          "value": 0.0237,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.098,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.035,
+          "status": "hit"
+        },
+        {
+          "type": "SpecificActivity",
+          "value": 0.01,
+          "status": "hit"
         },
         {
           "type": "Stability",
@@ -4626,7 +6827,132 @@
     {
       "parser": "docling",
       "label": "deepseek-flash",
+      "mode": "judge",
+      "sha8": "bd86866b",
+      "gt_total": 2,
+      "n_preds": 3,
+      "fp": 1,
+      "hit": 2,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 210.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 330.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "deepseek-flash",
       "mode": "raw",
+      "sha8": "bd86866b",
+      "gt_total": 2,
+      "n_preds": 3,
+      "fp": 1,
+      "hit": 2,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 210.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 330.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "deepseek-flash",
+      "mode": "reason-first-16k",
+      "sha8": "bd86866b",
+      "gt_total": 2,
+      "n_preds": 0,
+      "fp": 0,
+      "hit": 0,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 2,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 210.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Overpotential",
+          "value": 330.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "deepseek-flash",
+      "mode": "reason-first",
+      "sha8": "bd86866b",
+      "gt_total": 2,
+      "n_preds": 0,
+      "fp": 0,
+      "hit": 0,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 2,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 210.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Overpotential",
+          "value": 330.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "deepseek-flash",
+      "mode": "requery",
+      "sha8": "bd86866b",
+      "gt_total": 2,
+      "n_preds": 3,
+      "fp": 1,
+      "hit": 2,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 210.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 330.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "deepseek-flash",
+      "mode": "union-k3",
       "sha8": "bd86866b",
       "gt_total": 2,
       "n_preds": 3,
@@ -4676,6 +7002,31 @@
     {
       "parser": "docling",
       "label": "gemini-lite",
+      "mode": "judge",
+      "sha8": "bd86866b",
+      "gt_total": 2,
+      "n_preds": 3,
+      "fp": 1,
+      "hit": 2,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 210.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 330.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
       "mode": "raw",
       "sha8": "bd86866b",
       "gt_total": 2,
@@ -4701,7 +7052,107 @@
     {
       "parser": "docling",
       "label": "gemini-lite",
+      "mode": "reason-first-16k",
+      "sha8": "bd86866b",
+      "gt_total": 2,
+      "n_preds": 3,
+      "fp": 1,
+      "hit": 2,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 210.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 330.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
+      "mode": "reason-first",
+      "sha8": "bd86866b",
+      "gt_total": 2,
+      "n_preds": 3,
+      "fp": 1,
+      "hit": 2,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 210.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 330.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
+      "mode": "requery",
+      "sha8": "bd86866b",
+      "gt_total": 2,
+      "n_preds": 3,
+      "fp": 1,
+      "hit": 2,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 210.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 330.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
       "mode": "strict",
+      "sha8": "bd86866b",
+      "gt_total": 2,
+      "n_preds": 3,
+      "fp": 1,
+      "hit": 2,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 210.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 330.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
+      "mode": "union-k3",
       "sha8": "bd86866b",
       "gt_total": 2,
       "n_preds": 3,
@@ -5426,11 +7877,136 @@
     {
       "parser": "paddle",
       "label": "deepseek-flash",
+      "mode": "judge",
+      "sha8": "bd86866b",
+      "gt_total": 2,
+      "n_preds": 3,
+      "fp": 1,
+      "hit": 2,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 210.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 330.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "deepseek-flash",
       "mode": "raw",
       "sha8": "bd86866b",
       "gt_total": 2,
       "n_preds": 6,
       "fp": 4,
+      "hit": 2,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 210.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 330.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "deepseek-flash",
+      "mode": "reason-first-16k",
+      "sha8": "bd86866b",
+      "gt_total": 2,
+      "n_preds": 1,
+      "fp": 1,
+      "hit": 0,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 2,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 210.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Overpotential",
+          "value": 330.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "deepseek-flash",
+      "mode": "reason-first",
+      "sha8": "bd86866b",
+      "gt_total": 2,
+      "n_preds": 2,
+      "fp": 0,
+      "hit": 2,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 210.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 330.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "deepseek-flash",
+      "mode": "requery",
+      "sha8": "bd86866b",
+      "gt_total": 2,
+      "n_preds": 0,
+      "fp": 0,
+      "hit": 0,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 2,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 210.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Overpotential",
+          "value": 330.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "deepseek-flash",
+      "mode": "union-k3",
+      "sha8": "bd86866b",
+      "gt_total": 2,
+      "n_preds": 3,
+      "fp": 1,
       "hit": 2,
       "wrong_type": 0,
       "coverage_gap": 0,
@@ -5476,7 +8052,107 @@
     {
       "parser": "paddle",
       "label": "gemini-lite",
+      "mode": "judge",
+      "sha8": "bd86866b",
+      "gt_total": 2,
+      "n_preds": 3,
+      "fp": 1,
+      "hit": 2,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 210.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 330.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "gemini-lite",
       "mode": "raw",
+      "sha8": "bd86866b",
+      "gt_total": 2,
+      "n_preds": 3,
+      "fp": 1,
+      "hit": 2,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 210.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 330.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "gemini-lite",
+      "mode": "reason-first-16k",
+      "sha8": "bd86866b",
+      "gt_total": 2,
+      "n_preds": 2,
+      "fp": 0,
+      "hit": 2,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 210.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 330.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "gemini-lite",
+      "mode": "reason-first",
+      "sha8": "bd86866b",
+      "gt_total": 2,
+      "n_preds": 3,
+      "fp": 1,
+      "hit": 2,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 210.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 330.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "gemini-lite",
+      "mode": "requery",
       "sha8": "bd86866b",
       "gt_total": 2,
       "n_preds": 3,
@@ -5506,6 +8182,31 @@
       "gt_total": 2,
       "n_preds": 2,
       "fp": 0,
+      "hit": 2,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 210.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 330.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "gemini-lite",
+      "mode": "union-k3",
+      "sha8": "bd86866b",
+      "gt_total": 2,
+      "n_preds": 3,
+      "fp": 1,
       "hit": 2,
       "wrong_type": 0,
       "coverage_gap": 0,
@@ -5676,11 +8377,286 @@
     {
       "parser": "docling",
       "label": "deepseek-flash",
+      "mode": "judge",
+      "sha8": "bd9811a5",
+      "gt_total": 8,
+      "n_preds": 14,
+      "fp": 6,
+      "hit": 8,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 240.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.16,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 46.25,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 48.29,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 51.78,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1500.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1600.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 200.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "deepseek-flash",
       "mode": "raw",
       "sha8": "bd9811a5",
       "gt_total": 8,
       "n_preds": 12,
       "fp": 4,
+      "hit": 8,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 240.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.16,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 46.25,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 48.29,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 51.78,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1500.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1600.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 200.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "deepseek-flash",
+      "mode": "reason-first-16k",
+      "sha8": "bd9811a5",
+      "gt_total": 8,
+      "n_preds": 1,
+      "fp": 0,
+      "hit": 1,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 7,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 240.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.16,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 46.25,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 48.29,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 51.78,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 1500.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 1600.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 200.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "deepseek-flash",
+      "mode": "reason-first",
+      "sha8": "bd9811a5",
+      "gt_total": 8,
+      "n_preds": 1,
+      "fp": 0,
+      "hit": 1,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 7,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 240.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.16,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 46.25,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 48.29,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 51.78,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 1500.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 1600.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 200.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "deepseek-flash",
+      "mode": "requery",
+      "sha8": "bd9811a5",
+      "gt_total": 8,
+      "n_preds": 10,
+      "fp": 3,
+      "hit": 7,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 1,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 240.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.16,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 46.25,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 48.29,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 51.78,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1500.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1600.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 200.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "deepseek-flash",
+      "mode": "union-k3",
+      "sha8": "bd9811a5",
+      "gt_total": 8,
+      "n_preds": 14,
+      "fp": 6,
       "hit": 8,
       "wrong_type": 0,
       "coverage_gap": 0,
@@ -5786,6 +8762,61 @@
     {
       "parser": "docling",
       "label": "gemini-lite",
+      "mode": "judge",
+      "sha8": "bd9811a5",
+      "gt_total": 8,
+      "n_preds": 8,
+      "fp": 1,
+      "hit": 7,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 1,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 240.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.16,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 46.25,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 48.29,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 51.78,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1500.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1600.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 200.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
       "mode": "raw",
       "sha8": "bd9811a5",
       "gt_total": 8,
@@ -5841,6 +8872,171 @@
     {
       "parser": "docling",
       "label": "gemini-lite",
+      "mode": "reason-first-16k",
+      "sha8": "bd9811a5",
+      "gt_total": 8,
+      "n_preds": 6,
+      "fp": 0,
+      "hit": 6,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 2,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 240.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.16,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 46.25,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 48.29,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 51.78,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1500.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1600.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 200.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
+      "mode": "reason-first",
+      "sha8": "bd9811a5",
+      "gt_total": 8,
+      "n_preds": 6,
+      "fp": 0,
+      "hit": 6,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 2,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 240.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.16,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 46.25,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 48.29,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 51.78,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1500.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1600.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 200.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
+      "mode": "requery",
+      "sha8": "bd9811a5",
+      "gt_total": 8,
+      "n_preds": 10,
+      "fp": 2,
+      "hit": 8,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 240.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.16,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 46.25,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 48.29,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 51.78,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1500.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1600.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 200.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
       "mode": "strict",
       "sha8": "bd9811a5",
       "gt_total": 8,
@@ -5890,6 +9086,61 @@
           "type": "Stability",
           "value": 200.0,
           "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
+      "mode": "union-k3",
+      "sha8": "bd9811a5",
+      "gt_total": 8,
+      "n_preds": 8,
+      "fp": 1,
+      "hit": 7,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 1,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 240.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.16,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 46.25,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 48.29,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 51.78,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1500.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1600.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 200.0,
+          "status": "hit"
         }
       ]
     },
@@ -7326,6 +10577,61 @@
     {
       "parser": "paddle",
       "label": "deepseek-flash",
+      "mode": "judge",
+      "sha8": "bd9811a5",
+      "gt_total": 8,
+      "n_preds": 17,
+      "fp": 10,
+      "hit": 7,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 1,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 240.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.16,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 46.25,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 48.29,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 51.78,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1500.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1600.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 200.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "deepseek-flash",
       "mode": "raw",
       "sha8": "bd9811a5",
       "gt_total": 8,
@@ -7365,6 +10671,226 @@
           "type": "Stability",
           "value": 1500.0,
           "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 1600.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 200.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "deepseek-flash",
+      "mode": "reason-first-16k",
+      "sha8": "bd9811a5",
+      "gt_total": 8,
+      "n_preds": 1,
+      "fp": 1,
+      "hit": 0,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 8,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 240.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.16,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 46.25,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 48.29,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 51.78,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 1500.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 1600.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 200.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "deepseek-flash",
+      "mode": "reason-first",
+      "sha8": "bd9811a5",
+      "gt_total": 8,
+      "n_preds": 0,
+      "fp": 0,
+      "hit": 0,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 8,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 240.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.16,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 46.25,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 48.29,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 51.78,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 1500.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 1600.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 200.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "deepseek-flash",
+      "mode": "requery",
+      "sha8": "bd9811a5",
+      "gt_total": 8,
+      "n_preds": 12,
+      "fp": 6,
+      "hit": 6,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 2,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 240.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.16,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 46.25,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 48.29,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 51.78,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1500.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 1600.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 200.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "deepseek-flash",
+      "mode": "union-k3",
+      "sha8": "bd9811a5",
+      "gt_total": 8,
+      "n_preds": 17,
+      "fp": 10,
+      "hit": 7,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 1,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 240.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.16,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 46.25,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 48.29,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 51.78,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1500.0,
+          "status": "hit"
         },
         {
           "type": "Stability",
@@ -7436,6 +10962,61 @@
     {
       "parser": "paddle",
       "label": "gemini-lite",
+      "mode": "judge",
+      "sha8": "bd9811a5",
+      "gt_total": 8,
+      "n_preds": 8,
+      "fp": 2,
+      "hit": 6,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 2,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 240.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.16,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 46.25,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 48.29,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 51.78,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1500.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1600.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 200.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "gemini-lite",
       "mode": "raw",
       "sha8": "bd9811a5",
       "gt_total": 8,
@@ -7491,11 +11072,231 @@
     {
       "parser": "paddle",
       "label": "gemini-lite",
+      "mode": "reason-first-16k",
+      "sha8": "bd9811a5",
+      "gt_total": 8,
+      "n_preds": 6,
+      "fp": 0,
+      "hit": 6,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 2,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 240.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.16,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 46.25,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 48.29,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 51.78,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1500.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1600.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 200.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "gemini-lite",
+      "mode": "reason-first",
+      "sha8": "bd9811a5",
+      "gt_total": 8,
+      "n_preds": 9,
+      "fp": 3,
+      "hit": 6,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 2,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 240.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.16,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 46.25,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 48.29,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 51.78,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1500.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1600.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 200.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "gemini-lite",
+      "mode": "requery",
+      "sha8": "bd9811a5",
+      "gt_total": 8,
+      "n_preds": 9,
+      "fp": 3,
+      "hit": 6,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 2,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 240.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.16,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 46.25,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 48.29,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 51.78,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1500.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1600.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 200.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "gemini-lite",
       "mode": "strict",
       "sha8": "bd9811a5",
       "gt_total": 8,
       "n_preds": 6,
       "fp": 0,
+      "hit": 6,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 2,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 240.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.16,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 46.25,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 48.29,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 51.78,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1500.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1600.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 200.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "gemini-lite",
+      "mode": "union-k3",
+      "sha8": "bd9811a5",
+      "gt_total": 8,
+      "n_preds": 8,
+      "fp": 2,
       "hit": 6,
       "wrong_type": 0,
       "coverage_gap": 0,
@@ -7876,6 +11677,41 @@
     {
       "parser": "docling",
       "label": "deepseek-flash",
+      "mode": "judge",
+      "sha8": "c6319397",
+      "gt_total": 4,
+      "n_preds": 8,
+      "fp": 5,
+      "hit": 3,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 1,
+      "per_tuple": [
+        {
+          "type": "MassActivity",
+          "value": 192.0,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 81.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1700.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "deepseek-flash",
       "mode": "raw",
       "sha8": "c6319397",
       "gt_total": 4,
@@ -7905,6 +11741,146 @@
           "type": "Stability",
           "value": 40.0,
           "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "deepseek-flash",
+      "mode": "reason-first-16k",
+      "sha8": "c6319397",
+      "gt_total": 4,
+      "n_preds": 12,
+      "fp": 8,
+      "hit": 4,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "MassActivity",
+          "value": 192.0,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 81.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1700.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "deepseek-flash",
+      "mode": "reason-first",
+      "sha8": "c6319397",
+      "gt_total": 4,
+      "n_preds": 10,
+      "fp": 6,
+      "hit": 4,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "MassActivity",
+          "value": 192.0,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 81.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1700.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "deepseek-flash",
+      "mode": "requery",
+      "sha8": "c6319397",
+      "gt_total": 4,
+      "n_preds": 13,
+      "fp": 10,
+      "hit": 3,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 1,
+      "per_tuple": [
+        {
+          "type": "MassActivity",
+          "value": 192.0,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 81.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1700.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "deepseek-flash",
+      "mode": "union-k3",
+      "sha8": "c6319397",
+      "gt_total": 4,
+      "n_preds": 9,
+      "fp": 6,
+      "hit": 3,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 1,
+      "per_tuple": [
+        {
+          "type": "MassActivity",
+          "value": 192.0,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 81.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1700.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "model_gap"
         }
       ]
     },
@@ -7946,7 +11922,147 @@
     {
       "parser": "docling",
       "label": "gemini-lite",
+      "mode": "judge",
+      "sha8": "c6319397",
+      "gt_total": 4,
+      "n_preds": 7,
+      "fp": 4,
+      "hit": 3,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 1,
+      "per_tuple": [
+        {
+          "type": "MassActivity",
+          "value": 192.0,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 81.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1700.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
       "mode": "raw",
+      "sha8": "c6319397",
+      "gt_total": 4,
+      "n_preds": 7,
+      "fp": 4,
+      "hit": 3,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 1,
+      "per_tuple": [
+        {
+          "type": "MassActivity",
+          "value": 192.0,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 81.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1700.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
+      "mode": "reason-first-16k",
+      "sha8": "c6319397",
+      "gt_total": 4,
+      "n_preds": 9,
+      "fp": 5,
+      "hit": 4,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "MassActivity",
+          "value": 192.0,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 81.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1700.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
+      "mode": "reason-first",
+      "sha8": "c6319397",
+      "gt_total": 4,
+      "n_preds": 4,
+      "fp": 0,
+      "hit": 4,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "MassActivity",
+          "value": 192.0,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 81.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1700.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
+      "mode": "requery",
       "sha8": "c6319397",
       "gt_total": 4,
       "n_preds": 7,
@@ -8010,6 +12126,41 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
+      "mode": "union-k3",
+      "sha8": "c6319397",
+      "gt_total": 4,
+      "n_preds": 8,
+      "fp": 4,
+      "hit": 4,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "MassActivity",
+          "value": 192.0,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 81.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1700.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "hit"
         }
       ]
     },
@@ -8961,11 +13112,186 @@
     {
       "parser": "paddle",
       "label": "deepseek-flash",
+      "mode": "judge",
+      "sha8": "c6319397",
+      "gt_total": 4,
+      "n_preds": 10,
+      "fp": 7,
+      "hit": 3,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 1,
+      "per_tuple": [
+        {
+          "type": "MassActivity",
+          "value": 192.0,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 81.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1700.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "deepseek-flash",
       "mode": "raw",
       "sha8": "c6319397",
       "gt_total": 4,
       "n_preds": 9,
       "fp": 6,
+      "hit": 3,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 1,
+      "per_tuple": [
+        {
+          "type": "MassActivity",
+          "value": 192.0,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 81.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1700.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "deepseek-flash",
+      "mode": "reason-first-16k",
+      "sha8": "c6319397",
+      "gt_total": 4,
+      "n_preds": 12,
+      "fp": 8,
+      "hit": 4,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "MassActivity",
+          "value": 192.0,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 81.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1700.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "deepseek-flash",
+      "mode": "reason-first",
+      "sha8": "c6319397",
+      "gt_total": 4,
+      "n_preds": 4,
+      "fp": 0,
+      "hit": 4,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "MassActivity",
+          "value": 192.0,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 81.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1700.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "deepseek-flash",
+      "mode": "requery",
+      "sha8": "c6319397",
+      "gt_total": 4,
+      "n_preds": 8,
+      "fp": 5,
+      "hit": 3,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 1,
+      "per_tuple": [
+        {
+          "type": "MassActivity",
+          "value": 192.0,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 81.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1700.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "deepseek-flash",
+      "mode": "union-k3",
+      "sha8": "c6319397",
+      "gt_total": 4,
+      "n_preds": 11,
+      "fp": 8,
       "hit": 3,
       "wrong_type": 0,
       "coverage_gap": 0,
@@ -9031,6 +13357,41 @@
     {
       "parser": "paddle",
       "label": "gemini-lite",
+      "mode": "judge",
+      "sha8": "c6319397",
+      "gt_total": 4,
+      "n_preds": 7,
+      "fp": 4,
+      "hit": 3,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 1,
+      "per_tuple": [
+        {
+          "type": "MassActivity",
+          "value": 192.0,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 81.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1700.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "gemini-lite",
       "mode": "raw",
       "sha8": "c6319397",
       "gt_total": 4,
@@ -9066,11 +13427,151 @@
     {
       "parser": "paddle",
       "label": "gemini-lite",
+      "mode": "reason-first-16k",
+      "sha8": "c6319397",
+      "gt_total": 4,
+      "n_preds": 8,
+      "fp": 4,
+      "hit": 4,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "MassActivity",
+          "value": 192.0,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 81.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1700.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "gemini-lite",
+      "mode": "reason-first",
+      "sha8": "c6319397",
+      "gt_total": 4,
+      "n_preds": 6,
+      "fp": 3,
+      "hit": 3,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 1,
+      "per_tuple": [
+        {
+          "type": "MassActivity",
+          "value": 192.0,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 81.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1700.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "gemini-lite",
+      "mode": "requery",
+      "sha8": "c6319397",
+      "gt_total": 4,
+      "n_preds": 7,
+      "fp": 4,
+      "hit": 3,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 1,
+      "per_tuple": [
+        {
+          "type": "MassActivity",
+          "value": 192.0,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 81.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1700.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "gemini-lite",
       "mode": "strict",
       "sha8": "c6319397",
       "gt_total": 4,
       "n_preds": 3,
       "fp": 0,
+      "hit": 3,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 1,
+      "per_tuple": [
+        {
+          "type": "MassActivity",
+          "value": 192.0,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 81.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 1700.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "gemini-lite",
+      "mode": "union-k3",
+      "sha8": "c6319397",
+      "gt_total": 4,
+      "n_preds": 7,
+      "fp": 4,
       "hit": 3,
       "wrong_type": 0,
       "coverage_gap": 0,
@@ -9311,11 +13812,261 @@
     {
       "parser": "docling",
       "label": "deepseek-flash",
+      "mode": "judge",
+      "sha8": "c9a68107",
+      "gt_total": 7,
+      "n_preds": 11,
+      "fp": 5,
+      "hit": 6,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 1,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "deepseek-flash",
       "mode": "raw",
       "sha8": "c9a68107",
       "gt_total": 7,
       "n_preds": 10,
       "fp": 4,
+      "hit": 6,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 1,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "deepseek-flash",
+      "mode": "reason-first-16k",
+      "sha8": "c9a68107",
+      "gt_total": 7,
+      "n_preds": 6,
+      "fp": 0,
+      "hit": 6,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 1,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "deepseek-flash",
+      "mode": "reason-first",
+      "sha8": "c9a68107",
+      "gt_total": 7,
+      "n_preds": 10,
+      "fp": 3,
+      "hit": 7,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "deepseek-flash",
+      "mode": "requery",
+      "sha8": "c9a68107",
+      "gt_total": 7,
+      "n_preds": 10,
+      "fp": 4,
+      "hit": 6,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 1,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "deepseek-flash",
+      "mode": "union-k3",
+      "sha8": "c9a68107",
+      "gt_total": 7,
+      "n_preds": 13,
+      "fp": 7,
       "hit": 6,
       "wrong_type": 0,
       "coverage_gap": 0,
@@ -9411,11 +14162,211 @@
     {
       "parser": "docling",
       "label": "gemini-lite",
+      "mode": "judge",
+      "sha8": "c9a68107",
+      "gt_total": 7,
+      "n_preds": 10,
+      "fp": 3,
+      "hit": 7,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
       "mode": "raw",
       "sha8": "c9a68107",
       "gt_total": 7,
       "n_preds": 8,
       "fp": 1,
+      "hit": 7,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
+      "mode": "reason-first-16k",
+      "sha8": "c9a68107",
+      "gt_total": 7,
+      "n_preds": 8,
+      "fp": 1,
+      "hit": 7,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
+      "mode": "reason-first",
+      "sha8": "c9a68107",
+      "gt_total": 7,
+      "n_preds": 8,
+      "fp": 1,
+      "hit": 7,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
+      "mode": "requery",
+      "sha8": "c9a68107",
+      "gt_total": 7,
+      "n_preds": 9,
+      "fp": 2,
       "hit": 7,
       "wrong_type": 0,
       "coverage_gap": 0,
@@ -9505,6 +14456,56 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "docling",
+      "label": "gemini-lite",
+      "mode": "union-k3",
+      "sha8": "c9a68107",
+      "gt_total": 7,
+      "n_preds": 10,
+      "fp": 3,
+      "hit": 7,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "hit"
         }
       ]
     },
@@ -10811,7 +15812,257 @@
     {
       "parser": "paddle",
       "label": "deepseek-flash",
+      "mode": "judge",
+      "sha8": "c9a68107",
+      "gt_total": 7,
+      "n_preds": 0,
+      "fp": 0,
+      "hit": 0,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 7,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "model_gap"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "deepseek-flash",
       "mode": "raw",
+      "sha8": "c9a68107",
+      "gt_total": 7,
+      "n_preds": 0,
+      "fp": 0,
+      "hit": 0,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 7,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "model_gap"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "deepseek-flash",
+      "mode": "reason-first-16k",
+      "sha8": "c9a68107",
+      "gt_total": 7,
+      "n_preds": 8,
+      "fp": 1,
+      "hit": 7,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "deepseek-flash",
+      "mode": "reason-first",
+      "sha8": "c9a68107",
+      "gt_total": 7,
+      "n_preds": 5,
+      "fp": 0,
+      "hit": 5,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 2,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "deepseek-flash",
+      "mode": "requery",
+      "sha8": "c9a68107",
+      "gt_total": 7,
+      "n_preds": 0,
+      "fp": 0,
+      "hit": 0,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 7,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "model_gap"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "model_gap"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "model_gap"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "deepseek-flash",
+      "mode": "union-k3",
       "sha8": "c9a68107",
       "gt_total": 7,
       "n_preds": 0,
@@ -10911,7 +16162,207 @@
     {
       "parser": "paddle",
       "label": "gemini-lite",
+      "mode": "judge",
+      "sha8": "c9a68107",
+      "gt_total": 7,
+      "n_preds": 13,
+      "fp": 6,
+      "hit": 7,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "gemini-lite",
       "mode": "raw",
+      "sha8": "c9a68107",
+      "gt_total": 7,
+      "n_preds": 9,
+      "fp": 2,
+      "hit": 7,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "gemini-lite",
+      "mode": "reason-first-16k",
+      "sha8": "c9a68107",
+      "gt_total": 7,
+      "n_preds": 9,
+      "fp": 2,
+      "hit": 7,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "hit"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "gemini-lite",
+      "mode": "reason-first",
+      "sha8": "c9a68107",
+      "gt_total": 7,
+      "n_preds": 8,
+      "fp": 2,
+      "hit": 6,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 1,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "gemini-lite",
+      "mode": "requery",
       "sha8": "c9a68107",
       "gt_total": 7,
       "n_preds": 9,
@@ -11005,6 +16456,56 @@
           "type": "Stability",
           "value": 40.0,
           "status": "model_gap"
+        }
+      ]
+    },
+    {
+      "parser": "paddle",
+      "label": "gemini-lite",
+      "mode": "union-k3",
+      "sha8": "c9a68107",
+      "gt_total": 7,
+      "n_preds": 13,
+      "fp": 6,
+      "hit": 7,
+      "wrong_type": 0,
+      "coverage_gap": 0,
+      "model_gap": 0,
+      "per_tuple": [
+        {
+          "type": "Overpotential",
+          "value": 288.0,
+          "status": "hit"
+        },
+        {
+          "type": "Overpotential",
+          "value": 307.0,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 42.6,
+          "status": "hit"
+        },
+        {
+          "type": "TafelSlope",
+          "value": 45.1,
+          "status": "hit"
+        },
+        {
+          "type": "MassActivity",
+          "value": 345.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 120.0,
+          "status": "hit"
+        },
+        {
+          "type": "Stability",
+          "value": 40.0,
+          "status": "hit"
         }
       ]
     },

@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "paper_sha": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01",
+  "parser": "paddle",
+  "label": "deepseek-flash",
+  "mode": "requery",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "deepseek-v4-flash",
+  "temperature": 0.0,
+  "in_tokens": 62676,
+  "out_tokens": 561,
+  "latency_s": 6.22,
+  "items": [],
+  "errors": [
+    {
+      "error": "ValueError: LLM response not parseable as {\"items\": [...]}; head: '```json\\n{\"items\": [\\n  {\\n    \"type\": \"Overpotential\",\\n    \"value\": 210,\\n    \"unit_label\": \"mV\",\\n    \"condition\": {\\n      \"current_density\": 0.5,\\n      \"normalization_basis\": \"geometric\",\\n      \"electro'",
+      "raw": {
+        "batch": null
+      }
+    }
+  ]
+}

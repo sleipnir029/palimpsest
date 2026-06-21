@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "paper_sha": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01",
+  "parser": "docling",
+  "label": "deepseek-flash",
+  "mode": "reason-first-16k",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "deepseek-v4-flash",
+  "temperature": 0.0,
+  "in_tokens": 41272,
+  "out_tokens": 193,
+  "latency_s": 3.6,
+  "items": [],
+  "errors": []
+}

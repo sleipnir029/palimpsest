@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "paper_sha": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01",
+  "parser": "paddle",
+  "label": "deepseek-flash",
+  "mode": "reason-first-16k",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "deepseek-v4-flash",
+  "temperature": 0.0,
+  "in_tokens": 31364,
+  "out_tokens": 506,
+  "latency_s": 6.94,
+  "items": [
+    {
+      "value": 20.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 1.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "unknown",
+        "normalization_basis": "geometric",
+        "cell_type_family": null,
+        "electrolyte_family": "acid",
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 1,
+        "bbox_x0": 595.0,
+        "bbox_y0": 1139.0,
+        "bbox_x1": 1153.0,
+        "bbox_y1": 1414.0,
+        "source_text": "normalizing the current density to the geometric area or the mass of iridium. Amorphous $\\mathrm{I r O}_{x}$ rutile IrO, and shows a 20 mV reduction in overpotential as well as an approximately two orders of magnitude lower lifetime at l mA cm $^{-2}_{\\mathrm{g e o}}$ (ref. 8). Recent studies on highly active $\\mathrm{IrNiO}_{x}$ (refs.10,11),$\\mathsf{L i}-\\mathsf{I r O}$ $x (ref.9)and $\\mathsf{S r I r O}_{s}$ (res.8,3,5) ae motad tt te race of t materials is converted to an amorphous phase on exposure to oxygen e $\\mathbf{I r}0,$ is asier to oxidize and undergoes greater Ir-O bond shortening with increased potential compared with crystalline $\\mathrm{I r O}_{2}$ (refs. 9,10,16,17).These differences in coordination environment of the iridium centre have been suggested to influence the binding energetics of key OER intermediates, possibly ",
+        "parser_name": "paddle"
+      },
+      "type": "Overpotential"
+    }
+  ],
+  "errors": []
+}

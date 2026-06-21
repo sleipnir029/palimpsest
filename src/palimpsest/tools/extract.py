@@ -540,6 +540,7 @@ def extract(
     provider: Any = None,
     cache: Any = None,
     response_format: Any = None,
+    extra_instruction: str | None = None,
 ) -> tuple[list[BaseModel], list[tuple[Exception, dict]]]:
     """Run extraction over one cached parser output, ONE LLM call per page.
 
@@ -548,6 +549,11 @@ def extract(
     is the T72 strict-output arm: when set (an OpenAI-style ``json_schema`` dict),
     it is forwarded to ``provider.complete`` — only OpenAI-compatible providers
     honour it. Leave None for the production path (plain JSON + Pydantic).
+
+    ``extra_instruction`` (T74 multi-pass arms) appends one extra line to the user
+    message — reason-then-format steering, or a re-query naming the measurement
+    types a prior pass missed. ``None`` (default) leaves the production user
+    message byte-identical, so the production prompt and its cache key don't move.
     """
     if cache is None:
         from palimpsest.cache import ParserCache  # lazy: break import cycle
@@ -593,11 +599,14 @@ def extract(
         batches = [ids for _p, ids in sorted(by_page.items())]
 
     extra = {"response_format": response_format} if response_format is not None else {}
+    tail = "\n\nReturn the measurements."
+    if extra_instruction:
+        tail += "\n\n" + extra_instruction
     for batch in batches:
         content = full if batch is None else _render_projection(spans, batch)
         resp = provider.complete(
             system=system,
-            messages=[{"role": "user", "content": content + "\n\nReturn the measurements."}],
+            messages=[{"role": "user", "content": content + tail}],
             tools=None,
             cache_breakpoints=["system"],
             **extra,

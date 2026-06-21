@@ -1,0 +1,26 @@
+{
+  "date": "2026-06-21",
+  "git_commit": "d8b411f",
+  "parser": "t74",
+  "models": [
+    "deepseek-flash",
+    "gemini-lite",
+    "model-union"
+  ],
+  "rows": 140,
+  "modes": [
+    "judge",
+    "model-union",
+    "parser-union",
+    "raw",
+    "reason-first",
+    "reason-first-16k",
+    "requery",
+    "union-k3"
+  ],
+  "budget_before_eur": 24.9897,
+  "budget_after_eur": 25.1373,
+  "run_spend_eur": 0.1476,
+  "prompt_hash": "9f23e7c683a0",
+  "csv": "llm_matrix_t74_2026-06-21.csv"
+}

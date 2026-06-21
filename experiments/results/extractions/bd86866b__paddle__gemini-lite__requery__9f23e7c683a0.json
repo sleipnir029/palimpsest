@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "paper_sha": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01",
+  "parser": "paddle",
+  "label": "gemini-lite",
+  "mode": "requery",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "google/gemini-3.1-flash-lite",
+  "temperature": 0.0,
+  "in_tokens": 68764,
+  "out_tokens": 325,
+  "latency_s": 2.85,
+  "items": [
+    {
+      "value": 210.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 0.5,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "unknown",
+        "normalization_basis": null,
+        "cell_type_family": null,
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 2,
+        "bbox_x0": 603.0,
+        "bbox_y0": 503.0,
+        "bbox_x1": 1155.0,
+        "bbox_y1": 751.0,
+        "source_text": "Compared with $\\mathrm{I r O}_{2},$ ,the cyclic voltammograms of $\\mathsf{I r O}_{x}$ show higher redox current densities of around one order of magnitude, when normalized to the geometric area.$\\mathbf{,I r O},$ also shows a hiher activity than $\\mathrm{I r O}_{2}$ ,as reflected in the overpotential required to achieve 0.5 mA cm $^{-2}_{\\mathrm{g e o}}$ (-210 mV and 330 mV for IrOx $\\mathrm{a n d}\\mathrm{I r O}_{2}$ ,respectively; Fig.1d).$\\mathbf{I r O}_{x}$ shows two distinct broad redox peaks at around 0.8 and 1.2 V versus the reversible hydrogen electrode (RHE). By contrast, no distinct redox peak can be observed $\\mathrm{for}\\mathrm{IrO}_{2}$ .The redox features and catalytic activity of both samples are rlatively stable for 20 cycles and 2.5 hof operation (further results on te sability ofthe edox atures,activity and morpholog/structure can be found in Supplementary Note 2).",
+        "parser_name": "paddle"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 330.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 0.5,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "unknown",
+        "normalization_basis": null,
+        "cell_type_family": null,
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 2,
+        "bbox_x0": 603.0,
+        "bbox_y0": 503.0,
+        "bbox_x1": 1155.0,
+        "bbox_y1": 751.0,
+        "source_text": "Compared with $\\mathrm{I r O}_{2},$ ,the cyclic voltammograms of $\\mathsf{I r O}_{x}$ show higher redox current densities of around one order of magnitude, when normalized to the geometric area.$\\mathbf{,I r O},$ also shows a hiher activity than $\\mathrm{I r O}_{2}$ ,as reflected in the overpotential required to achieve 0.5 mA cm $^{-2}_{\\mathrm{g e o}}$ (-210 mV and 330 mV for IrOx $\\mathrm{a n d}\\mathrm{I r O}_{2}$ ,respectively; Fig.1d).$\\mathbf{I r O}_{x}$ shows two distinct broad redox peaks at around 0.8 and 1.2 V versus the reversible hydrogen electrode (RHE). By contrast, no distinct redox peak can be observed $\\mathrm{for}\\mathrm{IrO}_{2}$ .The redox features and catalytic activity of both samples are rlatively stable for 20 cycles and 2.5 hof operation (further results on te sability ofthe edox atures,activity and morpholog/structure can be found in Supplementary Note 2).",
+        "parser_name": "paddle"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 2.5,
+      "unit_label": "h",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": "RDE",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
+        },
+        "page": 2,
+        "bbox_x0": 603.0,
+        "bbox_y0": 503.0,
+        "bbox_x1": 1155.0,
+        "bbox_y1": 751.0,
+        "source_text": "Compared with $\\mathrm{I r O}_{2},$ ,the cyclic voltammograms of $\\mathsf{I r O}_{x}$ show higher redox current densities of around one order of magnitude, when normalized to the geometric area.$\\mathbf{,I r O},$ also shows a hiher activity than $\\mathrm{I r O}_{2}$ ,as reflected in the overpotential required to achieve 0.5 mA cm $^{-2}_{\\mathrm{g e o}}$ (-210 mV and 330 mV for IrOx $\\mathrm{a n d}\\mathrm{I r O}_{2}$ ,respectively; Fig.1d).$\\mathbf{I r O}_{x}$ shows two distinct broad redox peaks at around 0.8 and 1.2 V versus the reversible hydrogen electrode (RHE). By contrast, no distinct redox peak can be observed $\\mathrm{for}\\mathrm{IrO}_{2}$ .The redox features and catalytic activity of both samples are rlatively stable for 20 cycles and 2.5 hof operation (further results on te sability ofthe edox atures,activity and morpholog/structure can be found in Supplementary Note 2).",
+        "parser_name": "paddle"
+      },
+      "type": "Stability"
+    }
+  ],
+  "errors": []
+}

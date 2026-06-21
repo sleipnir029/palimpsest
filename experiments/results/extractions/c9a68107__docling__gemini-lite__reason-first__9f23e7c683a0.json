@@ -1,0 +1,308 @@
+{
+  "schema_version": 1,
+  "paper_sha": "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c",
+  "parser": "docling",
+  "label": "gemini-lite",
+  "mode": "reason-first",
+  "prompt_hash": "9f23e7c683a0",
+  "model_id": "google/gemini-3.1-flash-lite",
+  "temperature": 0.0,
+  "in_tokens": 39563,
+  "out_tokens": 992,
+  "latency_s": 3.78,
+  "items": [
+    {
+      "value": 288.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 10.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "applied",
+        "normalization_basis": null,
+        "cell_type_family": null,
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c"
+        },
+        "page": 4,
+        "bbox_x0": 306.14037150898804,
+        "bbox_y0": 335.2303139896312,
+        "bbox_x1": 561.364524137142,
+        "bbox_y1": 197.45013165405237,
+        "source_text": "Electrocatalytic performance in a three-electrode con fi guration The electrocatalytic activities toward OER of IrO2@TaB2 were measured using a standard three-electrode con fi guration in 0.1 M HClO4 electrolyte. As the IrO2 content increases, the electrocatalytic activity for OER increased rapidly (Fig. 4a), and reaches its optimization when the Ir content is 16 wt%. However, a further increase in the Ir content of the IrO2@TaB2 results in a slight deterioration of the electrocatalytic activity. The required overpotential to generate a current density of 10 mAcm -2 (normalized over the electrode geometric area) for 16 wt% IrO2@TaB2 is 288 mV, lower than that of unsupported IrO2 (307 mV). The Tafel slope of 16 wt% IrO2@TaB2 is 42.6 mV dec -1 (Supplementary Fig. 8), close to that of unsupported IrO2 (45.1 mV dec -1 ), indicating that the the TaB2 support has no change to OER pathway of IrO2.",
+        "parser_name": "docling"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 307.0,
+      "unit_label": "mV",
+      "condition": {
+        "current_density": 10.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "applied",
+        "normalization_basis": null,
+        "cell_type_family": null,
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c"
+        },
+        "page": 4,
+        "bbox_x0": 306.14037150898804,
+        "bbox_y0": 335.2303139896312,
+        "bbox_x1": 561.364524137142,
+        "bbox_y1": 197.45013165405237,
+        "source_text": "Electrocatalytic performance in a three-electrode con fi guration The electrocatalytic activities toward OER of IrO2@TaB2 were measured using a standard three-electrode con fi guration in 0.1 M HClO4 electrolyte. As the IrO2 content increases, the electrocatalytic activity for OER increased rapidly (Fig. 4a), and reaches its optimization when the Ir content is 16 wt%. However, a further increase in the Ir content of the IrO2@TaB2 results in a slight deterioration of the electrocatalytic activity. The required overpotential to generate a current density of 10 mAcm -2 (normalized over the electrode geometric area) for 16 wt% IrO2@TaB2 is 288 mV, lower than that of unsupported IrO2 (307 mV). The Tafel slope of 16 wt% IrO2@TaB2 is 42.6 mV dec -1 (Supplementary Fig. 8), close to that of unsupported IrO2 (45.1 mV dec -1 ), indicating that the the TaB2 support has no change to OER pathway of IrO2.",
+        "parser_name": "docling"
+      },
+      "type": "Overpotential"
+    },
+    {
+      "value": 42.6,
+      "unit_label": "mV/decade",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "applied",
+        "normalization_basis": null,
+        "cell_type_family": null,
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c"
+        },
+        "page": 4,
+        "bbox_x0": 306.14037150898804,
+        "bbox_y0": 335.2303139896312,
+        "bbox_x1": 561.364524137142,
+        "bbox_y1": 197.45013165405237,
+        "source_text": "Electrocatalytic performance in a three-electrode con fi guration The electrocatalytic activities toward OER of IrO2@TaB2 were measured using a standard three-electrode con fi guration in 0.1 M HClO4 electrolyte. As the IrO2 content increases, the electrocatalytic activity for OER increased rapidly (Fig. 4a), and reaches its optimization when the Ir content is 16 wt%. However, a further increase in the Ir content of the IrO2@TaB2 results in a slight deterioration of the electrocatalytic activity. The required overpotential to generate a current density of 10 mAcm -2 (normalized over the electrode geometric area) for 16 wt% IrO2@TaB2 is 288 mV, lower than that of unsupported IrO2 (307 mV). The Tafel slope of 16 wt% IrO2@TaB2 is 42.6 mV dec -1 (Supplementary Fig. 8), close to that of unsupported IrO2 (45.1 mV dec -1 ), indicating that the the TaB2 support has no change to OER pathway of IrO2.",
+        "parser_name": "docling"
+      },
+      "type": "TafelSlope"
+    },
+    {
+      "value": 45.1,
+      "unit_label": "mV/decade",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": "applied",
+        "normalization_basis": null,
+        "cell_type_family": null,
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c"
+        },
+        "page": 4,
+        "bbox_x0": 306.14037150898804,
+        "bbox_y0": 335.2303139896312,
+        "bbox_x1": 561.364524137142,
+        "bbox_y1": 197.45013165405237,
+        "source_text": "Electrocatalytic performance in a three-electrode con fi guration The electrocatalytic activities toward OER of IrO2@TaB2 were measured using a standard three-electrode con fi guration in 0.1 M HClO4 electrolyte. As the IrO2 content increases, the electrocatalytic activity for OER increased rapidly (Fig. 4a), and reaches its optimization when the Ir content is 16 wt%. However, a further increase in the Ir content of the IrO2@TaB2 results in a slight deterioration of the electrocatalytic activity. The required overpotential to generate a current density of 10 mAcm -2 (normalized over the electrode geometric area) for 16 wt% IrO2@TaB2 is 288 mV, lower than that of unsupported IrO2 (307 mV). The Tafel slope of 16 wt% IrO2@TaB2 is 42.6 mV dec -1 (Supplementary Fig. 8), close to that of unsupported IrO2 (45.1 mV dec -1 ), indicating that the the TaB2 support has no change to OER pathway of IrO2.",
+        "parser_name": "docling"
+      },
+      "type": "TafelSlope"
+    },
+    {
+      "value": 345.0,
+      "unit_label": "A/g",
+      "condition": {
+        "current_density": null,
+        "electrode_potential_vs_rhe": 1.53,
+        "temperature_C": null,
+        "electrolyte": {
+          "formula": "HClO4",
+          "concentration": 0.1,
+          "electrolyte_ph": null
+        },
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": null,
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c"
+        },
+        "page": 4,
+        "bbox_x0": 306.140099244663,
+        "bbox_y0": 195.14272852860427,
+        "bbox_x1": 561.3927166354785,
+        "bbox_y1": 48.31341725500636,
+        "source_text": "Electrochemical double layer capacitance (DLC) measurements were carried out to obtain the electrochemically active surface area (ECSA) of IrO2@TaB2 by estimating the accumulated charge amount at the electrode surface. Generally, the ECSA values become larger with increasing Ir content in IrO2@TaB2 (Fig. 4b, left and Supplementary Table 6). In order to compare the intrinsic activities of different catalysts, we normalized the measured currents by the ECSAs (Fig. 4b, right). The 16 wt% IrO2@TaB2 presents the highest current density ( j ECSA) at 1.53 V versus reversible hydrogen electrode (RHE) among these IrO2@TaB2 samples, which is 5.2 times larger than that of IrO2. We further compared the iridium mass activities of IrO2@TaB2 and IrO2 by normalizing the measured currents over the mass of iridium ( j ir). Although 16% IrO2@TaB2 has 70 wt% less iridium relative to IrO2, it displays a high iridium mass activity of 345 A g -1 at 1.53 V versus RHE",
+        "parser_name": "docling"
+      },
+      "type": "MassActivity"
+    },
+    {
+      "value": 120.0,
+      "unit_label": "h",
+      "condition": {
+        "current_density": 10.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": "RDE",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c"
+        },
+        "page": 5,
+        "bbox_x0": 39.68376650809003,
+        "bbox_y0": 237.94627157203126,
+        "bbox_x1": 294.9199636487976,
+        "bbox_y1": 91.17298521281532,
+        "source_text": "Besides high activity, IrO2@TaB2 displays great catalytic and structural stability for acidic OER. The galvanostatic measurements (Fig. 4d) demonstrate that IrO2@TaB2 remains steadily catalytic activity for more than 120 h of continuous operation at a current density of 10 mA cm -2 , while IrO2 lost its catalytic activity after 40 h in the acidic electrolyte. Supplementary Fig. 9 exhibits the polarization curve for OER obtained from IrO2@TaB2 and IrO2 before and after 5000 cycles. IrO2@TaB2 presents no measurable loss of catalytic activity after the continuous polarization measurements, while IrO2 suffers from a severe deactivation. These results suggest that TaB2 support greatly enhances the catalytic stability of IrO2. Moreover, IrO2@TaB2 achieves a faradaic ef fi ciency of nearly 100% during acidic OER(SupplementaryFig.10),con fi rming that the observed current can be entirely attributed to the oxygen generation.",
+        "parser_name": "docling"
+      },
+      "type": "Stability"
+    },
+    {
+      "value": 40.0,
+      "unit_label": "h",
+      "condition": {
+        "current_density": 10.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": null,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": "RDE",
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c"
+        },
+        "page": 5,
+        "bbox_x0": 39.68376650809003,
+        "bbox_y0": 237.94627157203126,
+        "bbox_x1": 294.9199636487976,
+        "bbox_y1": 91.17298521281532,
+        "source_text": "Besides high activity, IrO2@TaB2 displays great catalytic and structural stability for acidic OER. The galvanostatic measurements (Fig. 4d) demonstrate that IrO2@TaB2 remains steadily catalytic activity for more than 120 h of continuous operation at a current density of 10 mA cm -2 , while IrO2 lost its catalytic activity after 40 h in the acidic electrolyte. Supplementary Fig. 9 exhibits the polarization curve for OER obtained from IrO2@TaB2 and IrO2 before and after 5000 cycles. IrO2@TaB2 presents no measurable loss of catalytic activity after the continuous polarization measurements, while IrO2 suffers from a severe deactivation. These results suggest that TaB2 support greatly enhances the catalytic stability of IrO2. Moreover, IrO2@TaB2 achieves a faradaic ef fi ciency of nearly 100% during acidic OER(SupplementaryFig.10),con fi rming that the observed current can be entirely attributed to the oxygen generation.",
+        "parser_name": "docling"
+      },
+      "type": "Stability"
+    },
+    {
+      "value": 2.0,
+      "unit_label": "V",
+      "condition": {
+        "current_density": 3060.0,
+        "electrode_potential_vs_rhe": null,
+        "temperature_C": 80.0,
+        "electrolyte": null,
+        "cell_type": null,
+        "scan_rate": null,
+        "catalyst_loading": null,
+        "iR_correction": null,
+        "normalization_basis": null,
+        "cell_type_family": null,
+        "electrolyte_family": null,
+        "scan_rate_regime": null
+      },
+      "evidence": {
+        "paper": {
+          "doi": null,
+          "title": null,
+          "authors": null,
+          "sha256": "c9a68107074a82259fe3fd9ba9061eec3956d563532a16e435175831f266e86c"
+        },
+        "page": 2,
+        "bbox_x0": 39.68270385466302,
+        "bbox_y0": 441.4726182595592,
+        "bbox_x1": 561.3676281512056,
+        "bbox_y1": 487.3999116950063,
+        "source_text": "Herein, we present the entropy-driven synthesis of high-surfacearea nano-metal diboride from the corresponding disulphide, and demonstrate the practical usefulness of boride ceramics, especially TaB2, as the effective support material of anode nanocatalyst IrO2 in PEMWE. The TaB2-supported IrO2 nanocatalyst (denoted as IrO2@TaB2) possesses a large electrical conductivity (0.1 -0.2 S cm -1 ) similar to nano-IrO2 itself, shows about 10 times higher iridium mass activity than IrO2, and exhibits much lower iridium leaching than IrO2 during electrocatalysis. When integrated into a PEM single-cell electrolyzer, the IrO2@TaB2 can achieve 3.06 A cm -2 current density at 2.0 V and 80 \u00b0C (membrane: Na fi on TM N115), with a low iridium-loading of 0.15 mg cm -2 . The performance of our PEMWE has reached that of US DOE 2023 target (1.9 V@2.5 A cm -2 , platinum group metal (PGM) loading of 1 mg cm -2 ), under a much lower PGM loading (0.15 mgIr cm -2 and 0.27 mgPt cm -2 ). Even such low noble metals used in our CCM, the polarization curve of PEMWE reveals a current density of 3.06 A cm -2 with a cell potential of 2.0 V, operating at 80 \u00b0C and ambient pressure (Fig. 5c). It is surprising that the performance of our PEMWE has reached that of US DOE 2023 target (1.9 V@2.5 A cm -2 ), under such low PGM loadings (0.15 mgIrcm -2 and 0.27 mgPt cm -2 ). We note that the traditional CCMs in commercial PEMWE achieve reasonable activity and stability using a high Ir loading of 2 -4mgIr/cm 2 to ensure suf fi cient in-plane conductivity and mechanical stability of catalyst layer 59 . In fact, the performance of PEMWE using IrO2@TaB2 as anode electrocatalyst exceeds the most recent reports of PEMWEs using novel anode electrocatalysts (e.g., Sr2CaIrO6, Ta0.1Tm0.1Ir0.8O2\u03b4 , Ir@WOx) 16,18,60 -67 , as showninFig. 5d and Supplementary Table 8. Even if several supported catalysts (e.g., Ir@B4C, Ir@Nb2O5-x) have reported to reach the DOE 2023 target, they require several times higher iridium loadings 68,69 . In conclusion, we have demonstrated an entropy-driven disulphide-todiboride transition route strategy that can be operated to synthesize large-surface-area metal diborides as the promising support of IrO2 nanocatalysts. As a demonstration, we have prepared TaB2-supported IrO2 nanocatalyst (i.e., IrO2@TaB2), which displays uniformly distributed IrO2 nanoparticles ( \u223c 1.5 nm), highly conductive networks, and great acidic corrosion resistance. Impressively, the as-prepared IrO2@TaB2 catalysts with an optimized IrO2 content exhibit a 10 times higher iridium mass activity than IrO2, while showing lower iridium leaching during acidic OER. When integrated into a PEMWE, the IrO2@TaB2 anode cell requires 2.0 V to attain 3.06 A cm -2 (reaching the US DOE 2023 target), under a much lower PGM loadings of 0.15 mgIrcm -2 and 0.27 mgPt cm -2 than DOE 2023 target (PGM loading of 1 mg cm -2 ). Our fi ndings highlight the rational design of highly conductive, corrosion resistance, and large surface area materials as IrO2 supports for acidic OER, and stimulate practical applications of low-iridium-loading anode catalyst layers in industrial PEMWE.",
+        "parser_name": "docling"
+      },
+      "type": "PEMWECellVoltage"
+    }
+  ],
+  "errors": []
+}
