@@ -125,9 +125,12 @@ def magnitude_ok(measurement_class_name: str, value: float | None) -> bool:
 # (cm2) are excluded (prefix scaling there is squared, not linear) and so is everything
 # without an m-prefixed V/A canonical, via the `^m[VA]` gate below.
 _MILLI_CANON = re.compile(r"^m([VA])\b")
-_PREFIX_FACTOR = {"µ": 1e-6, "u": 1e-6, "n": 1e-9, "c": 1e-2, "m": 1e-3, "k": 1e3, "M": 1e6}
-# Prefix char immediately (modulo one space) before the canonical base letter (V/A).
-_PREFIXED_BASE = {b: re.compile(r"([µuncmkM])\s*" + b) for b in ("V", "A")}
+# Accepted source prefixes a small value could plausibly be PRINTED in for a milli slot:
+# micro (two encodings + ascii), nano, milli (the canonical itself → ×1 no-op). NOT
+# centi/kilo/mega — those are coarse, don't occur for these quantities, and would only
+# fire via a false match (and DegradationRate has no magnitude ceiling to catch the
+# damage). 'µ'/'u' both map to micro; the span is unicode-normalised to 'µ' first.
+_PREFIX_FACTOR = {"µ": 1e-6, "u": 1e-6, "n": 1e-9, "m": 1e-3}
 
 
 def _clean_units(text: str) -> str:
@@ -142,11 +145,16 @@ def rederive_milli_value(value: float | None, source_text: str, canonical: str |
     """Rescale ``value`` to a milli-canonical unit using the cited span's metric prefix.
 
     Returns ``value`` unchanged unless: the canonical unit is milli-prefixed on a V/A
-    base (e.g. ``mV/h``), AND the span states the value with a DIFFERENT metric prefix
-    on that base (e.g. ``µV/h``). Then the stored value is corrected to canonical
-    (22 µV/h → 0.022 mV/h). Conservative: an absent/unrecognised prefix → no change.
-    Runs AFTER the mis-citation guard, which has confirmed the emitted number is the one
-    printed in the span — so we know ``value`` is in the span's units, not pre-converted.
+    base (e.g. ``mV/h``), AND the span states *this* value with a DIFFERENT metric
+    prefix immediately attached to that base (e.g. ``22 µV/h``). Then the stored value
+    is corrected to canonical (22 µV/h → 0.022 mV/h).
+
+    Safety (hardened after review): the value is matched as a WHOLE numeric token (digit
+    boundaries, so ``22`` never matches inside ``1225``), and the unit must be ADJACENT
+    to the FIRST occurrence of that token (optionally across a range like ``2.3–2.8``),
+    so a foreign prefixed unit elsewhere in the span can't be grabbed. Only micro/nano/
+    milli prefixes are accepted. Any miss → value unchanged: a missed conversion is safe,
+    a wrong rescale corrupts data. Runs after the mis-citation guard.
     """
     if value is None or not canonical or not source_text:
         return value
@@ -155,19 +163,22 @@ def rederive_milli_value(value: float | None, source_text: str, canonical: str |
         return value
     base = mc.group(1)
     txt = _clean_units(source_text)
-    pat = _PREFIXED_BASE[base]
+    # Unit anchored right after the number (or a "lo–hi" range tail): optional range,
+    # optional space, an accepted prefix, optional space, the base letter.
+    unit_re = re.compile(r"(?:\s*[-–—]\s*[\d.]+)?\s*([µunm])\s*" + base)
     forms = {"%g" % value}
     if value == int(value):
         forms.add(str(int(value)))
     for s in forms:
-        idx = txt.find(s)
-        while idx != -1:
-            m = pat.search(txt[idx + len(s): idx + len(s) + 12])
-            if m:
-                fac = _PREFIX_FACTOR.get("µ" if m.group(1) == "u" else m.group(1))
-                if fac is not None:
-                    return value * (fac / 1e-3)  # source-prefix → milli
-            idx = txt.find(s, idx + 1)
+        # whole-number token: not glued to other digits, and not the head of a decimal
+        m = re.search(r"(?<!\d)" + re.escape(s) + r"(?!\d)(?!\.\d)", txt)
+        if not m:
+            continue
+        um = unit_re.match(txt, m.end())  # anchored at the end of THIS token only
+        if um:
+            fac = _PREFIX_FACTOR.get(um.group(1))
+            if fac is not None:
+                return value * (fac / 1e-3)  # source-prefix → milli
     return value
 
 

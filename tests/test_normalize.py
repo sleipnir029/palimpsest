@@ -213,6 +213,13 @@ from palimpsest.normalize import rederive_milli_value
         (30.0, "30 h, which is", "h", 30.0),                    # Stability
         (1.83, "1.83V i@ 2 A/cm2", "V", 1.83),                  # PEMWECellVoltage (no m-prefix canonical)
         (None, "whatever", "mV/h", None),
+        # --- adversarial must-NOT-change (review findings) ---
+        (22.0, "value 1225 µV/h reported", "mV/h", 22.0),       # B1: "22" is a substring of 1225, not a token
+        (2.0, "2 electrodes, 2 µV/h", "mV/h", 2.0),             # B2: first "2" has no adjacent unit → don't scan on
+        (5.0, "5 cV applied", "mV", 5.0),                       # B3: centi not an accepted prefix
+        (22.0, "22 kV/h test", "mV/h", 22.0),                   # B3: kilo not accepted
+        (5.0, "load 5}{kV elsewhere", "mV", 5.0),               # B4: brace-merge must not mint a prefix
+        (2.0, "tested 2 times at 0.022 mV/h", "mV/h", 2.0),     # value adjacent to no prefix → unchanged
     ],
 )
 def test_rederive_milli_value(value, source, canonical, expected):
