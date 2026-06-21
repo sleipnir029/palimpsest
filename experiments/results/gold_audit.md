@@ -121,14 +121,20 @@ ones):
 | bd9811a5 (s41565-025-02030-y) | PEMWECellVoltage 1.939, 1.986, 2.0 | "voltage rose from 1.939 V to 2.000 V in first 500 h … 1.986 V at 1,600 h" (docling+paddle identical) |
 | c63193979 (s41467-025-63541-9) | Stability 400 | "operational stability … over 400 h at both 1 A/cm² and 2 A/cm²" (docling+dots) |
 
-**Deferred (not added):** DegradationRate values (22/52/2.3–2.8 µV/h). The
-extractions emitted them in µV/h under an mV/h label without converting (1000× off).
-NOTE (post C3-review): DegradationRate is **not** magnitude-guarded by C3 — a µV/h-as-mV/h
-blunder is indistinguishable from a real high accelerated-stress rate, and a correctly
-converted value (0.022 mV/h) is blocked upstream by the mis-citation guard anyway. Clean
-DegradationRate extraction needs unit re-derivation from the cited span (deferred), not a
-magnitude bound. Other ≥3-agreement candidates were rejected as artifacts/duplicates/
-wrong-quantity — see `gold_verification_t74.md`.
+**DegradationRate (not yet in GOLD; extraction now FIXED):** the extractions emitted
+22/52/2.3–2.8 µV/h under an mV/h label without converting (1000× off). This is now
+handled in the runtime by **unit re-derivation** (`normalize.rederive_milli_value`,
+wired into `extract._process_items`): for milli-canonical V/A units, the value is
+rescaled from the cited span's own metric prefix (22 µV/h → 0.022 mV/h), tolerant of
+the OCR/LaTeX forms the parsers produce (`µ`, `μ`, `\mu`, spaced, ranges). It runs after
+the mis-citation guard, so it dissolves the earlier tension (the guard confirms the raw
+number is in the span; re-derivation then converts that number) — a correct value is no
+longer blocked. C3 magnitude bounds correctly stay OUT of DegradationRate (can't tell a
+blunder from a real high AST rate by magnitude). Adding the canonical-unit GOLD values
+(0.022, 0.052, 0.0023–0.0028 mV/h) is now unblocked but deferred: the 2.3–2.8 figure is
+a RANGE (no single point) and would need a re-extract to demonstrate the pipeline yields
+the re-derived values. Other ≥3-agreement candidates were rejected as artifacts/
+duplicates/wrong-quantity — see `gold_verification_t74.md`.
 
 **Impact:** denominators grew, so recall numbers in the T72 FINDINGS/report (built on
 the 40-tuple gold) differ from re-scores on the 47-tuple gold. The stamped T72 CSV

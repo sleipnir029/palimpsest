@@ -39,7 +39,8 @@ from typing import Any
 from pydantic import BaseModel, ValidationError
 
 from palimpsest.normalize import (
-    build_normalization_prompt, canonical_unit, magnitude_ok, units_match,
+    build_normalization_prompt, canonical_unit, magnitude_ok, rederive_milli_value,
+    units_match,
 )
 from palimpsest.providers import AnthropicProvider, DeepSeekProvider
 
@@ -472,6 +473,15 @@ def _process_items(
                 ))
                 continue
             item["evidence"] = evidence
+            # Unit re-derivation (T74): models often emit the raw number printed in the
+            # span under the canonical label without converting (e.g. "22 µV/h" →
+            # value=22, unit_label="mV/h", 1000× off). Re-derive from the span's own
+            # metric prefix so the stored value is truly canonical. Safe here: the
+            # mis-citation guard just confirmed the emitted number IS the one in the
+            # span, so it is in the span's units, not pre-converted. No-op unless the
+            # span uses a different metric prefix on a milli-canonical V/A unit.
+            item["value"] = rederive_milli_value(
+                item.get("value"), evidence["source_text"], canonical_unit(type_name))
 
         _coerce_condition(item)  # salvage stringy numeric condition fields
         try:

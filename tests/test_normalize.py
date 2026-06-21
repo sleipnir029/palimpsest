@@ -185,3 +185,39 @@ from palimpsest.normalize import magnitude_ok
 )
 def test_magnitude_ok(type_name, value, expected):
     assert magnitude_ok(type_name, value) is expected
+
+
+# T74 — unit re-derivation. Models emit the raw source number under the canonical
+# label without converting ("22 µV/h" → value=22, label="mV/h", 1000× too big).
+# rederive_milli_value rescales using the cited span's OWN metric prefix, for
+# milli-prefixed linear units only (mV*, mA*). Tested against the real (messy,
+# OCR/LaTeX) spans from the corpus, and against spans that must NOT change.
+from palimpsest.normalize import rederive_milli_value
+
+
+@_pytest.mark.parametrize(
+    "value,source,canonical,expected",
+    [
+        # the bug, in every form the parsers actually produced:
+        (22.0, "rate: 22 μV/h, Figs", "mV/h", 0.022),          # greek mu
+        (22.0, "rate: 22 µV/h, Figs", "mV/h", 0.022),          # micro sign
+        (22.0, "rate: 22 μ V/h, Figs", "mV/h", 0.022),         # space after prefix
+        (52.0, "of 52 µV/h), achieving", "mV/h", 0.052),
+        (2.8, r"2.8\mu\mathrm{V}\mathrm{h}^{-1}", "mV/h", 0.0028),  # LaTeX
+        (2.3, "2.3–2.8 µV h -1 . To", "mV/h", 0.0023),          # range: unit after the OTHER number
+        # must NOT change — canonical-unit spans (same milli prefix or no prefix):
+        (236.0, "236 mV, which is", "mV", 236.0),
+        (236.0, "236mVinanacid medium", "mV", 236.0),           # no space, trailing junk
+        (52.6, "52.6 mV dec -1 ", "mV/decade", 52.6),
+        # excluded slots (canonical not milli-V/A) → never touched:
+        (30.0, "30 h, which is", "h", 30.0),                    # Stability
+        (1.83, "1.83V i@ 2 A/cm2", "V", 1.83),                  # PEMWECellVoltage (no m-prefix canonical)
+        (None, "whatever", "mV/h", None),
+    ],
+)
+def test_rederive_milli_value(value, source, canonical, expected):
+    got = rederive_milli_value(value, source, canonical)
+    if expected is None:
+        assert got is None
+    else:
+        assert got == _pytest.approx(expected, rel=1e-9)
