@@ -494,15 +494,17 @@ def _process_items(
                 ))
                 continue
             # C3 (T74): magnitude sanity. C2 passes a value emitted in a prefixed unit
-            # (e.g. µV/h) under the canonical label (mV/h) without conversion — the
-            # value is then ~1000× off but dimensionally "correct". Reject values
-            # outside the slot's plausible range so an unconverted reading can't slip in.
+            # (e.g. mV) under the canonical label (V) without conversion — the value is
+            # then ~1000× too large but dimensionally "correct". Reject values whose
+            # magnitude exceeds the slot's plausible ceiling so an unconverted reading
+            # can't slip in. (Tracked slots only; DegradationRate is intentionally not
+            # guarded here — see normalize.PLAUSIBLE_MAX.)
             if not magnitude_ok(type_name, getattr(inst, "value", None)):
                 errors.append((
                     ValueError(
-                        f"value {getattr(inst, 'value', None)!r} out of plausible range "
-                        f"for {type_name} (canonical unit {canon!r}; likely an unconverted "
-                        f"prefixed unit)"
+                        f"value {getattr(inst, 'value', None)!r} magnitude exceeds the "
+                        f"plausible ceiling for {type_name} (canonical unit {canon!r}; "
+                        f"likely an unconverted prefixed unit)"
                     ),
                     raw,
                 ))

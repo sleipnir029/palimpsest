@@ -157,9 +157,11 @@ def test_units_match(emitted, canonical, expected):
 
 # T74 — magnitude sanity check (C3). The dimensional check (units_match/C2) validates
 # the unit LABEL but not that the value was actually converted to it: a model can emit
-# a µV/h reading under an "mV/h" label and pass C2 with a value 1000× too large
-# (every DegradationRate candidate in the T74 audit). magnitude_ok bounds the value
-# per slot to catch gross prefix errors.
+# a value in a prefixed unit (mV) under the canonical label (V) and pass C2 with a
+# value ~1000× too large. magnitude_ok bounds |value| per slot to catch that. It checks
+# only an UPPER ceiling on |value| — never a sign or lower bound — so real negatives
+# (HER overpotential) pass; and DegradationRate is intentionally untracked (magnitude
+# can't separate the µV/h blunder from a real high accelerated-stress rate).
 import pytest as _pytest
 from palimpsest.normalize import magnitude_ok
 
@@ -167,16 +169,18 @@ from palimpsest.normalize import magnitude_ok
 @_pytest.mark.parametrize(
     "type_name,value,expected",
     [
-        ("DegradationRate", 0.022, True),    # 22 µV/h correctly converted to mV/h
-        ("DegradationRate", 22.0, False),    # the bug: µV/h value under mV/h label
-        ("DegradationRate", 460.0, False),
         ("PEMWECellVoltage", 1.83, True),
-        ("PEMWECellVoltage", 1900.0, False), # mV under a V label
+        ("PEMWECellVoltage", 1900.0, False),  # mV emitted under a V label ⇒ ~1000× too big
+        ("PEMWECellVoltage", 5.0, True),      # ceiling is inclusive
         ("Overpotential", 236.0, True),
-        ("Overpotential", 236000.0, False),  # V under an mV label
+        ("Overpotential", -58.0, True),       # negative (HER sign convention) is REAL, not a blunder
+        ("Overpotential", 2000.0, True),      # ceiling inclusive
+        ("Overpotential", 236000.0, False),   # V emitted under an mV label
         ("Stability", 400.0, True),
-        ("UnknownType", 1e9, True),          # untracked slot → never reject (no range)
-        ("Overpotential", None, True),       # null handled elsewhere; don't crash here
+        # DegradationRate intentionally NOT magnitude-guarded → always allowed here.
+        ("DegradationRate", 22.0, True),
+        ("UnknownType", 1e9, True),           # untracked slot → never reject
+        ("Overpotential", None, True),        # null handled elsewhere; don't crash here
     ],
 )
 def test_magnitude_ok(type_name, value, expected):
