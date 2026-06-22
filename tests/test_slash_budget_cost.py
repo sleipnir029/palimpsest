@@ -104,3 +104,63 @@ def test_model_not_implemented(tmp_path):
 def test_model_unknown(tmp_path):
     out = dispatch(_app(tmp_path), "/model bogus")
     assert "unknown model" in out
+
+
+def test_model_persists_orchestration_setting(tmp_path, monkeypatch):
+    from palimpsest import config
+
+    monkeypatch.setitem(slash._PROVIDERS, "deepseek", _DummyProvider)
+    app = _app(tmp_path)
+    dispatch(app, "/model deepseek")
+    assert config.get_setting("orchestration_model", db_path=app.cost_meter.db_path) == "deepseek"
+
+
+# /use ----------------------------------------------------------------------
+def test_use_orchestration_rejects_non_loop_provider(tmp_path):
+    # Gemini can't drive the agent loop (OpenAI-compat → extraction-only). /use gates
+    # on ORCHESTRATION_PROVIDERS and points the user at /use extraction instead.
+    out = dispatch(_app(tmp_path), "/use orchestration gemini")
+    assert "can't drive the agent loop" in out
+    assert "extraction" in out
+
+
+def test_use_orchestration_anthropic_is_valid(tmp_path, monkeypatch):
+    # anthropic is a valid loop provider (same class as sonnet) and must be reachable
+    # at runtime, not just at startup — the two registries are kept in sync.
+    from palimpsest import config
+
+    monkeypatch.setitem(slash._PROVIDERS, "anthropic", _DummyProvider)
+    app = _app(tmp_path)
+    out = dispatch(app, "/use orchestration anthropic")
+    assert "switched" in out
+    assert config.get_setting("orchestration_model", db_path=app.cost_meter.db_path) == "anthropic"
+
+
+def test_use_extraction_persists(tmp_path):
+    from palimpsest import config
+
+    app = _app(tmp_path)
+    out = dispatch(app, "/use extraction gemini")
+    assert "extraction" in out and "gemini" in out
+    assert config.get_setting("extraction_model", db_path=app.cost_meter.db_path) == "gemini"
+
+
+def test_use_extraction_unknown_provider(tmp_path):
+    assert "unknown provider" in dispatch(_app(tmp_path), "/use extraction bogus")
+
+
+def test_use_parser_persists_and_validates(tmp_path):
+    from palimpsest import config
+
+    app = _app(tmp_path)
+    assert "parser" in dispatch(app, "/use parser docling")
+    assert config.get_setting("parser_name", db_path=app.cost_meter.db_path) == "docling"
+    assert "unknown parser" in dispatch(app, "/use parser bogus")
+
+
+def test_use_unknown_role(tmp_path):
+    assert "unknown role" in dispatch(_app(tmp_path), "/use bogus x")
+
+
+def test_use_usage_on_missing_args(tmp_path):
+    assert "usage" in dispatch(_app(tmp_path), "/use orchestration")

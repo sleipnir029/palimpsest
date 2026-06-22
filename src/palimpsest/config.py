@@ -12,10 +12,12 @@ from __future__ import annotations
 
 import getpass
 import os
+import sqlite3
 from pathlib import Path
 
 from dotenv import load_dotenv
 
+from .cost import canonical_db
 from .policy import workspace_root
 
 # Active provider → the env var its key lives in (mirrors slash._PROVIDERS names).
@@ -23,7 +25,45 @@ _PROVIDER_KEY = {
     "deepseek": "DEEPSEEK_API_KEY",
     "sonnet": "ANTHROPIC_API_KEY",
     "anthropic": "ANTHROPIC_API_KEY",
+    "gemini": "GEMINI_API_KEY",
 }
+
+
+# Settings (model-per-role selections, budget) live in the palimpsest.db `settings`
+# table — the SAME db as the cost ledger, so a run shares one source of truth. Keys
+# stay in .env (set_value); selections go here. db_path defaults to the canonical
+# repo ledger; tests pass a tmp path (canonical_db lets absolute paths through).
+def _settings_conn(db_path: str) -> sqlite3.Connection:
+    # A short-lived connection per call. busy_timeout so a /use write from the TUI
+    # worker thread waits briefly rather than erroring if the agent loop is mid-write
+    # on the shared palimpsest.db (CostMeter holds its own long-lived connection).
+    conn = sqlite3.connect(canonical_db(db_path))
+    conn.execute("PRAGMA busy_timeout = 3000")
+    conn.execute("CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT)")
+    return conn
+
+
+def get_setting(key: str, default: str | None = None, db_path: str = "palimpsest.db") -> str | None:
+    conn = _settings_conn(db_path)
+    try:
+        row = conn.execute("SELECT value FROM settings WHERE key = ?", (key,)).fetchone()
+        return row[0] if row and row[0] is not None else default
+    finally:
+        conn.close()
+
+
+def set_setting(key: str, value: str, db_path: str = "palimpsest.db") -> str:
+    conn = _settings_conn(db_path)
+    try:
+        conn.execute(
+            "INSERT INTO settings (key, value) VALUES (?, ?) "
+            "ON CONFLICT(key) DO UPDATE SET value = excluded.value",
+            (key, str(value)),
+        )
+        conn.commit()
+        return value
+    finally:
+        conn.close()
 
 
 def _env_path() -> Path:
@@ -73,3 +113,25 @@ def ensure_llm_credentials(provider: str = "deepseek", prompt=getpass.getpass) -
     else:
         # Don't silently proceed into the cryptic SDK auth error this guards against.
         print(f"warning: no {key} provided — set it later with /config set {key} <key>.")
+
+
+def ensure_role_credentials(db_path: str = "palimpsest.db", prompt=getpass.getpass) -> None:
+    """Ensure keys for the configured orchestration + extraction providers (app phase).
+
+    Both roles may run on different providers, so a single key check isn't enough.
+    Same provider for both (the default deepseek/deepseek) → one check. Called by the
+    entry points before the agent is built.
+    """
+    roles = [
+        get_setting("orchestration_model", "deepseek", db_path=db_path) or "deepseek",
+        get_setting("extraction_model", "deepseek", db_path=db_path) or "deepseek",
+    ]
+    # De-dupe by the env var, not the provider name: sonnet and anthropic share
+    # ANTHROPIC_API_KEY, so checking both would prompt twice for one missing key.
+    seen: set[str] = set()
+    for provider in roles:
+        key = _PROVIDER_KEY.get(provider, "DEEPSEEK_API_KEY")
+        if key in seen:
+            continue
+        seen.add(key)
+        ensure_llm_credentials(provider, prompt=prompt)

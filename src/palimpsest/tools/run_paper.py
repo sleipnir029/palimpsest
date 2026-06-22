@@ -31,17 +31,22 @@ from . import register
         "type": "object",
         "properties": {
             "pdf_path": {"type": "string"},
-            "parser_name": {"type": "string", "description": "docling|mineru|dots|paddle (default mineru)."},
+            "parser_name": {"type": "string", "description": "docling|mineru|dots|paddle (default: the /use parser setting, else mineru)."},
             "skill_name": {"type": "string", "description": "Extraction skill (default oer-extraction)."},
         },
         "required": ["pdf_path"],
     },
 })
-def extract_paper(pdf_path: str, parser_name: str = "mineru", skill_name: str = "oer-extraction") -> str:
+def extract_paper(pdf_path: str, parser_name: str | None = None, skill_name: str = "oer-extraction") -> str:
+    from palimpsest.config import get_setting
     from palimpsest.cost import CostMeter
     from palimpsest.pipeline import run_paper
     from palimpsest.runs import ExtractionRunLog
     from palimpsest.store import RDFStore
+
+    # Parser role (app phase): the agent may name a parser; otherwise use the
+    # persisted /use parser default (mineru if unset).
+    parser_name = parser_name or get_setting("parser_name", "mineru")
 
     try:
         summary = run_paper(

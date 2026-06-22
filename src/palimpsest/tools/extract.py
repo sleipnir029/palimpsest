@@ -42,7 +42,6 @@ from palimpsest.normalize import (
     build_normalization_prompt, canonical_unit, magnitude_ok, rederive_milli_value,
     units_match,
 )
-from palimpsest.providers import AnthropicProvider, DeepSeekProvider
 
 from schema.generated import pydantic as _schema  # PEP 420 namespace pkg
 
@@ -59,8 +58,24 @@ from .read_skill import _LOADER
 
 # Module-level singletons. Tests override via kwargs; production calls reuse them
 # so the class-map introspection happens once per process.
-_PROVIDER: AnthropicProvider | None = None  # lazy: needs DEEPSEEK_API_KEY (T50 default)
+_PROVIDER_CACHE: dict[str, Any] = {}  # extraction_model name → provider instance (lazy)
 _JSONSCHEMA_PATH = Path("schema/generated/jsonschema.json")
+
+
+def _resolve_extraction_provider(db_path: str = "palimpsest.db") -> Any:
+    """Build the extraction provider named by the ``extraction_model`` setting.
+
+    Independent of the agent's orchestration model (app phase): extraction may run
+    on any provider, including OpenAI-compat ones (Gemini) that can't drive the
+    agent loop. Cached by name so the class-map introspection happens once.
+    """
+    from palimpsest.config import get_setting
+    from palimpsest.providers import build_provider
+
+    name = get_setting("extraction_model", "deepseek", db_path=db_path) or "deepseek"
+    if name not in _PROVIDER_CACHE:
+        _PROVIDER_CACHE[name] = build_provider(name)
+    return _PROVIDER_CACHE[name]
 
 
 def _build_class_map() -> dict[str, type[BaseModel]]:
@@ -583,6 +598,22 @@ def extract(
     types a prior pass missed. ``None`` (default) leaves the production user
     message byte-identical, so the production prompt and its cache key don't move.
     """
+    # Resolve + budget-check the provider first (before any file work): a config or
+    # budget problem should fail fast. Budget invariant (€50 hard cap): a metered
+    # call must price its provider correctly — agent._cost_eur silently falls back to
+    # the Sonnet table when a provider has no `prices` (e.g. GeminiProvider built with
+    # prices=None), which would mis-charge the cap. Guard ONLY the resolved-from-config
+    # path: an injected provider (tests, experiments passing prices explicitly) is the
+    # caller's responsibility and keeps the Sonnet fallback they rely on.
+    if provider is None:
+        db = cost_meter.db_path if cost_meter is not None else "palimpsest.db"
+        provider = _resolve_extraction_provider(db)
+        if cost_meter is not None and getattr(provider, "prices", None) is None:
+            raise ValueError(
+                f"extraction provider {getattr(provider, 'name', provider)!r} has no "
+                "price table; set verified USD/token rates before metered extraction."
+            )
+
     if cache is None:
         from palimpsest.cache import ParserCache  # lazy: break import cycle
         cache = ParserCache()
@@ -601,12 +632,6 @@ def extract(
     norm = build_normalization_prompt([Path("skills") / skill_name])
     jsonschema_str = _schema_for_prompt(_JSONSCHEMA_PATH.read_text(encoding="utf-8"))
     system = _build_system_prompt(skill_body, jsonschema_str, norm)
-
-    global _PROVIDER
-    if provider is None:
-        if _PROVIDER is None:
-            _PROVIDER = DeepSeekProvider()  # T50: DeepSeek is the default LLM
-        provider = _PROVIDER
 
     spans = _load_spans(parser_name, parser_text)
     valid: list[BaseModel] = []

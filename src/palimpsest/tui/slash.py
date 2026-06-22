@@ -20,12 +20,15 @@ from ..providers import AnthropicProvider, DeepSeekProvider
 _CONFIG_KEYS = ("DEEPSEEK_API_KEY", "ANTHROPIC_API_KEY", "RUNPOD_API_KEY")
 _KEY_PROVIDER = {"DEEPSEEK_API_KEY": "deepseek", "ANTHROPIC_API_KEY": "sonnet"}
 
-# /model X -> provider class. Only the two real classes are wired (DeepSeek is the
-# T50 runtime default; Anthropic is the kept fallback). haiku/gemini are named but
-# unbuilt — handled explicitly so the message is clearer than "unknown model".
+# /model X -> provider class for the agent loop. Keys MUST stay in sync with
+# providers.ORCHESTRATION_PROVIDERS (the membership gate /use checks). DeepSeek is
+# the T50 default; Anthropic is the kept fallback (`sonnet` and `anthropic` are the
+# same class). haiku/gemini are named but can't drive the loop — handled explicitly
+# so the message is clearer than "unknown model".
 _PROVIDERS: dict[str, Callable] = {
     "deepseek": DeepSeekProvider,
     "sonnet": AnthropicProvider,
+    "anthropic": AnthropicProvider,
 }
 _NOT_IMPLEMENTED = {"haiku", "gemini"}
 
@@ -94,8 +97,44 @@ def _model(app, args: list[str]) -> str:
     except Exception as exc:  # noqa: BLE001 — e.g. missing API key; surface, don't crash
         return f"could not switch to {x}: {exc}"
     app.agent.provider = provider
+    # Persist so the choice survives restart (shared db with the ledger).
+    from .. import config
+    config.set_setting("orchestration_model", x, db_path=app.cost_meter.db_path)
     # New model ⇒ the prompt cache built for the old one no longer applies.
     return f"switched to {provider.name} (prompt cache reset)"
+
+
+def _use(app, args: list[str]) -> str:
+    """set a role's model: /use orchestration|extraction|parser <name>"""
+    from .. import config
+    from ..providers import PROVIDER_FACTORIES
+
+    if len(args) < 2:
+        return "usage: /use <orchestration|extraction|parser> <name>"
+    role, name = args[0], args[1]
+    db = app.cost_meter.db_path
+    if role in ("orchestration", "orch"):
+        # Orchestration is Anthropic-wire only — gate on the single source of truth
+        # before delegating to /model (which constructs + hot-swaps + persists).
+        from ..providers import ORCHESTRATION_PROVIDERS
+
+        if name not in ORCHESTRATION_PROVIDERS:
+            opts = ", ".join(ORCHESTRATION_PROVIDERS)
+            return (f"'{name}' can't drive the agent loop (Anthropic-wire only). "
+                    f"options: {opts}. For other models use /use extraction {name}.")
+        return _model(app, [name])
+    if role in ("extraction", "extract"):
+        if name not in PROVIDER_FACTORIES:
+            return f"unknown provider: {name}. options: {', '.join(PROVIDER_FACTORIES)}"
+        config.set_setting("extraction_model", name, db_path=db)
+        return f"extraction → {name} (applies to the next extract_paper)"
+    if role == "parser":
+        from ..parsers.commands import PARSERS
+        if name not in PARSERS:
+            return f"unknown parser: {name}. options: {', '.join(PARSERS)}"
+        config.set_setting("parser_name", name, db_path=db)
+        return f"parser → {name} (default for the next extract_paper)"
+    return f"unknown role: {role}. options: orchestration, extraction, parser"
 
 
 def _config(app, args: list[str]) -> str:
@@ -103,9 +142,19 @@ def _config(app, args: list[str]) -> str:
     from .. import config
 
     if not args:
-        return "\n".join(
+        db = getattr(getattr(app, "cost_meter", None), "db_path", "palimpsest.db")
+        keys = "\n".join(
             f"  {k}={'set' if os.environ.get(k) else '(unset)'}" for k in _CONFIG_KEYS
         )
+        roles = "\n".join(
+            f"  {label}={config.get_setting(key, dflt, db_path=db)}"
+            for label, key, dflt in (
+                ("orchestration", "orchestration_model", "deepseek"),
+                ("extraction", "extraction_model", "deepseek"),
+                ("parser", "parser_name", "mineru"),
+            )
+        )
+        return f"{keys}\nmodels:\n{roles}"
     if args[0] != "set" or len(args) < 3:
         return "usage: /config | /config set KEY VALUE"
     key, value = args[1], " ".join(args[2:])
@@ -141,6 +190,7 @@ SLASH_COMMANDS: dict[str, Callable] = {
     "budget": _budget,
     "cost": _cost,
     "model": _model,
+    "use": _use,
     "config": _config,
     "undo": _undo,
 }
