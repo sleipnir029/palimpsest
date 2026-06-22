@@ -298,6 +298,89 @@ def test_slash_help_lists_commands_in_app(tmp_path):
     asyncio.run(_drive())
 
 
+def test_slash_autocomplete_shows_and_filters(tmp_path):
+    """Typing `/` opens the command menu; typing more narrows it (app._menu seam)."""
+    meter = CostMeter(str(tmp_path / "t.db"))
+    app = PalimpsestApp(agent=_StubAgent(meter), cost_meter=meter)
+
+    async def _drive() -> None:
+        async with app.run_test() as pilot:
+            menu = app.query_one("#cmdmenu", Static)
+            assert menu.display is False  # hidden at rest
+
+            app.query_one("#prompt", Input).value = "/"
+            await pilot.pause()
+            assert menu.display is True
+            for cmd in ("help", "model", "theme", "use"):
+                assert cmd in app._menu
+
+            app.query_one("#prompt", Input).value = "/mo"
+            await pilot.pause()
+            assert app._menu == ["model"]  # only /model starts with "mo"
+
+            # a non-slash message never opens the menu
+            app.query_one("#prompt", Input).value = "hello"
+            await pilot.pause()
+            assert app.query_one("#cmdmenu", Static).display is False
+            assert app._menu == []
+
+    asyncio.run(_drive())
+
+
+def test_slash_autocomplete_tab_completes(tmp_path):
+    """Tab accepts the highlighted command into the input and closes the menu."""
+    meter = CostMeter(str(tmp_path / "t.db"))
+    app = PalimpsestApp(agent=_StubAgent(meter), cost_meter=meter)
+
+    async def _drive() -> None:
+        async with app.run_test() as pilot:
+            app.query_one("#prompt", Input).value = "/mo"
+            await pilot.pause()
+            await pilot.press("tab")
+            await pilot.pause()
+            assert app.query_one("#prompt", Input).value == "/model "
+            assert app.query_one("#cmdmenu", Static).display is False
+
+    asyncio.run(_drive())
+
+
+def test_slash_autocomplete_arrow_then_enter(tmp_path):
+    """Down moves the highlight; Enter on a partial value accepts that command."""
+    meter = CostMeter(str(tmp_path / "t.db"))
+    app = PalimpsestApp(agent=_StubAgent(meter), cost_meter=meter)
+
+    async def _drive() -> None:
+        async with app.run_test() as pilot:
+            app.query_one("#prompt", Input).value = "/"  # matches all, in registry order
+            await pilot.pause()
+            await pilot.press("down")  # help -> quit (2nd registered command)
+            await pilot.pause()
+            await pilot.press("enter")  # partial value "/" → accept, don't run
+            await pilot.pause()
+            assert app.query_one("#prompt", Input).value == "/quit "
+            assert app.query_one("#cmdmenu", Static).display is False
+
+    asyncio.run(_drive())
+
+
+def test_slash_autocomplete_esc_closes_menu(tmp_path):
+    """Esc dismisses the menu without cancelling/clearing the input."""
+    meter = CostMeter(str(tmp_path / "t.db"))
+    app = PalimpsestApp(agent=_StubAgent(meter), cost_meter=meter)
+
+    async def _drive() -> None:
+        async with app.run_test() as pilot:
+            app.query_one("#prompt", Input).value = "/the"
+            await pilot.pause()
+            assert app.query_one("#cmdmenu", Static).display is True
+            await pilot.press("escape")
+            await pilot.pause()
+            assert app.query_one("#cmdmenu", Static).display is False
+            assert app.query_one("#prompt", Input).value == "/the"  # input untouched
+
+    asyncio.run(_drive())
+
+
 def test_slash_quit_exits_the_app(tmp_path):
     """`/quit` exits the real app — and the write-after-exit("bye") doesn't crash."""
     meter = CostMeter(str(tmp_path / "t.db"))

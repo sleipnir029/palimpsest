@@ -54,6 +54,24 @@ Screen {
     background: $background;
 }
 
+/* Slash-command autocomplete: a framed list above the input, highlighted row in
+   parchment, the rest sepia. Shown only while typing a /command. */
+#cmdmenu {
+    height: auto;
+    max-height: 12;
+    margin: 0 1;
+    padding: 0 1;
+    color: $secondary;
+    background: $panel;
+    border: round $secondary;
+}
+
+/* The empty-screen welcome hint. */
+.welcome {
+    margin: 1 0 0 2;
+    color: $secondary;
+}
+
 /* Framed input — rounded copper border, gold on focus; the border carries the
    "ask" title and a one-line hint so the chrome itself does the signposting. */
 #prompt {
