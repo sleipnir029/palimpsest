@@ -164,3 +164,23 @@ def test_use_unknown_role(tmp_path):
 
 def test_use_usage_on_missing_args(tmp_path):
     assert "usage" in dispatch(_app(tmp_path), "/use orchestration")
+
+
+# /theme --------------------------------------------------------------------
+def test_theme_switch_persists(tmp_path):
+    from palimpsest import config
+
+    app = _app(tmp_path)
+    out = dispatch(app, "/theme oxide")
+    assert "oxide" in out
+    assert app.theme == "oxide"
+    assert config.get_setting("ui_theme", db_path=app.cost_meter.db_path) == "oxide"
+
+
+def test_theme_unknown(tmp_path):
+    assert "unknown theme" in dispatch(_app(tmp_path), "/theme nope")
+
+
+def test_theme_lists_available(tmp_path):
+    out = dispatch(_app(tmp_path), "/theme")
+    assert "scriptorium" in out and "vellum" in out and "catalogue" in out

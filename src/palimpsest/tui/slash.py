@@ -137,6 +137,26 @@ def _use(app, args: list[str]) -> str:
     return f"unknown role: {role}. options: orchestration, extraction, parser"
 
 
+def _theme(app, args: list[str]) -> str:
+    """switch UI theme: /theme [scriptorium|vellum|oxide|catalogue]"""
+    from .. import config
+    from .themes import THEMES
+
+    if not args:
+        cur = getattr(app, "theme", None)
+        listing = ", ".join(f"{n} (active)" if n == cur else n for n in THEMES)
+        return f"themes: {listing}"
+    name = args[0]
+    if name not in THEMES:
+        return f"unknown theme: {name}. options: {', '.join(THEMES)}"
+    app.theme = name  # Textual re-renders the whole screen with the new palette
+    refresh = getattr(app, "_refresh_topbar", None)
+    if refresh:
+        refresh()
+    config.set_setting("ui_theme", name, db_path=app.cost_meter.db_path)
+    return f"theme → {name}"
+
+
 def _config(app, args: list[str]) -> str:
     """show config keys (masked), or set one: /config set KEY VALUE"""
     from .. import config
@@ -191,6 +211,7 @@ SLASH_COMMANDS: dict[str, Callable] = {
     "cost": _cost,
     "model": _model,
     "use": _use,
+    "theme": _theme,
     "config": _config,
     "undo": _undo,
 }

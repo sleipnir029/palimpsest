@@ -224,5 +224,8 @@ store/
 notes/
 workspace/
 
+# generated TUI theme gallery (scripts/preview_themes.py)
+theme-preview/
+
 # macOS
 .DS_Store
