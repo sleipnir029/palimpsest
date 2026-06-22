@@ -25,13 +25,14 @@ import threading
 from rich.text import Text
 from textual import work
 from textual.app import App, ComposeResult
+from textual.binding import Binding
 from textual.containers import Vertical, VerticalScroll
 from textual.widgets import Input, Markdown, Static
 
 from ..agent import Agent, build_agent
 from ..cost import CostMeter
 from ..monitor import SessionMonitor
-from .slash import dispatch
+from .slash import SLASH_COMMANDS, dispatch
 from .themes import DEFAULT_THEME, THEMES
 
 _TRUNCATE = 200  # tool-result snippet cap (a long blob shouldn't flood the log)
@@ -43,6 +44,12 @@ class PalimpsestApp(App):
         ("ctrl+q", "quit", "Quit"),
         ("ctrl+l", "clear_log", "Clear log"),
         ("escape", "cancel_turn", "Stop"),
+        # Slash-command autocomplete: these act only while the menu is open (no-ops
+        # otherwise), so the single-line input loses nothing by binding them. tab is
+        # priority so it preempts Textual's built-in focus-navigation handler.
+        Binding("up", "menu_up", "Menu up", show=False),
+        Binding("down", "menu_down", "Menu down", show=False),
+        Binding("tab", "menu_complete", "Complete", priority=True, show=False),
     ]
 
     def __init__(self, agent: Agent, cost_meter: CostMeter) -> None:
@@ -55,6 +62,10 @@ class PalimpsestApp(App):
         # widgets (hard to read back), so every appended message also lands here as
         # (role, text) — the stable seam tests assert against.
         self.transcript: list[tuple[str, str]] = []
+        # Slash-command autocomplete state: the currently-matching command names and
+        # the highlighted index. Empty list == menu closed.
+        self._menu: list[str] = []
+        self._menu_idx = 0
         # T63: subscribe to the agent's tool events so the supervisor sees the loop
         # live. The agent fires these on the worker thread (see below).
         self.agent.on_event = self._on_agent_event
@@ -70,6 +81,7 @@ class PalimpsestApp(App):
         yield Static("palimpsest", id="topbar")
         yield VerticalScroll(id="log")
         with Vertical(id="dockbottom"):
+            yield Static(id="cmdmenu")  # slash-command autocomplete; shown on demand
             yield Input(placeholder="message palimpsest…   ( / for commands )", id="prompt")
             yield Static(self._status_text(), id="status")
 
@@ -81,6 +93,21 @@ class PalimpsestApp(App):
         name = config.get_setting("ui_theme", DEFAULT_THEME, db_path=self.cost_meter.db_path)
         self.theme = name if name in THEMES else DEFAULT_THEME  # guard a stale setting
         self._refresh_topbar()
+        self.query_one("#cmdmenu", Static).display = False
+        # A quiet welcome so the empty screen orients rather than stares back. Mounted
+        # directly (not via _emit) so it stays out of the transcript and scrolls away
+        # naturally once the conversation starts.
+        self.query_one("#log", VerticalScroll).mount(
+            Static(
+                Text.assemble(
+                    ("Ask a question, or type ", "dim"),
+                    ("/", "bold"),
+                    (" for commands.   e.g. ", "dim"),
+                    ("extract papers/<file>.pdf", "italic"),
+                ),
+                classes="welcome",
+            )
+        )
         prompt = self.query_one("#prompt", Input)
         prompt.border_title = "ask"
         prompt.border_subtitle = "enter ↵ to send · esc to stop"
@@ -103,6 +130,57 @@ class PalimpsestApp(App):
     def _set_status(self, text: str) -> None:
         self.query_one("#status", Static).update(text)
 
+    # slash autocomplete -----------------------------------------------------
+    def on_input_changed(self, event: Input.Changed) -> None:
+        self._sync_menu(event.value)
+
+    def _sync_menu(self, value: str) -> None:
+        """Open the menu with the commands matching a `/prefix` (before any space)."""
+        menu = self.query_one("#cmdmenu", Static)
+        if value.startswith("/") and " " not in value:
+            matches = [c for c in SLASH_COMMANDS if c.startswith(value[1:])]
+            if matches:
+                self._menu = matches
+                self._menu_idx = min(self._menu_idx, len(matches) - 1)
+                menu.update(self._render_menu())
+                menu.display = True
+                return
+        self._close_menu()
+
+    def _render_menu(self) -> Text:
+        out = Text()
+        for i, cmd in enumerate(self._menu):
+            doc = (SLASH_COMMANDS[cmd].__doc__ or "").strip()
+            selected = i == self._menu_idx
+            out.append(f"{'❯' if selected else ' '} /{cmd}", style="bold" if selected else "")
+            out.append(f"   {doc}\n", style="" if selected else "dim")
+        return out
+
+    def _close_menu(self) -> None:
+        self._menu = []
+        self._menu_idx = 0
+        self.query_one("#cmdmenu", Static).display = False
+
+    def action_menu_down(self) -> None:
+        if self._menu:
+            self._menu_idx = (self._menu_idx + 1) % len(self._menu)
+            self.query_one("#cmdmenu", Static).update(self._render_menu())
+
+    def action_menu_up(self) -> None:
+        if self._menu:
+            self._menu_idx = (self._menu_idx - 1) % len(self._menu)
+            self.query_one("#cmdmenu", Static).update(self._render_menu())
+
+    def action_menu_complete(self) -> None:
+        """Accept the highlighted command into the input (then the user types args)."""
+        if not self._menu:
+            return
+        cmd = self._menu[self._menu_idx]
+        prompt = self.query_one("#prompt", Input)
+        prompt.value = f"/{cmd} "
+        prompt.cursor_position = len(prompt.value)
+        self._close_menu()
+
     # message rendering ------------------------------------------------------
     def _emit(self, role: str, text: str, *, widget=None, renderable=None, classes: str = "") -> None:
         """Mount one message widget into the log and mirror it into the transcript.
@@ -124,6 +202,15 @@ class PalimpsestApp(App):
 
     # chat loop --------------------------------------------------------------
     def on_input_submitted(self, event: Input.Submitted) -> None:
+        # Enter while the autocomplete menu is open: if the command is fully typed
+        # (value == "/cmd"), run it; otherwise accept the highlighted command into the
+        # input (Claude-Code style) and wait for the user to type args.
+        if self._menu:
+            selected = self._menu[self._menu_idx]
+            if event.value.strip() != f"/{selected}":
+                self.action_menu_complete()
+                return
+            self._close_menu()  # fully typed → fall through and dispatch it
         text = event.value.strip()
         if not text:
             return
@@ -195,6 +282,10 @@ class PalimpsestApp(App):
         self.transcript.clear()
 
     def action_cancel_turn(self) -> None:
+        # Esc first dismisses an open autocomplete menu (doesn't cancel the turn).
+        if self._menu:
+            self._close_menu()
+            return
         # T65: request cancellation of the turn in flight. The input is disabled
         # exactly while the agent worker is running, so an enabled input means nothing
         # to cancel — ignore (and don't leave the flag set for the next run).
