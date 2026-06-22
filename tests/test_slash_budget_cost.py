@@ -184,3 +184,63 @@ def test_theme_unknown(tmp_path):
 def test_theme_lists_available(tmp_path):
     out = dispatch(_app(tmp_path), "/theme")
     assert "scriptorium" in out and "vellum" in out and "catalogue" in out
+
+
+# /resume -------------------------------------------------------------------
+class _ResumeAgent:
+    """Agent stub exposing the two attributes /resume touches: session + messages."""
+
+    def __init__(self, msgs):
+        self.provider = object()
+        self.messages: list = []
+        self.session = type("_S", (), {"load": lambda _self, limit=None: list(msgs)})()
+
+
+def _resume_app(tmp_path, msgs):
+    app = _FakeApp(CostMeter(str(tmp_path / "t.db")))
+    app.agent = _ResumeAgent(msgs)
+    return app
+
+
+def test_resume_trim_drops_dangling_tail():
+    from palimpsest.tui.slash import _resume_trim
+
+    clean = {"role": "assistant", "content": [{"type": "text", "text": "done"}]}
+    msgs = [
+        {"role": "user", "content": "hi"},
+        clean,
+        {"role": "user", "content": "extract x"},
+        {"role": "assistant", "content": [{"type": "tool_use", "name": "extract_paper", "id": "1", "input": {}}]},
+        {"role": "user", "content": [{"type": "tool_result", "tool_use_id": "1", "content": "ok"}]},
+    ]
+    # a cancelled-mid-turn tail (tool_use + tool_result, no reply) trims back to the
+    # last clean assistant answer so the restored history is API-valid.
+    assert _resume_trim(msgs)[-1] is clean
+
+
+def test_resume_recap_shows_text_exchanges():
+    from palimpsest.tui.slash import _resume_recap
+
+    msgs = [
+        {"role": "user", "content": "hello there"},
+        {"role": "assistant", "content": [{"type": "text", "text": "hi back"}]},
+    ]
+    out = _resume_recap(msgs)
+    assert "hello there" in out and "hi back" in out
+
+
+def test_resume_restores_context(tmp_path):
+    msgs = [
+        {"role": "user", "content": "earlier question"},
+        {"role": "assistant", "content": [{"type": "text", "text": "earlier answer"}]},
+    ]
+    app = _resume_app(tmp_path, msgs)
+    out = dispatch(app, "/resume")
+    assert "resumed 2 message" in out and "earlier question" in out
+    assert app.agent.messages[-1]["content"][0]["text"] == "earlier answer"
+
+
+def test_resume_empty_session(tmp_path):
+    app = _resume_app(tmp_path, [])
+    assert "no prior session" in dispatch(app, "/resume")
+    assert app.agent.messages == []  # nothing clobbered when there's nothing to load

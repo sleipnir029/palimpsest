@@ -137,6 +137,55 @@ def _use(app, args: list[str]) -> str:
     return f"unknown role: {role}. options: orchestration, extraction, parser"
 
 
+def _resume_trim(msgs: list[dict]) -> list[dict]:
+    """Trim a transcript to end at the last *clean* assistant answer.
+
+    The next turn appends a user message, so the restored history must end with a
+    completed assistant text turn (valid role alternation, no dangling tool_use). A
+    normally-finished run already does; this trims a tail left dangling by a
+    cancelled/killed run (its last record can be a tool_result with no reply)."""
+    out = list(msgs)
+    while out:
+        last = out[-1]
+        content = last.get("content")
+        if last.get("role") == "assistant" and isinstance(content, list) and any(
+            isinstance(b, dict) and b.get("type") == "text" for b in content
+        ) and not any(
+            isinstance(b, dict) and b.get("type") == "tool_use" for b in content
+        ):
+            return out
+        out.pop()
+    return out
+
+
+def _resume_recap(msgs: list[dict], keep: int = 10) -> str:
+    """One line per human/agent text exchange (tool blocks omitted), tail-capped."""
+    lines: list[str] = []
+    for m in msgs:
+        role, content = m.get("role"), m.get("content")
+        if role == "user" and isinstance(content, str):
+            lines.append(f"  ❯ {content.strip()[:76]}")
+        elif role == "assistant" and isinstance(content, list):
+            text = " ".join(
+                b.get("text", "") for b in content
+                if isinstance(b, dict) and b.get("type") == "text"
+            ).strip()
+            if text:
+                lines.append(f"  · {text[:76]}")
+    if len(lines) > keep:
+        lines = [f"  (+{len(lines) - keep} earlier)"] + lines[-keep:]
+    return "\n".join(lines) if lines else "  (no text exchanges)"
+
+
+def _resume(app, args: list[str]) -> str:
+    """reload the previous session's context into the agent: /resume"""
+    msgs = _resume_trim(list(app.agent.session.load()))
+    if not msgs:
+        return "no prior session to resume."
+    app.agent.messages = msgs  # restore context so the next turn continues with it
+    return f"resumed {len(msgs)} message(s) from the last session:\n{_resume_recap(msgs)}"
+
+
 def _theme(app, args: list[str]) -> str:
     """switch UI theme: /theme [scriptorium|vellum|oxide|catalogue]"""
     from .. import config
@@ -212,6 +261,7 @@ SLASH_COMMANDS: dict[str, Callable] = {
     "model": _model,
     "use": _use,
     "theme": _theme,
+    "resume": _resume,
     "config": _config,
     "undo": _undo,
 }
