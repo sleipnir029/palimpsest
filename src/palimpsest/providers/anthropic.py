@@ -18,6 +18,16 @@ class LLMResponse:
 
 class AnthropicProvider:
     name = "claude-sonnet-4-6"
+    # USD/token, Claude Sonnet 4.6 — $3/$15 per MTok, cache-read 0.1x, cache-creation
+    # 1.25x (confirmed via the claude-api reference, 2026-06). Mirrors agent._PRICE_USD
+    # (kept there as the fallback for price-less test stubs). Explicit here so the
+    # extraction budget guard sees a real table — DeepSeekProvider overrides it.
+    prices = {
+        "input_tokens": 3.00 / 1_000_000,
+        "output_tokens": 15.00 / 1_000_000,
+        "cache_read_input_tokens": 0.30 / 1_000_000,
+        "cache_creation_input_tokens": 3.75 / 1_000_000,
+    }
     # Extra request kwargs merged into every messages.create() call. Subclasses
     # override (e.g. DeepSeekProvider disables extended thinking). Anthropic's
     # default is no thinking, so the base leaves this empty.

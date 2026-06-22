@@ -42,6 +42,32 @@ def test_build_provider_unknown_raises():
         build_provider("not-a-model")
 
 
+def test_all_extraction_providers_are_priced():
+    # The budget guard refuses a price-less provider, so every provider selectable for
+    # extraction must carry a price table — sonnet/anthropic were relying on the
+    # implicit Sonnet fallback (None on the instance), and gemini had none.
+    for name in ("deepseek", "sonnet", "anthropic", "gemini"):
+        prices = build_provider(name).prices
+        assert prices and "input_tokens" in prices and "output_tokens" in prices, name
+
+
+def test_anthropic_prices_mirror_agent_fallback():
+    # AnthropicProvider.prices duplicates agent._PRICE_USD (the Sonnet fallback table
+    # the €50 cap depends on). Lock the mirror so the two can't silently drift.
+    from palimpsest.agent import _PRICE_USD
+    from palimpsest.providers import AnthropicProvider
+
+    assert AnthropicProvider().prices == _PRICE_USD
+
+
+def test_gemini_price_is_conservative():
+    # Priced at the current TOP Flash tier so a runtime extraction never UNDER-counts
+    # the cap whichever Flash the drifting alias resolves to (>= the cheap 2.5 tier).
+    from palimpsest.providers import GeminiProvider
+
+    assert GeminiProvider().prices["output_tokens"] >= 2.50 / 1_000_000
+
+
 def test_gemini_is_extraction_only():
     # Usable for extraction, but excluded from the agent loop (Anthropic-wire only).
     assert "gemini" in PROVIDER_FACTORIES

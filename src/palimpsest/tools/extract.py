@@ -601,10 +601,10 @@ def extract(
     # Resolve + budget-check the provider first (before any file work): a config or
     # budget problem should fail fast. Budget invariant (€50 hard cap): a metered
     # call must price its provider correctly — agent._cost_eur silently falls back to
-    # the Sonnet table when a provider has no `prices` (e.g. GeminiProvider built with
-    # prices=None), which would mis-charge the cap. Guard ONLY the resolved-from-config
-    # path: an injected provider (tests, experiments passing prices explicitly) is the
-    # caller's responsibility and keeps the Sonnet fallback they rely on.
+    # the Sonnet table when a provider has no `prices`, which would mis-charge the cap.
+    # The registry providers are all priced, so this is defense-in-depth for a future
+    # no-price provider. Guard ONLY the resolved-from-config path: an injected provider
+    # (tests, experiments passing prices explicitly) is the caller's responsibility.
     if provider is None:
         db = cost_meter.db_path if cost_meter is not None else "palimpsest.db"
         provider = _resolve_extraction_provider(db)

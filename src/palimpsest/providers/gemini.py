@@ -17,6 +17,17 @@ from .openai_compat import OpenAICompatProvider
 
 _GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai"
 
+# `gemini-flash-latest` is a drifting alias — it tracks Google's newest Flash, whose
+# price varies by tier (Gemini 2.5 Flash $0.30/$2.50, Gemini 3.5 Flash $1.50/$9.00 per
+# MTok — ai.google.dev/gemini-api/docs/pricing, 2026-06). We bake the CURRENT TOP Flash
+# tier so a runtime extraction is metered *conservatively*: the €50 cap is never
+# UNDER-counted whichever Flash the alias resolves to. Experiments pass an exact
+# model+prices and override this; the default only powers `/use extraction gemini`.
+_GEMINI_PRICE_USD = {
+    "input_tokens": 1.50 / 1_000_000,
+    "output_tokens": 9.00 / 1_000_000,
+}
+
 
 class GeminiProvider(OpenAICompatProvider):
     def __init__(
@@ -29,6 +40,7 @@ class GeminiProvider(OpenAICompatProvider):
         max_tokens: int = 32768,
         **kwargs,
     ) -> None:
+        prices = prices if prices is not None else _GEMINI_PRICE_USD
         # Gemini 3.x Flash is a thinking model: it spends a large, variable share of the
         # token budget on hidden reasoning, so the JSON answer truncates at the base
         # 16384 ceiling. Give it more headroom (its output cap is 64K+).
