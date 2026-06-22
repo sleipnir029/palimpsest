@@ -7,9 +7,29 @@ Routes through ``policy.assert_writable`` (same boundary as write_file).
 
 from __future__ import annotations
 
+import difflib
+
 from palimpsest.policy import assert_writable
 
 from . import register
+
+_DIFF_MAX_LINES = 60  # cap the returned diff so a huge edit can't flood the loop
+
+
+def _unified(path: str, old: str, new: str) -> str:
+    """A compact unified diff of one file's old→new text, capped (A4)."""
+    lines = list(
+        difflib.unified_diff(
+            old.splitlines(keepends=True),
+            new.splitlines(keepends=True),
+            fromfile=path,
+            tofile=path,
+            n=2,
+        )
+    )
+    if len(lines) > _DIFF_MAX_LINES:
+        lines = lines[:_DIFF_MAX_LINES] + [f"… (+{len(lines) - _DIFF_MAX_LINES} more diff lines)\n"]
+    return "".join(lines).rstrip("\n")
 
 
 @register("edit_file", {
@@ -35,5 +55,9 @@ def edit_file(path: str, old_string: str, new_string: str) -> str:
         return f"error: old_string not found in {path}"
     if n > 1:
         return f"error: old_string occurs {n} times in {path}; add context to make it unique"
-    p.write_text(text.replace(old_string, new_string), encoding="utf-8")
-    return f"edited {path}"
+    new_text = text.replace(old_string, new_string)
+    p.write_text(new_text, encoding="utf-8")
+    # Return the diff so both the model and the human (TUI colors it) can verify the
+    # change without opening git. Header line stays "edited <path>" for the TUI match.
+    diff = _unified(path, text, new_text)
+    return f"edited {path}\n{diff}" if diff else f"edited {path}"

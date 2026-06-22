@@ -13,11 +13,11 @@ from __future__ import annotations
 import asyncio
 
 import pytest
-from textual.widgets import Input, Static
+from textual.widgets import Static
 
 from palimpsest.config import get_setting
 from palimpsest.cost import CostMeter
-from palimpsest.tui.app import PalimpsestApp
+from palimpsest.tui.app import PalimpsestApp, PromptArea
 
 
 @pytest.fixture(autouse=True)
@@ -53,7 +53,7 @@ def test_tui_commands_integrate(tmp_path):
     async def _drive() -> None:
         async with app.run_test(size=(94, 30)) as pilot:
             async def cmd(line: str) -> None:
-                app.query_one("#prompt", Input).value = line
+                app.query_one("#prompt", PromptArea).text = line
                 await pilot.press("enter")
                 await pilot.pause()
 
@@ -80,5 +80,35 @@ def test_tui_commands_integrate(tmp_path):
             assert len(app.agent.messages) == 2  # prior context restored
             transcript = "\n".join(t for _role, t in app.transcript)
             assert "earlier question" in transcript
+
+    asyncio.run(_drive())
+
+
+def test_clear_and_export_integrate(tmp_path):
+    """A2 + B4: /export dumps the live context to a workspace markdown file (fenced
+    via assert_writable); /clear empties the agent's context."""
+    db = str(tmp_path / "t.db")
+    meter = CostMeter(db)
+    agent = _StubAgent(meter)
+    agent.messages = [
+        {"role": "user", "content": "hi"},
+        {"role": "assistant", "content": [{"type": "text", "text": "the answer"}]},
+    ]
+    app = PalimpsestApp(agent=agent, cost_meter=meter)
+
+    async def _drive() -> None:
+        async with app.run_test(size=(94, 30)) as pilot:
+            async def cmd(line: str) -> None:
+                app.query_one("#prompt", PromptArea).text = line
+                await pilot.press("enter")
+                await pilot.pause()
+
+            await cmd("/export")
+            exports = list(tmp_path.glob("transcript-*.md"))
+            assert exports, "no transcript file written"
+            assert "the answer" in exports[0].read_text(encoding="utf-8")
+
+            await cmd("/clear")
+            assert app.agent.messages == []  # context reset
 
     asyncio.run(_drive())

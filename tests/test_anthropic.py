@@ -70,3 +70,107 @@ def test_cache_control():
 
     print(f"\ncache_read_input_tokens={second.usage['cache_read_input_tokens']}")
     assert second.usage["cache_read_input_tokens"] > 0
+
+
+# --- streaming path (A1), offline: stub the SDK client so no network/key needed ---
+
+
+class _Block:
+    def __init__(self, type_: str, text: str | None = None, dump: dict | None = None) -> None:
+        self.type = type_
+        if text is not None:
+            self.text = text
+        self._dump = dump or {}
+
+    def model_dump(self) -> dict:
+        return self._dump
+
+
+class _Usage:
+    input_tokens = 11
+    output_tokens = 7
+    cache_read_input_tokens = 0
+    cache_creation_input_tokens = 0
+
+
+class _FinalMessage:
+    """Mimics the anthropic Message that stream.get_final_message() returns."""
+
+    content = [
+        _Block("text", text="hello world"),
+        _Block("tool_use", dump={"id": "t1", "name": "search", "input": {"q": "x"}}),
+    ]
+    usage = _Usage()
+
+    def model_dump(self) -> dict:
+        return {"content": [{"type": "text", "text": "hello world"}]}
+
+
+class _Stream:
+    def __init__(self, deltas, final) -> None:
+        self.text_stream = iter(deltas)
+        self._final = final
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        return False
+
+    def get_final_message(self):
+        return self._final
+
+
+class _Messages:
+    def __init__(self, stream) -> None:
+        self._stream = stream
+
+    def stream(self, **kwargs):
+        return self._stream
+
+    def create(self, **kwargs):
+        raise AssertionError("streaming path must not fall back to create()")
+
+
+class _Client:
+    def __init__(self, messages) -> None:
+        self.messages = messages
+
+
+def test_streaming_emits_deltas_and_assembles_same_shape():
+    """on_text receives the text deltas live, and complete() still returns the SAME
+    LLMResponse the loop needs (text, tool_calls, usage) from get_final_message()."""
+    provider = AnthropicProvider(api_key="x")  # no network in __init__
+    provider.client = _Client(_Messages(_Stream(["hello ", "world"], _FinalMessage())))
+
+    deltas: list[str] = []
+    resp = provider.complete(
+        system="s",
+        messages=[{"role": "user", "content": "hi"}],
+        on_text=deltas.append,
+    )
+
+    assert deltas == ["hello ", "world"]              # streamed live to the UI
+    assert resp.text == "hello world"                 # assembled from final message
+    assert resp.tool_calls == [{"id": "t1", "name": "search", "input": {"q": "x"}}]
+    assert resp.usage["input_tokens"] == 11           # usage mapped, not lost
+
+
+def test_streaming_cancel_propagates_without_fallback():
+    """#3: when on_text raises StreamCancelled (Esc mid-reply), complete() re-raises it
+    instead of falling back to messages.create() — which would defeat the cancel."""
+    from palimpsest.providers.anthropic import StreamCancelled
+
+    provider = AnthropicProvider(api_key="x")
+    # _Messages.create() asserts if reached → proves no fallback happened.
+    provider.client = _Client(_Messages(_Stream(["a", "b"], _FinalMessage())))
+
+    def on_text(_delta):
+        raise StreamCancelled()
+
+    with pytest.raises(StreamCancelled):
+        provider.complete(
+            system="s",
+            messages=[{"role": "user", "content": "hi"}],
+            on_text=on_text,
+        )

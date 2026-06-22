@@ -23,11 +23,12 @@ from __future__ import annotations
 import threading
 
 from rich.text import Text
-from textual import work
+from textual import events, work
 from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.containers import Vertical, VerticalScroll
-from textual.widgets import Input, Markdown, Static
+from textual.message import Message
+from textual.widgets import Markdown, Static, TextArea
 
 from ..agent import Agent, build_agent
 from ..cost import CostMeter
@@ -36,6 +37,79 @@ from .slash import dispatch, menu_for
 from .themes import DEFAULT_THEME, THEMES
 
 _TRUNCATE = 200  # tool-result snippet cap (a long blob shouldn't flood the log)
+_FULL_TRUNCATE = 4000  # higher cap for supervision-relevant tools (bash, extract_paper)
+
+
+def _diff_text(content: str) -> Text:
+    """Color an ``edited <path>\\n<unified diff>`` blob: +adds green, -dels red (A4)."""
+    out = Text()
+    for i, line in enumerate(content.splitlines()):
+        if i == 0:
+            out.append(line + "\n")  # the "edited <path>" header
+        elif line.startswith("+") and not line.startswith("+++"):
+            out.append(line + "\n", style="green")
+        elif line.startswith("-") and not line.startswith("---"):
+            out.append(line + "\n", style="red")
+        else:
+            out.append(line + "\n", style="dim")
+    return out
+
+
+class PromptArea(TextArea):
+    """Multi-line composer (C1): Enter submits, Ctrl+J inserts a newline.
+
+    Textual's TextArea maps Enter to a newline insert; we intercept it to submit
+    (like the old single-line Input) and move newline-insertion to Ctrl+J.
+    ponytail: Shift+Enter is the familiar gesture, but most terminals can't
+    distinguish it from Enter — Ctrl+J is the reliable newline key. We bind both
+    and use whichever the terminal actually delivers.
+    """
+
+    class Submitted(Message):
+        """Posted when the user presses Enter; carries the composer's full text."""
+
+        def __init__(self, value: str) -> None:
+            self.value = value
+            super().__init__()
+
+    def _menu_is_open(self) -> bool:
+        check = getattr(self.app, "_menu_open", None)
+        return bool(check and check())
+
+    async def _on_key(self, event: events.Key) -> None:
+        if event.key == "enter":
+            event.stop()
+            event.prevent_default()
+            self.post_message(self.Submitted(self.text))
+            return
+        if event.key == "escape":
+            # TextArea's default escape handler calls screen.focus_next(), which steals
+            # focus from the composer and leaves the app feeling frozen. Intercept it:
+            # route to the app's cancel/menu-close action and KEEP focus here.
+            event.stop()
+            event.prevent_default()
+            self.app.action_cancel_turn()
+            return
+        if event.key in ("ctrl+j", "shift+enter"):
+            event.stop()
+            event.prevent_default()
+            self.insert("\n")
+            return
+        # up/down drive the autocomplete menu / input history, but only when the menu
+        # is open or the cursor is at the composer's top/bottom edge — otherwise they
+        # move the cursor between lines like a normal multi-line editor.
+        if event.key in ("up", "down"):
+            row = self.cursor_location[0]
+            at_edge = (event.key == "up" and row == 0) or (
+                event.key == "down" and row == self.text.count("\n")
+            )
+            if self._menu_is_open() or at_edge:
+                event.stop()
+                event.prevent_default()
+                action = self.app.action_menu_up if event.key == "up" else self.app.action_menu_down
+                action()
+                return
+        await super()._on_key(event)
 
 
 class PalimpsestApp(App):
@@ -62,6 +136,15 @@ class PalimpsestApp(App):
         # widgets (hard to read back), so every appended message also lands here as
         # (role, text) — the stable seam tests assert against.
         self.transcript: list[tuple[str, str]] = []
+        # Streaming reply state (A1): the agent fires assistant_delta events as text
+        # arrives; the deltas land in one live Markdown widget. None = no reply in
+        # flight. The buffer is mirrored to the transcript once, on seal.
+        self._stream_widget: Markdown | None = None
+        self._stream_buf = ""
+        # Input history (A5): submitted lines, recalled with up/down when the
+        # autocomplete menu is closed. _history_idx is the cursor (None = not recalling).
+        self._history: list[str] = []
+        self._history_idx: int | None = None
         # Slash-command autocomplete state. `_menu` holds the selectable tokens
         # (command names in command mode, argument values in arg mode); `_menu_glosses`
         # is the parallel note per row; `_menu_usage` an optional header line. Empty
@@ -90,7 +173,7 @@ class PalimpsestApp(App):
         yield VerticalScroll(id="log")
         with Vertical(id="dockbottom"):
             yield Static(id="cmdmenu")  # slash-command autocomplete; shown on demand
-            yield Input(placeholder="message palimpsest…   ( / for commands )", id="prompt")
+            yield PromptArea(id="prompt", soft_wrap=True, show_line_numbers=False)
             yield Static(self._status_text(), id="status")
 
     def on_mount(self) -> None:
@@ -116,10 +199,18 @@ class PalimpsestApp(App):
                 classes="welcome",
             )
         )
-        prompt = self.query_one("#prompt", Input)
+        prompt = self.query_one("#prompt", PromptArea)
         prompt.border_title = "ask"
-        prompt.border_subtitle = "enter ↵ send · tab ⇥ complete · esc stop"
+        prompt.border_subtitle = "enter ↵ send · ctrl+j ⏎ newline · tab ⇥ complete · esc stop"
         prompt.focus()
+        # Seed up-arrow history from recent sessions so past prompts recall across
+        # launches (A5 / cross-session). Best-effort: empty outside a workspace repo.
+        try:
+            from ..session import recent_inputs
+
+            self._history = recent_inputs()
+        except Exception:  # noqa: BLE001 — history is a convenience, never fatal
+            self._history = []
 
     def _refresh_topbar(self) -> None:
         self.query_one("#topbar", Static).update(f"palimpsest · {self.theme}")
@@ -133,14 +224,31 @@ class PalimpsestApp(App):
         extr = config.get_setting("extraction_model", "deepseek", db_path=db)
         parser = config.get_setting("parser_name", "mineru", db_path=db)
         spent, cap = self.cost_meter.total_eur(), self.cost_meter.cap
-        return f"{orch} · extract:{extr} · parse:{parser}    €{spent:.2f} / €{cap:.0f}    /help"
+        # ctx: prompt size sent on the last turn = the live context the agent carries
+        # (A3). Reuses agent.last_usage — no tokenizer dependency. Hidden until the
+        # first turn records a usage block.
+        toks = (getattr(self.agent, "last_usage", None) or {}).get("input_tokens", 0)
+        ctx = f"    ctx ~{toks / 1000:.1f}k" if toks else ""
+        return f"{orch} · extract:{extr} · parse:{parser}    €{spent:.2f} / €{cap:.0f}{ctx}    /help"
 
     def _set_status(self, text: str) -> None:
         self.query_one("#status", Static).update(text)
 
     # slash autocomplete -----------------------------------------------------
-    def on_input_changed(self, event: Input.Changed) -> None:
-        self._sync_menu(event.value)
+    def on_text_area_changed(self, event: TextArea.Changed) -> None:
+        text = event.text_area.text
+        # While browsing history, a recalled line — even a slash command — must NOT pop
+        # the autocomplete menu, or up/down would switch to menu nav and break browsing.
+        # Detect our own recall: the text equals the current history entry. A real edit
+        # (text differs) exits browse mode and syncs the menu normally.
+        if (
+            self._history_idx is not None
+            and 0 <= self._history_idx < len(self._history)
+            and text == self._history[self._history_idx]
+        ):
+            return
+        self._history_idx = None
+        self._sync_menu(text)
 
     def _sync_menu(self, value: str) -> None:
         """Refresh the autocomplete from the input value (command or argument mode)."""
@@ -195,20 +303,44 @@ class PalimpsestApp(App):
         if self._menu:
             self._menu_idx = (self._menu_idx + 1) % len(self._menu)
             self.query_one("#cmdmenu", Static).update(self._render_menu())
+            return
+        self._history_recall(+1)  # menu closed → newer history (A5)
 
     def action_menu_up(self) -> None:
         if self._menu:
             self._menu_idx = (self._menu_idx - 1) % len(self._menu)
             self.query_one("#cmdmenu", Static).update(self._render_menu())
+            return
+        self._history_recall(-1)  # menu closed → older history (A5)
+
+    def _history_recall(self, direction: int) -> None:
+        """Walk input history into the prompt (-1 older, +1 newer); past the newest
+        clears the line. No-op while the agent is running (input disabled)."""
+        prompt = self.query_one("#prompt", PromptArea)
+        if prompt.disabled or not self._history:
+            return
+        if self._history_idx is None:
+            if direction > 0:
+                return  # already at the live (empty) line
+            self._history_idx = len(self._history) - 1
+        else:
+            self._history_idx += direction
+            if self._history_idx >= len(self._history):
+                self._history_idx = None
+                prompt.text = ""
+                return
+            self._history_idx = max(0, self._history_idx)
+        prompt.text = self._history[self._history_idx]
+        prompt.move_cursor(prompt.document.end)
 
     def action_menu_complete(self) -> None:
         """Accept the highlighted token (command or argument value) into the input."""
         if not self._menu:
             return
         tok = self._menu[self._menu_idx]
-        prompt = self.query_one("#prompt", Input)
-        prompt.value = f"{self._menu_prefix}{tok} "
-        prompt.cursor_position = len(prompt.value)
+        prompt = self.query_one("#prompt", PromptArea)
+        prompt.text = f"{self._menu_prefix}{tok} "
+        prompt.move_cursor(prompt.document.end)
         self._close_menu()
 
     # message rendering ------------------------------------------------------
@@ -231,7 +363,7 @@ class PalimpsestApp(App):
         log.scroll_end(animate=False)
 
     # chat loop --------------------------------------------------------------
-    def on_input_submitted(self, event: Input.Submitted) -> None:
+    def on_prompt_area_submitted(self, event: "PromptArea.Submitted") -> None:
         # Enter while the autocomplete menu is open. In argument mode, Enter runs the
         # line as typed (Tab is what completes a value). In command mode, if the command
         # is fully typed (value == "/cmd") run it; otherwise accept the highlighted
@@ -246,9 +378,15 @@ class PalimpsestApp(App):
                     return
                 self._close_menu()  # fully typed → fall through and dispatch it
         text = event.value.strip()
+        prompt = self.query_one("#prompt", PromptArea)
         if not text:
             return
-        event.input.value = ""
+        prompt.text = ""
+        # Record for up/down recall (A5): every submitted line incl. slash commands,
+        # skipping consecutive dupes. Reset the recall cursor.
+        if not self._history or self._history[-1] != text:
+            self._history.append(text)
+        self._history_idx = None
         self._emit("user", text, renderable=Text(f"❯ {text}", style="bold"), classes="msg-user")
 
         if text.startswith("/"):
@@ -263,8 +401,10 @@ class PalimpsestApp(App):
         self.cancel_event.clear()
         # Disable the input for the duration of the call: this guarantees a single
         # request in flight, so the CostMeter is never written concurrently.
-        event.input.disabled = True
+        prompt.disabled = True
         self._set_status("· working…")
+        self._stream_widget = None  # fresh reply: don't append to a stale widget
+        self._stream_buf = ""
         self._run_agent(text)
 
     @work(thread=True)
@@ -282,38 +422,87 @@ class PalimpsestApp(App):
 
     # live tool trace (T63) -------------------------------------------------
     def _on_agent_event(self, event: dict) -> None:
-        # Fires on the worker thread (inside agent.run). Capture to the demo log here
-        # (single-writer: the agent loop is serial and this is the only writer), then
-        # hop to the main thread to touch the widget — same marshalling the reply uses.
-        self.monitor.observe(event)
+        # Fires on the worker thread (inside agent.run). The demo monitor only models
+        # tool_call/tool_result — keep streaming/stage events away from it (it would
+        # mis-time them as tool results). Then hop to the main thread for the widgets.
+        if event.get("type") in ("tool_call", "tool_result"):
+            self.monitor.observe(event)
         self.call_from_thread(self._show_event, event)
 
     def _show_event(self, event: dict) -> None:
-        if event["type"] == "tool_call":
+        etype = event.get("type")
+        if etype == "assistant_delta":  # A1: streamed reply text
+            self._stream_append(event["text"])
+            return
+        if etype == "stage":  # B1: pipeline progress under the active tool
+            self._emit("trace", f"   · {event['text']}", classes="trace")
+            return
+        if etype == "tool_call":
+            self._seal_stream()  # any streamed text precedes this call — finalize it
             args = ", ".join(str(v) for v in (event["input"] or {}).values())
             self._emit("trace", f"→ {event['name']}({args})", classes="trace")
-        else:
-            content = str(event["content"])
-            snippet = content if len(content) <= _TRUNCATE else content[:_TRUNCATE] + "…"
-            marker = "✗" if event.get("is_error") else "←"
-            self._emit(
-                "trace", f"{marker} {snippet}",
-                classes="trace-error" if event.get("is_error") else "trace",
-            )
+            return
+        # tool_result
+        name = event.get("name")
+        content = str(event["content"])
+        if name == "edit_file" and content.startswith("edited "):
+            # A4: render the unified diff with +/- coloring instead of truncating it.
+            self._emit("trace", content, renderable=_diff_text(content), classes="trace")
+            return
+        # A4/B2: bash + extract_paper are supervision-relevant (the command run, the
+        # graph mutation) — show them in full rather than clipped to 200 chars.
+        cap = _FULL_TRUNCATE if name in ("bash", "extract_paper") else _TRUNCATE
+        snippet = content if len(content) <= cap else content[:cap] + "…"
+        marker = "✗" if event.get("is_error") else "←"
+        self._emit(
+            "trace", f"{marker} {snippet}",
+            classes="trace-error" if event.get("is_error") else "trace",
+        )
+
+    def _stream_append(self, delta: str) -> None:
+        """Append a streamed text delta to the live reply widget (A1), mounting it on
+        the first delta. Not mirrored to the transcript until seal."""
+        if self._stream_widget is None:
+            self._stream_widget = Markdown(classes="msg-agent")
+            self.query_one("#log", VerticalScroll).mount(self._stream_widget)
+        self._stream_buf += delta
+        self._stream_widget.update(self._stream_buf)
+        self.query_one("#log", VerticalScroll).scroll_end(animate=False)
+
+    def _seal_stream(self) -> None:
+        """Finalize the live reply widget: mirror its text to the transcript once and
+        stop appending (a later turn's text starts a fresh widget)."""
+        if self._stream_widget is None:
+            return
+        self.transcript.append(("agent", self._stream_buf))
+        self._stream_widget = None
+        self._stream_buf = ""
 
     def _show_reply(self, reply: str) -> None:
-        # The reply is the bright top layer — render it through Textual's theme-aware
-        # Markdown widget (headings/lists/code take the Scriptorium palette, not Rich's
-        # default red/cyan) over the faded tool traces above it.
-        self._emit("agent", reply, widget=Markdown(reply, classes="msg-agent"))
+        # Seal any live streamed text first — it's already on screen. A normally
+        # streamed reply needs nothing more (don't re-mount resp.text: it can differ
+        # from the deltas by trailing whitespace and would double-render).
+        had_stream = self._stream_widget is not None
+        self._seal_stream()
+        if reply.startswith(("[cancelled]", "[error]", "[budget]")):
+            # Control strings from the worker/monitor: a quiet note (it sits under the
+            # partial reply when Esc landed mid-stream, so the user sees both).
+            self._emit("trace", reply, classes="trace")
+        elif not had_stream and reply:
+            # Nothing streamed (non-streaming fallback): mount as the bright reply.
+            self._emit("agent", reply, widget=Markdown(reply, classes="msg-agent"))
         self._set_status(self._status_text())
-        prompt = self.query_one("#prompt", Input)
+        prompt = self.query_one("#prompt", PromptArea)
         prompt.disabled = False
         prompt.focus()
 
     def action_clear_log(self) -> None:
         self.query_one("#log", VerticalScroll).remove_children()
         self.transcript.clear()
+        # A clear mid-stream must drop the live widget reference (it was just removed)
+        # so the next delta starts a fresh one instead of updating a detached widget.
+        self._stream_widget = None
+        self._stream_buf = ""
 
     def action_cancel_turn(self) -> None:
         # Esc first dismisses an open autocomplete menu (doesn't cancel the turn).
@@ -323,7 +512,7 @@ class PalimpsestApp(App):
         # T65: request cancellation of the turn in flight. The input is disabled
         # exactly while the agent worker is running, so an enabled input means nothing
         # to cancel — ignore (and don't leave the flag set for the next run).
-        if not self.query_one("#prompt", Input).disabled:
+        if not self.query_one("#prompt", PromptArea).disabled:
             return
         self.cancel_event.set()
         self._emit("trace", "cancelling… (stops at the next step)", classes="trace")

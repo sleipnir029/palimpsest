@@ -86,9 +86,15 @@ def ws(tmp_path, monkeypatch):
     return tmp_path
 
 
+def _session_file(root):
+    """The single rotated session transcript a test produced (session-<id>.jsonl)."""
+    files = sorted((root / ".palimpsest").glob("session*.jsonl"))
+    return files[0] if files else None
+
+
 def _records(root):
-    log = root / ".palimpsest" / "session.jsonl"
-    return [json.loads(line) for line in log.read_text().splitlines()] if log.exists() else []
+    log = _session_file(root)
+    return [json.loads(line) for line in log.read_text().splitlines()] if log else []
 
 
 def _agent(provider, tmp_path, **kw):
@@ -137,7 +143,7 @@ def test_no_workspace_no_write(tmp_path, monkeypatch):
     monkeypatch.setenv("PALIMPSEST_WORKSPACE", str(tmp_path))
     agent = _agent(_FinalAnswerProvider(), tmp_path)
     agent.run("hello")
-    assert not (tmp_path / ".palimpsest" / "session.jsonl").exists()
+    assert _session_file(tmp_path) is None
 
 
 def test_load_round_trips(ws, tmp_path):
@@ -172,12 +178,57 @@ def test_load_tolerates_truncated_tail(ws):
     case load() must survive. It skips the broken line instead of raising."""
     log = SessionLog()
     log.append({"role": "user", "content": "complete"})
-    path = ws / ".palimpsest" / "session.jsonl"
+    path = log.current_path
     with path.open("a", encoding="utf-8") as fh:
         fh.write('{"role": "assistant", "content": [{"type": "te')  # truncated, no newline
 
     recs = log.load()  # must not raise
     assert recs == [{"role": "user", "content": "complete"}]
+
+
+# --- rotation + cross-session helpers (#5 / #6) ----------------------------------
+
+def _two_sessions(ws):
+    """Two rotated sessions with deterministic mtimes (A older, B newer)."""
+    import os
+
+    from palimpsest.session import SessionLog
+
+    a = SessionLog(session_id="20260101-000000-aaaaaa")
+    a.append({"role": "user", "content": "older prompt"})
+    a.append({"role": "user", "content": "/help"})  # slash command — kept in history too
+    b = SessionLog(session_id="20260102-000000-bbbbbb")
+    b.append({"role": "user", "content": "newer prompt"})
+    os.utime(a.current_path, (1000, 1000))
+    os.utime(b.current_path, (2000, 2000))
+    return a, b
+
+
+def test_session_paths_newest_first(ws):
+    from palimpsest.session import session_paths
+
+    _a, b = _two_sessions(ws)
+    paths = session_paths()
+    assert len(paths) == 2
+    assert paths[0] == b.current_path  # newest by mtime first
+
+
+def test_recent_inputs_spans_sessions_oldest_first(ws):
+    from palimpsest.session import recent_inputs
+
+    _two_sessions(ws)
+    # oldest→newest across sessions, slash commands included (the TUI suppresses the
+    # menu while browsing, so they no longer hijack up/down).
+    assert recent_inputs() == ["older prompt", "/help", "newer prompt"]
+
+
+def test_prior_sessions_excludes_current(ws):
+    from palimpsest.session import prior_sessions
+
+    a, b = _two_sessions(ws)
+    priors = prior_sessions(exclude=b.current_path)
+    assert b.current_path not in priors
+    assert a.current_path in priors
 
 
 # --- secret redaction (caveat 3) -------------------------------------------------
@@ -200,7 +251,7 @@ def test_secret_read_redacted_in_log_but_real_in_memory(ws, tmp_path):
     agent.run("read the env")
 
     # On disk: the tool_result is redacted, the secret never appears anywhere.
-    log_text = (ws / ".palimpsest" / "session.jsonl").read_text()
+    log_text = _session_file(ws).read_text()
     assert "sk-supersecret" not in log_text
     tool_results = [
         r for r in _records(ws) if r["role"] == "user" and isinstance(r["content"], list)
@@ -254,7 +305,7 @@ def test_only_secret_block_redacted_in_a_mixed_turn(ws, tmp_path):
     )
     agent.run("read both")
 
-    log_text = (ws / ".palimpsest" / "session.jsonl").read_text()
+    log_text = _session_file(ws).read_text()
     assert "sk-zzz" not in log_text          # secret masked
     assert "public notes" in log_text        # normal content preserved
 
@@ -299,4 +350,4 @@ def test_transcript_is_gitignored(ws, tmp_path):
         for p in porcelain.ls_files(Repo(str(ws)))
     }
     assert not any(".palimpsest" in t for t in tracked)  # never tracked
-    assert (ws / ".palimpsest" / "session.jsonl").exists()  # but on disk
+    assert _session_file(ws) is not None  # but on disk

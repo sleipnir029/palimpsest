@@ -11,10 +11,10 @@ from __future__ import annotations
 import asyncio
 
 import pytest
-from textual.widgets import Input, Static
+from textual.widgets import Static
 
 from palimpsest.cost import CostMeter
-from palimpsest.tui.app import PalimpsestApp
+from palimpsest.tui.app import PalimpsestApp, PromptArea
 from palimpsest.tui.slash import menu_for
 
 
@@ -94,13 +94,13 @@ def test_app_smoke_reply_path(tmp_path):
 
     async def _drive() -> None:
         async with app.run_test() as pilot:
-            app.query_one("#prompt", Input).value = "hello"
+            app.query_one("#prompt", PromptArea).text = "hello"
             await pilot.press("enter")
             await app.workers.wait_for_complete()  # let the thread worker finish
             await pilot.pause()  # let the call_from_thread callback settle
 
             assert agent.last == "hello"  # agent was actually invoked
-            prompt = app.query_one("#prompt", Input)
+            prompt = app.query_one("#prompt", PromptArea)
             assert prompt.disabled is False  # re-enabled after reply
             log_text = _text(app)
             assert "hello" in log_text  # user line rendered
@@ -120,7 +120,7 @@ def test_tui_records_per_turn_cost(tmp_path):
 
     async def _drive() -> None:
         async with app.run_test() as pilot:
-            app.query_one("#prompt", Input).value = "hello"
+            app.query_one("#prompt", PromptArea).text = "hello"
             await pilot.press("enter")
             await app.workers.wait_for_complete()
             await pilot.pause()
@@ -140,11 +140,11 @@ def test_agent_error_surfaces_and_reenables_input(tmp_path):
 
     async def _drive() -> None:
         async with app.run_test() as pilot:
-            app.query_one("#prompt", Input).value = "hi"
+            app.query_one("#prompt", PromptArea).text = "hi"
             await pilot.press("enter")
             await app.workers.wait_for_complete()
             await pilot.pause()
-            assert app.query_one("#prompt", Input).disabled is False
+            assert app.query_one("#prompt", PromptArea).disabled is False
             log_text = _text(app)
             assert "error" in log_text and "kaboom" in log_text
             # the TUI path records the failed turn through the monitor
@@ -163,7 +163,7 @@ def test_tool_trace_streams_before_reply(tmp_path):
 
     async def _drive() -> None:
         async with app.run_test() as pilot:
-            app.query_one("#prompt", Input).value = "read the paper"
+            app.query_one("#prompt", PromptArea).text = "read the paper"
             await pilot.press("enter")
             await app.workers.wait_for_complete()
             await pilot.pause()
@@ -205,7 +205,7 @@ def test_tool_error_result_renders_failure_marker(tmp_path):
 
     async def _drive() -> None:
         async with app.run_test() as pilot:
-            app.query_one("#prompt", Input).value = "do it"
+            app.query_one("#prompt", PromptArea).text = "do it"
             await pilot.press("enter")
             await app.workers.wait_for_complete()
             await pilot.pause()
@@ -233,11 +233,147 @@ def test_escape_requests_cancellation_when_in_flight(tmp_path):
             assert app.cancel_event.is_set() is False
 
             # simulate a turn in flight, then Esc requests cancellation
-            app.query_one("#prompt", Input).disabled = True
+            app.query_one("#prompt", PromptArea).disabled = True
             await pilot.press("escape")
             assert app.cancel_event.is_set() is True
             log_text = _text(app)
             assert "cancel" in log_text.lower()
+
+    asyncio.run(_drive())
+
+
+def test_streamed_reply_renders_once_via_deltas(tmp_path):
+    """A1: assistant_delta events stream the reply into a live widget; the final
+    reply is sealed to the transcript exactly once (not re-mounted).
+
+    The agent's returned text deliberately differs from the concatenated deltas by a
+    trailing newline (as a real provider can) — the sealed streamed text must win and
+    the divergent resp.text must NOT mount a second copy (the B1 double-render bug)."""
+    meter = CostMeter(str(tmp_path / "t.db"))
+
+    class _StreamAgent:
+        def __init__(self, m):
+            self.cost_meter = m
+            self.on_event = None
+
+        def run(self, text):
+            for d in ["Hel", "lo ", "world"]:
+                if self.on_event is not None:
+                    self.on_event({"type": "assistant_delta", "text": d})
+            self.cost_meter.record_llm("stub", 0.01)
+            return "Hello world\n"  # diverges from "Hello world" by a trailing newline
+
+    app = PalimpsestApp(agent=_StreamAgent(meter), cost_meter=meter)
+
+    async def _drive() -> None:
+        async with app.run_test() as pilot:
+            app.query_one("#prompt", PromptArea).text = "hi"
+            await pilot.press("enter")
+            await app.workers.wait_for_complete()
+            await pilot.pause()
+            agent_lines = [t for role, t in app.transcript if role == "agent"]
+            assert agent_lines == ["Hello world"]  # sealed once, not doubled
+
+    asyncio.run(_drive())
+
+
+def test_clear_log_resets_stream_state(tmp_path):
+    """B2: clearing the log mid-stream drops the live widget reference so the next
+    delta starts fresh instead of updating a detached widget."""
+    meter = CostMeter(str(tmp_path / "t.db"))
+    app = PalimpsestApp(agent=_StubAgent(meter), cost_meter=meter)
+
+    async def _drive() -> None:
+        async with app.run_test() as pilot:  # noqa: F841 — pilot mounts the #log widget
+            app._stream_append("partial reply")
+            assert app._stream_widget is not None
+            app.action_clear_log()
+            assert app._stream_widget is None
+            assert app._stream_buf == ""
+
+    asyncio.run(_drive())
+
+
+def test_ctrl_j_inserts_newline_without_submitting(tmp_path):
+    """C1: Ctrl+J inserts a newline in the composer; Enter (not pressed here) submits."""
+    meter = CostMeter(str(tmp_path / "t.db"))
+    app = PalimpsestApp(agent=_StubAgent(meter), cost_meter=meter)
+
+    async def _drive() -> None:
+        async with app.run_test() as pilot:
+            app.query_one("#prompt", PromptArea).focus()
+            await pilot.press("h", "i", "ctrl+j", "y", "o")
+            assert app.query_one("#prompt", PromptArea).text == "hi\nyo"
+
+    asyncio.run(_drive())
+
+
+def test_up_arrow_recalls_input_history(tmp_path):
+    """A5: a submitted line is recalled into the composer with up-arrow."""
+    meter = CostMeter(str(tmp_path / "t.db"))
+    app = PalimpsestApp(agent=_StubAgent(meter), cost_meter=meter)
+
+    async def _drive() -> None:
+        async with app.run_test() as pilot:
+            app.query_one("#prompt", PromptArea).text = "first message"
+            await pilot.press("enter")
+            await app.workers.wait_for_complete()
+            await pilot.pause()
+            assert app.query_one("#prompt", PromptArea).text == ""  # cleared on submit
+            await pilot.press("up")  # cursor at top-of-empty-line → history recall
+            assert app.query_one("#prompt", PromptArea).text == "first message"
+
+    asyncio.run(_drive())
+
+
+def test_history_navigates_up_up_down(tmp_path):
+    """A5: up walks back through MULTIPLE entries (not stuck after one), down walks
+    forward, and stepping past the newest clears the line."""
+    meter = CostMeter(str(tmp_path / "t.db"))
+    app = PalimpsestApp(agent=_StubAgent(meter), cost_meter=meter)
+
+    async def _drive() -> None:
+        async with app.run_test() as pilot:
+            for msg in ("first", "second"):
+                app.query_one("#prompt", PromptArea).text = msg
+                await pilot.press("enter")
+                await app.workers.wait_for_complete()
+                await pilot.pause()
+
+            def text() -> str:
+                return app.query_one("#prompt", PromptArea).text
+
+            await pilot.press("up")
+            assert text() == "second"
+            await pilot.press("up")
+            assert text() == "first"   # NOT stuck after the first up
+            await pilot.press("down")
+            assert text() == "second"
+            await pilot.press("down")
+            assert text() == ""        # past the newest → cleared
+
+    asyncio.run(_drive())
+
+
+def test_recalled_slash_command_does_not_open_menu(tmp_path):
+    """Slash commands ARE kept in history; recalling one must not pop the autocomplete
+    menu (which would hijack up/down and strand the user)."""
+    meter = CostMeter(str(tmp_path / "t.db"))
+    app = PalimpsestApp(agent=_StubAgent(meter), cost_meter=meter)
+
+    async def _drive() -> None:
+        async with app.run_test() as pilot:
+            for line in ("do the thing", "/help"):
+                app.query_one("#prompt", PromptArea).text = line
+                await pilot.press("enter")
+                await app.workers.wait_for_complete()
+                await pilot.pause()
+
+            await pilot.press("up")  # newest history entry is the slash command
+            assert app.query_one("#prompt", PromptArea).text == "/help"
+            assert app._menu == []   # menu suppressed while browsing — no hijack
+            await pilot.press("up")  # keeps walking history, not stuck on a menu
+            assert app.query_one("#prompt", PromptArea).text == "do the thing"
 
     asyncio.run(_drive())
 
@@ -252,7 +388,7 @@ def test_submit_clears_stale_cancel_before_running(tmp_path):
     async def _drive() -> None:
         async with app.run_test() as pilot:
             app.cancel_event.set()  # stale, as if left set from before
-            app.query_one("#prompt", Input).value = "hello"
+            app.query_one("#prompt", PromptArea).text = "hello"
             await pilot.press("enter")
             await app.workers.wait_for_complete()
             await pilot.pause()
@@ -271,7 +407,7 @@ def test_slash_command_dispatched(tmp_path):
 
     async def _drive() -> None:
         async with app.run_test() as pilot:
-            app.query_one("#prompt", Input).value = "/parser docling"
+            app.query_one("#prompt", PromptArea).text = "/parser docling"
             await pilot.press("enter")
             await pilot.pause()
             assert agent.last is None  # agent not called for slash commands
@@ -289,7 +425,7 @@ def test_slash_help_lists_commands_in_app(tmp_path):
 
     async def _drive() -> None:
         async with app.run_test() as pilot:
-            app.query_one("#prompt", Input).value = "/help"
+            app.query_one("#prompt", PromptArea).text = "/help"
             await pilot.press("enter")
             await pilot.pause()
             assert agent.last is None
@@ -309,19 +445,19 @@ def test_slash_autocomplete_shows_and_filters(tmp_path):
             menu = app.query_one("#cmdmenu", Static)
             assert menu.display is False  # hidden at rest
 
-            app.query_one("#prompt", Input).value = "/"
+            app.query_one("#prompt", PromptArea).text = "/"
             await pilot.pause()
             assert menu.display is True
             for cmd in ("help", "theme", "use", "config"):
                 assert cmd in app._menu
             assert "model" not in app._menu  # hidden alias of /use orchestration
 
-            app.query_one("#prompt", Input).value = "/b"
+            app.query_one("#prompt", PromptArea).text = "/b"
             await pilot.pause()
             assert app._menu == ["budget"]  # only /budget starts with "b"
 
             # a non-slash message never opens the menu
-            app.query_one("#prompt", Input).value = "hello"
+            app.query_one("#prompt", PromptArea).text = "hello"
             await pilot.pause()
             assert app.query_one("#cmdmenu", Static).display is False
             assert app._menu == []
@@ -336,11 +472,11 @@ def test_slash_autocomplete_tab_completes(tmp_path):
 
     async def _drive() -> None:
         async with app.run_test() as pilot:
-            app.query_one("#prompt", Input).value = "/q"  # unique prefix; /quit takes no args
+            app.query_one("#prompt", PromptArea).text = "/q"  # unique prefix; /quit takes no args
             await pilot.pause()
             await pilot.press("tab")
             await pilot.pause()
-            assert app.query_one("#prompt", Input).value == "/quit "
+            assert app.query_one("#prompt", PromptArea).text == "/quit "
             assert app.query_one("#cmdmenu", Static).display is False
 
     asyncio.run(_drive())
@@ -353,13 +489,13 @@ def test_slash_autocomplete_arrow_then_enter(tmp_path):
 
     async def _drive() -> None:
         async with app.run_test() as pilot:
-            app.query_one("#prompt", Input).value = "/"  # matches all, in registry order
+            app.query_one("#prompt", PromptArea).text = "/"  # matches all, in registry order
             await pilot.pause()
             await pilot.press("down")  # help -> quit (2nd registered command)
             await pilot.pause()
             await pilot.press("enter")  # partial value "/" → accept, don't run
             await pilot.pause()
-            assert app.query_one("#prompt", Input).value == "/quit "
+            assert app.query_one("#prompt", PromptArea).text == "/quit "
             assert app.query_one("#cmdmenu", Static).display is False
 
     asyncio.run(_drive())
@@ -372,13 +508,13 @@ def test_slash_autocomplete_esc_closes_menu(tmp_path):
 
     async def _drive() -> None:
         async with app.run_test() as pilot:
-            app.query_one("#prompt", Input).value = "/the"
+            app.query_one("#prompt", PromptArea).text = "/the"
             await pilot.pause()
             assert app.query_one("#cmdmenu", Static).display is True
             await pilot.press("escape")
             await pilot.pause()
             assert app.query_one("#cmdmenu", Static).display is False
-            assert app.query_one("#prompt", Input).value == "/the"  # input untouched
+            assert app.query_one("#prompt", PromptArea).text == "/the"  # input untouched
 
     asyncio.run(_drive())
 
@@ -396,14 +532,17 @@ def test_menu_for_argument_values():
     def toks(value):
         return [t for t, _ in menu_for(app, value).rows]
 
-    # /use: roles, then provider values for the chosen role (anthropic de-advertised).
+    # /use is two-level: roles → providers (by role) → models under the provider.
     assert toks("/use ") == ["orchestration", "extraction", "parser"]
-    assert toks("/use orchestration ") == ["deepseek", "sonnet"]
-    assert "anthropic" not in toks("/use extraction ")
-    # partial filtering + the completion prefix.
-    m = menu_for(app, "/use orchestration s")
-    assert m.rows == [("sonnet", "Anthropic fallback")]
-    assert m.prefix == "/use orchestration "
+    # orchestration offers only loop-capable providers; extraction offers all four.
+    assert toks("/use orchestration ") == ["deepseek", "anthropic"]
+    assert toks("/use extraction ") == ["deepseek", "anthropic", "gemini", "openrouter"]
+    # then the chosen provider's models (id + comment).
+    assert toks("/use orchestration anthropic ") == ["claude-sonnet-4-6", "claude-haiku-4-5"]
+    # partial filtering at the model level + the completion prefix.
+    m = menu_for(app, "/use orchestration anthropic claude-h")
+    assert m.rows == [("claude-haiku-4-5", "small / cheap")]
+    assert m.prefix == "/use orchestration anthropic "
     # parsers come from the PARSERS registry; mineru is the marked default.
     parser_rows = dict(menu_for(app, "/use parser ").rows)
     assert set(parser_rows) == {"docling", "mineru", "chandra", "dots", "paddle"}
@@ -424,13 +563,15 @@ def test_arg_autocomplete_tab_completes(tmp_path):
 
     async def _drive() -> None:
         async with app.run_test() as pilot:
-            app.query_one("#prompt", Input).value = "/use orchestration "
+            app.query_one("#prompt", PromptArea).text = "/use orchestration "
             await pilot.pause()
-            assert app._menu == ["deepseek", "sonnet"]  # arg-mode value list
+            assert app._menu == ["deepseek", "anthropic"]  # provider level
             await pilot.press("tab")
             await pilot.pause()
-            assert app.query_one("#prompt", Input).value == "/use orchestration deepseek "
-            assert app.query_one("#cmdmenu", Static).display is False
+            assert app.query_one("#prompt", PromptArea).text == "/use orchestration deepseek "
+            # completing a provider opens the next level: that provider's models
+            assert app._menu == ["deepseek-v4-flash", "deepseek-v4-pro"]
+            assert app.query_one("#cmdmenu", Static).display is True
 
     asyncio.run(_drive())
 
@@ -443,7 +584,7 @@ def test_hidden_model_alias_still_dispatches(tmp_path):
     async def _drive() -> None:
         async with app.run_test() as pilot:
             for line in ("/model deepseek", "/use orchestration anthropic"):
-                app.query_one("#prompt", Input).value = line
+                app.query_one("#prompt", PromptArea).text = line
                 await pilot.press("enter")
                 await pilot.pause()
             log = _text(app)
@@ -461,7 +602,7 @@ def test_slash_quit_exits_the_app(tmp_path):
 
     async def _drive() -> None:
         async with app.run_test() as pilot:
-            app.query_one("#prompt", Input).value = "/quit"
+            app.query_one("#prompt", PromptArea).text = "/quit"
             await pilot.press("enter")
             await pilot.pause()
             assert agent.last is None  # agent not called
