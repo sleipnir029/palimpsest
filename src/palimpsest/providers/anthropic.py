@@ -8,6 +8,14 @@ from dataclasses import dataclass
 import anthropic
 
 
+class StreamCancelled(Exception):
+    """Raised from on_text to abort an in-flight streamed reply (user pressed Esc).
+
+    Distinct from a transport error so the streaming path re-raises it instead of
+    falling back to a fresh blocking call (which would defeat the cancellation).
+    """
+
+
 @dataclass
 class LLMResponse:
     text: str
@@ -58,6 +66,7 @@ class AnthropicProvider:
         messages: list[dict],
         tools: list[dict] | None = None,
         cache_breakpoints: list[str] | None = None,
+        on_text=None,
     ) -> LLMResponse:
         breakpoints = cache_breakpoints or []
 
@@ -86,7 +95,26 @@ class AnthropicProvider:
             kwargs["tools"] = tools
 
         kwargs.update(self.extra_request)
-        response = self.client.messages.create(**kwargs)
+        if on_text is None:
+            # Non-streaming path (CLI + extraction): unchanged, one blocking call.
+            response = self.client.messages.create(**kwargs)
+        else:
+            # Streaming path (the TUI agent loop): push text deltas to on_text as
+            # they arrive, then assemble the SAME final Message the loop needs
+            # (tool_use blocks + usage) from get_final_message().
+            try:
+                with self.client.messages.stream(**kwargs) as stream:
+                    for delta in stream.text_stream:
+                        on_text(delta)  # may raise StreamCancelled (Esc mid-reply)
+                    response = stream.get_final_message()
+            except StreamCancelled:
+                raise  # user cancelled — do NOT fall back to a fresh blocking call
+            except Exception:  # noqa: BLE001 — endpoint may not stream cleanly
+                # ponytail: a stream that fails (typically on the first call, before
+                # any delta) falls back to one blocking call so the turn still
+                # completes — the reply just doesn't stream. A rare mid-stream
+                # failure could double-render partial text; acceptable for an MVP.
+                response = self.client.messages.create(**kwargs)
 
         # Only "text" blocks are the answer; a provider may also return "thinking"
         # blocks (extended reasoning) which we neither surface nor thread back.

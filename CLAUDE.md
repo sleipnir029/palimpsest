@@ -43,12 +43,15 @@ the original extraction-only core — don't shrink it back to a one-shot extract
 - LLM access via the Anthropic SDK. **Default runtime model: DeepSeek `deepseek-v4-flash`** (T50, 2026-06), called through DeepSeek's Anthropic-compatible endpoint (`https://api.deepseek.com/anthropic`) for cost — Anthropic (Sonnet) is too expensive for iterative runs. `AnthropicProvider` is kept as the fallback; Gemini SDK fallback also allowed. No third-party SDKs beyond these.
 - No agent frameworks (LangChain, LangGraph, CrewAI, AutoGen, smolagents, pydantic-ai).
 - No MCP servers. Python function calls only.
-- No LLM gateways (LiteLLM, OpenRouter) **in the runtime** (engine/agent/pipeline). The
-  agent loop, extraction, and pipeline call providers directly. **Experiment-only carve-out
-  (T72, user-authorized 2026-06-19):** `experiments/llm_matrix.py` — the accuracy-vs-cost
-  benchmark — may route its non-Claude models through OpenRouter (OpenAI-compatible, one
-  key) for breadth. This is offline analysis code, not shipped runtime; Claude runs direct
-  (OpenRouter 2x-marks-up Claude), and no gateway enters `src/palimpsest/`.
+- No LLM gateways (LiteLLM, OpenRouter) **in the agent loop / orchestration**. The loop
+  is locked to the Anthropic wire format and calls DeepSeek/Anthropic directly — a gateway
+  must never drive orchestration. **Extraction carve-out (user-authorized 2026-06-22):**
+  the EXTRACTION pass MAY route through OpenRouter (OpenAI-compatible, one key) for model
+  breadth — `/use extraction openrouter`, model via `OPENROUTER_MODEL`. Budget invariant
+  holds: set `OPENROUTER_PRICE_IN`/`OPENROUTER_PRICE_OUT` (USD per 1M tokens) for accurate
+  metering, else it falls back to conservative Sonnet rates so the €-cap is never
+  under-counted. The earlier T72 benchmark carve-out (`experiments/llm_matrix.py`) stands.
+  Claude still runs direct (OpenRouter 2x-marks-up Claude); no gateway drives the loop.
 - pyoxigraph for RDF. SQLite for cache + CostMeter. dulwich for versioning.
 - LinkML for schema. EMMO ECHO + QUDT + PROV-O + palimpsest-local IRIs.
 - Textual + Rich + Typer for TUI. FastAPI + vendored PDF.js + HTMX for viewer.

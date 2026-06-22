@@ -47,7 +47,7 @@ class _OneToolThenDone:
     def __init__(self) -> None:
         self.turn = 0
 
-    def complete(self, system, messages, tools, cache_breakpoints):
+    def complete(self, system, messages, tools, cache_breakpoints, on_text=None):
         self.turn += 1
         if self.turn == 1:
             call = {"id": "t1", "name": "mon_fails", "input": {}}
@@ -67,7 +67,7 @@ class _Priced:
     name = "stub"
     prices = {"input_tokens": 1.0}  # €/token after the USD->EUR factor
 
-    def complete(self, system, messages, tools, cache_breakpoints):
+    def complete(self, system, messages, tools, cache_breakpoints, on_text=None):
         return LLMResponse(
             text="hi", tool_calls=[], usage={**_ZERO, "input_tokens": 5},
             raw={"content": [{"type": "text", "text": "hi"}]},
@@ -79,7 +79,7 @@ class _AlwaysCallsTool:
 
     name = "stub"
 
-    def complete(self, system, messages, tools, cache_breakpoints):
+    def complete(self, system, messages, tools, cache_breakpoints, on_text=None):
         call = {"id": "t1", "name": "mon_fails", "input": {}}
         return LLMResponse(
             text="", tool_calls=[call], usage=dict(_ZERO),

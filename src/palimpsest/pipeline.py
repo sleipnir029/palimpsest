@@ -18,6 +18,7 @@ import logging
 import uuid
 from pathlib import Path
 
+from . import progress
 from .cache import ParserCache
 from .cost import CostMeter
 from .parsers.runner import parse_with_cache
@@ -62,6 +63,7 @@ def run_paper(
     run_id = run_id or f"run-{uuid.uuid4()}"
 
     # 1. Parse via the cache. All-5-cached → short-circuit, no pod, no spend.
+    progress.emit(f"parsing {pdf_path.name} with {parser_name} (cached parses are free)…")
     mapping = parse_with_cache([pdf_path], cost_meter, cache)
     sha = next(iter(mapping))
 
@@ -69,6 +71,7 @@ def run_paper(
     #    already carry Evidence; extract-level `errors` (bad/mis-cited items) are
     #    logged inside extract() and not re-counted here — the summary is the
     #    monotonic funnel extracted (=valid) → validated → inserted.
+    progress.emit("extracting measurements…")
     valid, _errors = extract(
         sha, parser_name, skill_name,
         cost_meter=cost_meter, provider=provider, cache=cache,
@@ -83,6 +86,7 @@ def run_paper(
     ]
 
     # 3. SHACL gate. Belt-and-suspenders over Pydantic (T23); drop + log failures.
+    progress.emit(f"validating {len(valid)} measurement(s)…")
     validated = []
     for inst in valid:
         ok, report = validate_instance(inst)
@@ -95,6 +99,7 @@ def run_paper(
 
     # 4. Insert with provenance. insert_extraction refuses (ValueError) any
     #    instance whose Evidence is None — CLAUDE.md provenance non-negotiable.
+    progress.emit(f"inserting {len(validated)} validated measurement(s) with provenance…")
     n_inserted = 0
     for inst in validated:
         try:

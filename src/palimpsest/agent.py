@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from jsonschema import ValidationError, validate
 
+from .providers.anthropic import StreamCancelled
 from .session import SessionLog
 from .tools import TOOLS
 
@@ -71,6 +72,21 @@ class Agent:
         self.session = session if session is not None else SessionLog()
 
     def run(self, user_msg: str) -> str:
+        """Run one turn-loop, with the progress sink installed for its duration (B1).
+
+        Only the supervised path (TUI, on_event set) routes stage messages to the UI;
+        the CLI/extraction path leaves the sink unset (a no-op), unchanged.
+        """
+        from . import progress
+
+        if self.on_event is not None:
+            progress.set_sink(lambda m: self._emit({"type": "stage", "text": m}))
+        try:
+            return self._run_loop(user_msg)
+        finally:
+            progress.set_sink(None)
+
+    def _run_loop(self, user_msg: str) -> str:
         self.messages.append({"role": "user", "content": user_msg})
         self._log_message(self.messages[-1])
 
@@ -87,12 +103,25 @@ class Agent:
             if self.cancel_event is not None and self.cancel_event.is_set():
                 return f"[cancelled] stopped at turn {turn} (no final answer)"
             self.cost_meter.check_or_raise(projected_eur=0.05)  # conservative
-            resp = self.provider.complete(
+            complete_kwargs: dict = dict(
                 system=self.system_prompt,
                 messages=self.messages,
                 tools=list(self.tools.values()),
                 cache_breakpoints=breakpoints,
             )
+            # Stream the reply only when a supervisor is watching (the TUI sets
+            # on_event); the CLI/extraction path omits on_text and stays unchanged.
+            if self.on_event is not None:
+                complete_kwargs["on_text"] = self._stream_delta
+            try:
+                resp = self.provider.complete(**complete_kwargs)
+            except StreamCancelled:
+                # Esc landed mid-reply: stop now (the partial text already streamed),
+                # don't run another turn. ponytail: the abandoned call's partial tokens
+                # go unbilled — a small, bounded under-count of the ledger, gated by the
+                # pre-call check_or_raise(0.05) reservation so the €50 CAP still holds.
+                # Upgrade path: bill stream.current_message_snapshot usage on cancel.
+                return f"[cancelled] stopped mid-reply at turn {turn}"
             self.last_usage = resp.usage
             self.cost_meter.record_llm(
                 self.provider.name,
@@ -125,6 +154,13 @@ class Agent:
             self._log_message(self._redact_secrets(self.messages[-1], resp.tool_calls))
 
         raise MaxTurnsExceeded(f"no final answer in {self.max_turns} turns")
+
+    def _stream_delta(self, delta: str) -> None:
+        """on_text sink (A1): surface the streamed delta to the UI, then honor a
+        mid-reply cancel by raising — the provider re-raises it and the loop stops."""
+        self._emit({"type": "assistant_delta", "text": delta})
+        if self.cancel_event is not None and self.cancel_event.is_set():
+            raise StreamCancelled()
 
     def _emit(self, event: dict) -> None:
         """Notify the passive observer of a tool event (best-effort, T63).

@@ -80,7 +80,9 @@ class _AlwaysCallsToolProvider:
 
     name = "stub"
 
-    def complete(self, system, messages, tools, cache_breakpoints):
+    def complete(self, system, messages, tools, cache_breakpoints, on_text=None):
+        # on_text is accepted (streaming interface) but unused: a tool-only turn has
+        # no text to stream, so the loop sees only tool_call/tool_result events.
         call = {"id": "t1", "name": "always_fails", "input": {}}
         return LLMResponse(
             text="",
@@ -180,6 +182,30 @@ def test_cancel_event_exits_before_max_turns(tmp_path):
     out = agent.run("Do the task.")  # must NOT raise MaxTurnsExceeded
     assert "cancel" in out.lower()
     assert provider.calls == 1  # turn 1's boundary check returned before a 2nd call
+
+
+def test_streaming_cancel_returns_cancelled_note(tmp_path):
+    """#3: Esc mid-reply (cancel set) makes Agent._stream_delta raise StreamCancelled
+    when a delta arrives; run() catches it and returns a [cancelled] note, no extra turn."""
+    meter = CostMeter(str(tmp_path / "c.db"))
+    cancel = threading.Event()
+    cancel.set()  # the user already pressed Esc
+
+    class _StreamingProvider:
+        name = "stub"
+
+        def complete(self, system, messages, tools, cache_breakpoints, on_text=None, **kw):
+            if on_text is not None:
+                on_text("partial")  # _stream_delta sees the cancel flag → raises
+            raise AssertionError("loop must stop before the response is processed")
+
+    agent = Agent(
+        _StreamingProvider(), meter, tools={},
+        on_event=lambda _e: None,  # enables streaming (on_text is passed)
+        cancel_event=cancel,
+    )
+    out = agent.run("hi")
+    assert "cancel" in out.lower()
 
 
 def test_preset_cancel_returns_immediately_without_a_paid_call(tmp_path):

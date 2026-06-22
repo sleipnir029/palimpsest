@@ -24,8 +24,18 @@ from ..providers import (
 )
 from .themes import THEMES
 
-# Config keys surfaced by /config, and which provider each one (re)builds.
-_CONFIG_KEYS = ("DEEPSEEK_API_KEY", "ANTHROPIC_API_KEY", "RUNPOD_API_KEY")
+# Config keys surfaced by /config. LLM keys + RunPod creds: the API key AND the
+# per-parser template ids (RunPod spins pods up FROM a template — the key alone can't
+# parse). OpenRouter is deliberately absent: CLAUDE.md bars LLM gateways from the
+# runtime (experiment-only carve-out), so it stays out of the agent's /config.
+_RUNPOD_TEMPLATE_KEYS = tuple(dict.fromkeys(p["template_id_env"] for p in PARSERS.values()))
+_CONFIG_KEYS = (
+    "DEEPSEEK_API_KEY", "ANTHROPIC_API_KEY", "GEMINI_API_KEY",
+    "OPENROUTER_API_KEY", "OPENROUTER_MODEL",  # extraction gateway (CLAUDE.md carve-out)
+    "RUNPOD_API_KEY", *_RUNPOD_TEMPLATE_KEYS,
+)
+# Which orchestration provider a key (re)builds when set live. Only the Anthropic-wire
+# loop drivers; GEMINI/RunPod keys are saved but don't hot-swap the agent provider.
 _KEY_PROVIDER = {"DEEPSEEK_API_KEY": "deepseek", "ANTHROPIC_API_KEY": "sonnet"}
 
 # /model X -> provider class for the agent loop. Keys MUST stay in sync with
@@ -35,10 +45,68 @@ _KEY_PROVIDER = {"DEEPSEEK_API_KEY": "deepseek", "ANTHROPIC_API_KEY": "sonnet"}
 # so the message is clearer than "unknown model".
 _PROVIDERS: dict[str, Callable] = {
     "deepseek": DeepSeekProvider,
+    "deepseek-pro": PROVIDER_FACTORIES["deepseek-pro"],
     "sonnet": AnthropicProvider,
+    "haiku": PROVIDER_FACTORIES["haiku"],
     "anthropic": AnthropicProvider,
 }
-_NOT_IMPLEMENTED = {"haiku", "gemini"}
+_NOT_IMPLEMENTED = {"gemini"}  # extraction-only (OpenAI-compat, no tool use)
+
+# Two-level model selection for /use (T-app): provider → its models. Each model is
+# (id, comment, factory); factory is the priced PROVIDER_FACTORIES name for the
+# Anthropic-wire models, or None for gateway providers that carry the chosen model in
+# an env var. Per the user's choice the menu shows names + comments, no prices.
+_PROVIDER_MODELS: dict[str, dict] = {
+    "deepseek": {"loop": True, "desc": "DeepSeek (Anthropic-wire)", "models": [
+        ("deepseek-v4-flash", "cheap default", "deepseek"),
+        ("deepseek-v4-pro", "bigger, pricier", "deepseek-pro"),
+    ]},
+    "anthropic": {"loop": True, "desc": "Anthropic (fallback)", "models": [
+        ("claude-sonnet-4-6", "mid frontier", "sonnet"),
+        ("claude-haiku-4-5", "small / cheap", "haiku"),
+    ]},
+    "gemini": {"loop": False, "desc": "Google (extraction only)", "env": "GEMINI_MODEL",
+               "models": [
+        ("gemini-flash-latest", "newest Flash (drifting alias)", None),
+        ("gemini-2.5-flash", "Gemini 2.5 Flash", None),
+        ("gemini-3.5-flash", "Gemini 3.5 Flash", None),
+    ]},
+    "openrouter": {"loop": False, "desc": "OpenRouter gateway (extraction only)",
+                   "env": "OPENROUTER_MODEL", "free": True, "models": [
+        ("openai/gpt-4o-mini", "cheap OpenAI", None),
+        ("openai/gpt-4o", "OpenAI frontier", None),
+        ("anthropic/claude-3.5-sonnet", "Claude via gateway", None),
+        ("google/gemini-2.5-flash", "Gemini via gateway", None),
+        ("deepseek/deepseek-chat", "DeepSeek via gateway", None),
+        ("meta-llama/llama-3.3-70b-instruct", "Llama 3.3 70B", None),
+        ("z-ai/glm-4.6", "Zhipu z.ai GLM 4.6", None),
+    ]},
+}
+
+
+def _providers_for_role(role: str) -> list[str]:
+    """Providers offered for a role: all four for extraction, loop-capable for orch."""
+    extract = role in ("extraction", "extract")
+    return [p for p, s in _PROVIDER_MODELS.items() if extract or s["loop"]]
+
+
+def _provider_model_rows(provider: str) -> list[tuple[str, str]]:
+    return [(m, c) for m, c, _f in _PROVIDER_MODELS[provider]["models"]]
+
+
+def _factory_for(provider: str, model: str | None) -> str:
+    """The PROVIDER_FACTORIES name for a (provider, model) pick (default model if None).
+
+    Free/unlisted gateway models resolve to the provider name — its factory reads the
+    chosen model from the env var, so pricing stays the provider's (conservative) table.
+    """
+    models = _PROVIDER_MODELS[provider]["models"]
+    if model is None:
+        return models[0][2] or provider
+    for m, _c, fac in models:
+        if m == model:
+            return fac or provider
+    return provider
 
 
 def _help(app, args: list[str]) -> str:
@@ -113,36 +181,53 @@ def _model(app, args: list[str]) -> str:
 
 
 def _use(app, args: list[str]) -> str:
-    """set a role's model: /use orchestration|extraction|parser <name>"""
+    """set a role's model: /use <orchestration|extraction|parser> <provider> [model]"""
     from .. import config
-    from ..providers import PROVIDER_FACTORIES
 
-    if len(args) < 2:
-        return "usage: /use <orchestration|extraction|parser> <name>"
-    role, name = args[0], args[1]
+    if not args:
+        return "usage: /use <orchestration|extraction|parser> <provider> [model]"
+    role = args[0]
     db = app.cost_meter.db_path
-    if role in ("orchestration", "orch"):
-        # Orchestration is Anthropic-wire only — gate on the single source of truth
-        # before delegating to /model (which constructs + hot-swaps + persists).
-        from ..providers import ORCHESTRATION_PROVIDERS
 
-        if name not in ORCHESTRATION_PROVIDERS:
-            opts = ", ".join(ORCHESTRATION_PROVIDERS)
-            return (f"'{name}' can't drive the agent loop (Anthropic-wire only). "
-                    f"options: {opts}. For other models use /use extraction {name}.")
-        return _model(app, [name])
-    if role in ("extraction", "extract"):
-        if name not in PROVIDER_FACTORIES:
-            return f"unknown provider: {name}. options: {', '.join(PROVIDER_FACTORIES)}"
-        config.set_setting("extraction_model", name, db_path=db)
-        return f"extraction → {name} (applies to the next extract_paper)"
-    if role == "parser":
-        from ..parsers.commands import PARSERS
+    if role == "parser":  # unchanged: parsers have no provider/model split
+        name = args[1] if len(args) > 1 else ""
+        if not name:
+            return f"usage: /use parser <name>. options: {', '.join(PARSERS)}"
         if name not in PARSERS:
             return f"unknown parser: {name}. options: {', '.join(PARSERS)}"
         config.set_setting("parser_name", name, db_path=db)
         return f"parser → {name} (default for the next extract_paper)"
-    return f"unknown role: {role}. options: orchestration, extraction, parser"
+
+    if role not in ("orchestration", "orch", "extraction", "extract"):
+        return f"unknown role: {role}. options: orchestration, extraction, parser"
+
+    provs = _providers_for_role(role)
+    if len(args) < 2:
+        return f"usage: /use {role} <provider> [model]. providers: {', '.join(provs)}"
+    provider = args[1]
+    if provider not in provs:
+        if provider in _PROVIDER_MODELS:  # real provider, wrong role
+            return (f"'{provider}' can't drive the agent loop (OpenAI-compat → "
+                    f"extraction-only). use /use extraction {provider}.")
+        return f"unknown provider: {provider}. options: {', '.join(provs)}"
+
+    spec = _PROVIDER_MODELS[provider]
+    model = args[2] if len(args) > 2 else None
+    known = [m for m, _c, _f in spec["models"]]
+    if model is not None and model not in known and not spec.get("free"):
+        return f"unknown {provider} model: {model}. options: {', '.join(known)}"
+
+    if role in ("orchestration", "orch"):
+        return _model(app, [_factory_for(provider, model)])  # constructs + hot-swaps + persists
+    # extraction
+    if "env" in spec:  # gateway providers carry the chosen model in an env var
+        if model is not None:
+            config.set_value(spec["env"], model)
+        config.set_setting("extraction_model", provider, db_path=db)
+        return f"extraction → {provider} ({model or 'default'}) — applies to the next extract_paper"
+    factory = _factory_for(provider, model)  # deepseek/anthropic → a priced factory
+    config.set_setting("extraction_model", factory, db_path=db)
+    return f"extraction → {factory} (applies to the next extract_paper)"
 
 
 def _resume_trim(msgs: list[dict]) -> list[dict]:
@@ -186,12 +271,32 @@ def _resume_recap(msgs: list[dict], keep: int = 10) -> str:
 
 
 def _resume(app, args: list[str]) -> str:
-    """reload the previous session's context into the agent: /resume"""
-    msgs = _resume_trim(list(app.agent.session.load()))
+    """reload a previous session: /resume [n] (n from the list; 1 = most recent)"""
+    from ..session import load_session, prior_sessions
+
+    cur = getattr(app.agent.session, "current_path", None)
+    priors = prior_sessions(exclude=cur)
+    if not priors:
+        # No rotated prior sessions (first launch, or a stub/legacy single file) —
+        # fall back to the agent's own loader so resume still works.
+        msgs = _resume_trim(list(app.agent.session.load()))
+        if not msgs:
+            return "no prior session to resume."
+        app.agent.messages = msgs
+        return f"resumed {len(msgs)} message(s):\n{_resume_recap(msgs)}"
+    idx = 0
+    if args:
+        try:
+            idx = int(args[0]) - 1
+        except ValueError:
+            return "usage: /resume [n] — n is a number from the list (1 = most recent)"
+    if not 0 <= idx < len(priors):
+        return f"no session #{idx + 1}; there are {len(priors)} prior session(s). try /resume 1"
+    msgs = _resume_trim(load_session(priors[idx]))
     if not msgs:
-        return "no prior session to resume."
+        return "that session has no resumable context."
     app.agent.messages = msgs  # restore context so the next turn continues with it
-    return f"resumed {len(msgs)} message(s) from the last session:\n{_resume_recap(msgs)}"
+    return f"resumed session #{idx + 1} ({len(msgs)} message(s)):\n{_resume_recap(msgs)}"
 
 
 def _theme(app, args: list[str]) -> str:
@@ -247,6 +352,60 @@ def _config(app, args: list[str]) -> str:
     return note
 
 
+def _clear(app, args: list[str]) -> str:
+    """reset the agent's context — forget this conversation (budget/ledger untouched)"""
+    app.agent.messages = []
+    app.agent.last_usage = {}
+    clear = getattr(app, "action_clear_log", None)
+    if clear:
+        clear()  # also wipe the on-screen log + its transcript mirror
+    return "context cleared — the agent starts fresh."
+
+
+def _transcript_md(msgs: list[dict]) -> str:
+    """Render the agent's message history as readable markdown (B4)."""
+    out = ["# palimpsest session transcript\n"]
+    for m in msgs:
+        role, content = m.get("role"), m.get("content")
+        if role == "user" and isinstance(content, str):
+            out.append(f"## ❯ you\n\n{content}\n")
+        elif role == "assistant" and isinstance(content, list):
+            for b in content:
+                if not isinstance(b, dict):
+                    continue
+                if b.get("type") == "text" and b.get("text", "").strip():
+                    out.append(f"## · palimpsest\n\n{b['text'].strip()}\n")
+                elif b.get("type") == "tool_use":
+                    inp = ", ".join(f"{k}={v}" for k, v in (b.get("input") or {}).items())
+                    out.append(f"- 🔧 `{b.get('name')}({inp[:120]})`")
+        elif role == "user" and isinstance(content, list):  # tool results
+            for b in content:
+                if isinstance(b, dict) and b.get("type") == "tool_result":
+                    c = str(b.get("content", "")).strip().replace("\n", " ")
+                    out.append(f"  ↳ {c[:200]}")
+    return "\n".join(out) + "\n"
+
+
+def _export(app, args: list[str]) -> str:
+    """export the conversation to workspace/transcript-<ts>.md"""
+    from datetime import datetime
+
+    from ..policy import PolicyViolation, assert_writable, workspace_root
+
+    msgs = list(app.agent.messages)  # the live context (always populated, no git gate)
+    if not msgs:
+        return "nothing to export yet."
+    ts = datetime.now().strftime("%Y%m%d-%H%M%S")
+    out = workspace_root() / f"transcript-{ts}.md"
+    try:
+        path = assert_writable(str(out))  # same fence as write_file (defense in depth)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(_transcript_md(msgs), encoding="utf-8")
+    except (OSError, PolicyViolation) as exc:
+        return f"export failed: {exc}"
+    return f"exported {len(msgs)} message(s) → {out}"
+
+
 def _undo(app, args: list[str]) -> str:
     """revert the workspace to the previous turn (records a revert commit)"""
     from .. import versioning
@@ -270,6 +429,8 @@ SLASH_COMMANDS: dict[str, Callable] = {
     "use": _use,
     "theme": _theme,
     "resume": _resume,
+    "clear": _clear,
+    "export": _export,
     "config": _config,
     "undo": _undo,
 }
@@ -296,13 +457,17 @@ def dispatch(app, line: str) -> str:
 # surface). `anthropic` is accepted by the handlers but unlisted (canonical name is
 # `sonnet`); de-advertised, not removed, so persisted *_model=anthropic rows survive.
 VISIBLE_COMMANDS = (
-    "help", "quit", "budget", "cost", "use", "theme", "resume", "config", "undo",
+    "help", "quit", "budget", "cost", "use", "theme", "resume", "clear", "export",
+    "config", "undo",
 )
 
 _PROVIDER_GLOSS = {
-    "deepseek": "cheap default",
-    "sonnet": "Anthropic fallback",
+    "deepseek": "deepseek-v4-flash (cheap default)",
+    "deepseek-pro": "deepseek-v4-pro (bigger)",
+    "sonnet": "claude-sonnet-4-6 (fallback)",
+    "haiku": "claude-haiku-4-5 (small/cheap)",
     "gemini": "OpenAI-compat (extraction only)",
+    "openrouter": "OpenRouter gateway (extraction only; set OPENROUTER_MODEL)",
 }
 _ROLE_GLOSS = {
     "orchestration": "agent loop driver",
@@ -318,7 +483,12 @@ _THEME_GLOSS = {
 _CONFIG_KEY_GLOSS = {
     "DEEPSEEK_API_KEY": "DeepSeek key",
     "ANTHROPIC_API_KEY": "Anthropic key",
+    "GEMINI_API_KEY": "Gemini key (extraction)",
+    "OPENROUTER_API_KEY": "OpenRouter key (extraction gateway)",
+    "OPENROUTER_MODEL": "OpenRouter model slug, e.g. openai/gpt-4o-mini",
     "RUNPOD_API_KEY": "RunPod key (GPU)",
+    **{p["template_id_env"]: f"RunPod template id — {name} parser"
+       for name, p in PARSERS.items()},
 }
 
 
@@ -352,16 +522,34 @@ def _arg_options(app, cmd: str, completed: list[str]) -> tuple[str | None, list[
         return ("usage: /model <name>", _provider_rows(ORCHESTRATION_PROVIDERS)) if pos == 0 else (None, [])
     if cmd == "use":
         if pos == 0:
-            return ("usage: /use <role> <name>",
+            return ("usage: /use <role> <provider> [model]",
                     [(r, _ROLE_GLOSS[r]) for r in ("orchestration", "extraction", "parser")])
-        if pos == 1:
-            role = completed[0]
-            if role in ("orchestration", "orch"):
-                return ("usage: /use orchestration <name>", _provider_rows(ORCHESTRATION_PROVIDERS))
-            if role in ("extraction", "extract"):
-                return ("usage: /use extraction <name>", _provider_rows(PROVIDER_FACTORIES))
-            if role == "parser":
+        role = completed[0]
+        if role == "parser":  # parsers have no provider/model split
+            if pos == 1:
                 return ("usage: /use parser <name>", [(n, _parser_gloss(n)) for n in PARSERS])
+            return (None, [])
+        if role not in ("orchestration", "orch", "extraction", "extract"):
+            return (None, [])
+        if pos == 1:  # pick a provider (loop-capable for orchestration; all for extraction)
+            return (f"usage: /use {role} <provider> [model]",
+                    [(p, _PROVIDER_MODELS[p]["desc"]) for p in _providers_for_role(role)])
+        if pos == 2:  # pick a model under the chosen provider (id + comment)
+            provider = completed[1]
+            if provider in _PROVIDER_MODELS:
+                return (f"usage: /use {role} {provider} <model>", _provider_model_rows(provider))
+        return (None, [])
+    if cmd == "resume":
+        if pos == 0:
+            from ..session import prior_sessions, session_recap
+
+            sess = getattr(getattr(app, "agent", None), "session", None)
+            cur = getattr(sess, "current_path", None)
+            priors = prior_sessions(exclude=cur)
+            if not priors:
+                return ("no prior sessions to resume", [])
+            rows = [(str(i + 1), session_recap(p)) for i, p in enumerate(priors[:9])]
+            return ("usage: /resume <n> — pick a past session", rows)
         return (None, [])
     if cmd == "theme":
         if pos == 0:

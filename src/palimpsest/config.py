@@ -23,9 +23,12 @@ from .policy import workspace_root
 # Active provider → the env var its key lives in (mirrors slash._PROVIDERS names).
 _PROVIDER_KEY = {
     "deepseek": "DEEPSEEK_API_KEY",
+    "deepseek-pro": "DEEPSEEK_API_KEY",
     "sonnet": "ANTHROPIC_API_KEY",
     "anthropic": "ANTHROPIC_API_KEY",
+    "haiku": "ANTHROPIC_API_KEY",
     "gemini": "GEMINI_API_KEY",
+    "openrouter": "OPENROUTER_API_KEY",  # extraction-only gateway (CLAUDE.md carve-out)
 }
 
 

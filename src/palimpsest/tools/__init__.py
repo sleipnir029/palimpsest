@@ -35,6 +35,7 @@ from . import extract  # noqa: E402,F401 — import for @register side effect
 from . import open_notebook  # noqa: E402,F401 — import for @register side effect
 from . import read_file  # noqa: E402,F401 — import for @register side effect
 from . import list_dir  # noqa: E402,F401 — import for @register side effect
+from . import search  # noqa: E402,F401 — import for @register side effect
 from . import sparql_query  # noqa: E402,F401 — import for @register side effect
 from . import run_paper  # noqa: E402,F401 — import for @register side effect (registers extract_paper)
 from . import write_file  # noqa: E402,F401 — import for @register side effect

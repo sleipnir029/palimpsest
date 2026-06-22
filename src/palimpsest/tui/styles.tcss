@@ -75,7 +75,9 @@ Screen {
 /* Framed input — rounded copper border, gold on focus; the border carries the
    "ask" title and a one-line hint so the chrome itself does the signposting. */
 #prompt {
-    height: 3;
+    height: auto;        /* grow with content (multi-line composing) … */
+    min-height: 1;
+    max-height: 12;      /* … then lock and scroll internally past ~10 lines */
     margin: 0 1;
     padding: 0 1;
     border: round $primary;

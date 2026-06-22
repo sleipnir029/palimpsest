@@ -4,9 +4,18 @@ sqlite3, no network) + a tiny fake app carrying .cost_meter and .agent.provider.
 
 from __future__ import annotations
 
+import pytest
+
 from palimpsest.cost import CostMeter
 from palimpsest.tui import slash
 from palimpsest.tui.slash import dispatch
+
+
+@pytest.fixture(autouse=True)
+def _isolate_workspace(tmp_path, monkeypatch):
+    """Point the workspace at tmp so /resume's session scan never reads the real
+    ./workspace (it now lists rotated session files off disk)."""
+    monkeypatch.setenv("PALIMPSEST_WORKSPACE", str(tmp_path))
 
 
 class _FakeAgent:
@@ -97,13 +106,24 @@ def test_model_construction_failure_is_friendly(tmp_path, monkeypatch):
 
 
 def test_model_not_implemented(tmp_path):
-    out = dispatch(_app(tmp_path), "/model haiku")
+    # gemini is extraction-only (OpenAI-compat, no tool use) → can't drive the loop.
+    out = dispatch(_app(tmp_path), "/model gemini")
     assert "not implemented" in out
 
 
 def test_model_unknown(tmp_path):
     out = dispatch(_app(tmp_path), "/model bogus")
     assert "unknown model" in out
+
+
+def test_use_orchestration_specific_model_switches(tmp_path):
+    """Two-level pick: provider then model. haiku under anthropic switches the loop
+    with its own pricing (real provider built offline, no API call)."""
+    app = _app(tmp_path)
+    out = dispatch(app, "/use orchestration anthropic claude-haiku-4-5")
+    assert "switched to claude-haiku-4-5" in out
+    # the switched provider carries verified haiku pricing (not the sonnet default)
+    assert round(app.agent.provider.prices["input_tokens"] * 1_000_000, 2) == 1.0
 
 
 def test_model_persists_orchestration_setting(tmp_path, monkeypatch):
@@ -124,16 +144,15 @@ def test_use_orchestration_rejects_non_loop_provider(tmp_path):
     assert "extraction" in out
 
 
-def test_use_orchestration_anthropic_is_valid(tmp_path, monkeypatch):
-    # anthropic is a valid loop provider (same class as sonnet) and must be reachable
-    # at runtime, not just at startup — the two registries are kept in sync.
+def test_use_orchestration_anthropic_is_valid(tmp_path):
+    # anthropic is a valid loop provider; with no model it defaults to its first model
+    # (sonnet), persisted as the priced factory name.
     from palimpsest import config
 
-    monkeypatch.setitem(slash._PROVIDERS, "anthropic", _DummyProvider)
     app = _app(tmp_path)
     out = dispatch(app, "/use orchestration anthropic")
     assert "switched" in out
-    assert config.get_setting("orchestration_model", db_path=app.cost_meter.db_path) == "anthropic"
+    assert config.get_setting("orchestration_model", db_path=app.cost_meter.db_path) == "sonnet"
 
 
 def test_use_extraction_persists(tmp_path):
@@ -238,6 +257,79 @@ def test_resume_restores_context(tmp_path):
     out = dispatch(app, "/resume")
     assert "resumed 2 message" in out and "earlier question" in out
     assert app.agent.messages[-1]["content"][0]["text"] == "earlier answer"
+
+
+def _write_session(session_id, msgs, mtime):
+    import os
+
+    from palimpsest.session import SessionLog
+
+    log = SessionLog(session_id=session_id)
+    for m in msgs:
+        log.append(m)
+    os.utime(log.current_path, (mtime, mtime))
+
+
+def test_resume_picks_specific_prior_session(tmp_path):
+    """#5: /resume <n> selects the nth prior session (1 = newest), excludes current,
+    and bounds-checks. Uses two REAL rotated sessions (the fallback tests don't)."""
+    (tmp_path / ".git").mkdir()  # open the session-log write gate (mirrors ensure_repo)
+    _write_session("20260101-000000-aaaaaa",
+                   [{"role": "user", "content": "old q"},
+                    {"role": "assistant", "content": [{"type": "text", "text": "old a"}]}], 1000)
+    _write_session("20260102-000000-bbbbbb",
+                   [{"role": "user", "content": "new q"},
+                    {"role": "assistant", "content": [{"type": "text", "text": "new a"}]}], 2000)
+    app = _resume_app(tmp_path, [])  # stub session has no current_path → excludes nothing
+
+    out1 = dispatch(app, "/resume 1")  # newest prior
+    assert "new q" in out1 and app.agent.messages[0]["content"] == "new q"
+    out2 = dispatch(app, "/resume 2")  # older
+    assert "old q" in out2 and app.agent.messages[0]["content"] == "old q"
+    assert "no session #9" in dispatch(app, "/resume 9")  # out of range
+
+
+def test_deepseek_pro_carries_its_own_pricing(tmp_path):
+    """Budget invariant: deepseek-v4-pro (under deepseek) switches with its verified
+    table, not the flash/sonnet default."""
+    app = _app(tmp_path)
+    out = dispatch(app, "/use orchestration deepseek deepseek-v4-pro")
+    assert "switched to deepseek-v4-pro" in out
+    assert round(app.agent.provider.prices["input_tokens"] * 1_000_000, 3) == 0.435
+
+
+def test_openrouter_is_extraction_only(tmp_path):
+    """OpenRouter is selectable for extraction (CLAUDE.md carve-out) but NOT for the
+    agent loop (OpenAI-compat can't drive it)."""
+    from palimpsest.providers import ORCHESTRATION_PROVIDERS, PROVIDER_FACTORIES, build_provider
+
+    assert "openrouter" in PROVIDER_FACTORIES
+    assert "openrouter" not in ORCHESTRATION_PROVIDERS
+    assert build_provider("openrouter").base_url.startswith("https://openrouter.ai")
+    # rejected as a loop driver, accepted as an extractor
+    assert "can't drive the agent loop" in dispatch(_app(tmp_path), "/use orchestration openrouter")
+
+
+def test_use_extraction_openrouter_persists(tmp_path):
+    from palimpsest import config
+
+    app = _app(tmp_path)
+    out = dispatch(app, "/use extraction openrouter")
+    assert "openrouter" in out
+    assert config.get_setting("extraction_model", db_path=str(tmp_path / "t.db")) == "openrouter"
+
+
+def test_use_extraction_gateway_model_sets_env(tmp_path, monkeypatch):
+    """Two-level extraction: a gateway provider carries the chosen model in an env var
+    (OPENROUTER_MODEL), persisted to the workspace .env; the role setting is the provider."""
+    from palimpsest import config
+
+    monkeypatch.setenv("OPENROUTER_MODEL", "")  # register for cleanup (set_value mutates os.environ)
+    app = _app(tmp_path)
+    out = dispatch(app, "/use extraction openrouter deepseek/deepseek-chat")
+    assert "openrouter" in out and "deepseek/deepseek-chat" in out
+    assert "OPENROUTER_MODEL=deepseek/deepseek-chat" in (tmp_path / ".env").read_text()
+    assert config.get_setting("extraction_model", db_path=str(tmp_path / "t.db")) == "openrouter"
 
 
 def test_resume_empty_session(tmp_path):
