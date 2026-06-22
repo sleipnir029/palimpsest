@@ -32,7 +32,7 @@ from textual.widgets import Input, Markdown, Static
 from ..agent import Agent, build_agent
 from ..cost import CostMeter
 from ..monitor import SessionMonitor
-from .slash import SLASH_COMMANDS, dispatch
+from .slash import dispatch, menu_for
 from .themes import DEFAULT_THEME, THEMES
 
 _TRUNCATE = 200  # tool-result snippet cap (a long blob shouldn't flood the log)
@@ -62,10 +62,18 @@ class PalimpsestApp(App):
         # widgets (hard to read back), so every appended message also lands here as
         # (role, text) — the stable seam tests assert against.
         self.transcript: list[tuple[str, str]] = []
-        # Slash-command autocomplete state: the currently-matching command names and
-        # the highlighted index. Empty list == menu closed.
+        # Slash-command autocomplete state. `_menu` holds the selectable tokens
+        # (command names in command mode, argument values in arg mode); `_menu_glosses`
+        # is the parallel note per row; `_menu_usage` an optional header line. Empty
+        # `_menu` + None `_menu_usage` == menu closed. `_menu_prefix` is prepended on
+        # Tab-completion; `_menu_arg` flips Enter from "complete" to "run the line".
         self._menu: list[str] = []
         self._menu_idx = 0
+        self._menu_glosses: list[str] = []
+        self._menu_usage: str | None = None
+        self._menu_prefix = "/"
+        self._menu_arg = False
+        self._menu_label_slash = True
         # T63: subscribe to the agent's tool events so the supervisor sees the loop
         # live. The agent fires these on the worker thread (see below).
         self.agent.on_event = self._on_agent_event
@@ -110,7 +118,7 @@ class PalimpsestApp(App):
         )
         prompt = self.query_one("#prompt", Input)
         prompt.border_title = "ask"
-        prompt.border_subtitle = "enter ↵ to send · esc to stop"
+        prompt.border_subtitle = "enter ↵ send · tab ⇥ complete · esc stop"
         prompt.focus()
 
     def _refresh_topbar(self) -> None:
@@ -135,30 +143,52 @@ class PalimpsestApp(App):
         self._sync_menu(event.value)
 
     def _sync_menu(self, value: str) -> None:
-        """Open the menu with the commands matching a `/prefix` (before any space)."""
-        menu = self.query_one("#cmdmenu", Static)
-        if value.startswith("/") and " " not in value:
-            matches = [c for c in SLASH_COMMANDS if c.startswith(value[1:])]
-            if matches:
-                self._menu = matches
-                self._menu_idx = min(self._menu_idx, len(matches) - 1)
-                menu.update(self._render_menu())
-                menu.display = True
-                return
-        self._close_menu()
+        """Refresh the autocomplete from the input value (command or argument mode)."""
+        widget = self.query_one("#cmdmenu", Static)
+        menu = menu_for(self, value)
+        if menu is None:
+            self._close_menu()
+            return
+        new_menu = [t for t, _ in menu.rows]
+        # Keep the highlight only while the same rows persist; a changed row set
+        # (e.g. command list → a different arg list) resets it to the top so the
+        # selection never lands on a semantically different row.
+        self._menu_idx = (
+            min(self._menu_idx, max(0, len(new_menu) - 1))
+            if new_menu == self._menu else 0
+        )
+        self._menu = new_menu
+        self._menu_glosses = [g for _, g in menu.rows]
+        self._menu_usage = menu.usage
+        self._menu_prefix = menu.prefix
+        self._menu_label_slash = menu.label_slash
+        self._menu_arg = not menu.label_slash
+        widget.update(self._render_menu())
+        widget.display = True
 
     def _render_menu(self) -> Text:
         out = Text()
-        for i, cmd in enumerate(self._menu):
-            doc = (SLASH_COMMANDS[cmd].__doc__ or "").strip()
+        if self._menu_usage:  # a usage header (arg mode) sits above the value rows
+            out.append(f"{self._menu_usage}\n", style="dim")
+        for i, tok in enumerate(self._menu):
+            gloss = self._menu_glosses[i] if i < len(self._menu_glosses) else ""
             selected = i == self._menu_idx
-            out.append(f"{'❯' if selected else ' '} /{cmd}", style="bold" if selected else "")
-            out.append(f"   {doc}\n", style="" if selected else "dim")
+            label = f"/{tok}" if self._menu_label_slash else tok
+            out.append(f"{'❯' if selected else ' '} {label}", style="bold" if selected else "")
+            out.append(f"   {gloss}\n", style="" if selected else "dim")
         return out
+
+    def _menu_open(self) -> bool:
+        return bool(self._menu) or self._menu_usage is not None
 
     def _close_menu(self) -> None:
         self._menu = []
         self._menu_idx = 0
+        self._menu_glosses = []
+        self._menu_usage = None
+        self._menu_prefix = "/"
+        self._menu_arg = False
+        self._menu_label_slash = True
         self.query_one("#cmdmenu", Static).display = False
 
     def action_menu_down(self) -> None:
@@ -172,12 +202,12 @@ class PalimpsestApp(App):
             self.query_one("#cmdmenu", Static).update(self._render_menu())
 
     def action_menu_complete(self) -> None:
-        """Accept the highlighted command into the input (then the user types args)."""
+        """Accept the highlighted token (command or argument value) into the input."""
         if not self._menu:
             return
-        cmd = self._menu[self._menu_idx]
+        tok = self._menu[self._menu_idx]
         prompt = self.query_one("#prompt", Input)
-        prompt.value = f"/{cmd} "
+        prompt.value = f"{self._menu_prefix}{tok} "
         prompt.cursor_position = len(prompt.value)
         self._close_menu()
 
@@ -202,15 +232,19 @@ class PalimpsestApp(App):
 
     # chat loop --------------------------------------------------------------
     def on_input_submitted(self, event: Input.Submitted) -> None:
-        # Enter while the autocomplete menu is open: if the command is fully typed
-        # (value == "/cmd"), run it; otherwise accept the highlighted command into the
-        # input (Claude-Code style) and wait for the user to type args.
-        if self._menu:
-            selected = self._menu[self._menu_idx]
-            if event.value.strip() != f"/{selected}":
-                self.action_menu_complete()
-                return
-            self._close_menu()  # fully typed → fall through and dispatch it
+        # Enter while the autocomplete menu is open. In argument mode, Enter runs the
+        # line as typed (Tab is what completes a value). In command mode, if the command
+        # is fully typed (value == "/cmd") run it; otherwise accept the highlighted
+        # command into the input (Claude-Code style) and wait for the user to type args.
+        if self._menu_open():
+            if self._menu_arg:
+                self._close_menu()  # fall through and dispatch the typed line
+            else:
+                selected = self._menu[self._menu_idx]
+                if event.value.strip() != f"/{selected}":
+                    self.action_menu_complete()
+                    return
+                self._close_menu()  # fully typed → fall through and dispatch it
         text = event.value.strip()
         if not text:
             return

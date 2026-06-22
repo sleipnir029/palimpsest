@@ -3,7 +3,7 @@ takes any object with an .exit() method, so a tiny fake stands in for the App.""
 
 from __future__ import annotations
 
-from palimpsest.tui.slash import SLASH_COMMANDS, dispatch
+from palimpsest.tui.slash import SLASH_COMMANDS, VISIBLE_COMMANDS, dispatch
 
 
 class _FakeApp:
@@ -18,10 +18,13 @@ class _FakeApp:
 
 def test_help_lists_registered_commands():
     out = dispatch(_FakeApp(), "/help")
-    # one line per registered command, each with its name
-    for name in SLASH_COMMANDS:
+    # one line per VISIBLE command, each with its name
+    for name in VISIBLE_COMMANDS:
         assert f"/{name}" in out
     assert "/help" in out and "/quit" in out
+    # /model is a hidden alias of /use orchestration — dispatchable but unlisted.
+    assert "model" in SLASH_COMMANDS and "model" not in VISIBLE_COMMANDS
+    assert "/model" not in out
     # card requires one-line descriptions, not just names
     assert "list available commands" in out and "exit palimpsest" in out
 
