@@ -11,10 +11,19 @@ from __future__ import annotations
 import asyncio
 
 import pytest
-from textual.widgets import Input, RichLog, Static
+from textual.widgets import Input, Static
 
 from palimpsest.cost import CostMeter
 from palimpsest.tui.app import PalimpsestApp
+
+
+def _text(app: PalimpsestApp) -> str:
+    """The on-screen transcript as plain text — the stable seam for assertions.
+
+    The view is a tree of per-message widgets (Scriptorium rebuild); the app mirrors
+    every appended message into ``app.transcript`` as (role, text) in order, so tests
+    assert content + ordering without reaching into widget internals."""
+    return "\n".join(t for _role, t in app.transcript)
 
 
 @pytest.fixture(autouse=True)
@@ -92,11 +101,11 @@ def test_app_smoke_reply_path(tmp_path):
             assert agent.last == "hello"  # agent was actually invoked
             prompt = app.query_one("#prompt", Input)
             assert prompt.disabled is False  # re-enabled after reply
-            log_text = "\n".join(strip.text for strip in app.query_one("#log", RichLog).lines)
+            log_text = _text(app)
             assert "hello" in log_text  # user line rendered
             assert "echo: hello" in log_text  # agent reply rendered
             # cost meter incremented (card requirement) — bar reflects the €0.01 bill
-            assert "0.01" in str(app.query_one("#costbar", Static).render())
+            assert "0.01" in str(app.query_one("#status", Static).render())
 
     asyncio.run(_drive())
 
@@ -135,7 +144,7 @@ def test_agent_error_surfaces_and_reenables_input(tmp_path):
             await app.workers.wait_for_complete()
             await pilot.pause()
             assert app.query_one("#prompt", Input).disabled is False
-            log_text = "\n".join(strip.text for strip in app.query_one("#log", RichLog).lines)
+            log_text = _text(app)
             assert "error" in log_text and "kaboom" in log_text
             # the TUI path records the failed turn through the monitor
             assert app.monitor.runs[-1]["ok"] is False
@@ -158,7 +167,7 @@ def test_tool_trace_streams_before_reply(tmp_path):
             await app.workers.wait_for_complete()
             await pilot.pause()
 
-            lines = [strip.text for strip in app.query_one("#log", RichLog).lines]
+            lines = [t for _role, t in app.transcript]
             log_text = "\n".join(lines)
             # tool-call line rendered
             assert "→ read_paper" in log_text
@@ -199,7 +208,7 @@ def test_tool_error_result_renders_failure_marker(tmp_path):
             await pilot.press("enter")
             await app.workers.wait_for_complete()
             await pilot.pause()
-            log_text = "\n".join(strip.text for strip in app.query_one("#log", RichLog).lines)
+            log_text = _text(app)
             assert "✗" in log_text
             assert "error: nope" in log_text
 
@@ -226,7 +235,7 @@ def test_escape_requests_cancellation_when_in_flight(tmp_path):
             app.query_one("#prompt", Input).disabled = True
             await pilot.press("escape")
             assert app.cancel_event.is_set() is True
-            log_text = "\n".join(strip.text for strip in app.query_one("#log", RichLog).lines)
+            log_text = _text(app)
             assert "cancel" in log_text.lower()
 
     asyncio.run(_drive())
@@ -265,7 +274,7 @@ def test_slash_command_dispatched(tmp_path):
             await pilot.press("enter")
             await pilot.pause()
             assert agent.last is None  # agent not called for slash commands
-            log_text = "\n".join(strip.text for strip in app.query_one("#log", RichLog).lines)
+            log_text = _text(app)
             assert "unknown command: /parser" in log_text
 
     asyncio.run(_drive())
@@ -283,7 +292,7 @@ def test_slash_help_lists_commands_in_app(tmp_path):
             await pilot.press("enter")
             await pilot.pause()
             assert agent.last is None
-            log_text = "\n".join(strip.text for strip in app.query_one("#log", RichLog).lines)
+            log_text = _text(app)
             assert "/help" in log_text and "/quit" in log_text
 
     asyncio.run(_drive())
@@ -303,7 +312,7 @@ def test_slash_quit_exits_the_app(tmp_path):
             assert agent.last is None  # agent not called
             # "bye" rendered == the write-after-exit() ran without crashing,
             # and _exit is set == app.exit() was actually invoked by the handler
-            log_text = "\n".join(strip.text for strip in app.query_one("#log", RichLog).lines)
+            log_text = _text(app)
             assert "bye" in log_text
             assert app._exit is True
 

@@ -1,19 +1,80 @@
-/* T26 chat TUI layout: cost bar on top, message log fills, input docked bottom. */
+/* Scriptorium chat TUI — ink-on-parchment. Colours come from the registered
+   SCRIPTORIUM theme (app.py) as $background/$foreground/$primary/$secondary/$accent. */
 
-#costbar {
+Screen {
+    background: $background;
+    color: $foreground;
+}
+
+#topbar {
     dock: top;
     height: 1;
-    background: $accent;
-    color: $text;
-    text-align: right;
-    padding: 0 1;
+    padding: 0 2;
+    color: $accent;
+    text-style: bold;
+    background: $background;
 }
 
+/* The scrolling manuscript: per-message widgets, breathing room on the sides. */
 #log {
     height: 1fr;
-    padding: 0 1;
+    padding: 1 2;
+    background: $background;
+    scrollbar-size-vertical: 1;
+    scrollbar-color: $secondary;
+    scrollbar-background: $background;
 }
 
-#prompt {
+/* User line: the fresh hand, copper + bold, a blank line above to separate turns. */
+.msg-user {
+    color: $primary;
+    text-style: bold;
+    margin: 1 0 0 0;
+}
+
+/* Agent reply: the bright top layer (markdown), a blank line below it. */
+.msg-agent {
+    margin: 0 0 1 0;
+}
+
+/* Tool traces: the faded underwriting showing through, indented under the turn. */
+.trace {
+    color: $secondary;
+    margin: 0 0 0 2;
+}
+
+.trace-error {
+    color: $error;
+    margin: 0 0 0 2;
+}
+
+#dockbottom {
     dock: bottom;
+    height: auto;
+    background: $background;
+}
+
+/* Framed input — rounded copper border, gold on focus; the border carries the
+   "ask" title and a one-line hint so the chrome itself does the signposting. */
+#prompt {
+    height: 3;
+    margin: 0 1;
+    padding: 0 1;
+    border: round $primary;
+    border-title-color: $secondary;
+    border-subtitle-color: $secondary;
+    background: $surface;
+    color: $foreground;
+}
+
+#prompt:focus {
+    border: round $accent;
+}
+
+/* Quiet footer: the three model roles + live spend, sepia so it recedes. */
+#status {
+    height: 1;
+    padding: 0 2;
+    color: $secondary;
+    background: $background;
 }
