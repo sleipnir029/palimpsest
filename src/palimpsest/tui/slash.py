@@ -13,8 +13,16 @@ from __future__ import annotations
 
 import os
 from collections.abc import Callable
+from typing import NamedTuple
 
-from ..providers import AnthropicProvider, DeepSeekProvider
+from ..parsers.commands import PARSERS
+from ..providers import (
+    AnthropicProvider,
+    DeepSeekProvider,
+    ORCHESTRATION_PROVIDERS,
+    PROVIDER_FACTORIES,
+)
+from .themes import THEMES
 
 # Config keys surfaced by /config, and which provider each one (re)builds.
 _CONFIG_KEYS = ("DEEPSEEK_API_KEY", "ANTHROPIC_API_KEY", "RUNPOD_API_KEY")
@@ -36,8 +44,8 @@ _NOT_IMPLEMENTED = {"haiku", "gemini"}
 def _help(app, args: list[str]) -> str:
     """list available commands"""
     lines = ["available commands:"]
-    for name, fn in SLASH_COMMANDS.items():
-        lines.append(f"  /{name} — {(fn.__doc__ or '').strip()}")
+    for name in VISIBLE_COMMANDS:  # /model is a hidden alias of /use orchestration
+        lines.append(f"  /{name} — {(SLASH_COMMANDS[name].__doc__ or '').strip()}")
     return "\n".join(lines)
 
 
@@ -279,3 +287,128 @@ def dispatch(app, line: str) -> str:
     if handler is None:
         return f"unknown command: /{cmd}. type /help for available commands."
     return handler(app, parts[1:])
+
+
+# --- autocomplete (app-phase) ------------------------------------------------
+# The TUI menu reads everything it needs from `menu_for`; all command/argument
+# knowledge stays here so app.py stays a dumb view. `/model` dispatches but is NOT
+# in VISIBLE_COMMANDS — it's a hidden alias of `/use orchestration` (consolidated
+# surface). `anthropic` is accepted by the handlers but unlisted (canonical name is
+# `sonnet`); de-advertised, not removed, so persisted *_model=anthropic rows survive.
+VISIBLE_COMMANDS = (
+    "help", "quit", "budget", "cost", "use", "theme", "resume", "config", "undo",
+)
+
+_PROVIDER_GLOSS = {
+    "deepseek": "cheap default",
+    "sonnet": "Anthropic fallback",
+    "gemini": "OpenAI-compat (extraction only)",
+}
+_ROLE_GLOSS = {
+    "orchestration": "agent loop driver",
+    "extraction": "extraction pass",
+    "parser": "PDF parser",
+}
+_THEME_GLOSS = {
+    "scriptorium": "warm ink & parchment",
+    "vellum": "aged-paper light",
+    "oxide": "cool graphite",
+    "catalogue": "slate-navy",
+}
+_CONFIG_KEY_GLOSS = {
+    "DEEPSEEK_API_KEY": "DeepSeek key",
+    "ANTHROPIC_API_KEY": "Anthropic key",
+    "RUNPOD_API_KEY": "RunPod key (GPU)",
+}
+
+
+class Menu(NamedTuple):
+    """What the autocomplete should show for the current input value."""
+
+    usage: str | None              # header line, e.g. "usage: /use <role> <name>"
+    rows: list[tuple[str, str]]    # (token, gloss), already filtered by the partial
+    prefix: str                    # prepend on completion, e.g. "/use orchestration "
+    label_slash: bool              # command mode → display "/help"; arg values → bare
+
+
+def _provider_rows(names) -> list[tuple[str, str]]:
+    # Drop the `anthropic` alias from the advertised list (canonical: sonnet).
+    return [(n, _PROVIDER_GLOSS.get(n, "")) for n in names if n != "anthropic"]
+
+
+def _parser_gloss(name: str) -> str:
+    v = PARSERS[name].get("version", "")
+    return f"{v} (default)" if name == "mineru" else v
+
+
+def _arg_options(app, cmd: str, completed: list[str]) -> tuple[str | None, list[tuple[str, str]]]:
+    """Options for the positional arg currently being typed (``completed`` = the
+    args already finished before it). ``[]`` options + a usage string means a
+    free-text arg (show the usage header only); ``(None, [])`` means no help."""
+    pos = len(completed)
+    if cmd == "budget":
+        return ("usage: /budget <int euros>  e.g. 75", []) if pos == 0 else (None, [])
+    if cmd == "model":  # hidden alias, still guided once typed
+        return ("usage: /model <name>", _provider_rows(ORCHESTRATION_PROVIDERS)) if pos == 0 else (None, [])
+    if cmd == "use":
+        if pos == 0:
+            return ("usage: /use <role> <name>",
+                    [(r, _ROLE_GLOSS[r]) for r in ("orchestration", "extraction", "parser")])
+        if pos == 1:
+            role = completed[0]
+            if role in ("orchestration", "orch"):
+                return ("usage: /use orchestration <name>", _provider_rows(ORCHESTRATION_PROVIDERS))
+            if role in ("extraction", "extract"):
+                return ("usage: /use extraction <name>", _provider_rows(PROVIDER_FACTORIES))
+            if role == "parser":
+                return ("usage: /use parser <name>", [(n, _parser_gloss(n)) for n in PARSERS])
+        return (None, [])
+    if cmd == "theme":
+        if pos == 0:
+            cur = getattr(app, "theme", None)
+            rows = [
+                (n, _THEME_GLOSS.get(n, "") + (" (active)" if n == cur else ""))
+                for n in THEMES
+            ]
+            return ("usage: /theme <name>", rows)
+        return (None, [])
+    if cmd == "config":
+        if pos == 0:
+            return ("usage: /config set KEY VALUE", [("set", "set a config key")])
+        if pos == 1 and completed[0] == "set":
+            return ("usage: /config set KEY VALUE",
+                    [(k, _CONFIG_KEY_GLOSS.get(k, "")) for k in _CONFIG_KEYS])
+        if pos == 2 and completed[0] == "set":
+            return ("usage: /config set KEY VALUE", [])  # free VALUE
+        return (None, [])
+    return (None, [])
+
+
+def menu_for(app, value: str) -> Menu | None:
+    """Autocomplete state for an input value, or None to close the menu.
+
+    Two modes: command (``/pre`` with no space → match VISIBLE_COMMANDS) and
+    argument (``/cmd …`` → live values for the current positional arg)."""
+    if not value.startswith("/"):
+        return None
+    head, sep, rest = value.partition(" ")
+    cmd = head[1:]
+    if not sep:  # still typing the command name
+        matches = [c for c in VISIBLE_COMMANDS if c.startswith(cmd)]
+        if not matches:
+            return None
+        rows = [(c, (SLASH_COMMANDS[c].__doc__ or "").strip()) for c in matches]
+        return Menu(usage=None, rows=rows, prefix="/", label_slash=True)
+    if cmd not in SLASH_COMMANDS:  # includes the hidden "model"
+        return None
+    toks = rest.split()
+    if rest == "" or rest.endswith(" "):
+        completed, partial = toks, ""
+    else:
+        completed, partial = toks[:-1], toks[-1]
+    usage, options = _arg_options(app, cmd, completed)
+    if usage is None and not options:
+        return None
+    filtered = [(t, g) for t, g in options if t.startswith(partial)]
+    prefix = head + " " + (" ".join(completed) + " " if completed else "")
+    return Menu(usage=usage, rows=filtered, prefix=prefix, label_slash=False)

@@ -15,6 +15,7 @@ from textual.widgets import Input, Static
 
 from palimpsest.cost import CostMeter
 from palimpsest.tui.app import PalimpsestApp
+from palimpsest.tui.slash import menu_for
 
 
 def _text(app: PalimpsestApp) -> str:
@@ -311,12 +312,13 @@ def test_slash_autocomplete_shows_and_filters(tmp_path):
             app.query_one("#prompt", Input).value = "/"
             await pilot.pause()
             assert menu.display is True
-            for cmd in ("help", "model", "theme", "use"):
+            for cmd in ("help", "theme", "use", "config"):
                 assert cmd in app._menu
+            assert "model" not in app._menu  # hidden alias of /use orchestration
 
-            app.query_one("#prompt", Input).value = "/mo"
+            app.query_one("#prompt", Input).value = "/b"
             await pilot.pause()
-            assert app._menu == ["model"]  # only /model starts with "mo"
+            assert app._menu == ["budget"]  # only /budget starts with "b"
 
             # a non-slash message never opens the menu
             app.query_one("#prompt", Input).value = "hello"
@@ -328,17 +330,17 @@ def test_slash_autocomplete_shows_and_filters(tmp_path):
 
 
 def test_slash_autocomplete_tab_completes(tmp_path):
-    """Tab accepts the highlighted command into the input and closes the menu."""
+    """Tab accepts the highlighted command; a no-arg command closes the menu."""
     meter = CostMeter(str(tmp_path / "t.db"))
     app = PalimpsestApp(agent=_StubAgent(meter), cost_meter=meter)
 
     async def _drive() -> None:
         async with app.run_test() as pilot:
-            app.query_one("#prompt", Input).value = "/mo"
+            app.query_one("#prompt", Input).value = "/q"  # unique prefix; /quit takes no args
             await pilot.pause()
             await pilot.press("tab")
             await pilot.pause()
-            assert app.query_one("#prompt", Input).value == "/model "
+            assert app.query_one("#prompt", Input).value == "/quit "
             assert app.query_one("#cmdmenu", Static).display is False
 
     asyncio.run(_drive())
@@ -377,6 +379,76 @@ def test_slash_autocomplete_esc_closes_menu(tmp_path):
             await pilot.pause()
             assert app.query_one("#cmdmenu", Static).display is False
             assert app.query_one("#prompt", Input).value == "/the"  # input untouched
+
+    asyncio.run(_drive())
+
+
+class _ThemeStub:
+    """Minimal stand-in for the app — menu_for only reads .theme (for /theme)."""
+
+    theme = "oxide"
+
+
+def test_menu_for_argument_values():
+    """menu_for surfaces live registry values for the current positional arg."""
+    app = _ThemeStub()
+
+    def toks(value):
+        return [t for t, _ in menu_for(app, value).rows]
+
+    # /use: roles, then provider values for the chosen role (anthropic de-advertised).
+    assert toks("/use ") == ["orchestration", "extraction", "parser"]
+    assert toks("/use orchestration ") == ["deepseek", "sonnet"]
+    assert "anthropic" not in toks("/use extraction ")
+    # partial filtering + the completion prefix.
+    m = menu_for(app, "/use orchestration s")
+    assert m.rows == [("sonnet", "Anthropic fallback")]
+    assert m.prefix == "/use orchestration "
+    # parsers come from the PARSERS registry; mineru is the marked default.
+    parser_rows = dict(menu_for(app, "/use parser ").rows)
+    assert set(parser_rows) == {"docling", "mineru", "chandra", "dots", "paddle"}
+    assert "(default)" in parser_rows["mineru"]
+    # /theme marks the active palette; /budget is a free arg (usage header, no rows).
+    theme_rows = dict(menu_for(app, "/theme ").rows)
+    assert "(active)" in theme_rows["oxide"]
+    budget = menu_for(app, "/budget ")
+    assert budget.rows == [] and budget.usage is not None
+    # command mode still hides /model.
+    assert "model" not in [t for t, _ in menu_for(app, "/").rows]
+
+
+def test_arg_autocomplete_tab_completes(tmp_path):
+    """In argument mode, Tab completes the highlighted value onto the typed line."""
+    meter = CostMeter(str(tmp_path / "t.db"))
+    app = PalimpsestApp(agent=_StubAgent(meter), cost_meter=meter)
+
+    async def _drive() -> None:
+        async with app.run_test() as pilot:
+            app.query_one("#prompt", Input).value = "/use orchestration "
+            await pilot.pause()
+            assert app._menu == ["deepseek", "sonnet"]  # arg-mode value list
+            await pilot.press("tab")
+            await pilot.pause()
+            assert app.query_one("#prompt", Input).value == "/use orchestration deepseek "
+            assert app.query_one("#cmdmenu", Static).display is False
+
+    asyncio.run(_drive())
+
+
+def test_hidden_model_alias_still_dispatches(tmp_path):
+    """/model is unlisted but still runs; the `anthropic` alias is still accepted."""
+    meter = CostMeter(str(tmp_path / "t.db"))
+    app = PalimpsestApp(agent=_StubAgent(meter), cost_meter=meter)
+
+    async def _drive() -> None:
+        async with app.run_test() as pilot:
+            for line in ("/model deepseek", "/use orchestration anthropic"):
+                app.query_one("#prompt", Input).value = line
+                await pilot.press("enter")
+                await pilot.pause()
+            log = _text(app)
+            assert "unknown command: /model" not in log          # hidden, not removed
+            assert "can't drive the agent loop" not in log        # anthropic accepted
 
     asyncio.run(_drive())
 
