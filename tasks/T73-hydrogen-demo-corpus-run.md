@@ -1,6 +1,11 @@
 # T73 — Scaled hydrogen demo run (20–25 papers, full pipeline, agentic)
 
-**Status:** planned · **Group:** use-case demonstration (thesis) · **Priority:** medium · **Depends:** T71, T36–T39
+**Status:** paused (2026-06-22) · **Group:** use-case demonstration (thesis) · **Priority:** medium · **Depends:** T71, T36–T39
+
+> **Paused (2026-06-22):** blocked on supervisor sign-off + budget for the 20–25
+> paper corpus. This is the generalization test for the T72/T74 guards. A
+> preliminary hypothesis test (5 papers × 4 parsers, T72/T74) is banked; the
+> scaled run resumes once funding is approved.
 
 ## Bigger picture (read first)
 The supervisor's "Application/Use Case": *show the system working on 20–25 hydrogen

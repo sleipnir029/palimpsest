@@ -1,6 +1,10 @@
 # T37 — Parser metric: table-cell F1
 
-**Status:** planned · **Group:** evaluation (thesis) · **Priority:** high
+**Status:** paused (2026-06-22) · **Group:** evaluation (thesis) · **Priority:** high
+
+> **Paused (2026-06-22):** benchmarking paused pending T73 funding. Metric logic
+> currently lives in `experiments/` (`llm_matrix.py` / `ab_extract.py`), not yet
+> lifted into a tested module. Resumes with T73.
 
 > **Updated 2026-06-19** — scoreable parser set is **{docling, mineru, dots, paddle}**
 > (Chandra not parsed on this corpus — T34). Part of the shared T36–T39 parser

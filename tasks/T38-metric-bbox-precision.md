@@ -1,6 +1,10 @@
 # T38 — Parser metric: bbox precision
 
-**Status:** planned · **Group:** evaluation (thesis) · **Priority:** high
+**Status:** paused (2026-06-22) · **Group:** evaluation (thesis) · **Priority:** high
+
+> **Paused (2026-06-22):** benchmarking paused pending T73 funding. Metric logic
+> currently lives in `experiments/` (`llm_matrix.py` / `ab_extract.py`), not yet
+> lifted into a tested module. Resumes with T73.
 
 > **Updated 2026-06-19** — part of the shared T36–T39 comparison. The detailed T49 note
 > below already fixes the parser set + Chandra exclusion + coordinate conventions; the

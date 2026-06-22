@@ -1,6 +1,10 @@
 # T39 — Downstream extraction accuracy by parser
 
-**Status:** planned · **Group:** evaluation (thesis headline metric) · **Priority:** high
+**Status:** paused (2026-06-22) · **Group:** evaluation (thesis headline metric) · **Priority:** high
+
+> **Paused (2026-06-22):** benchmarking paused pending T73 funding. Metric logic
+> currently lives in `experiments/` (`llm_matrix.py` / `ab_extract.py`), not yet
+> lifted into a tested module. Resumes with T73.
 
 ## Bigger picture (read first)
 This is the metric the thesis leads with (`report/palimpsest-report.md` §1; contribution

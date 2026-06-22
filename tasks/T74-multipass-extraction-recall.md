@@ -1,6 +1,12 @@
 # T74 — Closing the extraction gap: multi-pass & ensemble vs single-shot
 
-**Status:** planned · **Group:** evaluation (thesis) · **Priority:** high
+**Status:** done (2026-06-22) · **Group:** evaluation (thesis) · **Priority:** high
+
+> **Banked (2026-06-22, benchmarking paused):** multi-pass benchmark executed
+> (`experiments/llm_matrix_t74.py`, `multipass.py`, `reports/t74_report.html`).
+> Headline: cheap model-union ≈ Sonnet recall at ~10× lower cost. The extraction
+> guards (`normalize.PLAUSIBLE_MAX`, `rederive_milli_value`) are 5-paper-tuned —
+> validate on T73, relax/revert rather than tune further (see commit c9c11c3).
 
 ## Bigger picture (read first)
 T72 measured **single-shot** extraction and proved *where* recall is lost. Its 200

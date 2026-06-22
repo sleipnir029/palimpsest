@@ -1,6 +1,12 @@
 # T72 — LLM breadth-matrix extraction benchmark (frontier / cheap / small-open / local)
 
-**Status:** planned · **Group:** evaluation (thesis) · **Priority:** high
+**Status:** done (2026-06-22) · **Group:** evaluation (thesis) · **Priority:** high
+
+> **Banked (2026-06-22, benchmarking paused):** executed across ~10 models × 4
+> parsers × 5 papers. Outputs: per-parser CSVs in `experiments/results/`,
+> `reports/t72_report.html`, extraction cache (€0 re-scoring). Scaled run is T73
+> (paused). Default runtime model is DeepSeek v4-flash (T50); non-Claude models
+> routed via the experiments-only OpenRouter carve-out.
 
 ## Bigger picture (read first)
 The meeting asked for an LLM benchmark across Claude / DeepSeek / Gemini / OpenAI with
