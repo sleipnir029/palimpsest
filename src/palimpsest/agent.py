@@ -272,11 +272,19 @@ def build_agent(provider=None, cost_meter=None) -> "Agent":
     drifted between ``__main__.py`` and ``tui/app.py``. Defaults to DeepSeek + the
     on-disk ledger; both are injectable for tests.
     """
+    from .config import get_setting
     from .cost import CostMeter
-    from .providers import DeepSeekProvider
+    from .providers import ORCHESTRATION_PROVIDERS, build_provider
 
     cost_meter = cost_meter if cost_meter is not None else CostMeter("palimpsest.db")
-    provider = provider if provider is not None else DeepSeekProvider()
+    if provider is None:
+        # Role-config (app phase): the orchestration model is persisted in the same
+        # db as the ledger. Guard a stale/invalid value back to the default so a bad
+        # setting can never brick startup — and never let a non-loop provider here.
+        name = get_setting("orchestration_model", "deepseek", db_path=cost_meter.db_path)
+        if name not in ORCHESTRATION_PROVIDERS:
+            name = "deepseek"
+        provider = build_provider(name)
     return Agent(
         provider=provider,
         cost_meter=cost_meter,

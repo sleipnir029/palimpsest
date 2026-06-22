@@ -10,7 +10,7 @@ from __future__ import annotations
 import sys
 
 from .agent import build_agent
-from .config import ensure_llm_credentials, load
+from .config import ensure_role_credentials, load
 
 
 def main() -> None:
@@ -38,7 +38,7 @@ def main() -> None:
     from .versioning import ensure_repo
 
     ensure_repo()
-    ensure_llm_credentials()  # prompt + save the provider key if missing (never invent)
+    ensure_role_credentials()  # prompt + save orchestration/extraction keys if missing
     # One factory builds the agent (tools + dynamic system prompt) for CLI and TUI.
     print(build_agent().run(sys.argv[1]))
 
