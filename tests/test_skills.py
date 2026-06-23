@@ -79,3 +79,27 @@ def test_normalization_overlay_survives_relocation(tmp_path):
     loader = SkillLoader(root=tmp_path)
     block = build_normalization_prompt([loader.skill_dir("relocated")])
     assert "relocated" in block  # overlay was loaded, not silently {}
+
+
+def _write_task(root, name):
+    d = root / name
+    d.mkdir(parents=True)
+    fm = {"name": name, "description": "task skill", "when_to_use": "t",
+          "version": "1.0.0", "kind": "task",
+          "reads": ["Overpotential"], "uses": ["sparql_query"]}
+    body = "# body\n\n" + ("filler. " * 60)
+    (d / "SKILL.md").write_text(
+        "---\n" + yaml.safe_dump(fm, sort_keys=False) + "---\n\n" + body, encoding="utf-8"
+    )
+
+
+def test_manifest_groups_domain_and_general(tmp_path):
+    _write_min_skill(tmp_path / "domain", "an-extraction")  # kind defaults to extraction
+    _write_task(tmp_path / "general", "a-task")
+    loader = SkillLoader(root=tmp_path)
+    m = loader.manifest()
+    assert "**Domain skills**" in m
+    assert "**General skills**" in m
+    assert "an-extraction" in m and "a-task" in m
+    # domain section precedes general section
+    assert m.index("**Domain skills**") < m.index("**General skills**")
