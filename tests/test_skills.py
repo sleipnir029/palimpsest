@@ -103,3 +103,73 @@ def test_manifest_groups_domain_and_general(tmp_path):
     assert "an-extraction" in m and "a-task" in m
     # domain section precedes general section
     assert m.index("**Domain skills**") < m.index("**General skills**")
+
+
+# --- reload() tests ---------------------------------------------------------
+
+def test_reload_picks_up_new_skill(tmp_path):
+    """A skill written after construction becomes visible after reload()."""
+    _write_min_skill(tmp_path, "skill-alpha")
+    loader = SkillLoader(root=tmp_path)
+    assert "skill-beta" not in loader.names()
+
+    _write_min_skill(tmp_path, "skill-beta")
+    loader.reload()
+    assert "skill-beta" in loader.names()
+
+
+def test_reload_resets_finalized(tmp_path):
+    """reload() resets _finalized so the uses-gate runs again on next access."""
+    _write_min_skill(tmp_path, "skill-alpha")
+    loader = SkillLoader(root=tmp_path)
+    loader.names()  # triggers _ensure_finalized → _finalized = True
+    assert loader._finalized is True
+
+    loader.reload()
+    assert loader._finalized is False
+
+
+def test_reload_clears_stale_quarantine(tmp_path):
+    """A skill quarantined for bad reads: is accepted after reload() once fixed."""
+    d = tmp_path / "bad-task"
+    d.mkdir()
+    bad_fm = {
+        "name": "bad-task",
+        "description": "task skill",
+        "when_to_use": "t",
+        "version": "1.0.0",
+        "kind": "task",
+        "reads": ["NonExistentClass999"],
+        "uses": ["sparql_query"],
+    }
+    body = "# body\n\n" + ("filler. " * 60)
+    skill_file = d / "SKILL.md"
+    skill_file.write_text(
+        "---\n" + yaml.safe_dump(bad_fm, sort_keys=False) + "---\n\n" + body,
+        encoding="utf-8",
+    )
+
+    with pytest.warns(UserWarning, match="quarantined"):
+        loader = SkillLoader(root=tmp_path)
+
+    assert "bad-task" in loader.invalid
+    assert "bad-task" not in loader.names()
+
+    # Fix the skill on disk
+    good_fm = {
+        "name": "bad-task",
+        "description": "task skill",
+        "when_to_use": "t",
+        "version": "1.0.0",
+        "kind": "task",
+        "reads": ["Overpotential"],
+        "uses": ["sparql_query"],
+    }
+    skill_file.write_text(
+        "---\n" + yaml.safe_dump(good_fm, sort_keys=False) + "---\n\n" + body,
+        encoding="utf-8",
+    )
+
+    loader.reload()
+    assert "bad-task" in loader.names()
+    assert "bad-task" not in loader.invalid

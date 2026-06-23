@@ -73,6 +73,10 @@ class SkillLoader:
         # — keeps the agent alive for the future corrector layer).
         self.invalid: dict[str, str] = {}
         self._finalized = False
+        self._scan()
+
+    def _scan(self) -> None:
+        """Scan skills/ from disk and populate _skills, _meta, invalid."""
         for skill_md in sorted(self.root.glob("**/SKILL.md")):
             meta, _ = _split(skill_md.read_text(encoding="utf-8"))
             name = meta["name"]
@@ -96,6 +100,17 @@ class SkillLoader:
                         warnings.warn(f"skill {name!r} quarantined: {reason}", stacklevel=2)
                         continue
             self._skills[name] = {"path": skill_md, "meta": meta, "kind": kind}
+
+    def reload(self) -> None:
+        """Re-scan skills/ from disk so a skill authored after construction becomes
+        visible. Resets the lazy uses-gate; the next accessor re-finalizes against
+        the now-complete TOOLS registry. Does NOT clear skill_check's @cache'd schema
+        helpers (the schema is unchanged when a SKILL.md is authored)."""
+        self._skills.clear()
+        self._meta.clear()
+        self.invalid.clear()
+        self._finalized = False
+        self._scan()
 
     def _ensure_finalized(self) -> None:
         """Run the deferred `uses:` gate once, when the tool registry is complete.
