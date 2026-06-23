@@ -64,6 +64,7 @@ class SkillLoader:
         # used) but does not crash the process (T69; "refuse to use, not to boot"
         # — keeps the agent alive for the future corrector layer).
         self.invalid: dict[str, str] = {}
+        self._finalized = False
         for skill_md in sorted(self.root.glob("**/SKILL.md")):
             meta, _ = _split(skill_md.read_text(encoding="utf-8"))
             name = meta["name"]
@@ -88,8 +89,31 @@ class SkillLoader:
                         continue
             self._skills[name] = {"path": skill_md, "meta": meta, "kind": kind}
 
+    def _ensure_finalized(self) -> None:
+        """Run the deferred `uses:` gate once, when the tool registry is complete.
+
+        The loader is constructed during early tool import (before most tools
+        register), so a task skill's `uses:` cannot be checked at __init__.
+        Every accessor calls this first; it runs at most once.
+        """
+        if self._finalized:
+            return
+        self._finalized = True
+        from .tools import TOOLS  # lazy: avoid the import cycle; complete at runtime
+        for name in list(self._skills):
+            if self._skills[name]["kind"] != "task":
+                continue
+            uses = self._skills[name]["meta"].get("uses") or []
+            missing = [u for u in uses if u not in TOOLS]
+            if missing:
+                reason = f"uses unregistered tools: {', '.join(missing)}"
+                self.invalid[name] = reason
+                warnings.warn(f"skill {name!r} quarantined: {reason}", stacklevel=2)
+                del self._skills[name]
+
     def manifest(self) -> str:
         """One-line-per-skill listing for the system prompt."""
+        self._ensure_finalized()
         return "\n".join(
             f"- {s['meta']['name']}: {s['meta']['description']}"
             for s in self._skills.values()
@@ -97,10 +121,12 @@ class SkillLoader:
 
     def names(self) -> list[str]:
         """Sorted list of registered skill names — for error messages and discovery."""
+        self._ensure_finalized()
         return sorted(self._skills)
 
     def load(self, name: str) -> str:
         """Return the body of the named SKILL.md (frontmatter stripped)."""
+        self._ensure_finalized()
         if name not in self._skills:
             raise KeyError(name)
         _, body = _split(self._skills[name]["path"].read_text(encoding="utf-8"))
@@ -112,6 +138,7 @@ class SkillLoader:
         Source of truth for a skill's on-disk location, so callers never
         reconstruct `Path("skills") / name` (which breaks when skills move).
         """
+        self._ensure_finalized()
         if name not in self._skills:
             raise KeyError(name)
         return self._skills[name]["path"].parent
