@@ -269,3 +269,33 @@ def test_task_skill_with_bad_reads_is_quarantined(tmp_path):
         loader = SkillLoader(root=tmp_path)
     assert "bad-reads" not in loader.names()
     assert "bad-reads" in loader.invalid
+
+
+def test_task_skill_with_bad_uses_quarantined_via_names(tmp_path):
+    """B2 guard: the uses-gate fires when reached through names(), WITHOUT
+    manifest() ever being called."""
+    _write_task_skill(tmp_path / "general", "bad-uses",
+                      reads=["Overpotential"], uses=["sparql_query", "no_such_tool"])
+    loader = SkillLoader(root=tmp_path)  # not yet finalized — no warning here
+    with pytest.warns(UserWarning, match="no_such_tool"):
+        names = loader.names()
+    assert "bad-uses" not in names
+    assert "bad-uses" in loader.invalid
+
+
+def test_task_skill_with_bad_uses_quarantined_via_load(tmp_path):
+    _write_task_skill(tmp_path / "general", "bad-uses2",
+                      reads=["Overpotential"], uses=["definitely_not_a_tool"])
+    loader = SkillLoader(root=tmp_path)
+    with pytest.warns(UserWarning, match="definitely_not_a_tool"):
+        with pytest.raises(KeyError):
+            loader.load("bad-uses2")
+    assert "bad-uses2" in loader.invalid
+
+
+def test_task_skill_with_valid_uses_survives_finalize(tmp_path):
+    _write_task_skill(tmp_path / "general", "ok-task",
+                      reads=["Overpotential"], uses=["sparql_query", "write_file"])
+    loader = SkillLoader(root=tmp_path)
+    assert "ok-task" in loader.names()
+    assert "ok-task" not in loader.invalid
