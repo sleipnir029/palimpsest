@@ -112,12 +112,24 @@ class SkillLoader:
                 del self._skills[name]
 
     def manifest(self) -> str:
-        """One-line-per-skill listing for the system prompt."""
+        """One-line-per-skill listing for the system prompt, grouped by kind."""
         self._ensure_finalized()
-        return "\n".join(
-            f"- {s['meta']['name']}: {s['meta']['description']}"
-            for s in self._skills.values()
-        )
+        domain = [s for s in self._skills.values() if s["kind"] != "task"]
+        task = [s for s in self._skills.values() if s["kind"] == "task"]
+
+        def _lines(group):
+            return [f"- {s['meta']['name']}: {s['meta']['description']}" for s in group]
+
+        out: list[str] = []
+        if domain:
+            out.append("**Domain skills** (extraction — load before extracting in that domain):")
+            out += _lines(domain)
+        if task:
+            if out:
+                out.append("")
+            out.append("**General skills** (analysis/reporting tasks):")
+            out += _lines(task)
+        return "\n".join(out)
 
     def names(self) -> list[str]:
         """Sorted list of registered skill names — for error messages and discovery."""
