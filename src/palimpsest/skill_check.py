@@ -67,6 +67,22 @@ def check_targets(skill_name: str, targets: list[str]) -> list[str]:
     return [t for t in targets if t not in mc]
 
 
+@cache
+def all_classes() -> set[str]:
+    """Every class name declared under `classes:` in the schema.
+
+    Broader than `measurement_classes()` — a task skill's `reads:` may name
+    Evidence/Paper/Condition for provenance, not just Measurement subclasses.
+    """
+    return set((_schema_doc().get("classes") or {}).keys())
+
+
+def check_reads(skill_name: str, reads: list[str]) -> list[str]:
+    """Offline membership check: reads that are not any schema class."""
+    ac = all_classes()
+    return [r for r in reads if r not in ac]
+
+
 @dataclass
 class ClassCheck:
     name: str

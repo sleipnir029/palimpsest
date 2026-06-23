@@ -213,3 +213,52 @@ def test_real_pemwe_skill_iris_resolve():
     report = validate_skill("pemwe-anode", SkillLoader(), resolve_iris=True)
     assert report.unresolved_iris == [], report.unresolved_iris
     assert report.ok
+
+
+# ---- task-skill: kind/reads load-gate (Task 2) ----------------------------
+
+def _write_task_skill(root, name, *, reads=None, uses=None):
+    """Materialize a minimal kind:task SKILL.md."""
+    d = root / name
+    d.mkdir(parents=True)
+    fm = {"name": name, "description": "t", "when_to_use": "t",
+          "version": "1.0.0", "kind": "task"}
+    if reads is not None:
+        fm["reads"] = reads
+    if uses is not None:
+        fm["uses"] = uses
+    body = "# body\n\n" + ("filler. " * 60)
+    (d / "SKILL.md").write_text(
+        "---\n" + yaml.safe_dump(fm, sort_keys=False) + "---\n\n" + body, encoding="utf-8"
+    )
+    return d
+
+
+def test_all_classes_includes_non_measurement_classes():
+    from palimpsest.skill_check import all_classes
+    ac = all_classes()
+    for name in ["Evidence", "Paper", "Condition", "Overpotential"]:
+        assert name in ac, f"{name} should be a schema class"
+
+
+def test_check_reads_against_all_classes():
+    from palimpsest.skill_check import check_reads
+    assert check_reads("x", ["Overpotential", "Evidence", "Paper"]) == []
+    assert check_reads("x", ["Overpotential", "NoSuchClass"]) == ["NoSuchClass"]
+
+
+def test_task_skill_with_valid_reads_loads(tmp_path):
+    _write_task_skill(tmp_path / "general", "good-task",
+                      reads=["Overpotential", "Evidence"], uses=["sparql_query"])
+    loader = SkillLoader(root=tmp_path)
+    assert "good-task" in loader.names()
+    assert "good-task" not in loader.invalid
+
+
+def test_task_skill_with_bad_reads_is_quarantined(tmp_path):
+    _write_task_skill(tmp_path / "general", "bad-reads",
+                      reads=["Overpotential", "NoSuchClass"], uses=["sparql_query"])
+    with pytest.warns(UserWarning, match="NoSuchClass"):
+        loader = SkillLoader(root=tmp_path)
+    assert "bad-reads" not in loader.names()
+    assert "bad-reads" in loader.invalid

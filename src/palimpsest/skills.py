@@ -24,7 +24,7 @@ from pathlib import Path
 
 import yaml
 
-from .skill_check import check_targets
+from .skill_check import check_reads, check_targets
 
 _DELIM = "---"
 
@@ -68,17 +68,25 @@ class SkillLoader:
             meta, _ = _split(skill_md.read_text(encoding="utf-8"))
             name = meta["name"]
             self._meta[name] = meta
-            targets = meta.get("targets")
-            if targets:
-                missing = check_targets(name, targets)
+            kind = meta.get("kind", "extraction")
+            if kind == "task":
+                reads = meta.get("reads") or []
+                missing = check_reads(name, reads)
                 if missing:
-                    reason = f"targets unknown schema classes: {', '.join(missing)}"
+                    reason = f"reads unknown schema classes: {', '.join(missing)}"
                     self.invalid[name] = reason
-                    warnings.warn(
-                        f"skill {name!r} quarantined: {reason}", stacklevel=2
-                    )
+                    warnings.warn(f"skill {name!r} quarantined: {reason}", stacklevel=2)
                     continue
-            self._skills[name] = {"path": skill_md, "meta": meta}
+            else:
+                targets = meta.get("targets")
+                if targets:
+                    missing = check_targets(name, targets)
+                    if missing:
+                        reason = f"targets unknown schema classes: {', '.join(missing)}"
+                        self.invalid[name] = reason
+                        warnings.warn(f"skill {name!r} quarantined: {reason}", stacklevel=2)
+                        continue
+            self._skills[name] = {"path": skill_md, "meta": meta, "kind": kind}
 
     def manifest(self) -> str:
         """One-line-per-skill listing for the system prompt."""
