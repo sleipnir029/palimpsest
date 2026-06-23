@@ -210,9 +210,11 @@ def render_report(report: SkillReport) -> str:
             lines.append(f"  ✓ tool {t.name}: registered")
         else:
             lines.append(f"  ✗ tool {t.name}: NOT in tool registry")
+    if report.kind == "task":
+        lines.append("  (task skill: reads/uses checked; no IRIs)")
     if not report.checks:
         what = "reads:" if report.kind == "task" else "targets:"
         lines.append(f"  (skill declares no {what})")
-    if not report.iris_resolved:
+    if not report.iris_resolved and report.kind != "task":
         lines.append("  (offline: IRIs not checked)")
     return "\n".join(lines)

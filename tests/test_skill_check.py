@@ -317,3 +317,7 @@ def test_validate_task_skill_reports_reads_and_uses(tmp_path):
     assert "PASS" in rendered
     assert "sparql_query" in rendered
     assert "no targets" not in rendered.lower()
+    # task-skill note: IRI status must be explicit
+    assert "task skill" in rendered
+    assert "no IRIs" in rendered
+    assert "offline: IRIs not checked" not in rendered
