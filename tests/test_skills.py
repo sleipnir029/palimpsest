@@ -173,3 +173,24 @@ def test_reload_clears_stale_quarantine(tmp_path):
     loader.reload()
     assert "bad-task" in loader.names()
     assert "bad-task" not in loader.invalid
+
+
+# --- import-time finalization guard -----------------------------------------
+
+import subprocess
+import sys
+
+
+def test_loader_not_finalized_at_import():
+    """Importing palimpsest.tools constructs _LOADER but must NOT finalize it.
+    A future import-time accessor call would flip _finalized True and fail this."""
+    code = (
+        "import palimpsest.tools\n"
+        "from palimpsest.tools.read_skill import _LOADER\n"
+        "assert _LOADER._finalized is False, 'an accessor ran at import time'\n"
+    )
+    result = subprocess.run(
+        [sys.executable, "-c", code],
+        capture_output=True, text=True,
+    )
+    assert result.returncode == 0, result.stderr
