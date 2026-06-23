@@ -25,6 +25,11 @@ Produce a **self-contained HTML** report into `workspace/reports/`. Write it wit
 - Start from `references/report_template.py`; change only the SPARQL queries and
   the prose. Each figure is `plotly.graph_objects` embedded via `fig.to_html(
   full_html=False, include_plotlyjs="cdn")` — no kaleido, no static images.
+  The reference query is already schema-correct and runs as-is against a
+  populated store.
+- `STORE_PATH` and `OUT` are **relative to the repo root**; run from there, or
+  `RDFStore("store")` opens an empty store and the report comes out empty (no
+  error).
 - **Every figure carries a provenance table** (paper sha256, parser, page) for
   the points it shows. A number without provenance does not go in the report.
 - Pull the caveats from the domain skill's "common traps": never fuse RDE and
