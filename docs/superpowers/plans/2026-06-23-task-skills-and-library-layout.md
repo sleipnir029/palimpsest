@@ -17,7 +17,7 @@
 - `kind:` in frontmatter is the source of truth for skill kind, **not** the folder. Absent → `extraction`.
 - Commit directly to `main` (no feature branch — user's standing rule). Every commit message ends with the trailer:
   `Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>`
-- Run the focused test suite after each task: `pixi run -e dev pytest tests/test_skills.py tests/test_skill_check.py tests/test_normalize.py -q` (adjust env name if the repo uses a different one; fall back to `pytest`).
+- Run tests with `pixi run pytest <args>` (the repo's pixi env; `pixi.toml` also defines `pixi run test` = `pytest -v` for the whole suite). Focused after each task, e.g. `pixi run pytest tests/test_skills.py tests/test_skill_check.py tests/test_normalize.py -q`.
 
 ---
 
@@ -94,7 +94,7 @@ def test_normalization_overlay_survives_relocation(tmp_path):
 
 - [ ] **Step 2: Run tests to verify they fail**
 
-Run: `pixi run -e dev pytest tests/test_skills.py -q`
+Run: `pixi run pytest tests/test_skills.py -q`
 Expected: FAIL — `AttributeError: 'SkillLoader' object has no attribute 'skill_dir'` (and the nested-discovery test fails because the one-level glob misses `domain/nested-skill`).
 
 - [ ] **Step 3: Change the glob and add `skill_dir`**
@@ -137,7 +137,7 @@ to:
 
 - [ ] **Step 5: Run tests to verify they pass**
 
-Run: `pixi run -e dev pytest tests/test_skills.py tests/test_normalize.py -q`
+Run: `pixi run pytest tests/test_skills.py tests/test_normalize.py -q`
 Expected: PASS (all, including the existing manifest/load tests).
 
 - [ ] **Step 6: Commit**
@@ -217,7 +217,7 @@ def test_task_skill_with_bad_reads_is_quarantined(tmp_path):
 
 - [ ] **Step 2: Run tests to verify they fail**
 
-Run: `pixi run -e dev pytest tests/test_skill_check.py -q -k "all_classes or check_reads or task_skill"`
+Run: `pixi run pytest tests/test_skill_check.py -q -k "all_classes or check_reads or task_skill"`
 Expected: FAIL — `ImportError: cannot import name 'all_classes'` / the bad-reads skill is NOT quarantined yet (loader ignores `reads:`).
 
 - [ ] **Step 3: Add `all_classes` + `check_reads` to skill_check.py**
@@ -278,7 +278,7 @@ Replace the per-skill body of the `for skill_md in ...` loop with:
 
 - [ ] **Step 5: Run tests to verify they pass**
 
-Run: `pixi run -e dev pytest tests/test_skill_check.py tests/test_skills.py -q`
+Run: `pixi run pytest tests/test_skill_check.py tests/test_skills.py -q`
 Expected: PASS (existing extraction quarantine tests unaffected; new task-reads tests pass).
 
 - [ ] **Step 6: Commit**
@@ -338,7 +338,7 @@ def test_task_skill_with_valid_uses_survives_finalize(tmp_path):
 
 - [ ] **Step 2: Run tests to verify they fail**
 
-Run: `pixi run -e dev pytest tests/test_skill_check.py -q -k "bad_uses or valid_uses"`
+Run: `pixi run pytest tests/test_skill_check.py -q -k "bad_uses or valid_uses"`
 Expected: FAIL — bad-`uses` skills are NOT quarantined (no `uses:` gate exists yet); the skills remain in `names()`/loadable.
 
 - [ ] **Step 3: Implement `_ensure_finalized` and guard accessors**
@@ -388,7 +388,7 @@ Do the same (first line `self._ensure_finalized()`) in `manifest`, `load`, and `
 
 - [ ] **Step 4: Run tests to verify they pass**
 
-Run: `pixi run -e dev pytest tests/test_skill_check.py tests/test_skills.py -q`
+Run: `pixi run pytest tests/test_skill_check.py tests/test_skills.py -q`
 Expected: PASS (the bad-`uses` skills are now quarantined on first access; valid ones survive; all existing tests green).
 
 - [ ] **Step 5: Commit**
@@ -433,7 +433,7 @@ def test_validate_task_skill_reports_reads_and_uses(tmp_path):
 
 - [ ] **Step 2: Run tests to verify they fail**
 
-Run: `pixi run -e dev pytest tests/test_skill_check.py -q -k validate_task_skill`
+Run: `pixi run pytest tests/test_skill_check.py -q -k validate_task_skill`
 Expected: FAIL — `AttributeError: 'SkillReport' object has no attribute 'kind'` (or `tool_checks`).
 
 - [ ] **Step 3: Extend the dataclasses and `validate_skill`**
@@ -510,7 +510,7 @@ Replace the empty-checks branch so it is kind-aware:
 
 - [ ] **Step 5: Run tests to verify they pass**
 
-Run: `pixi run -e dev pytest tests/test_skill_check.py -q`
+Run: `pixi run pytest tests/test_skill_check.py -q`
 Expected: PASS (new task-report test passes; existing extraction reports unchanged — `tool_checks` empty so `ok` is unaffected).
 
 - [ ] **Step 6: Commit**
@@ -562,7 +562,7 @@ def test_manifest_groups_domain_and_general(tmp_path):
 
 - [ ] **Step 2: Run test to verify it fails**
 
-Run: `pixi run -e dev pytest tests/test_skills.py -q -k manifest_groups`
+Run: `pixi run pytest tests/test_skills.py -q -k manifest_groups`
 Expected: FAIL — no `**Domain skills**` header (manifest is a flat list today).
 
 - [ ] **Step 3: Implement grouped manifest**
@@ -593,7 +593,7 @@ Replace `SkillLoader.manifest` in `src/palimpsest/skills.py` with:
 
 - [ ] **Step 4: Run tests to verify they pass**
 
-Run: `pixi run -e dev pytest tests/test_skills.py tests/test_agent_tools.py -q`
+Run: `pixi run pytest tests/test_skills.py tests/test_agent_tools.py -q`
 Expected: PASS (`test_manifest_lists_oer_extraction` still passes — the substring is present; the agent-prompt test still sees `oer-extraction`).
 
 - [ ] **Step 5: Commit**
@@ -624,7 +624,7 @@ git mv skills/pemwe-anode skills/domain/pemwe-anode
 
 - [ ] **Step 2: Run the suite to see exactly what breaks**
 
-Run: `pixi run -e dev pytest tests/test_normalize.py tests/test_skill_check.py -q`
+Run: `pixi run pytest tests/test_normalize.py tests/test_skill_check.py -q`
 Expected: FAIL in `tests/test_normalize.py` (the `OER_DIR` constant and the `build_normalization_prompt([Path("skills")/...])` call now point at non-existent dirs) and `tests/test_skill_check.py` (the two `Path("skills/<name>/SKILL.md")` reads). This confirms the blast radius is exactly these four sites.
 
 - [ ] **Step 3: Update the hard-coded test paths**
@@ -668,7 +668,7 @@ Update each hit in `EXECUTION.md`/`PROGRESS.md` to the `skills/domain/...` path.
 
 - [ ] **Step 5: Run the full suite to verify green**
 
-Run: `pixi run -e dev pytest tests/test_skills.py tests/test_skill_check.py tests/test_normalize.py tests/test_agent_tools.py -q`
+Run: `pixi run pytest tests/test_skills.py tests/test_skill_check.py tests/test_normalize.py tests/test_agent_tools.py -q`
 Expected: PASS (skill names unchanged → manifest/prompt assertions survive; paths now resolve).
 
 - [ ] **Step 6: Commit**
@@ -735,7 +735,7 @@ def test_reference_skeletons_parse():
 
 - [ ] **Step 2: Run tests to verify they fail**
 
-Run: `pixi run -e dev pytest tests/test_general_skills.py -q`
+Run: `pixi run pytest tests/test_general_skills.py -q`
 Expected: FAIL — the skills do not exist (`notebook-analysis` not in `names()`; skeleton files missing).
 
 - [ ] **Step 3: Create the notebook-analysis skill**
@@ -934,12 +934,12 @@ if __name__ == "__main__":
 
 - [ ] **Step 5: Run tests to verify they pass**
 
-Run: `pixi run -e dev pytest tests/test_general_skills.py tests/test_skills.py -q`
+Run: `pixi run pytest tests/test_general_skills.py tests/test_skills.py -q`
 Expected: PASS — both skills register, `check_skill` PASSes for each (every `reads:` class and `uses:` tool is real), and both skeletons `ast.parse`.
 
 - [ ] **Step 6: Full regression + commit**
 
-Run: `pixi run -e dev pytest tests/ -q -m "not slow"`
+Run: `pixi run pytest tests/ -q -m "not slow"`
 Expected: PASS.
 
 ```bash
