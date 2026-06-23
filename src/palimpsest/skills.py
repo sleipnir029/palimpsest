@@ -64,7 +64,7 @@ class SkillLoader:
         # used) but does not crash the process (T69; "refuse to use, not to boot"
         # — keeps the agent alive for the future corrector layer).
         self.invalid: dict[str, str] = {}
-        for skill_md in sorted(self.root.glob("*/SKILL.md")):
+        for skill_md in sorted(self.root.glob("**/SKILL.md")):
             meta, _ = _split(skill_md.read_text(encoding="utf-8"))
             name = meta["name"]
             self._meta[name] = meta
@@ -97,3 +97,13 @@ class SkillLoader:
             raise KeyError(name)
         _, body = _split(self._skills[name]["path"].read_text(encoding="utf-8"))
         return body.strip()
+
+    def skill_dir(self, name: str) -> Path:
+        """Directory containing the named skill's SKILL.md (for normalization etc.).
+
+        Source of truth for a skill's on-disk location, so callers never
+        reconstruct `Path("skills") / name` (which breaks when skills move).
+        """
+        if name not in self._skills:
+            raise KeyError(name)
+        return self._skills[name]["path"].parent

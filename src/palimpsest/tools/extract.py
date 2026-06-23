@@ -629,7 +629,7 @@ def extract(
     except KeyError:
         avail = ", ".join(_LOADER.names()) or "(none)"
         raise ValueError(f"unknown skill: {skill_name!r}. Available: {avail}") from None
-    norm = build_normalization_prompt([Path("skills") / skill_name])
+    norm = build_normalization_prompt([_LOADER.skill_dir(skill_name)])
     jsonschema_str = _schema_for_prompt(_JSONSCHEMA_PATH.read_text(encoding="utf-8"))
     system = _build_system_prompt(skill_body, jsonschema_str, norm)
 
