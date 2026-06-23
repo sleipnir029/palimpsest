@@ -12,10 +12,14 @@ STORE_PATH = "store"
 OUT = "workspace/reports/report.html"
 
 QUERY = """
-PREFIX pmp: <https://palimpsest.local/schema/>
+PREFIX palim: <https://w3id.org/palimpsest/>
+PREFIX emmo: <https://w3id.org/emmo/domain/electrochemistry#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
 SELECT ?value ?paper ?parser ?page WHERE {
-  ?m a pmp:Overpotential ; pmp:value ?value ; pmp:evidence ?e .
-  ?e pmp:paper ?paper ; pmp:parser_name ?parser ; pmp:page ?page .
+  ?m a emmo:electrochemistry_1cd1d777_e67b_47eb_81f1_edac35d9f2c6 ;  # Overpotential
+     palim:value ?value ;
+     prov:hadPrimarySource ?e .
+  ?e palim:paper ?paper ; palim:parserName ?parser ; palim:page ?page .
 }
 """
 
