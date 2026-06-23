@@ -77,7 +77,7 @@ That is the entire heartbeat. Everything else is tools + UI + storage.
 **Verdict:** Ship one skill in MVP (`oer-extraction`); keep the loader trivial so HER / CO2RR / NRR can be added later by dropping a folder.
 
 - Anthropic's Agent Skills spec (announced Dec 18 2025 at `anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills`; open standard at `agentskills.io`): a skill is a folder containing a `SKILL.md` with YAML frontmatter (`name`, `description`) and instructions. Progressive disclosure: only the frontmatter is in the system prompt at startup; the body is loaded by the agent on demand.
-- Implementation: `skills/oer-extraction/SKILL.md` describes what an OER extraction looks like (which slots, which heuristics, which units, which traps — e.g. iR-correction, scan-rate sensitivity, Tafel-from-LSV pitfalls). A `read_skill(name)` tool pulls the full body into context when picked.
+- Implementation: `skills/domain/oer-extraction/SKILL.md` describes what an OER extraction looks like (which slots, which heuristics, which units, which traps — e.g. iR-correction, scan-rate sensitivity, Tafel-from-LSV pitfalls). A `read_skill(name)` tool pulls the full body into context when picked.
 - Adding HER later is literally `skills/her-extraction/SKILL.md` — no loop changes.
 
 ### F4. Parser orchestration — all five on cloud GPU, one isolated image per parser
@@ -254,7 +254,7 @@ The five parsers represent five different design philosophies as of late 2025 / 
 
 **Week 3 (schema & extraction):**
 8. Author the LinkML schema with EMMO / QUDT / palimpsest-local IRIs (Appendix E). Generate Pydantic + SHACL.
-9. Write the `oer-extraction` skill (`skills/oer-extraction/SKILL.md`).
+9. Write the `oer-extraction` skill (`skills/domain/oer-extraction/SKILL.md`).
 10. Implement `extract_to_graph` tool: takes parser output + skill, calls Sonnet 4.5 with `cache_control`, validates against Pydantic, runs SHACL, inserts into pyoxigraph.
 
 **Week 4 (UI & viewer):**
