@@ -253,6 +253,13 @@ def test_task_skill_with_valid_reads_loads(tmp_path):
     loader = SkillLoader(root=tmp_path)
     assert "good-task" in loader.names()
     assert "good-task" not in loader.invalid
+    assert loader._skills["good-task"]["kind"] == "task"
+
+
+def test_legacy_skill_defaults_to_extraction_kind(tmp_path):
+    _write_skill(tmp_path / "domain", "legacy", targets=["Overpotential"])
+    loader = SkillLoader(root=tmp_path)
+    assert loader._skills["legacy"]["kind"] == "extraction"
 
 
 def test_task_skill_with_bad_reads_is_quarantined(tmp_path):
