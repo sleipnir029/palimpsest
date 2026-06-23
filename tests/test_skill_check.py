@@ -77,7 +77,7 @@ def test_oer_skill_declares_expected_targets():
     from palimpsest.skills import _split
 
     meta, _ = _split(
-        Path("skills/oer-extraction/SKILL.md").read_text(encoding="utf-8")
+        Path("skills/domain/oer-extraction/SKILL.md").read_text(encoding="utf-8")
     )
     assert set(meta.get("targets") or []) == set(OER_TARGETS)
 
@@ -103,7 +103,7 @@ def test_pemwe_skill_declares_expected_targets():
     from palimpsest.skills import _split
 
     meta, _ = _split(
-        Path("skills/pemwe-anode/SKILL.md").read_text(encoding="utf-8")
+        Path("skills/domain/pemwe-anode/SKILL.md").read_text(encoding="utf-8")
     )
     assert set(meta.get("targets") or []) == set(PEMWE_TARGETS)
 

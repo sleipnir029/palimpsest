@@ -1,20 +1,28 @@
 """Skill loader.
 
-Scans `skills/*/SKILL.md` once at __init__, parsing only the YAML frontmatter
-so the per-skill cost of listing skills in the system prompt stays small
-(~50–100 tokens each). Full body is read lazily by `load(name)` — the agent
-fetches it via the `read_skill` tool when a skill is actually relevant.
+Scans `skills/**/SKILL.md` recursively once at __init__, parsing only the YAML
+frontmatter so the per-skill cost of listing skills in the system prompt stays
+small (~50–100 tokens each). Full body is read lazily by `load(name)` — the
+agent fetches it via the `read_skill` tool when a skill is actually relevant.
 
-Frontmatter shape (see `skills/oer-extraction/SKILL.md`):
+Layout convention:
+  skills/domain/   — extraction skills (e.g. oer-extraction, pemwe-anode)
+  skills/general/  — task skills (agent-level procedures)
+
+Frontmatter shape (extraction skill, see `skills/domain/oer-extraction/SKILL.md`):
 
     ---
     name: oer-extraction
     description: ...one line...
     when_to_use: ...
     version: 1.0.0
+    targets: [Overpotential, TafelSlope, ...]   # schema Measurement classes
     ---
 
     # Body in markdown
+
+Task skills additionally carry `kind: task`, `reads: [...]` (schema classes
+they query), and `uses: [...]` (registered tool names they invoke).
 """
 
 from __future__ import annotations
@@ -47,7 +55,7 @@ def _split(text: str) -> tuple[dict, str]:
 
 
 class SkillLoader:
-    """Registry of skills discovered under `root/*/SKILL.md`.
+    """Registry of skills discovered under `root/**/SKILL.md`.
 
     `manifest()` returns the string injected into the system prompt; `load()`
     returns the full body for one skill (lazy, re-reads the file each call).
