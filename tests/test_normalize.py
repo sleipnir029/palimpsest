@@ -21,7 +21,7 @@ from palimpsest.normalize import (
     units_match,
 )
 
-OER_DIR = Path(__file__).parent.parent / "skills" / "oer-extraction"
+OER_DIR = Path(__file__).parent.parent / "skills" / "domain" / "oer-extraction"
 
 
 def test_universal_constants_well_formed():
@@ -127,7 +127,8 @@ def test_pemwe_overlay_does_not_shadow_universal_keys():
     from pathlib import Path
 
     prompt = build_normalization_prompt(
-        [Path("skills") / "oer-extraction", Path("skills") / "pemwe-anode"]
+        [Path("skills") / "domain" / "oer-extraction",
+         Path("skills") / "domain" / "pemwe-anode"]
     )
     assert "oer-extraction" in prompt and "pemwe-anode" in prompt
     assert "catalyst_loading" in prompt  # advertised once, from the universal layer
