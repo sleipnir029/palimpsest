@@ -92,10 +92,18 @@ class ClassCheck:
 
 
 @dataclass
+class ToolCheck:
+    name: str
+    registered: bool
+
+
+@dataclass
 class SkillReport:
     skill: str
     checks: list[ClassCheck]
     iris_resolved: bool
+    tool_checks: list["ToolCheck"] = field(default_factory=list)
+    kind: str = "extraction"
 
     @property
     def missing_classes(self) -> list[str]:
@@ -107,7 +115,11 @@ class SkillReport:
 
     @property
     def ok(self) -> bool:
-        return not self.missing_classes and not self.unresolved_iris
+        return (
+            not self.missing_classes
+            and not self.unresolved_iris
+            and all(t.registered for t in self.tool_checks)
+        )
 
 
 def _prefix_local(curie: str) -> tuple[str, str]:
@@ -138,6 +150,16 @@ def validate_skill(name: str, loader, *, resolve_iris: bool = True) -> SkillRepo
     meta = loader._meta.get(name)
     if meta is None:
         raise KeyError(name)
+    kind = meta.get("kind", "extraction")
+    if kind == "task":
+        ac = all_classes()
+        checks = [ClassCheck(name=r, in_schema=(r in ac)) for r in (meta.get("reads") or [])]
+        from .tools import TOOLS  # lazy: registry complete at runtime
+        tool_checks = [ToolCheck(name=u, registered=(u in TOOLS)) for u in (meta.get("uses") or [])]
+        return SkillReport(
+            skill=name, checks=checks, iris_resolved=resolve_iris,
+            tool_checks=tool_checks, kind=kind,
+        )
     targets = list(meta.get("targets") or [])
     mc = measurement_classes()
 
@@ -165,7 +187,7 @@ def validate_skill(name: str, loader, *, resolve_iris: bool = True) -> SkillRepo
                 name=t, in_schema=True, external_iris=external, unresolved=unresolved
             )
         )
-    return SkillReport(skill=name, checks=checks, iris_resolved=resolve_iris)
+    return SkillReport(skill=name, checks=checks, iris_resolved=resolve_iris, kind=kind)
 
 
 def render_report(report: SkillReport) -> str:
@@ -183,8 +205,14 @@ def render_report(report: SkillReport) -> str:
             lines.append(f"  ✓ {c.name}: in schema ({len(c.external_iris)} IRI ok)")
         else:
             lines.append(f"  ✓ {c.name}: in schema (palimpsest-local, no external IRI)")
+    for t in report.tool_checks:
+        if t.registered:
+            lines.append(f"  ✓ tool {t.name}: registered")
+        else:
+            lines.append(f"  ✗ tool {t.name}: NOT in tool registry")
     if not report.checks:
-        lines.append("  (skill declares no targets:)")
+        what = "reads:" if report.kind == "task" else "targets:"
+        lines.append(f"  (skill declares no {what})")
     if not report.iris_resolved:
         lines.append("  (offline: IRIs not checked)")
     return "\n".join(lines)

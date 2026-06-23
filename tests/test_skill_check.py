@@ -299,3 +299,21 @@ def test_task_skill_with_valid_uses_survives_finalize(tmp_path):
     loader = SkillLoader(root=tmp_path)
     assert "ok-task" in loader.names()
     assert "ok-task" not in loader.invalid
+
+
+# ---- task-skill: validate_skill + render_report (Task 4) -------------------
+
+def test_validate_task_skill_reports_reads_and_uses(tmp_path):
+    _write_task_skill(tmp_path / "general", "good-task",
+                      reads=["Overpotential", "Evidence"], uses=["sparql_query"])
+    loader = SkillLoader(root=tmp_path)
+    report = validate_skill("good-task", loader, resolve_iris=False)
+    assert report.kind == "task"
+    assert report.missing_classes == []
+    assert [t.name for t in report.tool_checks] == ["sparql_query"]
+    assert all(t.registered for t in report.tool_checks)
+    assert report.ok
+    rendered = render_report(report)
+    assert "PASS" in rendered
+    assert "sparql_query" in rendered
+    assert "no targets" not in rendered.lower()
