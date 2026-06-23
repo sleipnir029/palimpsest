@@ -72,6 +72,12 @@ class SkillLoader:
         # used) but does not crash the process (T69; "refuse to use, not to boot"
         # — keeps the agent alive for the future corrector layer).
         self.invalid: dict[str, str] = {}
+        # Invariant: no accessor (manifest/names/load/skill_dir) may run at IMPORT
+        # time. `_LOADER` is constructed in read_skill.py while tools/__init__.py is
+        # still importing tool modules, so TOOLS is incomplete then; finalizing early
+        # would run the uses-gate against a half-built registry and spuriously
+        # quarantine task skills whose `uses:` name a not-yet-imported tool.
+        # Guarded by test_loader_not_finalized_at_import.
         self._finalized = False
         self._scan()
 
@@ -118,6 +124,12 @@ class SkillLoader:
         The loader is constructed during early tool import (before most tools
         register), so a task skill's `uses:` cannot be checked at __init__.
         Every accessor calls this first; it runs at most once.
+
+        Calling this at import time (before tools/__init__.py finishes) would
+        import a half-built TOOLS registry and spuriously quarantine task skills
+        whose `uses:` name a not-yet-imported tool. See the invariant comment
+        near `self._finalized = False` in __init__ and the guard test
+        test_loader_not_finalized_at_import.
         """
         if self._finalized:
             return
