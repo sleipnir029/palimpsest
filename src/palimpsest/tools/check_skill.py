@@ -1,10 +1,8 @@
-"""`check_skill` tool — verify a skill's `targets:` against schema + ontologies.
+"""`check_skill` tool — verify a skill against schema + ontologies.
 
-The read side of T69's constrained-autonomy spine: the agent can ask, at run
-time, whether a skill is consistent with the schema (each declared target is a
-real Measurement class) and whether its EMMO/H2KG IRIs still resolve. Read-only,
-€0 (no LLM call); the IRI resolution is the network path (advisory warnings),
-membership is offline+hard (already enforced at load by SkillLoader quarantine).
+For extraction skills: checks each `targets:` class against the schema and
+whether its EMMO/H2KG IRIs resolve. For task skills: reports validity of
+`reads:` (schema classes) and `uses:` (registered tools). Read-only, €0.
 """
 
 from __future__ import annotations
@@ -17,9 +15,10 @@ from .read_skill import _LOADER  # one process-wide SkillLoader; do not make ano
 
 @register("check_skill", {
     "description": (
-        "Check a skill's declared `targets:` against the schema and ontologies "
-        "(read-only). Reports, per target class, whether it exists in the schema "
-        "and whether its EMMO/H2KG IRIs resolve."
+        "Check a skill's validity (read-only, €0). For extraction skills, reports "
+        "each `targets:` class against the schema and EMMO/H2KG IRI resolution. "
+        "For task skills (`kind: task`), reports whether `reads:` schema classes "
+        "and `uses:` registered tools are valid."
     ),
     "input_schema": {
         "type": "object",
