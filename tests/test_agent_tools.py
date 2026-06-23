@@ -124,6 +124,10 @@ def test_build_system_prompt_advertises_tools_and_skills():
     assert "never hand-edit the graph" in p  # provenance/budget invariant stated
 
 
+def test_reload_skills_tool_is_registered():
+    assert "reload_skills" in TOOLS
+
+
 def test_build_agent_uses_full_registry_and_dynamic_prompt(tmp_path):
     from palimpsest.cost import CostMeter
 
