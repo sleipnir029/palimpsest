@@ -26,7 +26,12 @@ it with `write_file` into `workspace/notebooks/`, then spawn it with
 - Start from `references/notebook_template.py`; change only the SPARQL query and
   the store path. Keep it minimal — one figure per question.
 - Query the store directly inside the notebook via `palimpsest.store.RDFStore`.
-  Use `sparql_query` first to preview a query before baking it in.
+  Use `sparql_query` first to preview a query before baking it in. The reference
+  query is already schema-correct and returns rows as-is against a populated
+  store — a working baseline, not a placeholder.
+- `STORE_PATH` is **relative to the repo root**; the notebook must be spawned
+  from there, or `RDFStore("store")` opens an empty store and every cell is
+  silently empty (no error).
 - **Provenance in every cell:** every row you plot must keep its `paper` (sha256),
   `parser`, and `page` columns so the human can trace any point back to the PDF.
   A chart without provenance is not acceptable.
