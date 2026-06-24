@@ -159,6 +159,7 @@ class Measurement(ConfiguredBaseModel):
 
     value: Optional[float] = Field(default=None, description="""Numeric value of the measurement, in the unit named by unit_label.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:value'} })
     unit_label: Optional[str] = Field(default=None, description="""Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:unitLabel'} })
+    confidence: Optional[float] = Field(default=None, description="""Model's self-reported confidence (0-1) that this measurement was extracted correctly. Optional — legacy/untagged extractions omit it and still validate.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:confidence'} })
     condition: Optional[Condition] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:condition'} })
     evidence: Optional[Evidence] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'prov:hadPrimarySource'} })
 
@@ -173,6 +174,7 @@ class Overpotential(Measurement):
 
     value: Optional[float] = Field(default=None, description="""Numeric value of the measurement, in the unit named by unit_label.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:value'} })
     unit_label: Optional[str] = Field(default=None, description="""Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:unitLabel'} })
+    confidence: Optional[float] = Field(default=None, description="""Model's self-reported confidence (0-1) that this measurement was extracted correctly. Optional — legacy/untagged extractions omit it and still validate.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:confidence'} })
     condition: Optional[Condition] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:condition'} })
     evidence: Optional[Evidence] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'prov:hadPrimarySource'} })
 
@@ -188,6 +190,7 @@ class TafelSlope(Measurement):
 
     value: Optional[float] = Field(default=None, description="""Numeric value of the measurement, in the unit named by unit_label.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:value'} })
     unit_label: Optional[str] = Field(default=None, description="""Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:unitLabel'} })
+    confidence: Optional[float] = Field(default=None, description="""Model's self-reported confidence (0-1) that this measurement was extracted correctly. Optional — legacy/untagged extractions omit it and still validate.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:confidence'} })
     condition: Optional[Condition] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:condition'} })
     evidence: Optional[Evidence] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'prov:hadPrimarySource'} })
 
@@ -202,6 +205,7 @@ class ExchangeCurrentDensity(Measurement):
 
     value: Optional[float] = Field(default=None, description="""Numeric value of the measurement, in the unit named by unit_label.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:value'} })
     unit_label: Optional[str] = Field(default=None, description="""Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:unitLabel'} })
+    confidence: Optional[float] = Field(default=None, description="""Model's self-reported confidence (0-1) that this measurement was extracted correctly. Optional — legacy/untagged extractions omit it and still validate.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:confidence'} })
     condition: Optional[Condition] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:condition'} })
     evidence: Optional[Evidence] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'prov:hadPrimarySource'} })
 
@@ -216,6 +220,7 @@ class ChargeTransferCoefficient(Measurement):
 
     value: Optional[float] = Field(default=None, description="""Numeric value of the measurement, in the unit named by unit_label.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:value'} })
     unit_label: Optional[str] = Field(default=None, description="""Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:unitLabel'} })
+    confidence: Optional[float] = Field(default=None, description="""Model's self-reported confidence (0-1) that this measurement was extracted correctly. Optional — legacy/untagged extractions omit it and still validate.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:confidence'} })
     condition: Optional[Condition] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:condition'} })
     evidence: Optional[Evidence] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'prov:hadPrimarySource'} })
 
@@ -231,6 +236,7 @@ class MassActivity(Measurement):
 
     value: Optional[float] = Field(default=None, description="""Numeric value of the measurement, in the unit named by unit_label.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:value'} })
     unit_label: Optional[str] = Field(default=None, description="""Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:unitLabel'} })
+    confidence: Optional[float] = Field(default=None, description="""Model's self-reported confidence (0-1) that this measurement was extracted correctly. Optional — legacy/untagged extractions omit it and still validate.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:confidence'} })
     condition: Optional[Condition] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:condition'} })
     evidence: Optional[Evidence] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'prov:hadPrimarySource'} })
 
@@ -246,6 +252,7 @@ class TurnoverFrequency(Measurement):
 
     value: Optional[float] = Field(default=None, description="""Numeric value of the measurement, in the unit named by unit_label.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:value'} })
     unit_label: Optional[str] = Field(default=None, description="""Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:unitLabel'} })
+    confidence: Optional[float] = Field(default=None, description="""Model's self-reported confidence (0-1) that this measurement was extracted correctly. Optional — legacy/untagged extractions omit it and still validate.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:confidence'} })
     condition: Optional[Condition] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:condition'} })
     evidence: Optional[Evidence] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'prov:hadPrimarySource'} })
 
@@ -260,6 +267,7 @@ class ECSA(Measurement):
 
     value: Optional[float] = Field(default=None, description="""Numeric value of the measurement, in the unit named by unit_label.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:value'} })
     unit_label: Optional[str] = Field(default=None, description="""Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:unitLabel'} })
+    confidence: Optional[float] = Field(default=None, description="""Model's self-reported confidence (0-1) that this measurement was extracted correctly. Optional — legacy/untagged extractions omit it and still validate.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:confidence'} })
     condition: Optional[Condition] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:condition'} })
     evidence: Optional[Evidence] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'prov:hadPrimarySource'} })
 
@@ -274,6 +282,7 @@ class SpecificActivity(Measurement):
 
     value: Optional[float] = Field(default=None, description="""Numeric value of the measurement, in the unit named by unit_label.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:value'} })
     unit_label: Optional[str] = Field(default=None, description="""Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:unitLabel'} })
+    confidence: Optional[float] = Field(default=None, description="""Model's self-reported confidence (0-1) that this measurement was extracted correctly. Optional — legacy/untagged extractions omit it and still validate.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:confidence'} })
     condition: Optional[Condition] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:condition'} })
     evidence: Optional[Evidence] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'prov:hadPrimarySource'} })
 
@@ -288,6 +297,7 @@ class Stability(Measurement):
 
     value: Optional[float] = Field(default=None, description="""Numeric value of the measurement, in the unit named by unit_label.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:value'} })
     unit_label: Optional[str] = Field(default=None, description="""Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:unitLabel'} })
+    confidence: Optional[float] = Field(default=None, description="""Model's self-reported confidence (0-1) that this measurement was extracted correctly. Optional — legacy/untagged extractions omit it and still validate.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:confidence'} })
     condition: Optional[Condition] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:condition'} })
     evidence: Optional[Evidence] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'prov:hadPrimarySource'} })
 
@@ -302,6 +312,7 @@ class PEMWECellVoltage(Measurement):
 
     value: Optional[float] = Field(default=None, description="""Numeric value of the measurement, in the unit named by unit_label.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:value'} })
     unit_label: Optional[str] = Field(default=None, description="""Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:unitLabel'} })
+    confidence: Optional[float] = Field(default=None, description="""Model's self-reported confidence (0-1) that this measurement was extracted correctly. Optional — legacy/untagged extractions omit it and still validate.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:confidence'} })
     condition: Optional[Condition] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:condition'} })
     evidence: Optional[Evidence] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'prov:hadPrimarySource'} })
 
@@ -316,6 +327,7 @@ class DegradationRate(Measurement):
 
     value: Optional[float] = Field(default=None, description="""Numeric value of the measurement, in the unit named by unit_label.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:value'} })
     unit_label: Optional[str] = Field(default=None, description="""Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:unitLabel'} })
+    confidence: Optional[float] = Field(default=None, description="""Model's self-reported confidence (0-1) that this measurement was extracted correctly. Optional — legacy/untagged extractions omit it and still validate.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:confidence'} })
     condition: Optional[Condition] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:condition'} })
     evidence: Optional[Evidence] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'prov:hadPrimarySource'} })
 

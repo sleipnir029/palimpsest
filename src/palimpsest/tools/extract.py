@@ -155,12 +155,16 @@ def _build_system_prompt(skill_body: str, jsonschema_str: str, norm: str) -> str
         "Return EXACTLY ONE JSON object of the form:\n\n"
         '```\n{"items": [\n'
         '  {"type": "<MeasurementSubclass>", "value": <float>, "unit_label": "<unit>",\n'
-        '   "condition": {...}, "evidence": {"spans": [<id>, ...]}},\n'
+        '   "confidence": <float 0-1>, "condition": {...}, "evidence": {"spans": [<id>, ...]}},\n'
         '  ...\n]}\n```\n\n'
         f"- `type` must be one of: {type_list}. Never emit `type: Measurement` "
         "(it is the abstract base).\n"
         "- `value` (float) + `unit_label` (string, the canonical unit per the "
         "Normalization rules — convert before emitting). `condition` is optional.\n"
+        "- `confidence` (float 0-1, optional): your self-assessed certainty that "
+        "this value/unit is correctly extracted from the cited span(s). Use ~0.9+ "
+        "when the span states it explicitly, lower when inferred or ambiguous. Omit "
+        "if you cannot judge.\n"
         "- `evidence.spans` MUST list the id(s) of the span(s) on THIS page that "
         "state the measurement (the span(s) containing the value). Cite the "
         "smallest set that covers it — usually one id. Do NOT invent ids, and do "
@@ -390,6 +394,30 @@ def _coerce_condition(item: dict) -> None:
         _coerce_floats(el, _ELECTROLYTE_NUMERIC)
 
 
+def _coerce_confidence(item: dict) -> None:
+    """Make ``confidence`` a never-fatal optional annotation.
+
+    Salvage a number from a stringy value ("0.9 (high)" → 0.9), and DROP the key
+    entirely when it isn't a number or falls outside [0,1]. Two reasons: an
+    optional self-assessment must never delete an otherwise-valid measurement (a
+    prose "high" would raise in ``cls(**item)`` and sink the whole item), and a
+    wrong-scale value (e.g. 95 read as a percent) must not silently corrupt the
+    parser×model matrix — better untagged than wrong. Enforced here rather than as
+    a hard schema bound, which would reject the whole instance.
+    """
+    v = item.get("confidence")
+    if v is None:
+        return
+    if isinstance(v, str):
+        m = re.search(r"[-+]?\d*\.?\d+", v)
+        v = float(m.group()) if m else None
+    # bool is an int subclass — not a valid confidence
+    if isinstance(v, (int, float)) and not isinstance(v, bool) and 0.0 <= float(v) <= 1.0:
+        item["confidence"] = float(v)
+    else:
+        item.pop("confidence", None)
+
+
 def _value_digits(value: Any) -> str:
     """Significant digits of a numeric value, for the mis-citation guard."""
     try:
@@ -498,6 +526,7 @@ def _process_items(
             item["value"] = rederive_milli_value(
                 item.get("value"), evidence["source_text"], canonical_unit(type_name))
 
+        _coerce_confidence(item)  # never let an optional confidence sink the item
         _coerce_condition(item)  # salvage stringy numeric condition fields
         try:
             inst = _instantiate(item)

@@ -112,12 +112,17 @@ class RDFStore:
         *,
         run_id: str,
         parse_run_id: str | None = None,
+        extraction_model: str | None = None,
     ) -> str:
         """Insert one Measurement + provenance. Returns the measurement IRI.
 
         Raises ``ValueError`` if ``instance.evidence is None`` — CLAUDE.md
         provenance non-negotiable. Pre-T22 callers should never reach this
         path; T25 wires `validate_instance` ahead of this insert anyway.
+
+        ``extraction_model`` (optional) tags which LLM produced the triple; like
+        ``run_id`` it is not a schema slot, so it lives in the run-provenance
+        named graph (no SHACL impact).
         """
         ev = getattr(instance, "evidence", None)
         if ev is None:
@@ -141,6 +146,11 @@ class RDFStore:
         if instance.unit_label is not None:
             self._add(m_iri, NamedNode(f"{PALIM}unitLabel"),
                       Literal(instance.unit_label))
+        # Per-value confidence (optional Measurement slot; closed SHACL allows it
+        # post-regen). Absent on legacy/untagged extractions — skip when None.
+        if getattr(instance, "confidence", None) is not None:
+            self._add(m_iri, NamedNode(f"{PALIM}confidence"),
+                      Literal(str(instance.confidence), datatype=XSD_FLOAT))
         self._add(m_iri, NamedNode(f"{PROV}hadPrimarySource"), evidence)
 
         # Evidence node (prov:Entity) — the source anchor, mirroring the closed
@@ -183,6 +193,11 @@ class RDFStore:
         if parse_run_id is not None:
             self._add(m_iri, NamedNode(f"{PALIM}parseRunId"),
                       Literal(parse_run_id), run_graph)
+        # Which LLM produced this triple (parser×model matrix). Same named-graph
+        # mechanism as runId — recoverable per measurement via a GRAPH-clause query.
+        if extraction_model is not None:
+            self._add(m_iri, NamedNode(f"{PALIM}extractionModel"),
+                      Literal(extraction_model), run_graph)
 
         # Condition node (C1/T46) — experimental context; dropping it makes the
         # measurement uncomparable ("236 mV" means nothing without "at 10 mA/cm²").

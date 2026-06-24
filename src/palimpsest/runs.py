@@ -35,13 +35,14 @@ CREATE TABLE IF NOT EXISTS extraction_runs (
     n_validated  INTEGER NOT NULL,
     n_inserted   INTEGER NOT NULL,
     errors_json  TEXT,
+    model        TEXT,
     PRIMARY KEY (paper_sha256, run_id)
 );
 """
 
 _COLS = (
     "run_id", "extracted_at", "parser_name", "skill_name",
-    "n_errors", "n_extracted", "n_validated", "n_inserted", "errors_json",
+    "n_errors", "n_extracted", "n_validated", "n_inserted", "errors_json", "model",
 )
 
 
@@ -65,6 +66,10 @@ class ExtractionRunLog:
         cols = {r[1] for r in self.conn.execute("PRAGMA table_info(extraction_runs)")}
         if "errors_json" not in cols:
             self.conn.execute("ALTER TABLE extraction_runs ADD COLUMN errors_json TEXT")
+        # parser×model matrix: tag which LLM produced the run. Same ALTER-backfill
+        # pattern as errors_json — nullable, so pre-matrix rows read NULL.
+        if "model" not in cols:
+            self.conn.execute("ALTER TABLE extraction_runs ADD COLUMN model TEXT")
 
     def record(
         self,
@@ -78,19 +83,21 @@ class ExtractionRunLog:
         n_validated: int,
         n_inserted: int,
         errors_json: str | None = None,
+        model: str | None = None,
     ) -> None:
         # INSERT OR REPLACE: a re-run with the same run_id overwrites in place
         # (matches parser_runs' idempotent re-run semantics). errors_json is the
         # T58 per-item drop reasons (a JSON list); None for callers that only
         # track counts (T57) — kept optional so those callers are unaffected.
+        # model tags the LLM (parser×model matrix); None for pre-matrix callers.
         self.conn.execute(
             "INSERT OR REPLACE INTO extraction_runs "
             "(paper_sha256, run_id, extracted_at, parser_name, skill_name, "
-            " n_errors, n_extracted, n_validated, n_inserted, errors_json) "
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            " n_errors, n_extracted, n_validated, n_inserted, errors_json, model) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             (
                 paper_sha256, run_id, _now(), parser_name, skill_name,
-                n_errors, n_extracted, n_validated, n_inserted, errors_json,
+                n_errors, n_extracted, n_validated, n_inserted, errors_json, model,
             ),
         )
         self.conn.commit()

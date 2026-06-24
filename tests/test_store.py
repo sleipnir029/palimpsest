@@ -20,6 +20,7 @@ from schema.generated.pydantic import (
     Overpotential,
     Paper,
     PEMWECellVoltage,
+    Stability,
 )
 
 from palimpsest.store import PALIM, RDFStore
@@ -219,6 +220,73 @@ def test_run_ids_in_named_graph():
     assert rows == [
         {"m": iri, "rid": "extract-2026-06-08", "prid": "parse-2026-05-31"}
     ]
+
+
+def test_confidence_written_when_set():
+    """Per-value confidence (optional Measurement slot) persists as palim:confidence
+    on the measurement node when the instance carries it."""
+    op = Overpotential(value=236.0, unit_label="mV", confidence=0.92, evidence=_evidence())
+    store = RDFStore()
+    iri = store.insert_extraction(op, run_id="r1")
+    rows = store.sparql(
+        f"PREFIX palim: <{PALIM}> "
+        f"SELECT ?c WHERE {{ <{iri}> palim:confidence ?c . }}"
+    )
+    assert len(rows) == 1
+    assert float(rows[0]["c"]) == 0.92
+
+
+def test_no_confidence_adds_no_confidence_triple():
+    """A measurement without confidence (legacy/untagged) still inserts and adds
+    zero palim:confidence triples — the optional slot is skipped when None."""
+    op = Overpotential(value=236.0, unit_label="mV", evidence=_evidence())
+    store = RDFStore()
+    iri = store.insert_extraction(op, run_id="r1")
+    rows = store.sparql(
+        f"PREFIX palim: <{PALIM}> SELECT ?c WHERE {{ <{iri}> palim:confidence ?c . }}"
+    )
+    assert rows == []
+
+
+def test_extraction_model_in_named_graph():
+    """The extraction_model tag lands in the per-run named graph keyed to the
+    measurement IRI (like runId) — out of the SHACL-validated data graph."""
+    store = RDFStore()
+    iri = store.insert_extraction(
+        _overpotential(), run_id="r1", extraction_model="gemini-3.1-flash-lite (openrouter)"
+    )
+    rows = store.sparql(
+        f"PREFIX palim: <{PALIM}> "
+        "SELECT ?m ?model WHERE { GRAPH ?g { ?m palim:extractionModel ?model . } }"
+    )
+    assert rows == [{"m": iri, "model": "gemini-3.1-flash-lite (openrouter)"}]
+
+
+def test_no_extraction_model_adds_no_tag():
+    """Omitting extraction_model (legacy/pipeline default) writes no tag triple."""
+    store = RDFStore()
+    store.insert_extraction(_overpotential(), run_id="r1")
+    rows = store.sparql(
+        f"PREFIX palim: <{PALIM}> "
+        "SELECT ?model WHERE { GRAPH ?g { ?m palim:extractionModel ?model . } }"
+    )
+    assert rows == []
+
+
+@pytest.mark.parametrize("cls, unit", [
+    (Overpotential, "mV"),
+    (Stability, "h"),
+    (PEMWECellVoltage, "V"),
+])
+def test_confidence_data_graph_conforms_to_shacl(cls, unit):
+    """C4: confidence must pass the closed SHACL shape on EVERY Measurement
+    subclass, not just the base — the closure is per-subclass-shape, so an
+    Overpotential-only test would miss a subclass whose shape lacks confidence."""
+    m = cls(value=1.0, unit_label=unit, confidence=0.88, evidence=_evidence())
+    store = RDFStore()
+    store.insert_extraction(m, run_id="r1")
+    conforms, report = _conforms(store)
+    assert conforms, report
 
 
 def test_rocksdb_path_persists(tmp_path):

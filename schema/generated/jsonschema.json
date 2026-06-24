@@ -52,6 +52,13 @@
                         }
                     ]
                 },
+                "confidence": {
+                    "description": "Model's self-reported confidence (0-1) that this measurement was extracted correctly. Optional \u2014 legacy/untagged extractions omit it and still validate.",
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                },
                 "evidence": {
                     "anyOf": [
                         {
@@ -170,6 +177,13 @@
                         }
                     ]
                 },
+                "confidence": {
+                    "description": "Model's self-reported confidence (0-1) that this measurement was extracted correctly. Optional \u2014 legacy/untagged extractions omit it and still validate.",
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                },
                 "evidence": {
                     "anyOf": [
                         {
@@ -210,6 +224,13 @@
                         {
                             "type": "null"
                         }
+                    ]
+                },
+                "confidence": {
+                    "description": "Model's self-reported confidence (0-1) that this measurement was extracted correctly. Optional \u2014 legacy/untagged extractions omit it and still validate.",
+                    "type": [
+                        "number",
+                        "null"
                     ]
                 },
                 "evidence": {
@@ -338,6 +359,13 @@
                         }
                     ]
                 },
+                "confidence": {
+                    "description": "Model's self-reported confidence (0-1) that this measurement was extracted correctly. Optional \u2014 legacy/untagged extractions omit it and still validate.",
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                },
                 "evidence": {
                     "anyOf": [
                         {
@@ -390,6 +418,13 @@
                         }
                     ]
                 },
+                "confidence": {
+                    "description": "Model's self-reported confidence (0-1) that this measurement was extracted correctly. Optional \u2014 legacy/untagged extractions omit it and still validate.",
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                },
                 "evidence": {
                     "anyOf": [
                         {
@@ -430,6 +465,13 @@
                         {
                             "type": "null"
                         }
+                    ]
+                },
+                "confidence": {
+                    "description": "Model's self-reported confidence (0-1) that this measurement was extracted correctly. Optional \u2014 legacy/untagged extractions omit it and still validate.",
+                    "type": [
+                        "number",
+                        "null"
                     ]
                 },
                 "evidence": {
@@ -485,6 +527,13 @@
                         }
                     ]
                 },
+                "confidence": {
+                    "description": "Model's self-reported confidence (0-1) that this measurement was extracted correctly. Optional \u2014 legacy/untagged extractions omit it and still validate.",
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                },
                 "evidence": {
                     "anyOf": [
                         {
@@ -531,6 +580,13 @@
                         {
                             "type": "null"
                         }
+                    ]
+                },
+                "confidence": {
+                    "description": "Model's self-reported confidence (0-1) that this measurement was extracted correctly. Optional \u2014 legacy/untagged extractions omit it and still validate.",
+                    "type": [
+                        "number",
+                        "null"
                     ]
                 },
                 "evidence": {
@@ -623,6 +679,13 @@
                         }
                     ]
                 },
+                "confidence": {
+                    "description": "Model's self-reported confidence (0-1) that this measurement was extracted correctly. Optional \u2014 legacy/untagged extractions omit it and still validate.",
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                },
                 "evidence": {
                     "anyOf": [
                         {
@@ -663,6 +726,13 @@
                         {
                             "type": "null"
                         }
+                    ]
+                },
+                "confidence": {
+                    "description": "Model's self-reported confidence (0-1) that this measurement was extracted correctly. Optional \u2014 legacy/untagged extractions omit it and still validate.",
+                    "type": [
+                        "number",
+                        "null"
                     ]
                 },
                 "evidence": {
@@ -707,6 +777,13 @@
                         }
                     ]
                 },
+                "confidence": {
+                    "description": "Model's self-reported confidence (0-1) that this measurement was extracted correctly. Optional \u2014 legacy/untagged extractions omit it and still validate.",
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                },
                 "evidence": {
                     "anyOf": [
                         {
@@ -747,6 +824,13 @@
                         {
                             "type": "null"
                         }
+                    ]
+                },
+                "confidence": {
+                    "description": "Model's self-reported confidence (0-1) that this measurement was extracted correctly. Optional \u2014 legacy/untagged extractions omit it and still validate.",
+                    "type": [
+                        "number",
+                        "null"
                     ]
                 },
                 "evidence": {

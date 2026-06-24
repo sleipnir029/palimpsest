@@ -51,6 +51,7 @@ classes:
     slots:
       - value
       - unit_label
+      - confidence
       - condition
       - evidence
 
@@ -261,6 +262,10 @@ slots:
     range: string
     slot_uri: palimpsest:unitLabel
     description: Human-readable unit (e.g. "mV", "mA/cm2"); QUDT IRI on the typed class.
+  confidence:
+    range: float
+    slot_uri: palimpsest:confidence
+    description: Model's self-reported confidence (0-1) that this measurement was extracted correctly. Optional — legacy/untagged extractions omit it and still validate.
 
   # --- OER metric slots (Appendix E rows 651-664) ---
   # F2 (2026-06-08): overpotential_at_10mAcm2, activation_overpotential,
