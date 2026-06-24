@@ -1,0 +1,114 @@
+id: https://w3id.org/palimpsest/exploratory
+name: palimpsest-exploratory
+title: palimpsest exploratory schema (proposed vocabulary, not in the closed main schema)
+description: >-
+  Exploratory LinkML layer for vocabulary that is NOT part of the closed,
+  SHACL-validated main schema (schema/palimpsest.yaml). Per CLAUDE.md, new slots
+  and classes are proposed here first and never silently added to the main schema.
+
+  WS1 correction loop (T84/T74/T35-adjacent). A Correction is an append-only,
+  *superseding* record of a human or agent edit to a previously extracted
+  Measurement. It is written into a dedicated corrections named graph
+  (palimpsest:corrections/<run_id>) by src/palimpsest/corrections.py — it never
+  mutates or deletes the original measurement, so the closed Measurement/Evidence
+  shapes are untouched and the data view still returns the original value. The
+  store writes these IRIs directly (it does not validate corrections through
+  SHACL); this file is the source-of-record for the vocabulary, not a runtime
+  dependency. Accumulated corrections are labeled extractor errors: queryable by
+  SPARQL to score the extractor and, on user request, to guide a re-extraction.
+license: MIT
+version: 0.1.0
+
+prefixes:
+  linkml:     https://w3id.org/linkml/
+  palimpsest: https://w3id.org/palimpsest/
+  prov:       http://www.w3.org/ns/prov#
+  xsd:        http://www.w3.org/2001/XMLSchema#
+
+default_prefix: palimpsest
+default_range: string
+
+imports:
+  - linkml:types
+
+classes:
+
+  Correction:
+    class_uri: palimpsest:Correction
+    description: >-
+      An append-only, superseding correction to a previously extracted
+      Measurement. Links to the original via prov:wasRevisionOf (the original is
+      preserved). Carries the prior value/unit for audit, the replacement (or a
+      flagged-wrong marker), the author (human or agent), a free-text comment, and
+      a timestamp. Lives only in a corrections named graph.
+    slots:
+      - was_revision_of
+      - paper
+      - correction_author
+      - correction_comment
+      - correction_run_id
+      - generated_at_time
+      - prior_value
+      - prior_unit
+      - corrected_value
+      - corrected_unit
+      - flagged_wrong
+
+slots:
+
+  was_revision_of:
+    slot_uri: prov:wasRevisionOf
+    description: The original Measurement IRI this correction supersedes.
+    range: uriorcurie
+    required: true
+
+  paper:
+    slot_uri: palimpsest:paper
+    description: >-
+      Paper IRI the corrected measurement belongs to (denormalized onto the
+      Correction so per-paper feedback queries need no Evidence join).
+    range: uriorcurie
+
+  correction_author:
+    slot_uri: palimpsest:correctionAuthor
+    description: Who made the correction — "human" (viewer) or "palimpsest-agent" (chat tool).
+    required: true
+
+  correction_comment:
+    slot_uri: palimpsest:correctionComment
+    description: Free-text reason / what is correct. Becomes the git commit title + body.
+    required: true
+
+  correction_run_id:
+    slot_uri: palimpsest:correctionRunId
+    description: Identifier of the correction run (also names the corrections named graph).
+    required: true
+
+  generated_at_time:
+    slot_uri: prov:generatedAtTime
+    description: When the correction was recorded (ISO-8601, UTC).
+    range: datetime
+    required: true
+
+  prior_value:
+    slot_uri: palimpsest:priorValue
+    description: The measurement's value at correction time, captured for audit.
+    range: float
+
+  prior_unit:
+    slot_uri: palimpsest:priorUnit
+    description: The measurement's unit label at correction time.
+
+  corrected_value:
+    slot_uri: palimpsest:correctedValue
+    description: The replacement numeric value (absent when only flagged wrong).
+    range: float
+
+  corrected_unit:
+    slot_uri: palimpsest:correctedUnit
+    description: The replacement unit label.
+
+  flagged_wrong:
+    slot_uri: palimpsest:flaggedWrong
+    description: True when the extraction is marked wrong with no replacement value.
+    range: boolean

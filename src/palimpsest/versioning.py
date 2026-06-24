@@ -83,12 +83,16 @@ def _has_changes(repo: Repo) -> bool:
     return bool(st.untracked) or bool(st.unstaged) or any(st.staged.values())
 
 
-def checkpoint(message: str) -> str | None:
+def checkpoint(message: str, body: str | None = None) -> str | None:
     """Commit all workspace changes (respecting .gitignore); None if nothing changed.
 
     Per-action granularity: called after each tool runs — a no-op for read-only
     tools (nothing staged) and a commit for mutating ones (incl. bash edits).
     ``porcelain.add`` with no paths stages adds, modifications, AND deletions.
+
+    ``body`` (optional) appends a git-style commit body (``title\\n\\nbody``) — used
+    by corrections to carry the user's full comment under a scannable title. Callers
+    that pass only ``message`` keep the single-line behaviour unchanged.
     """
     root = workspace_root()
     if not (root / ".git").exists():
@@ -97,8 +101,9 @@ def checkpoint(message: str) -> str | None:
     if not _has_changes(repo):
         return None
     porcelain.add(repo)  # git add -A, respecting .gitignore
+    full = message if not body else f"{message}\n\n{body}"
     sha = porcelain.commit(
-        repo, message=message.encode("utf-8"), author=_AUTHOR, committer=_AUTHOR
+        repo, message=full.encode("utf-8"), author=_AUTHOR, committer=_AUTHOR
     )
     return sha.decode() if isinstance(sha, bytes) else sha
 

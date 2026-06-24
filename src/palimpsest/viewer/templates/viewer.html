@@ -22,6 +22,18 @@
     .bbox-overlay { position: absolute; pointer-events: none;
                     background: rgba(255, 235, 59, .4);
                     border: 1px solid rgba(245, 200, 0, .9); }
+    /* WS1 correction UI */
+    .value.corrected .label { text-decoration: line-through; opacity: .6; }
+    .value .corr-note { display: block; color: #b8860b; font-size: .8rem; cursor: default; }
+    .correction-form { margin: .4rem 0 .5rem; padding: .5rem; background: #f7f7f7;
+                       border: 1px solid #ddd; border-radius: 4px;
+                       display: grid; gap: .35rem; cursor: default; }
+    .correction-form input { font: inherit; }
+    .correction-form .cf-value { width: 8rem; }
+    .correction-form .cf-unit { width: 6rem; }
+    .correction-form textarea { width: 100%; min-height: 2.5rem; font: inherit; }
+    .correction-form button { font: inherit; }
+    .correction-form .cf-msg { color: #c0392b; font-size: .8rem; }
   </style>
 </head>
 <body>
@@ -78,19 +90,92 @@
 
     // Data pane: /data is JSON (T30, do-not-touch), so fetch + render rows here
     // rather than HTMX-swapping. Each row carries page/bbox/parser for the hover
-    // highlight; data-parser keeps the deferred per-parser toggle additive.
+    // highlight + the measurement id (data-id) for corrections (WS1). Click a row
+    // to open an inline correction form; the latest correction (if any) is shown.
     (async () => {
-      const { triples } = await (await fetch("/paper/{{ sha }}/data")).json();
+      const sha = "{{ sha }}";
       const pane = document.getElementById("data-pane");
+      const { triples } = await (await fetch(`/paper/${sha}/data`)).json();
+      const { corrections } = await (await fetch(`/paper/${sha}/corrections`)).json();
+      const latest = {};  // measurement id -> newest correction (query is oldest-first)
+      for (const c of corrections) latest[c.measurement_id] = c;
+
       for (const t of triples) {
         const row = document.createElement("div");
         row.className = "value";
+        row.dataset.id = t.id;
         row.dataset.page = t.page;
         row.dataset.bbox = JSON.stringify(t.bbox);
         row.dataset.parser = t.parser_name;
-        row.textContent = `${t.slot_path}: ${t.value}${t.unit ? " " + t.unit : ""}`;
+
+        const label = document.createElement("span");
+        label.className = "label";
+        label.textContent = `${t.slot_path}: ${t.value}${t.unit ? " " + t.unit : ""}`;
+        row.appendChild(label);
+
         row.onmouseover = () => highlightBox(row);
+        row.onclick = (e) => { if (!e.target.closest(".correction-form, .corr-note")) toggleForm(row, t); };
+        if (latest[t.id]) markCorrected(row, latest[t.id]);
         pane.appendChild(row);
+      }
+
+      function markCorrected(row, c) {
+        row.classList.add("corrected");
+        let note = row.querySelector(".corr-note");
+        if (!note) { note = document.createElement("small"); note.className = "corr-note"; row.appendChild(note); }
+        const to = c.flagged_wrong
+          ? "flagged wrong"
+          : `→ ${c.corrected_value ?? ""}${c.corrected_unit ? " " + c.corrected_unit : ""}`;
+        note.textContent = `corrected by ${c.author} ${to} — ${c.comment}`;
+      }
+
+      function toggleForm(row, t) {
+        const open = row.querySelector(".correction-form");
+        if (open) { open.remove(); return; }
+        const form = document.createElement("div");
+        form.className = "correction-form";
+        const v = t.value ?? "", u = t.unit ?? "";
+        form.innerHTML = `
+          <label>value <input class="cf-value" type="number" step="any" value="${v}"></label>
+          <label>unit <input class="cf-unit" value="${u}"></label>
+          <label><input class="cf-flag" type="checkbox"> flag wrong (no replacement)</label>
+          <textarea class="cf-comment" placeholder="why is this wrong / what is correct (required)"></textarea>
+          <div><button class="cf-save">save correction</button>
+               <button class="cf-cancel">cancel</button>
+               <span class="cf-msg"></span></div>`;
+        row.appendChild(form);
+        form.querySelector(".cf-cancel").onclick = () => form.remove();
+        form.querySelector(".cf-save").onclick = () => saveCorrection(row, t, form);
+      }
+
+      async function saveCorrection(row, t, form) {
+        const msg = form.querySelector(".cf-msg");
+        const comment = form.querySelector(".cf-comment").value.trim();
+        if (!comment) { msg.textContent = "comment required"; return; }
+        const flagged = form.querySelector(".cf-flag").checked;
+        const payload = { measurement_iri: t.id, comment, flagged_wrong: flagged };
+        if (!flagged) {
+          const vRaw = form.querySelector(".cf-value").value.trim();
+          const uRaw = form.querySelector(".cf-unit").value.trim();
+          if (vRaw !== "" && Number(vRaw) !== t.value) payload.new_value = Number(vRaw);
+          if (uRaw !== "" && uRaw !== (t.unit ?? "")) payload.new_unit = uRaw;
+          if (payload.new_value === undefined && payload.new_unit === undefined) {
+            msg.textContent = "change a value/unit or check flag wrong"; return;
+          }
+        }
+        msg.textContent = "saving…";
+        const res = await fetch(`/paper/${sha}/correct`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) { msg.textContent = "error: " + await res.text(); return; }
+        form.remove();
+        markCorrected(row, {
+          author: "human", comment,
+          corrected_value: payload.new_value ?? null, corrected_unit: payload.new_unit ?? null,
+          flagged_wrong: flagged,
+        });
       }
     })();
   </script>
