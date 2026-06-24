@@ -7,6 +7,13 @@ PDF location is content-addressed: the `papers` table stores an unreliable
 `filename` (fixture rows say 'sample.pdf'), so we resolve a sha256 -> path index
 by hashing every `papers/*.pdf` with T07's `read_paper`. The bytes served for
 `{sha}` therefore hash to exactly `{sha}` — provenance holds by construction.
+
+WS1: the viewer is now read-MOSTLY. It has exactly one non-GET route,
+`POST /paper/{sha}/correct`, which appends an *append-only superseding* correction
+via the shared `corrections.correct_measurement` primitive (reusing this process's
+already-open, single-writer RocksDB store). The original triple is never mutated;
+`GET /paper/{sha}/corrections` lists the recorded corrections (= labeled extractor
+errors) for the data pane.
 """
 
 from __future__ import annotations
@@ -22,9 +29,11 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from pydantic import BaseModel
 
 from schema.generated import pydantic as _schema  # PEP 420 namespace pkg
 
+from ..corrections import CorrectionError, correct_measurement
 from ..cost import canonical_db
 from ..store import PALIM, RDFStore, _expand
 from ..tools.read_paper import read_paper
@@ -221,3 +230,91 @@ def paper_data(sha: str) -> dict:
         for r in rows
     ]
     return {"sha": sha, "triples": triples}
+
+
+# ------------------------------------------------------------- corrections (WS1)
+
+# Corrections for a paper, oldest-first (the data pane keeps the newest per
+# measurement). Lives in the corrections named graph, so a GRAPH clause is needed.
+_CORRECTIONS_QUERY = """\
+PREFIX palim: <https://w3id.org/palimpsest/>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+SELECT ?c ?m ?author ?comment ?prior ?value ?unit ?flagged ?at WHERE {{
+  GRAPH ?g {{
+    ?c prov:wasRevisionOf ?m ;
+       palim:paper <{paper}> ;
+       palim:correctionAuthor ?author ;
+       palim:correctionComment ?comment ;
+       prov:generatedAtTime ?at .
+    OPTIONAL {{ ?c palim:priorValue ?prior }}
+    OPTIONAL {{ ?c palim:correctedValue ?value }}
+    OPTIONAL {{ ?c palim:correctedUnit ?unit }}
+    OPTIONAL {{ ?c palim:flaggedWrong ?flagged }}
+  }}
+}}
+ORDER BY ?at"""
+
+
+class CorrectionIn(BaseModel):
+    measurement_iri: str
+    comment: str
+    new_value: float | None = None
+    new_unit: str | None = None
+    flagged_wrong: bool = False
+
+
+@app.get("/paper/{sha}/corrections")
+def paper_corrections(sha: str) -> dict:
+    """Corrections recorded for `sha` (= labeled extractor errors), oldest-first JSON.
+
+    Read-only over the corrections named graph; non-hex sha yields an empty list.
+    """
+    if not _SHA_RE.match(sha):
+        return {"sha": sha, "corrections": []}
+    rows = _graph_store().sparql(_CORRECTIONS_QUERY.format(paper=f"{PALIM}paper/{sha}"))
+    corrections = [
+        {
+            "id": r["c"],
+            "measurement_id": r["m"],
+            "author": r["author"],
+            "comment": r["comment"],
+            "prior_value": _num(r["prior"]),
+            "corrected_value": _num(r["value"]),
+            "corrected_unit": r["unit"],
+            "flagged_wrong": r["flagged"] == "true",
+            "at": r["at"],
+        }
+        for r in rows
+    ]
+    return {"sha": sha, "corrections": corrections}
+
+
+@app.post("/paper/{sha}/correct")
+def post_correct(sha: str, body: CorrectionIn) -> dict:
+    """Record a human correction to a measurement — the viewer's one write path.
+
+    Appends a superseding correction via the shared primitive, reusing this
+    process's already-open store (RocksDB is single-writer; a second handle would
+    deadlock). 400 on a non-hex sha; 422 on a refused correction (empty / no
+    Evidence anchor). The original triple is never touched.
+    """
+    if not _SHA_RE.match(sha):
+        raise HTTPException(status_code=400, detail="non-hex sha")
+    try:
+        r = correct_measurement(
+            _graph_store(),
+            measurement_iri=body.measurement_iri,
+            comment=body.comment,
+            author="human",
+            new_value=body.new_value,
+            new_unit=body.new_unit,
+            flagged_wrong=body.flagged_wrong,
+        )
+    except CorrectionError as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+    return {
+        "correction_iri": r.correction_iri,
+        "prior_value": r.prior_value,
+        "prior_unit": r.prior_unit,
+        "commit": r.commit_sha,
+    }
