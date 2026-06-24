@@ -374,6 +374,59 @@ def test_stringy_condition_coerced(tmp_path):
     assert valid[0].condition.current_density == 10.0
 
 
+def _extract_one_confidence(tmp_path, sha, conf):
+    """Extract one Overpotential carrying `conf` as confidence; return the instance."""
+    cache = _seed_cache(tmp_path, sha)
+    item = {"type": "Overpotential", "value": 236.0, "unit_label": "mV", "evidence": _ev(0)}
+    item["confidence"] = conf
+    response = {"items": [item]}
+    valid, errors = extract(paper_sha=sha, provider=_StubProvider(json.dumps(response)), cache=cache)
+    assert errors == [] and len(valid) == 1, f"measurement dropped for confidence={conf!r}"
+    return valid[0]
+
+
+def test_confidence_float_kept(tmp_path):
+    assert _extract_one_confidence(tmp_path, "a" * 64, 0.9).confidence == 0.9
+
+
+def test_confidence_zero_kept(tmp_path):
+    """0.0 is a valid confidence (falsy but in-range) — must still round-trip."""
+    assert _extract_one_confidence(tmp_path, "b" * 64, 0.0).confidence == 0.0
+
+
+def test_confidence_prose_salvaged(tmp_path):
+    """A stringy "0.9 (high)" salvages to 0.9 rather than sinking the measurement."""
+    assert _extract_one_confidence(tmp_path, "c" * 64, "0.9 (high)").confidence == 0.9
+
+
+def test_confidence_nonnumeric_dropped_not_fatal(tmp_path):
+    """Prose with no number ("high") drops confidence but keeps the measurement
+    (an optional annotation must never delete a valid value — NB-1)."""
+    assert _extract_one_confidence(tmp_path, "d" * 64, "high").confidence is None
+
+
+def test_confidence_out_of_range_dropped_not_fatal(tmp_path):
+    """A wrong-scale 95 (percent?) is dropped, not stored — better untagged than
+    corrupting the matrix; measurement survives (NB-2)."""
+    assert _extract_one_confidence(tmp_path, "e" * 64, 95).confidence is None
+    assert _extract_one_confidence(tmp_path, "f" * 64, -1.0).confidence is None
+
+
+def test_confidence_bool_dropped(tmp_path):
+    """bool is an int subclass — must NOT be read as confidence 1.0/0.0."""
+    assert _extract_one_confidence(tmp_path, "1" * 64, True).confidence is None
+
+
+def test_confidence_percent_string_dropped(tmp_path):
+    """"90%" → regex yields 90 (out of range) → dropped; must NOT mis-salvage to 0.90."""
+    assert _extract_one_confidence(tmp_path, "2" * 64, "90%").confidence is None
+
+
+def test_confidence_upper_bound_kept(tmp_path):
+    """1.0 is in-range and must be kept (boundary)."""
+    assert _extract_one_confidence(tmp_path, "3" * 64, 1.0).confidence == 1.0
+
+
 def test_dedup_keeps_distinct_same_value():
     """Two catalysts reporting the same value (different source spans) are kept;
     only an identical-source duplicate collapses."""

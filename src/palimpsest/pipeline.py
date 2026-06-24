@@ -41,6 +41,7 @@ def run_paper(
     provider=None,
     run_id: str | None = None,
     run_log: ExtractionRunLog | None = None,
+    extraction_model: str | None = None,
 ) -> dict:
     """Run one paper end-to-end and return a summary of counts.
 
@@ -103,7 +104,7 @@ def run_paper(
     n_inserted = 0
     for inst in validated:
         try:
-            store.insert_extraction(inst, run_id=run_id)
+            store.insert_extraction(inst, run_id=run_id, extraction_model=extraction_model)
             n_inserted += 1
         except ValueError as e:
             log.warning("insert refused: %s", e)
@@ -119,7 +120,7 @@ def run_paper(
         parser_name=parser_name, skill_name=skill_name,
         n_errors=len(_errors), n_extracted=len(valid),
         n_validated=len(validated), n_inserted=n_inserted,
-        errors_json=json.dumps(drops),
+        errors_json=json.dumps(drops), model=extraction_model,
     )
 
     return {

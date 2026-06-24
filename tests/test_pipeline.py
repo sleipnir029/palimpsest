@@ -147,7 +147,7 @@ def test_run_paper_persists_drop_reasons(monkeypatch):
     ))
 
     class _FakeStore:
-        def insert_extraction(self, inst, *, run_id, parse_run_id=None):
+        def insert_extraction(self, inst, *, run_id, parse_run_id=None, extraction_model=None):
             if inst is c:  # insert refusal on the last survivor
                 raise ValueError("refuse to insert without Evidence")
             return "iri"
