@@ -294,6 +294,70 @@ def test_clear_log_resets_stream_state(tmp_path):
     asyncio.run(_drive())
 
 
+def test_streaming_render_is_throttled(tmp_path, monkeypatch):
+    """A1 perf: Markdown.update re-parses the whole buffer, so it must NOT fire per
+    delta (that O(n²) churn froze the UI). The buffer still accumulates every delta and
+    the seal flush renders the tail — nothing is dropped."""
+    from palimpsest.tui import app as appmod
+
+    calls = {"n": 0}
+    orig_update = appmod.Markdown.update
+
+    def _counting_update(self, *a, **k):
+        calls["n"] += 1
+        return orig_update(self, *a, **k)
+
+    monkeypatch.setattr(appmod.Markdown, "update", _counting_update)
+
+    meter = CostMeter(str(tmp_path / "t.db"))
+    app = PalimpsestApp(agent=_StubAgent(meter), cost_meter=meter)
+    deltas = [f"tok{i} " for i in range(500)]
+
+    async def _drive() -> None:
+        async with app.run_test():  # mounts #log
+            for d in deltas:
+                app._stream_append(d)
+            assert app._stream_widget is not None
+            app._seal_stream()
+
+    asyncio.run(_drive())
+
+    # 500 deltas coalesce to a small handful of renders (first + ~10 Hz + final flush),
+    # never one-per-delta.
+    assert calls["n"] < 50, f"expected throttled renders, got {calls['n']}"
+    agent_lines = [t for role, t in app.transcript if role == "agent"]
+    assert agent_lines == ["".join(deltas)]  # full text preserved, nothing lost
+
+
+def test_tool_pair_renders_one_collapsible(tmp_path):
+    """C: a tool_call + its tool_result render as exactly ONE Collapsible whose title
+    carries the summary and whose body carries the full content (expand on demand)."""
+    from textual.widgets import Collapsible
+
+    meter = CostMeter(str(tmp_path / "t.db"))
+    app = PalimpsestApp(agent=_StubAgent(meter), cost_meter=meter)
+
+    async def _drive() -> None:
+        async with app.run_test() as pilot:
+            app._show_event(
+                {"type": "tool_call", "name": "read_paper", "input": {"path": "papers/x.pdf"}}
+            )
+            app._show_event(
+                {"type": "tool_result", "name": "read_paper", "content": "l1\nl2\nl3"}
+            )
+            await pilot.pause()  # let the collapsible's children compose/mount
+            cols = list(app.query(Collapsible))
+            assert len(cols) == 1  # one widget for the pair, not two loose lines
+            assert app._pending_tool is None  # call/result paired and cleared
+            title = str(cols[0].title)
+            assert "read_paper" in title and "3 lines" in title
+            assert cols[0].collapsed is True  # counts-at-a-glance, detail on expand
+            bodies = [str(s.render()) for s in cols[0].query(Static)]
+            assert any("l2" in b for b in bodies)  # full content available in the body
+
+    asyncio.run(_drive())
+
+
 def test_ctrl_j_inserts_newline_without_submitting(tmp_path):
     """C1: Ctrl+J inserts a newline in the composer; Enter (not pressed here) submits."""
     meter = CostMeter(str(tmp_path / "t.db"))
