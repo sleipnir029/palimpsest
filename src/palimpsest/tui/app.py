@@ -20,6 +20,7 @@ DEVIATIONS.md. View updates always hop to the main thread via ``call_from_thread
 
 from __future__ import annotations
 
+import json
 import threading
 import time
 
@@ -122,6 +123,7 @@ class PalimpsestApp(App):
     BINDINGS = [
         ("ctrl+q", "quit", "Quit"),
         ("ctrl+l", "clear_log", "Clear log"),
+        ("ctrl+y", "copy_reply", "Copy reply"),
         ("escape", "cancel_turn", "Stop"),
         # Slash-command autocomplete: these act only while the menu is open (no-ops
         # otherwise), so the single-line input loses nothing by binding them. tab is
@@ -153,8 +155,12 @@ class PalimpsestApp(App):
         self._stream_last_render = 0.0
         # The tool trace renders one collapsible per call: mounted (title "… running…")
         # when the call fires, its title+body filled when the result arrives. Holds the
-        # in-flight (collapsible, body, name, args) between those two events; None = idle.
-        self._pending_tool: tuple[Collapsible, Static, str, str] | None = None
+        # in-flight (collapsible, body, name, args, start_monotonic) between those two
+        # events so the result can show elapsed time; None = idle.
+        self._pending_tool: tuple | None = None
+        # Last paper SHA seen in an extract_paper result — lets /view open the provenance
+        # viewer (FastAPI, `pixi run viewer`) at /paper/<sha> without re-deriving it.
+        self._last_paper_sha: str | None = None
         # Input history (A5): submitted lines, recalled with up/down when the
         # autocomplete menu is closed. _history_idx is the cursor (None = not recalling).
         self._history: list[str] = []
@@ -230,7 +236,19 @@ class PalimpsestApp(App):
         self.query_one("#topbar", Static).update(f"palimpsest · {self.theme}")
 
     # status footer ----------------------------------------------------------
-    def _status_text(self) -> str:
+    def _budget_bar(self, spent: float, cap: float, theme, width: int = 16) -> Text:
+        """A colored spend gauge against the €-cap: calm sepia under €10, amber through
+        the mid ladder, burnt red past €30 — the €10/20/30/40 warn ladder made visible
+        (it lived only in logic before)."""
+        frac = min(1.0, spent / cap) if cap else 0.0
+        filled = int(round(frac * width))
+        color = theme.secondary if frac < 0.2 else (theme.warning if frac < 0.6 else theme.error)
+        bar = Text()
+        bar.append("█" * filled, style=color)
+        bar.append("░" * (width - filled), style=f"dim {theme.secondary}")
+        return bar
+
+    def _status_text(self) -> Text:
         from .. import config
 
         db = self.cost_meter.db_path
@@ -238,14 +256,27 @@ class PalimpsestApp(App):
         extr = config.get_setting("extraction_model", "deepseek", db_path=db)
         parser = config.get_setting("parser_name", "mineru", db_path=db)
         spent, cap = self.cost_meter.total_eur(), self.cost_meter.cap
-        # ctx: prompt size sent on the last turn = the live context the agent carries
-        # (A3). Reuses agent.last_usage — no tokenizer dependency. Hidden until the
-        # first turn records a usage block.
-        toks = (getattr(self.agent, "last_usage", None) or {}).get("input_tokens", 0)
-        ctx = f"    ctx ~{toks / 1000:.1f}k" if toks else ""
-        return f"{orch} · extract:{extr} · parse:{parser}    €{spent:.2f} / €{cap:.0f}{ctx}    /help"
+        theme = THEMES.get(self.theme, THEMES[DEFAULT_THEME])
 
-    def _set_status(self, text: str) -> None:
+        out = Text(no_wrap=True, overflow="ellipsis")
+        # line 1 — spend gauge + issues badge + live context size
+        out.append(f"€{spent:.2f} ", style=theme.foreground)
+        out.append_text(self._budget_bar(spent, cap, theme))
+        out.append(f" €{cap:.0f}", style=theme.secondary)
+        n = len(getattr(self.monitor, "issues", []))
+        if n:
+            out.append(f"    ⚠ {n} issue{'' if n == 1 else 's'}", style=theme.error)
+        # ctx: last-turn prompt size = the live context the agent carries (A3). Reuses
+        # agent.last_usage, no tokenizer. Hidden until the first turn records usage.
+        toks = (getattr(self.agent, "last_usage", None) or {}).get("input_tokens", 0)
+        if toks:
+            out.append(f"    ctx ~{toks / 1000:.1f}k", style=theme.secondary)
+        # line 2 — the three model roles + a quiet command/keybind hint
+        out.append(f"\n{orch} · extract:{extr} · parse:{parser}", style=theme.secondary)
+        out.append("      /help · ^y copy", style=f"dim {theme.secondary}")
+        return out
+
+    def _set_status(self, text) -> None:
         self.query_one("#status", Static).update(text)
 
     # slash autocomplete -----------------------------------------------------
@@ -475,7 +506,7 @@ class PalimpsestApp(App):
             args_disp = args if len(args) <= 60 else args[:60] + "…"
             body = Static("")
             col = Collapsible(body, title=f"{name}({args_disp}) — running…", collapsed=True, classes="trace")
-            self._pending_tool = (col, body, name, args_disp)
+            self._pending_tool = (col, body, name, args_disp, time.monotonic())
             self._emit("trace", f"→ {name}({args})", widget=col)
             return
 
@@ -497,10 +528,24 @@ class PalimpsestApp(App):
             summary = "error" if is_error else (f"{nlines} lines" if nlines else "ok")
             body_render = Text(snippet, style="red") if is_error else snippet
 
+        # A: extract_paper is the headline tool — pull its real funnel (N inserted) from
+        # the JSON result and stash the paper SHA so /view can open the provenance viewer.
+        # raw_decode tolerates the trailing drop-nudge text appended after the JSON.
+        if name == "extract_paper" and not is_error:
+            try:
+                obj, _ = json.JSONDecoder().raw_decode(content)
+                if obj.get("paper_sha"):
+                    self._last_paper_sha = obj["paper_sha"]
+                if obj.get("n_inserted") is not None:
+                    summary = f"{obj['n_inserted']} inserted"
+            except Exception:  # noqa: BLE001 — a non-JSON result just keeps the line count
+                pass
+
         cls = "trace-error" if is_error else "trace"
         if self._pending_tool is not None:  # fill the collapsible from the matching call
-            col, body, cname, cargs = self._pending_tool
-            col.title = f"{cname}({cargs}) — {summary}"
+            col, body, cname, cargs, start = self._pending_tool
+            elapsed = time.monotonic() - start
+            col.title = f"{cname}({cargs}) — {summary} · {elapsed:.1f}s"
             if is_error:
                 col.add_class("trace-error")
             body.update(body_render)
@@ -566,6 +611,17 @@ class PalimpsestApp(App):
         self._stream_widget = None
         self._stream_buf = ""
         self._pending_tool = None  # the removed children include any open tool collapsible
+
+    def action_copy_reply(self) -> None:
+        """Copy the most recent agent reply to the clipboard (C). Mouse-selection is off
+        (it crashed Textual over markdown tables), so this is the deliberate copy path —
+        copy_to_clipboard emits OSC52, which the terminal honours even over SSH."""
+        reply = next((t for role, t in reversed(self.transcript) if role == "agent"), None)
+        if not reply:
+            self._set_status("nothing to copy yet")
+            return
+        self.copy_to_clipboard(reply)
+        self._set_status(f"copied last reply ({len(reply)} chars) to clipboard")
 
     def action_cancel_turn(self) -> None:
         # Esc first dismisses an open autocomplete menu (doesn't cancel the turn).

@@ -358,6 +358,86 @@ def test_tool_pair_renders_one_collapsible(tmp_path):
     asyncio.run(_drive())
 
 
+def test_extract_result_shows_count_and_stashes_sha(tmp_path):
+    """A/E: an extract_paper result surfaces its real funnel (N inserted) + elapsed in
+    the collapsible title, and stashes the paper SHA for /view (raw_decode tolerates the
+    drop-nudge text appended after the JSON)."""
+    import json as _json
+    from textual.widgets import Collapsible
+
+    meter = CostMeter(str(tmp_path / "t.db"))
+    app = PalimpsestApp(agent=_StubAgent(meter), cost_meter=meter)
+    # Mirror production exactly: pipeline emits indent=2 JSON + a trailing drop-nudge.
+    result = (
+        _json.dumps({"paper_sha": "abc123", "n_extracted": 9, "n_validated": 8, "n_inserted": 7}, indent=2)
+        + "\n\n2 measurement(s) dropped. Call diagnose_run(...)"
+    )
+
+    async def _drive() -> None:
+        async with app.run_test() as pilot:
+            app._show_event({"type": "tool_call", "name": "extract_paper",
+                             "input": {"pdf_path": "papers/x.pdf"}})
+            app._show_event({"type": "tool_result", "name": "extract_paper", "content": result})
+            await pilot.pause()
+            title = str(app.query(Collapsible).first().title)
+            assert "7 inserted ·" in title and title.endswith("s")  # count + elapsed
+            assert app._last_paper_sha == "abc123"
+
+            # n_inserted == 0 must read "0 inserted" (the is-not-None check, not falsy),
+            # and a result with no preceding tool_call still stashes the SHA.
+            app._show_event({"type": "tool_result", "name": "extract_paper",
+                             "content": _json.dumps({"paper_sha": "zero99", "n_inserted": 0})})
+            await pilot.pause()
+            assert "0 inserted" in str(app.query(Collapsible).last().title)
+            assert app._last_paper_sha == "zero99"
+
+    asyncio.run(_drive())
+
+
+def test_copy_reply_puts_last_reply_on_clipboard(tmp_path):
+    """C: ctrl+y copies the most recent agent reply (mouse-selection is off)."""
+    meter = CostMeter(str(tmp_path / "t.db"))
+    app = PalimpsestApp(agent=_StubAgent(meter), cost_meter=meter)
+
+    async def _drive() -> None:
+        async with app.run_test():
+            app.transcript += [("agent", "first"), ("user", "again"), ("agent", "the answer is 42")]
+            app.action_copy_reply()
+            assert app.clipboard == "the answer is 42"  # newest agent reply, not the user line
+
+    asyncio.run(_drive())
+
+
+def test_view_command_targets_last_paper_sha(tmp_path, monkeypatch):
+    """E: /view opens the provenance viewer URL for the stashed SHA."""
+    import webbrowser
+    from palimpsest.tui.slash import dispatch
+
+    opened = {}
+    monkeypatch.setattr(webbrowser, "open", lambda url: opened.update(url=url) or True)
+    meter = CostMeter(str(tmp_path / "t.db"))
+    app = PalimpsestApp(agent=_StubAgent(meter), cost_meter=meter)
+    app._last_paper_sha = "deadbeef"
+
+    out = dispatch(app, "/view")
+    assert "deadbeef" in out and "/paper/deadbeef" in opened["url"]
+    # no paper yet → a hint, no browser launched
+    app._last_paper_sha = None
+    assert "no paper yet" in dispatch(app, "/view")
+
+
+def test_issues_command_lists_monitor_issues(tmp_path):
+    """G: /issues reports the session's recorded tool errors / exceptions / budget marks."""
+    from palimpsest.tui.slash import dispatch
+
+    meter = CostMeter(str(tmp_path / "t.db"))
+    app = PalimpsestApp(agent=_StubAgent(meter), cost_meter=meter)
+    assert "no issues" in dispatch(app, "/issues")
+    app.monitor.issues.append({"kind": "tool_error", "tool": "bash", "detail": "boom"})
+    out = dispatch(app, "/issues")
+    assert "tool_error" in out and "bash" in out and "boom" in out
+
+
 def test_ctrl_j_inserts_newline_without_submitting(tmp_path):
     """C1: Ctrl+J inserts a newline in the composer; Enter (not pressed here) submits."""
     meter = CostMeter(str(tmp_path / "t.db"))
