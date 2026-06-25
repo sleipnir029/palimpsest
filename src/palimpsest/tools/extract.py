@@ -30,6 +30,7 @@ extractable.
 from __future__ import annotations
 
 import copy
+import hashlib
 import inspect
 import json
 import re
@@ -431,13 +432,19 @@ def _resolve_spans(
     spans: list[Span],
     paper_sha: str,
     parser_name: str,
+    value: Any = None,
 ) -> dict | None:
     """Build a full Evidence dict from the cited GLOBAL span ids, or ``None`` if invalid.
 
-    ``page``/``bbox``/``source_text`` come from the cited spans (page of the first
-    cited span, union bbox, concatenated verbatim text); ``paper.sha256`` +
-    ``parser_name`` are injected. Returns ``None`` when ``ev`` has no usable
-    ``spans`` (caller routes to ``errors``).
+    When the model cites several spans, Evidence pins to the SINGLE span that
+    contains the measured ``value``'s digits — that span's granular bbox + verbatim
+    text. This keeps the source box tight (one line/cell) instead of the coarse
+    UNION of every cited span, which made every value from one region share one
+    block-level box. The digit test mirrors the mis-citation guard; values with
+    fewer than 2 digits can't be disambiguated, so they fall back to the union (also
+    used when no cited span carries the value, or no value is supplied).
+    ``paper.sha256`` + ``parser_name`` are injected. Returns ``None`` when ``ev`` has
+    no usable ``spans`` (caller routes to ``errors``).
     """
     if not isinstance(ev, dict):
         return None
@@ -449,6 +456,17 @@ def _resolve_spans(
     cited = [spans[i] for i in ids if isinstance(i, int) and 0 <= i < len(spans)]
     if not cited:
         return None
+    # Pin to the value-bearing span (granular) when the value is unambiguous.
+    vd = _value_digits(value)
+    if len(vd) >= 2:
+        for p, t, b in cited:
+            if vd in re.sub(r"\D", "", t):
+                return {
+                    "paper": {"sha256": paper_sha}, "page": p,
+                    "bbox_x0": b[0], "bbox_y0": b[1], "bbox_x1": b[2], "bbox_y1": b[3],
+                    "source_text": t, "parser_name": parser_name,
+                }
+    # Fallback: union bbox + concatenated text (multi-span value, <2 digits, or no value).
     bboxes = [b for _p, _t, b in cited]
     return {
         "paper": {"sha256": paper_sha},
@@ -492,7 +510,8 @@ def _process_items(
         type_name = item.get("type")
 
         if type_name in _MEASUREMENT_NAMES:
-            evidence = _resolve_spans(item.get("evidence"), spans, paper_sha, parser_name)
+            evidence = _resolve_spans(item.get("evidence"), spans, paper_sha, parser_name,
+                                      value=item.get("value"))
             if evidence is None:
                 errors.append((
                     ValueError(
@@ -589,6 +608,52 @@ def _dedup(valid: list[BaseModel]) -> list[BaseModel]:
         seen.add(key)
         out.append(inst)
     return out
+
+
+def _pdf_for_sha(sha: str) -> Path | None:
+    """Locate the source PDF for ``sha`` by hashing every ``papers/*.pdf``.
+
+    Mirrors the viewer's ``_pdf_index`` (tools must not import the viewer). Returns
+    ``None`` when no PDF matches — callers treat that as "can't tighten" and keep the
+    parser-native bbox, so offline tests (fake shas, no PDF on disk) are unaffected.
+    """
+    papers = Path(__file__).resolve().parents[3] / "papers"
+    for pdf in sorted(papers.glob("*.pdf")):
+        try:
+            if hashlib.sha256(pdf.read_bytes()).hexdigest() == sha:
+                return pdf
+        except OSError:
+            continue
+    return None
+
+
+def _tighten_evidence(valid: list[BaseModel], paper_sha: str) -> None:
+    """Relocate each measurement's Evidence bbox to the exact value text on its PDF
+    page, in tight PDF points (bottom-left origin) — so the viewer renders one
+    uniform coordinate space for every parser. Pure-local (fitz), no LLM cost.
+
+    No-op when the PDF isn't on disk or the page/text can't be matched: the
+    parser-native box is kept (``tighten_bbox`` never fabricates a box).
+    """
+    pdf = _pdf_for_sha(paper_sha)
+    if pdf is None:
+        return
+    import fitz  # heavy; only when a PDF is actually present
+
+    from .geometry import tighten_bbox
+
+    doc = fitz.open(pdf)
+    try:
+        for inst in valid:
+            ev = getattr(inst, "evidence", None)
+            if ev is None or not (1 <= ev.page <= doc.page_count):
+                continue
+            fallback = (ev.bbox_x0, ev.bbox_y0, ev.bbox_x1, ev.bbox_y1)
+            new_bbox, _refined = tighten_bbox(
+                doc[ev.page - 1], getattr(inst, "value", None), ev.source_text or "", fallback)
+            ev.bbox_x0, ev.bbox_y0, ev.bbox_x1, ev.bbox_y1 = new_bbox
+    finally:
+        doc.close()
 
 
 @register("extract", {
@@ -707,4 +772,8 @@ def extract(
             continue
         _process_items(items, spans, paper_sha, parser_name, valid, errors)
 
+    # Tighten each Evidence box to the exact value text via the PDF text layer, so
+    # boxes are value-tight and in ONE coordinate space (PDF points) the viewer can
+    # place for every parser. No-op offline / on scanned pages (keeps native box).
+    _tighten_evidence(valid, paper_sha)
     return _dedup(valid), errors

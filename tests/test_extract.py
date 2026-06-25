@@ -28,6 +28,7 @@ from palimpsest.tools.extract import (
     _schema_for_prompt,
     extract,
 )
+from schema.generated import pydantic as _schema
 
 load_dotenv()
 
@@ -134,8 +135,97 @@ def test_source_text_kept_verbatim(tmp_path):
     assert valid[0].evidence.source_text == latex  # `\,`, `^{-1}`, `_{Ir}` intact
 
 
+def test_evidence_pins_to_value_bearing_span(tmp_path):
+    """When the model cites several spans, Evidence pins to the one CONTAINING the
+    value's digits — granular bbox + that span's text — not the coarse union of all
+    cited spans (the bug that made every value share one block-level box)."""
+    sha = "7" * 64
+    cache = _seed_cache(tmp_path, sha)
+    # Cite span 0 (overpotential, has "236") AND span 1 (Tafel — broad/context citation).
+    # value 236 lives only in span 0, so Evidence must pin to span 0's bbox/text.
+    response = {"items": [
+        {"type": "Overpotential", "value": 236.0, "unit_label": "mV", "evidence": _ev(0, 1)},
+    ]}
+    valid, errors = extract(paper_sha=sha, provider=_StubProvider(json.dumps(response)), cache=cache)
+    assert errors == [] and len(valid) == 1
+    ev = valid[0].evidence
+    assert (ev.bbox_x0, ev.bbox_y0, ev.bbox_x1, ev.bbox_y1) == BBOX_OVERP  # span 0, NOT union w/ span 1
+    assert ev.source_text == SPAN_OVERP                                    # just span 0, not concatenated
+
+
+def test_pin_misses_then_guard_rejects(tmp_path):
+    """Value digits in NO cited span → union fallback → mis-citation guard rejects
+    (locks the fallback-then-guard path the pin test doesn't cover)."""
+    sha = "8" * 64
+    cache = _seed_cache(tmp_path, sha)
+    response = {"items": [
+        {"type": "Overpotential", "value": 236.0, "unit_label": "mV", "evidence": _ev(1, 2)},
+    ]}  # 236 lives in span 0, but only spans 1+2 are cited
+    valid, errors = extract(paper_sha=sha, provider=_StubProvider(json.dumps(response)), cache=cache)
+    assert valid == [] and len(errors) == 1
+    assert "mis-citation" in str(errors[0][0])
+
+
+def test_tighten_evidence_relocates_box_to_value():
+    """Post-pass: a born-digital PDF whose sha is on disk → the block-sized box is
+    relocated to the exact value text (tight, bottom-left points)."""
+    import hashlib
+    from types import SimpleNamespace
+
+    from palimpsest.tools.extract import _tighten_evidence
+
+    pdf = Path(__file__).resolve().parents[1] / "papers" / "s41467-022-35426-8.pdf"
+    if not pdf.exists():
+        pytest.skip(f"fixture PDF missing: {pdf}")
+    sha = hashlib.sha256(pdf.read_bytes()).hexdigest()
+    ev = _schema.Evidence(
+        paper={"sha256": sha}, page=1,
+        bbox_x0=1.0, bbox_y0=2.0, bbox_x1=590.0, bbox_y1=780.0,  # whole-block fallback
+        source_text="Received: 13 July 2022", parser_name="mineru",
+    )
+    _tighten_evidence([SimpleNamespace(value=13, evidence=ev)], sha)
+    assert (ev.bbox_x1 - ev.bbox_x0) < 200.0  # shrunk from the 589-wide block
+    assert ev.bbox_y0 < ev.bbox_y1
+
+
+def test_tighten_evidence_noop_when_pdf_absent():
+    """No PDF on disk for the sha (every offline test) → box untouched. This is why
+    the resolution/pinning tests above keep passing unchanged."""
+    from types import SimpleNamespace
+
+    from palimpsest.tools.extract import _tighten_evidence
+
+    ev = _schema.Evidence(
+        paper={"sha256": "0" * 64}, page=1,
+        bbox_x0=63.0, bbox_y0=137.0, bbox_x1=929.0, bbox_y1=244.0,
+        source_text=SPAN_OVERP, parser_name="mineru",
+    )
+    _tighten_evidence([SimpleNamespace(value=236, evidence=ev)], "0" * 64)
+    assert (ev.bbox_x0, ev.bbox_y0, ev.bbox_x1, ev.bbox_y1) == (63.0, 137.0, 929.0, 244.0)
+
+
+def test_resolve_spans_unions_when_value_split_across_spans():
+    """A value whose digits straddle two cited spans matches no single span → union."""
+    spans = [(3, "current of 12", (60.0, 100.0, 300.0, 120.0)),
+             (3, "34 mA", (60.0, 122.0, 280.0, 142.0))]
+    ev = _resolve_spans({"spans": [0, 1]}, spans, paper_sha="z" * 64, parser_name="dots", value=1234)
+    assert (ev["bbox_x0"], ev["bbox_y0"], ev["bbox_x1"], ev["bbox_y1"]) == (60.0, 100.0, 300.0, 142.0)
+    assert ev["source_text"] == "current of 12 34 mA"
+
+
+def test_resolve_spans_pins_to_first_cited_match():
+    """Several cited spans contain the digits → pin to the FIRST CITED (citation
+    order, not span-id order)."""
+    spans = [(3, "236 mV here", (10.0, 10.0, 100.0, 30.0)),
+             (3, "also 236 there", (10.0, 40.0, 100.0, 60.0))]
+    ev = _resolve_spans({"spans": [1, 0]}, spans, paper_sha="z" * 64, parser_name="dots", value=236)
+    assert (ev["bbox_x0"], ev["bbox_y0"], ev["bbox_x1"], ev["bbox_y1"]) == (10.0, 40.0, 100.0, 60.0)
+    assert ev["source_text"] == "also 236 there"
+
+
 def test_resolve_spans_unions_multiple_ids():
-    """Citing >1 span unions their bboxes; source_text concatenates; page from cited."""
+    """No value-bearing span (no value passed) → fall back to union: bboxes union,
+    source_text concatenates, page from the first cited span."""
     spans = [(3, "the overpotential was 236", (60.0, 100.0, 300.0, 120.0)),
              (3, "mV at 10 mA cm-2", (60.0, 122.0, 280.0, 142.0))]
     ev = _resolve_spans({"spans": [0, 1]}, spans, paper_sha="z" * 64, parser_name="dots")
