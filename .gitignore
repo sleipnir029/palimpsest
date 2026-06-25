@@ -221,6 +221,8 @@ __marimo__/
 palimpsest.db
 cache/
 store/
+# tighten/backup variants (store.tight, store.coarse.bak, …) — data, never tracked
+store.*/
 notes/
 workspace/
 
