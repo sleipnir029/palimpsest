@@ -202,18 +202,18 @@ per correct extraction). The expensive models bought little accuracy.
 
 ## 6. Knowledge graph, schema, and ontology
 
-**What becomes a triple.** Each extracted measurement is one RDF node, **typed by its
+**What becomes a triple:** Each extracted measurement is one RDF node, **typed by its
 ontology class**, carrying `value` (xsd:float) + `unitLabel` (string) + optional
 `confidence`, and linked to two nodes: a **Condition** (current density, electrode
 potential vs RHE, temperature, scan rate, electrolyte family + pH, cell type, iR
 correction, …) and an **Evidence** node typed `prov:Entity` carrying the
-**provenance CLAUDE.md treats as non-negotiable** — paper SHA-256, page, four bbox floats,
+**provenance treated as non-negotiable** — paper SHA-256, page, four bbox floats,
 parser name, and source text. Run metadata (run_id, parser run, **extraction-model tag**)
 is written to a **per-run named graph**, keeping the data graph SHACL-closed. A
 measurement lacking complete provenance is **refused, not inserted**. (One Overpotential
 emits ~22 quads: measurement 5, evidence 9, paper 4, condition 3, run-graph 1.)
 
-**What is in the schema, and why.** A single **LinkML** file (`schema/palimpsest.yaml`)
+**What is in the schema, and why:** A single **LinkML** file (`schema/palimpsest.yaml`)
 is the source of truth; it generates **Pydantic + JSON-Schema + JSON-LD + SHACL** so one
 contract simultaneously validates extraction, shapes the LLM's tool signature, and
 enforces RDF conformance. It defines a **measurement hierarchy of 11 types** (Overpotential,
@@ -223,7 +223,7 @@ plus the structural classes Paper, Condition, Electrolyte, and Evidence. New slo
 `schema/exploratory.yaml` and reviewed before entering the closed main schema — never
 silently added.
 
-**How the ontology models the values.** Alignment is at two levels. **In the triples**:
+**How the ontology models the values:** Alignment is at two levels. **In the triples**:
 each measurement node is typed by an **EMMO ECHO** electrochemistry class IRI where one
 exists (e.g. Overpotential, ExchangeCurrentDensity, ECSA), or by a palimpsest-local IRI
 where EMMO has no term (TafelSlope, MassActivity, the PEMWE metrics, OER); provenance uses
@@ -272,18 +272,17 @@ Two distinct activities, two very different costs:
 
 **(a) Application / demo run (the 19-June use case).** 20–25 hydrogen papers through the
 chosen pipeline (docling + gemini-flash-lite), driven by the agent end-to-end. Parsing is
-docling-only here, so GPU is small and extraction ≈ \$0.15; **total ≈ \$1–2 — fits the
-remaining ≈ \$14.6.** This needs no funding; it is the next concrete deliverable.
+docling-only here, so GPU is small and extraction ≈ \$0.15; **total ≈ \$1–2** plus margin if any crashes occur and **agent api cost ≈ \$1–2**.
 
 **(b) Full re-benchmark at 20–25-paper scale (validating H1–H3, and re-scoring on the
 47-tuple gold).** Re-running the parser × model × multipass grid at 5× the corpus:
 
 | Item | Estimate |
 |---|---|
-| Parse 20–25 papers × 4–5 parsers (GPU, actual rates) | **≈ \$30** |
+| Parse 20–25 papers × 4–5 parsers (GPU, actual rates) | **≈ \$30-40** |
 | LLM grid (4 parsers × ~8 models × multipass), ~5× the 5-paper spend | **≈ \$120–150** |
 | Ground-truth construction (multi-read + verification, human spot-check) | principal *effort* cost |
-| **Total compute** | **≈ \$150–180 → exceeds the \$50 cap** |
+| **Total compute** | **≈ \$150–190** |
 
 *(The \$30 parse line uses real RunPod rates, ~5× the in-process meter — see §5; the earlier
 naive estimate of \$6 undercounted pod overhead.)*
