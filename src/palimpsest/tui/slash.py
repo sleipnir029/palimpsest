@@ -420,6 +420,35 @@ def _undo(app, args: list[str]) -> str:
     return f"{r.detail}{tail}: restored {len(r.changed)} file(s): {files}"
 
 
+def _view(app, args: list[str]) -> str:
+    """open the provenance viewer for the last extraction (or /view <sha>)"""
+    import webbrowser
+
+    sha = args[0] if args else getattr(app, "_last_paper_sha", None)
+    if not sha:
+        return "no paper yet — run extract_paper first, or pass /view <sha>"
+    url = f"http://localhost:8765/paper/{sha}"
+    # The viewer is a separate process (supervised model — the TUI must not spawn
+    # servers). Just point a browser at it; if it isn't up the browser shows a refused
+    # connection, so name the start command.
+    opened = webbrowser.open(url)
+    tail = "" if opened else " (no browser launched — open it manually)"
+    return f"opening {url}{tail}\nviewer not running? start it with:  pixi run viewer"
+
+
+def _issues(app, args: list[str]) -> str:
+    """list this session's tool errors, budget warnings, and exceptions"""
+    issues = getattr(app.monitor, "issues", [])
+    if not issues:
+        return "no issues this session ✓"
+    lines = [f"{len(issues)} issue(s) this session:"]
+    for i in issues[-10:]:  # last 10 is plenty for a glance
+        tool = f" [{i['tool']}]" if i.get("tool") else ""
+        detail = str(i.get("detail", "")).replace("\n", " ")[:120]
+        lines.append(f"  · {i.get('kind', '?')}{tool}: {detail}")
+    return "\n".join(lines)
+
+
 SLASH_COMMANDS: dict[str, Callable] = {
     "help": _help,
     "quit": _quit,
@@ -433,6 +462,8 @@ SLASH_COMMANDS: dict[str, Callable] = {
     "export": _export,
     "config": _config,
     "undo": _undo,
+    "view": _view,
+    "issues": _issues,
 }
 
 
@@ -458,7 +489,7 @@ def dispatch(app, line: str) -> str:
 # `sonnet`); de-advertised, not removed, so persisted *_model=anthropic rows survive.
 VISIBLE_COMMANDS = (
     "help", "quit", "budget", "cost", "use", "theme", "resume", "clear", "export",
-    "config", "undo",
+    "config", "undo", "view", "issues",
 )
 
 _PROVIDER_GLOSS = {

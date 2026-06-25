@@ -8,8 +8,8 @@ Screen {
 
 #topbar {
     dock: top;
-    height: 1;
-    padding: 0 2;
+    height: 2;          /* title + a blank line so the manuscript doesn't butt the edge */
+    padding: 1 2 0 2;
     color: $accent;
     text-style: bold;
     background: $background;
@@ -120,9 +120,11 @@ Collapsible.trace-error > Contents {
     border: round $accent;
 }
 
-/* Quiet footer: the three model roles + live spend, sepia so it recedes. */
+/* Quiet footer: spend gauge + issues on line 1, model roles + hints on line 2. Two
+   lines with a blank above so it breathes apart from the input frame. */
 #status {
-    height: 1;
+    height: 2;
+    margin: 1 0 0 0;
     padding: 0 2;
     color: $secondary;
     background: $background;
