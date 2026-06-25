@@ -4,180 +4,523 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>palimpsest — {{ filename }}</title>
-  <!-- HTMX for T30's data-pane loads (CDN per T29 card) -->
-  <script src="https://unpkg.com/htmx.org@latest"></script>
   <style>
-    html, body { margin: 0; height: 100%; font-family: system-ui, sans-serif; }
+    :root {
+      --pane: #2b2a2e;        /* PDF reading pane (neutral dark) */
+      --paper: #efe7d6;       /* vellum data pane */
+      --card: #fbf8f1;        /* card surface */
+      --ink: #23201b;         /* warm near-black text */
+      --muted: #8c8069;       /* sepia — provenance / captions */
+      --rule: #dcd2bd;        /* hairline */
+      --verdigris: #2f6b5e;   /* accent: oxidized-copper patina */
+      --amber: #b8860b;
+      --clay: #a14334;
+      --serif: "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
+      --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; font-family: system-ui, sans-serif; color: var(--ink); }
     #layout { display: grid; grid-template-columns: 1fr 1fr; height: 100vh; }
-    #pdf-pane { overflow-y: auto; background: #525659; padding: 1rem; }
-    #pdf-pane .page-wrap { position: relative; margin: 0 auto 1rem; }
-    #pdf-pane canvas { display: block; box-shadow: 0 2px 8px rgba(0, 0, 0, .4); }
-    #data-pane { overflow-y: auto; padding: 1rem; border-left: 1px solid #ddd; }
-    header { font-size: .85rem; color: #888; margin-bottom: .75rem; }
-    #data-pane header { color: #666; }
-    .value { padding: .25rem .4rem; border-radius: 3px; cursor: pointer;
-             font-size: .9rem; }
-    .value:hover { background: #fdf3c0; }
-    /* T31 hover overlay: semi-transparent yellow box over the source bbox. */
+
+    /* ---- PDF pane (left) ---- */
+    #pdf-pane { overflow: auto; background: var(--pane); padding: 1.25rem; }
+    #pdf-pane .pane-head { color: #cdc6bb; font-size: .8rem; margin-bottom: .9rem;
+                           font-family: var(--mono); letter-spacing: .02em; }
+    .page-wrap { position: relative; margin: 0 auto 1rem; }
+    #pdf-canvases canvas { display: block; width: 100%; height: auto;
+                           box-shadow: 0 2px 12px rgba(0,0,0,.45); border-radius: 2px; }
     .bbox-overlay { position: absolute; pointer-events: none;
-                    background: rgba(255, 235, 59, .4);
-                    border: 1px solid rgba(245, 200, 0, .9); }
-    /* WS1 correction UI */
-    .value.corrected .label { text-decoration: line-through; opacity: .6; }
-    .value .corr-note { display: block; color: #b8860b; font-size: .8rem; cursor: default; }
-    .correction-form { margin: .4rem 0 .5rem; padding: .5rem; background: #f7f7f7;
-                       border: 1px solid #ddd; border-radius: 4px;
-                       display: grid; gap: .35rem; cursor: default; }
-    .correction-form input { font: inherit; }
-    .correction-form .cf-value { width: 8rem; }
-    .correction-form .cf-unit { width: 6rem; }
-    .correction-form textarea { width: 100%; min-height: 2.5rem; font: inherit; }
-    .correction-form button { font: inherit; }
-    .correction-form .cf-msg { color: #c0392b; font-size: .8rem; }
+                    background: rgba(47,107,94,.22);
+                    border: 1.5px solid var(--verdigris);
+                    box-shadow: 0 0 0 1px rgba(255,255,255,.4); }
+
+    /* ---- data pane (right) ---- */
+    /* whole pane scrolls as one column (matrix/filters included), not just the cards */
+    #data-pane { overflow-y: auto; background: var(--paper); border-left: 1px solid var(--rule); }
+    .data-head { padding: 1.1rem 1.25rem .6rem; border-bottom: 1px solid var(--rule); }
+    .data-head h1 { font-family: var(--serif); font-weight: 600; font-size: 1.15rem;
+                    margin: 0 0 .15rem; letter-spacing: -.01em; }
+    .data-head .sub { font-family: var(--mono); font-size: .72rem; color: var(--muted); }
+
+    /* signature: parser × model matrix selector */
+    .matrix { padding: .85rem 1.25rem; border-bottom: 1px solid var(--rule); overflow-x: auto; }
+    .matrix .mx-title { font-size: .68rem; text-transform: uppercase; letter-spacing: .14em;
+                        color: var(--muted); margin-bottom: .5rem; }
+    table.mx { border-collapse: collapse; font-size: .74rem; }
+    table.mx th { font-family: var(--mono); font-weight: 500; color: var(--muted);
+                  padding: .2rem .4rem; text-align: center; white-space: nowrap; }
+    table.mx th.row-h { text-align: right; }
+    table.mx td { padding: 2px; }
+    .mx-cell { min-width: 2.4rem; padding: .3rem .45rem; border: 1px solid var(--rule);
+               background: var(--card); border-radius: 3px; cursor: pointer; text-align: center;
+               font-family: var(--mono); font-size: .8rem; color: var(--ink);
+               transition: background .12s, border-color .12s; }
+    .mx-cell:hover { border-color: var(--verdigris); }
+    .mx-cell.empty { color: var(--rule); cursor: default; background: transparent; border-style: dashed; }
+    .mx-cell.active { background: var(--verdigris); color: #fff; border-color: var(--verdigris); }
+
+    .cell-meta { padding: .7rem 1.25rem .1rem; font-size: .8rem; color: var(--muted); }
+    .cell-meta b { color: var(--ink); font-variant-numeric: tabular-nums; }
+    .hl-note { padding: 0 1.25rem .35rem; font-size: .74rem; color: var(--clay); min-height: 1rem; }
+
+    /* tab bar (Parser · Schema · Gold funnel) */
+    .tabbar { display: flex; gap: .25rem; padding: .45rem 1.25rem 0; border-bottom: 1px solid var(--rule); }
+    .tab { font: inherit; font-size: .74rem; font-family: var(--mono); padding: .35rem .85rem;
+           border: 1px solid var(--rule); border-bottom: none; border-radius: 5px 5px 0 0;
+           background: var(--card); color: var(--muted); cursor: pointer; }
+    .tab:hover { color: var(--ink); border-color: var(--verdigris); }
+    .tab.active { color: #fff; background: var(--verdigris); border-color: var(--verdigris); }
+
+    /* Parser tab — raw parser spans; Gold tab — extracted-vs-gold diff */
+    .tab-pane { padding: .5rem 1.25rem 1rem; }
+    .span-row { font-family: var(--mono); font-size: .76rem; color: var(--ink); padding: .25rem .35rem;
+                border-bottom: 1px solid var(--rule); line-height: 1.4; cursor: pointer; border-radius: 3px; }
+    .span-row:hover { background: var(--card); }
+    .span-row.active { background: var(--card); box-shadow: inset 2px 0 0 var(--verdigris); }
+    .span-row .pg { color: var(--muted); margin-right: .5rem; }
+    .gold-summary { font-size: .82rem; margin: .2rem 0 .6rem; line-height: 1.45; }
+    .gold-section-h { font-size: .66rem; text-transform: uppercase; letter-spacing: .12em;
+                      color: var(--muted); margin: .9rem 0 .3rem; }
+    .gold-row { display: flex; gap: .55rem; align-items: baseline; font-size: .82rem;
+                padding: .25rem 0; border-bottom: 1px solid var(--rule); }
+    .gold-row .gmark { font-family: var(--mono); width: 1rem; }
+    .gold-row.hit .gmark { color: var(--verdigris); }
+    .gold-row.miss .gmark { color: var(--clay); }
+    .gold-row .gtype { font-family: var(--serif); font-weight: 600; }
+    .gold-row .gval { font-family: var(--mono); margin-left: auto; font-variant-numeric: tabular-nums; }
+
+    /* value cards (Schema tab) */
+    .cards { padding: .25rem 1.25rem 1rem; }
+    .card { background: var(--card); border: 1px solid var(--rule); border-radius: 6px;
+            padding: .6rem .75rem; margin-bottom: .55rem; cursor: pointer;
+            transition: border-color .12s, box-shadow .12s; }
+    .card:hover { border-color: var(--verdigris); box-shadow: 0 1px 6px rgba(47,107,94,.12); }
+    .card.active { border-color: var(--verdigris); box-shadow: 0 0 0 1px var(--verdigris); }
+    .card-top { display: flex; align-items: baseline; justify-content: space-between; gap: .5rem; }
+    .card-slot { font-family: var(--serif); font-size: .95rem; font-weight: 600; }
+    .card-val { font-family: var(--mono); font-size: 1.05rem; font-variant-numeric: tabular-nums;
+                white-space: nowrap; }
+    .card-val.corrected { text-decoration: line-through; opacity: .5; }
+    .badge { font-family: var(--mono); font-size: .68rem; padding: .08rem .4rem; border-radius: 999px;
+             border: 1px solid currentColor; white-space: nowrap; }
+    .badge.hi { color: var(--verdigris); } .badge.md { color: var(--amber); }
+    .badge.lo { color: var(--clay); } .badge.none { color: var(--muted); }
+    .card-meta { margin-top: .3rem; font-size: .72rem; color: var(--muted);
+                 display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
+    .card-meta .pg { font-family: var(--mono); }
+    .card-edit { margin-left: auto; font-size: .7rem; padding: .12rem .5rem; }
+    .card-src { margin-top: .35rem; font-size: .78rem; color: #5e5547; line-height: 1.35;
+                border-left: 2px solid var(--rule); padding-left: .5rem; }
+    .corr-note { display: block; margin-top: .35rem; color: var(--amber); font-size: .76rem; }
+
+    /* edit & review (WS1 correction form), restyled inside a card */
+    .correction-form { margin-top: .55rem; padding: .55rem; background: var(--paper);
+                       border: 1px solid var(--rule); border-radius: 5px;
+                       display: grid; gap: .4rem; cursor: default; }
+    .correction-form label { font-size: .76rem; color: var(--muted); }
+    .correction-form input, .correction-form textarea { font: inherit; font-size: .82rem;
+                       padding: .25rem .35rem; border: 1px solid var(--rule); border-radius: 3px;
+                       background: #fff; }
+    .correction-form .cf-value { width: 7rem; } .correction-form .cf-unit { width: 5rem; }
+    .correction-form textarea { width: 100%; min-height: 2.6rem; resize: vertical; }
+    .correction-form .cf-msg { color: var(--clay); font-size: .76rem; }
+    button { font: inherit; font-size: .8rem; padding: .3rem .7rem; border-radius: 4px;
+             border: 1px solid var(--rule); background: var(--card); color: var(--ink); cursor: pointer; }
+    button.primary { background: var(--verdigris); color: #fff; border-color: var(--verdigris); }
+    button:hover { border-color: var(--verdigris); }
+
+    /* action bar (sticky footer — stays reachable while the pane scrolls) */
+    .actionbar { display: flex; align-items: center; gap: .6rem; padding: .7rem 1.25rem;
+                 border-top: 1px solid var(--rule); background: var(--paper);
+                 position: sticky; bottom: 0; }
+    .actionbar .raw { margin-left: auto; font-size: .74rem; color: var(--muted); }
+    .actionbar a { color: var(--verdigris); }
+
+    .empty { padding: 1.5rem 1.25rem; color: var(--muted); font-size: .85rem; }
+
+    @media (max-width: 900px) { #layout { grid-template-columns: 1fr; height: auto; }
+      #pdf-pane, #data-pane { height: 90vh; } }
+    :focus-visible { outline: 2px solid var(--verdigris); outline-offset: 1px; }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
   </style>
 </head>
 <body>
   <div id="layout">
     <div id="pdf-pane">
-      <header>{{ filename }}{% if page_count %} · {{ page_count }} pages{% endif %} · {{ sha[:12] }}…</header>
+      <div class="pane-head">{{ filename }}{% if page_count %} · {{ page_count }}pp{% endif %} · {{ sha[:12] }}…</div>
       <div id="pdf-canvases"></div>
     </div>
     <div id="data-pane">
-      <header>extracted data</header>
-      <!-- T30 populates this div; T31 wires hover -> bbox highlight. -->
+      <div class="data-head">
+        <h1>{{ filename }}</h1>
+        <div class="sub">verify extracted values against the source · pick a parser × model</div>
+      </div>
+      <div class="matrix" id="matrix"><div class="mx-title">parser × model — measurements per cell</div>
+        <div id="mx-grid"></div></div>
+      <div class="cell-meta" id="cell-meta"></div>
+      <div class="tabbar" id="tabbar">
+        <button class="tab" data-tab="parser" title="raw text spans the parser surfaced">Parser</button>
+        <button class="tab active" data-tab="schema" title="typed measurements extracted">Schema</button>
+        <button class="tab" data-tab="gold" title="extracted vs the gold answer key">Gold</button>
+      </div>
+      <div class="hl-note" id="hl-note"></div>
+      <div class="cards" id="cards"><div class="empty">Loading…</div></div>
+      <div class="tab-pane" id="parser-pane" hidden></div>
+      <div class="tab-pane" id="gold-pane" hidden></div>
+      <div class="actionbar">
+        <button class="primary" id="export-btn">Export CSV</button>
+        <span class="raw" id="raw-link"></span>
+      </div>
     </div>
   </div>
 
-  <!-- T31: highlightBox()/clearHighlights() globals, used by the rows below. -->
-  <script src="/static/pdf-overlay.js"></script>
-
+  <!-- ?v bust: browsers cache /static aggressively; bump when pdf-overlay.js changes. -->
+  <script src="/static/pdf-overlay.js?v=4"></script>
   <script type="module">
     import * as pdfjsLib from "/static/pdfjs/pdf.min.mjs";
     pdfjsLib.GlobalWorkerOptions.workerSrc = "/static/pdfjs/pdf.worker.min.mjs";
+    const sha = "{{ sha }}";
+    window.palimPages = {};  // page -> { viewport, wrap }; shared with pdf-overlay.js
 
-    const SCALE = 1.4;
-    const container = document.getElementById("pdf-canvases");
+    // every fetch goes through this: a non-200 returns an HTML error page, and
+    // r.json() on that throws "Unexpected token <" — an unhandled rejection that
+    // freezes the pane on "Loading…". Surface the real status instead.
+    async function getJSON(url) {
+      const r = await fetch(url);
+      if (!r.ok) throw new Error(`${url} → HTTP ${r.status}: ${(await r.text()).slice(0, 200)}`);
+      return r.json();
+    }
 
-    // Shared with pdf-overlay.js: page number -> { viewport, wrap }. The overlay
-    // needs the PageViewport (for convertToViewportRectangle) and a positioned
-    // ancestor to absolutely-place the highlight div into.
-    window.palimPages = {};
-
+    // ---- render the PDF, fit each page to the pane width (fixes overflow/alignment) ----
     (async () => {
-      // cMapUrl/standardFontDataUrl let PDF.js render CID/CJK-encoded PDFs and
-      // PDFs that don't embed their fonts — both vendored under /static/pdfjs/.
-      const pdf = await pdfjsLib.getDocument({
-        url: "/paper/{{ sha }}/pdf",
-        cMapUrl: "/static/pdfjs/cmaps/",
-        cMapPacked: true,
-        standardFontDataUrl: "/static/pdfjs/standard_fonts/",
-      }).promise;
-      for (let n = 1; n <= pdf.numPages; n++) {
-        const page = await pdf.getPage(n);
-        const viewport = page.getViewport({ scale: SCALE });
-        const wrap = document.createElement("div");
-        wrap.className = "page-wrap";
-        wrap.style.width = viewport.width + "px";
-        const canvas = document.createElement("canvas");
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
-        wrap.appendChild(canvas);
-        container.appendChild(wrap);
-        await page.render({ canvasContext: canvas.getContext("2d"), viewport }).promise;
-        window.palimPages[n] = { viewport, wrap };
+      const container = document.getElementById("pdf-canvases");
+      try {
+        const fit = container.clientWidth || 600;
+        const pdf = await pdfjsLib.getDocument({
+          url: `/paper/${sha}/pdf`, cMapUrl: "/static/pdfjs/cmaps/", cMapPacked: true,
+          standardFontDataUrl: "/static/pdfjs/standard_fonts/",
+        }).promise;
+        for (let n = 1; n <= pdf.numPages; n++) {
+          const page = await pdf.getPage(n);
+          const scale = fit / page.getViewport({ scale: 1 }).width;  // page fills the pane
+          const viewport = page.getViewport({ scale });
+          const wrap = document.createElement("div");
+          wrap.className = "page-wrap"; wrap.style.width = viewport.width + "px";
+          const canvas = document.createElement("canvas");
+          canvas.width = viewport.width; canvas.height = viewport.height;
+          wrap.appendChild(canvas); container.appendChild(wrap);
+          await page.render({ canvasContext: canvas.getContext("2d"), viewport }).promise;
+          window.palimPages[n] = { viewport, wrap };
+        }
+      } catch (e) {
+        container.innerHTML = `<div class="pane-head">failed to render PDF — ${escapeHtml(String(e.message || e))}</div>`;
       }
     })();
 
-    // Data pane: /data is JSON (T30, do-not-touch), so fetch + render rows here
-    // rather than HTMX-swapping. Each row carries page/bbox/parser for the hover
-    // highlight + the measurement id (data-id) for corrections (WS1). Click a row
-    // to open an inline correction form; the latest correction (if any) is shown.
+    // ---- the matrix selector + value cards ----
+    const PARSERS = ["docling", "mineru", "chandra", "dots", "paddle"];
+    const shortModel = (m) => (m || "—")
+      .replace("deepseek-v4-", "ds·").replace(/gemini-[\d.]+-flash(-lite)?/, "gem")
+      .replace(" (direct)", "·dir").replace(" (openrouter)", "·or");
+    const confBadge = (c) => c == null ? ["none", "no conf"]
+      : c >= 0.85 ? ["hi", Math.round(c * 100) + "%"]
+      : c >= 0.6 ? ["md", Math.round(c * 100) + "%"] : ["lo", Math.round(c * 100) + "%"];
+    let active = null;        // {parser, model}
+    let activeTab = "schema"; // Parser · Schema · Gold funnel
+    let cellData = null;      // {triples, corrections, pageinfo, gold, parser, model}
+    let runsCount = 0;        // M — populated (parser×model) cells in the matrix
+    const spansCache = {};    // parser -> {count, spans} (spans don't depend on model)
+
+    // tab buttons live in static HTML, so wire them once on load
+    document.querySelectorAll(".tab").forEach(btn => btn.onclick = () => {
+      activeTab = btn.dataset.tab;
+      document.querySelectorAll(".tab").forEach(b => b.classList.toggle("active", b === btn));
+      clearHighlights();                                  // drop any box from the prior tab
+      document.getElementById("hl-note").textContent = "";
+      renderActiveTab();
+    });
+
     (async () => {
-      const sha = "{{ sha }}";
-      const pane = document.getElementById("data-pane");
-      const { triples } = await (await fetch(`/paper/${sha}/data`)).json();
-      const { corrections } = await (await fetch(`/paper/${sha}/corrections`)).json();
-      const latest = {};  // measurement id -> newest correction (query is oldest-first)
-      for (const c of corrections) latest[c.measurement_id] = c;
+      const grid = document.getElementById("mx-grid");
+      try {
+        const { runs } = await getJSON(`/paper/${sha}/runs`);
+        if (!runs.length) { grid.innerHTML = '<span class="empty">no extractions in store</span>'; return; }
+        runsCount = runs.length;
+        const models = [...new Set(runs.map(r => r.model))].sort();
+        const cell = {};  // `${parser}|${model}` -> count
+        for (const r of runs) cell[`${r.parser}|${r.model}`] = r.count;
+        const parsers = PARSERS.filter(p => runs.some(r => r.parser === p))
+          .concat([...new Set(runs.map(r => r.parser))].filter(p => !PARSERS.includes(p)));
 
-      for (const t of triples) {
-        const row = document.createElement("div");
-        row.className = "value";
-        row.dataset.id = t.id;
-        row.dataset.page = t.page;
-        row.dataset.bbox = JSON.stringify(t.bbox);
-        row.dataset.parser = t.parser_name;
-
-        const label = document.createElement("span");
-        label.className = "label";
-        label.textContent = `${t.slot_path}: ${t.value}${t.unit ? " " + t.unit : ""}`;
-        row.appendChild(label);
-
-        row.onmouseover = () => highlightBox(row);
-        row.onclick = (e) => { if (!e.target.closest(".correction-form, .corr-note")) toggleForm(row, t); };
-        if (latest[t.id]) markCorrected(row, latest[t.id]);
-        pane.appendChild(row);
-      }
-
-      function markCorrected(row, c) {
-        row.classList.add("corrected");
-        let note = row.querySelector(".corr-note");
-        if (!note) { note = document.createElement("small"); note.className = "corr-note"; row.appendChild(note); }
-        const to = c.flagged_wrong
-          ? "flagged wrong"
-          : `→ ${c.corrected_value ?? ""}${c.corrected_unit ? " " + c.corrected_unit : ""}`;
-        note.textContent = `corrected by ${c.author} ${to} — ${c.comment}`;
-      }
-
-      function toggleForm(row, t) {
-        const open = row.querySelector(".correction-form");
-        if (open) { open.remove(); return; }
-        const form = document.createElement("div");
-        form.className = "correction-form";
-        const v = t.value ?? "", u = t.unit ?? "";
-        form.innerHTML = `
-          <label>value <input class="cf-value" type="number" step="any" value="${v}"></label>
-          <label>unit <input class="cf-unit" value="${u}"></label>
-          <label><input class="cf-flag" type="checkbox"> flag wrong (no replacement)</label>
-          <textarea class="cf-comment" placeholder="why is this wrong / what is correct (required)"></textarea>
-          <div><button class="cf-save">save correction</button>
-               <button class="cf-cancel">cancel</button>
-               <span class="cf-msg"></span></div>`;
-        row.appendChild(form);
-        form.querySelector(".cf-cancel").onclick = () => form.remove();
-        form.querySelector(".cf-save").onclick = () => saveCorrection(row, t, form);
-      }
-
-      async function saveCorrection(row, t, form) {
-        const msg = form.querySelector(".cf-msg");
-        const comment = form.querySelector(".cf-comment").value.trim();
-        if (!comment) { msg.textContent = "comment required"; return; }
-        const flagged = form.querySelector(".cf-flag").checked;
-        const payload = { measurement_iri: t.id, comment, flagged_wrong: flagged };
-        if (!flagged) {
-          const vRaw = form.querySelector(".cf-value").value.trim();
-          const uRaw = form.querySelector(".cf-unit").value.trim();
-          if (vRaw !== "" && Number(vRaw) !== t.value) payload.new_value = Number(vRaw);
-          if (uRaw !== "" && uRaw !== (t.unit ?? "")) payload.new_unit = uRaw;
-          if (payload.new_value === undefined && payload.new_unit === undefined) {
-            msg.textContent = "change a value/unit or check flag wrong"; return;
+        const tbl = document.createElement("table"); tbl.className = "mx";
+        const head = tbl.insertRow();
+        head.insertCell();  // corner
+        for (const m of models) { const th = document.createElement("th"); th.textContent = shortModel(m); th.title = m || "untagged"; head.appendChild(th); }
+        for (const p of parsers) {
+          const tr = tbl.insertRow();
+          const rh = document.createElement("th"); rh.className = "row-h"; rh.textContent = p; tr.appendChild(rh);
+          for (const m of models) {
+            const td = tr.insertCell();
+            const n = cell[`${p}|${m}`];
+            const d = document.createElement("div");
+            if (n) { d.className = "mx-cell"; d.textContent = n; d.title = `${p} × ${m || "untagged"} — ${n} measurements`;
+              d.onclick = () => loadCell(p, m, d); }
+            else { d.className = "mx-cell empty"; d.textContent = "·"; }
+            td.appendChild(d);
           }
         }
-        msg.textContent = "saving…";
-        const res = await fetch(`/paper/${sha}/correct`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-        if (!res.ok) { msg.textContent = "error: " + await res.text(); return; }
-        form.remove();
-        markCorrected(row, {
-          author: "human", comment,
-          corrected_value: payload.new_value ?? null, corrected_unit: payload.new_unit ?? null,
-          flagged_wrong: flagged,
-        });
+        grid.appendChild(tbl);
+        // default to the densest cell
+        const best = runs.reduce((a, b) => b.count > a.count ? b : a);
+        const firstCell = [...grid.querySelectorAll(".mx-cell")].find(
+          c => c.title.startsWith(`${best.parser} × ${best.model || "untagged"}`));
+        loadCell(best.parser, best.model, firstCell);
+      } catch (e) {
+        grid.innerHTML = `<span class="empty">failed to load runs — ${escapeHtml(String(e.message || e))}</span>`;
       }
     })();
+
+    const TAB_PANES = () => ({
+      schema: document.getElementById("cards"),
+      parser: document.getElementById("parser-pane"),
+      gold: document.getElementById("gold-pane"),
+    });
+
+    async function loadCell(parser, model, cellEl) {
+      active = { parser, model };
+      document.querySelectorAll(".mx-cell.active").forEach(c => c.classList.remove("active"));
+      if (cellEl) cellEl.classList.add("active");
+      clearHighlights();                                  // drop any stale box from the prior cell
+      document.getElementById("hl-note").textContent = "";
+      const q = new URLSearchParams({ parser, ...(model ? { model } : {}) });
+      const activePane = TAB_PANES()[activeTab];
+      activePane.innerHTML = '<div class="empty">Loading…</div>';  // replaced on success OR error — never frozen
+      try {
+        // /gold is read-only too; fetched here so the counter shows the gold target and
+        // the Gold tab is instant on switch. spans are lazy (Parser tab only).
+        const [{ triples }, { corrections }, pageinfo, gold] = await Promise.all([
+          getJSON(`/paper/${sha}/data?${q}`),
+          getJSON(`/paper/${sha}/corrections`),
+          getJSON(`/paper/${sha}/pageinfo/${encodeURIComponent(parser)}`),
+          getJSON(`/paper/${sha}/gold?${q}`),
+        ]);
+        cellData = { triples, corrections, pageinfo, gold, parser, model };
+        // honest counter: this cell's count is ONE of M cells, scored against G gold values
+        document.getElementById("cell-meta").innerHTML =
+          `<b>${triples.length}</b> in this cell · <b>${runsCount}</b> cells · gold <b>${gold.gold_total}</b>`;
+        document.getElementById("raw-link").innerHTML =
+          `raw parse: <a href="/paper/${sha}/parse/${encodeURIComponent(parser)}" target="_blank">${escapeHtml(parser)}</a>`;
+        document.getElementById("export-btn").onclick = () =>
+          window.open(`/paper/${sha}/export?${q}&format=csv`, "_blank");
+        renderActiveTab();
+      } catch (e) {
+        activePane.innerHTML = `<div class="empty">failed to load this cell — ${escapeHtml(String(e.message || e))}</div>`;
+        document.getElementById("cell-meta").innerHTML = "";
+      }
+    }
+
+    // Show the active tab's pane, hide the others, and render it from cellData.
+    function renderActiveTab() {
+      const panes = TAB_PANES();
+      for (const k in panes) panes[k].hidden = (k !== activeTab);
+      document.getElementById("hl-note").hidden = (activeTab === "gold");  // bbox note for schema + parser
+      if (!cellData) return;
+      if (activeTab === "schema") renderSchema();
+      else if (activeTab === "parser") renderParser();
+      else if (activeTab === "gold") renderGold();
+    }
+
+    function renderSchema() {
+      const cards = document.getElementById("cards");
+      const { triples, corrections, pageinfo } = cellData;
+      const latest = {}; for (const c of corrections) latest[c.measurement_id] = c;
+      cards.innerHTML = "";
+      if (!triples.length) { cards.innerHTML = '<div class="empty">This parser × model produced no measurements.</div>'; return; }
+      for (const t of triples) cards.appendChild(renderCard(t, latest[t.id], pageinfo));
+    }
+
+    // Parser tab: the raw text spans the parser surfaced — the granular "so many values"
+    // that narrows into Schema then Gold. Each row is clickable: it highlights the
+    // parser's NATIVE region on the PDF (reusing the card overlay), so you can see how
+    // the parser carved up the page — distinct from the tightened measurement boxes.
+    // Lazy + cached per parser (spans are model-independent).
+    async function renderParser() {
+      const pane = document.getElementById("parser-pane");
+      const parser = cellData.parser, pageinfo = cellData.pageinfo;
+      pane.innerHTML = '<div class="empty">Loading spans…</div>';
+      try {
+        let payload = spansCache[parser];
+        if (!payload) { payload = await getJSON(`/paper/${sha}/spans/${encodeURIComponent(parser)}`); spansCache[parser] = payload; }
+        if (activeTab !== "parser" || cellData.parser !== parser) return;  // user switched mid-fetch
+        pane.innerHTML = "";
+        if (!payload.count) {
+          pane.innerHTML = `<div class="empty">${escapeHtml(parser)} has no geometry spans (e.g. chandra) — nothing to show.</div>`; return;
+        }
+        const head = document.createElement("div");
+        head.className = "gold-summary";
+        head.innerHTML = `<b>${payload.count}</b> raw text spans from ${escapeHtml(parser)} — click one to highlight the region the parser read it from.`;
+        pane.appendChild(head);
+        for (const s of payload.spans) pane.appendChild(renderSpanRow(s, parser, pageinfo));
+      } catch (e) {
+        pane.innerHTML = `<div class="empty">failed to load spans — ${escapeHtml(String(e.message || e))}</div>`;
+      }
+    }
+
+    // A span row carries the SAME bbox-placement dataset as a value card (page, native
+    // bbox, parser, coord mode + reference page size), so highlightBox() places it with
+    // no parser-specific code. docling/paddle draw; mineru/dots have no cached page size.
+    function renderSpanRow(s, parser, pageinfo) {
+      const row = document.createElement("div");
+      row.className = "span-row";
+      row.dataset.page = s.page;
+      row.dataset.bbox = JSON.stringify(s.bbox);
+      row.dataset.parser = parser;
+      row.dataset.mode = (pageinfo && pageinfo.mode) || "none";
+      const ref = pageinfo && pageinfo.pages ? pageinfo.pages[s.page] : null;
+      if (ref) { row.dataset.refw = ref[0]; row.dataset.refh = ref[1]; }
+      row.innerHTML = `<span class="pg">p.${s.page}</span>${escapeHtml(s.text)}`;
+      row.onmouseover = () => highlightBox(row, false);  // preview only — no scroll on hover
+      row.onclick = () => selectSpan(row);
+      return row;
+    }
+
+    function selectSpan(row) {
+      document.querySelectorAll(".span-row.active").forEach(r => r.classList.remove("active"));
+      row.classList.add("active");
+      const drawn = highlightBox(row, true);
+      document.getElementById("hl-note").textContent = drawn ? ""
+        : `⚠ “${row.dataset.parser}” regions can’t be placed — no reference page size is cached for this parser (docling/paddle highlight; mineru/dots don’t).`;
+    }
+
+    // Gold tab: extracted-vs-gold for this cell — which gold values were found/missed,
+    // and which extracted values are extra (not in gold). Answers "missing, or thin gold?".
+    function renderGold() {
+      const pane = document.getElementById("gold-pane");
+      const g = cellData.gold;
+      if (!g.gold_total) { pane.innerHTML = '<div class="empty">No gold reference for this paper.</div>'; return; }
+      const extras = g.extracted.filter(e => !e.matched);
+      const goldRows = g.gold.map(x =>
+        `<div class="gold-row ${x.matched ? "hit" : "miss"}"><span class="gmark">${x.matched ? "✓" : "✗"}</span>` +
+        `<span class="gtype">${escapeHtml(x.type)}</span><span class="gval">${escapeHtml(String(x.value))}</span></div>`).join("");
+      const extraRows = extras.length
+        ? extras.map(x => `<div class="gold-row"><span class="gmark" style="color:var(--muted)">+</span>` +
+            `<span class="gtype">${escapeHtml(x.type)}</span><span class="gval">${escapeHtml(String(x.value))}</span></div>`).join("")
+        : '<div class="empty" style="padding:.3rem 0">none</div>';
+      pane.innerHTML =
+        `<div class="gold-summary">matched <b>${g.tp}/${g.gold_total}</b> gold ` +
+        `(recall <b>${Math.round(g.recall * 100)}%</b>) · precision <b>${Math.round(g.precision * 100)}%</b> ` +
+        `· <b>${g.fp}</b> extracted not in gold</div>` +
+        `<div class="gold-section-h">gold values (✓ found · ✗ missed)</div>${goldRows}` +
+        `<div class="gold-section-h">extracted but not in gold (${extras.length})</div>${extraRows}`;
+    }
+
+    function renderCard(t, correction, pageinfo) {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.dataset.id = t.id; card.dataset.page = t.page;
+      card.dataset.bbox = JSON.stringify(t.bbox); card.dataset.parser = t.parser_name;
+      // coordinate mode + reference page size (from /pageinfo) so the overlay can place
+      // pixel-parser (paddle) boxes, not just docling points.
+      card.dataset.mode = (pageinfo && pageinfo.mode) || "none";
+      const ref = pageinfo && pageinfo.pages ? pageinfo.pages[t.page] : null;
+      if (ref) { card.dataset.refw = ref[0]; card.dataset.refh = ref[1]; }
+      const [cls, txt] = confBadge(t.confidence);
+      // every data-controlled value is escaped: unit_label/source_text are free LLM
+      // text from arbitrary PDFs (stored-XSS vector); slot_path/parser are controlled
+      // vocab but escaped for consistency.
+      const unit = t.unit ? " " + escapeHtml(t.unit) : "";
+      const val = `${escapeHtml(String(t.value ?? "—"))}${unit}`;
+      card.innerHTML = `
+        <div class="card-top">
+          <span class="card-slot">${escapeHtml(t.slot_path)}</span>
+          <span class="card-val">${val}</span>
+        </div>
+        <div class="card-meta">
+          <span class="badge ${cls}">${txt}</span>
+          ${t.page != null ? `<span class="pg">p.${t.page}</span>` : ""}
+          <span>${escapeHtml(t.parser_name)}</span>
+          <button class="card-edit">✎ Edit</button>
+        </div>
+        ${t.source_text ? `<div class="card-src">${escapeHtml(t.source_text)}</div>` : ""}`;
+      card.onmouseover = () => highlightBox(card, false);  // preview only — do NOT scroll on hover
+      card.onclick = (e) => {
+        if (!e.target.closest(".correction-form, .corr-note, .card-edit")) selectCard(card);
+      };
+      card.querySelector(".card-edit").onclick = (e) => { e.stopPropagation(); toggleForm(card, t); };
+      if (correction) markCorrected(card, correction);
+      return card;
+    }
+
+    // Click a card → mark it active, highlight + scroll the PDF to its source. If the
+    // parser's coords can't be placed (pixel parsers w/o a reference page size), say so
+    // honestly instead of leaving a stale or misplaced box.
+    function selectCard(card) {
+      document.querySelectorAll(".card.active").forEach(c => c.classList.remove("active"));
+      card.classList.add("active");
+      const drawn = highlightBox(card, true);
+      document.getElementById("hl-note").textContent = drawn ? ""
+        : `⚠ source box not available for “${card.dataset.parser}” — the value text couldn’t be located in the PDF (scanned page or no match), so this box wasn’t tightened to placeable points.`;
+    }
+
+    function escapeHtml(s) { const d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
+
+    function markCorrected(card, c) {
+      card.querySelector(".card-val")?.classList.add("corrected");
+      let note = card.querySelector(".corr-note");
+      if (!note) { note = document.createElement("small"); note.className = "corr-note"; card.appendChild(note); }
+      const to = c.flagged_wrong ? "flagged wrong"
+        : `→ ${c.corrected_value ?? ""}${c.corrected_unit ? " " + c.corrected_unit : ""}`;
+      note.textContent = `corrected by ${c.author} ${to} — ${c.comment}`;
+    }
+
+    function toggleForm(card, t) {
+      const open = card.querySelector(".correction-form");
+      if (open) { open.remove(); return; }
+      const form = document.createElement("div");
+      form.className = "correction-form";
+      form.innerHTML = `
+        <label>value <input class="cf-value" type="number" step="any"></label>
+        <label>unit <input class="cf-unit"></label>
+        <label><input class="cf-flag" type="checkbox"> flag wrong (no replacement)</label>
+        <textarea class="cf-comment" placeholder="why is this wrong / what is correct (required)"></textarea>
+        <div><button class="primary cf-save">Save correction</button>
+             <button class="cf-cancel">Cancel</button>
+             <span class="cf-msg"></span></div>`;
+      card.appendChild(form);
+      // set field values via property, NOT attribute interpolation — XSS-safe for a
+      // unit_label like `" onfocus=… autofocus="`.
+      form.querySelector(".cf-value").value = t.value ?? "";
+      form.querySelector(".cf-unit").value = t.unit ?? "";
+      form.querySelector(".cf-cancel").onclick = () => form.remove();
+      form.querySelector(".cf-save").onclick = () => saveCorrection(card, t, form);
+    }
+
+    async function saveCorrection(card, t, form) {
+      const msg = form.querySelector(".cf-msg");
+      const comment = form.querySelector(".cf-comment").value.trim();
+      if (!comment) { msg.textContent = "comment required"; return; }
+      const flagged = form.querySelector(".cf-flag").checked;
+      const payload = { measurement_iri: t.id, comment, flagged_wrong: flagged };
+      if (!flagged) {
+        const vRaw = form.querySelector(".cf-value").value.trim();
+        const uRaw = form.querySelector(".cf-unit").value.trim();
+        if (vRaw !== "" && Number(vRaw) !== t.value) payload.new_value = Number(vRaw);
+        if (uRaw !== "" && uRaw !== (t.unit ?? "")) payload.new_unit = uRaw;
+        if (payload.new_value === undefined && payload.new_unit === undefined) {
+          msg.textContent = "change a value/unit or check flag wrong"; return;
+        }
+      }
+      msg.textContent = "saving…";
+      const res = await fetch(`/paper/${sha}/correct`, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) { msg.textContent = "error: " + await res.text(); return; }
+      form.remove();
+      markCorrected(card, { author: "human", comment,
+        corrected_value: payload.new_value ?? null, corrected_unit: payload.new_unit ?? null,
+        flagged_wrong: flagged });
+    }
   </script>
 </body>
 </html>
