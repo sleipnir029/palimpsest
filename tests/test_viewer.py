@@ -67,6 +67,19 @@ def test_known_pdf_streams_and_renders():
 
     page = client.get(f"/paper/{sha}")
     assert page.status_code == 200
-    # template wired the right stream URL + sha into the viewer
-    assert f"/paper/{sha}/pdf" in page.text
+    # template wires the full sha into the viewer JS, which builds /paper/${sha}/pdf
+    # client-side (the redesign moved URL construction from Jinja to JS).
+    assert f'const sha = "{sha}"' in page.text
     assert sha[:12] in page.text
+
+
+def test_collect_triples_tolerates_bad_literals():
+    """A single malformed page/bbox literal must degrade to None, not 500 the route
+    (so the data pane renders the value with no box, instead of failing the cell)."""
+    from palimpsest.viewer.app import _bbox, _int
+
+    assert _int("3") == 3 and _int(None) is None and _int("3.5") is None and _int("x") is None
+    good = {"bx0": "1.0", "by0": "2.0", "bx1": "3.0", "by1": "4.0"}
+    assert _bbox(good) == [1.0, 2.0, 3.0, 4.0]
+    assert _bbox({**good, "bx1": "oops"}) is None  # one bad coord → whole box dropped
+    assert _bbox({**good, "by1": None}) is None

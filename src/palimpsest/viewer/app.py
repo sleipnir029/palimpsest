@@ -18,24 +18,30 @@ errors) for the data pane.
 
 from __future__ import annotations
 
+import csv
 import html
+import importlib.util
 import inspect
+import io
+import json
 import re
 import sqlite3
 from functools import lru_cache
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import FileResponse, HTMLResponse
+from fastapi.responses import FileResponse, HTMLResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 
 from schema.generated import pydantic as _schema  # PEP 420 namespace pkg
 
+from ..cache import ParserCache
 from ..corrections import CorrectionError, correct_measurement
 from ..cost import canonical_db
 from ..store import PALIM, RDFStore, _expand
+from ..tools.extract import _load_spans
 from ..tools.read_paper import read_paper
 
 _BASE = Path(__file__).parent
@@ -172,13 +178,15 @@ def _type_names() -> dict[str, str]:
 
 
 # One SELECT joining each measurement to its Evidence (provenance) for a given
-# paper. value/unitLabel/sourceText are OPTIONAL — only written when present
-# (store.py skips None); page/bbox/parserName are schema-required.
+# paper. value/unitLabel/sourceText/confidence are OPTIONAL — only written when
+# present (store.py skips None); page/bbox/parserName are schema-required. The
+# extraction model lives in the per-run named graph (store.py T-app), so it is
+# joined via a GRAPH clause and is OPTIONAL (legacy/untagged data has none).
 _DATA_QUERY = """\
 PREFIX palim: <https://w3id.org/palimpsest/>
 PREFIX prov: <http://www.w3.org/ns/prov#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-SELECT ?m ?type ?value ?unit ?page ?bx0 ?by0 ?bx1 ?by1 ?parser ?src WHERE {{
+SELECT ?m ?type ?value ?unit ?page ?bx0 ?by0 ?bx1 ?by1 ?parser ?src ?conf ?model WHERE {{
   ?m rdf:type ?type ;
      prov:hadPrimarySource ?ev .
   ?ev palim:paper <{paper}> ;
@@ -188,9 +196,24 @@ SELECT ?m ?type ?value ?unit ?page ?bx0 ?by0 ?bx1 ?by1 ?parser ?src WHERE {{
       palim:parserName ?parser .
   OPTIONAL {{ ?m palim:value ?value }}
   OPTIONAL {{ ?m palim:unitLabel ?unit }}
+  OPTIONAL {{ ?m palim:confidence ?conf }}
   OPTIONAL {{ ?ev palim:sourceText ?src }}
+  OPTIONAL {{ GRAPH ?g {{ ?m palim:extractionModel ?model }} }}
 }}
 ORDER BY ?page ?m"""
+
+# Per-paper (parser, model) cells + measurement counts — the source for the
+# viewer's parser×model selector. model is OPTIONAL (legacy data → unbound).
+_RUNS_QUERY = """\
+PREFIX palim: <https://w3id.org/palimpsest/>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+SELECT ?parser ?model (COUNT(DISTINCT ?m) AS ?n) WHERE {{
+  ?m prov:hadPrimarySource ?ev .
+  ?ev palim:paper <{paper}> ; palim:parserName ?parser .
+  OPTIONAL {{ GRAPH ?g {{ ?m palim:extractionModel ?model }} }}
+}}
+GROUP BY ?parser ?model
+ORDER BY ?parser ?model"""
 
 
 def _num(v: str | None) -> float | str | None:
@@ -203,17 +226,29 @@ def _num(v: str | None) -> float | str | None:
         return v
 
 
-@app.get("/paper/{sha}/data")
-def paper_data(sha: str) -> dict:
-    """All measurements for `sha` with value, unit, and provenance, as JSON.
+def _int(v: str | None) -> int | None:
+    """Page literal -> int; None if absent/unparseable so one bad row can't 500 the route."""
+    try:
+        return int(v) if v is not None else None
+    except (TypeError, ValueError):
+        return None
 
-    Read-only over the RDF graph — no LLM, no spend. Unknown sha (or a non-hex
-    sha, which must never reach the SPARQL string) yields an empty `triples`
-    list with 200 — not a 404 like the sibling /paper routes — so the HTMX data
-    pane renders an empty state cleanly.
+
+def _bbox(r: dict) -> list[float] | None:
+    """The four coords as floats, or None if any is missing/non-numeric — the overlay
+    skips a null bbox cleanly instead of doing math on a string (a NaN box)."""
+    cs = [_num(r["bx0"]), _num(r["by0"]), _num(r["bx1"]), _num(r["by1"])]
+    return cs if all(isinstance(c, float) for c in cs) else None
+
+
+def _collect_triples(sha: str, parser: str | None = None, model: str | None = None) -> list[dict]:
+    """Measurement rows for `sha`, each with provenance + confidence + model.
+
+    `parser`/`model`, when given, post-filter the rows in Python (NOT interpolated
+    into SPARQL — they come from the query string). [] for a non-hex sha.
     """
     if not _SHA_RE.match(sha):
-        return {"sha": sha, "triples": []}
+        return []
     rows = _graph_store().sparql(_DATA_QUERY.format(paper=f"{PALIM}paper/{sha}"))
     names = _type_names()
     triples = [
@@ -222,13 +257,217 @@ def paper_data(sha: str) -> dict:
             "slot_path": names.get(r["type"], r["type"]),
             "value": _num(r["value"]),
             "unit": r["unit"],
-            "page": int(r["page"]) if r["page"] is not None else None,
-            "bbox": [_num(r["bx0"]), _num(r["by0"]), _num(r["bx1"]), _num(r["by1"])],
+            "page": _int(r["page"]),
+            "bbox": _bbox(r),
             "parser_name": r["parser"],
             "source_text": r["src"],
+            "confidence": _num(r["conf"]),
+            "model": r["model"],
         }
         for r in rows
     ]
+    if parser is not None:
+        triples = [t for t in triples if t["parser_name"] == parser]
+    if model is not None:
+        triples = [t for t in triples if t["model"] == model]
+    return triples
+
+
+@app.get("/paper/{sha}/data")
+def paper_data(sha: str, parser: str | None = None, model: str | None = None) -> dict:
+    """Measurements for `sha` with value, unit, provenance, confidence, and model.
+
+    Read-only over the RDF graph — no LLM, no spend. Optional `parser`/`model`
+    query params filter to one matrix cell. Unknown/non-hex sha yields an empty
+    `triples` list with 200 (not 404) so the data pane renders an empty state.
+    """
+    return {"sha": sha, "triples": _collect_triples(sha, parser, model)}
+
+
+def _page_geometry(sha: str, parser: str) -> dict:
+    """Per-page reference size + coordinate mode for placing a parser's bboxes.
+
+    docling bboxes are PDF points (mode "points"); paddle bboxes are image pixels
+    with a known reference page size in its cached output (mode "pixels"). mineru/
+    dots cached outputs carry no page size (mode "none"), so the viewer can't place
+    their boxes without a re-parse. Returns ``{"mode", "pages": {page_no: [w, h]}}``.
+    """
+    if parser not in ParserCache.PARSERS:
+        return {"mode": "none", "pages": {}}
+    path = ParserCache().get_output(sha, parser)
+    if path is None or path.suffix != ".json":
+        return {"mode": "none", "pages": {}}
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return {"mode": "none", "pages": {}}
+    pages: dict[int, list[float]] = {}
+    if parser == "docling":  # .pages is {page_no_str: {size: {width, height}}}, points
+        for k, pg in (data.get("pages") or {}).items():
+            try:
+                size = pg.get("size", {})
+                pages[int(k)] = [float(size["width"]), float(size["height"])]
+            except (ValueError, KeyError, TypeError, AttributeError):
+                continue
+        return {"mode": "points", "pages": pages}
+    if parser == "paddle":  # .pages[].res.{page_index, width, height}, pixels
+        for pg in data.get("pages", []):
+            res = pg.get("res", {}) if isinstance(pg, dict) else {}
+            idx = res.get("page_index")
+            if isinstance(idx, int) and "width" in res and "height" in res:
+                pages[idx + 1] = [float(res["width"]), float(res["height"])]
+        return {"mode": "pixels", "pages": pages}
+    return {"mode": "none", "pages": {}}  # mineru/dots: no page size cached
+
+
+@app.get("/paper/{sha}/pageinfo/{parser}")
+def paper_pageinfo(sha: str, parser: str) -> dict:
+    """Reference page sizes + coordinate mode for `parser`, so the viewer can place
+    pixel-parser bboxes (docling=points, paddle=pixels, mineru/dots=none)."""
+    if not _SHA_RE.match(sha):
+        raise HTTPException(status_code=400, detail="non-hex sha")
+    if parser not in ParserCache.PARSERS:
+        raise HTTPException(status_code=400, detail=f"unknown parser: {parser}")
+    return {"sha": sha, "parser": parser, **_page_geometry(sha, parser)}
+
+
+@app.get("/paper/{sha}/runs")
+def paper_runs(sha: str) -> dict:
+    """Distinct (parser, model) cells + measurement counts for `sha`.
+
+    The data source for the viewer's parser×model selector. `model` is null for
+    legacy/untagged extractions. Read-only; empty for a non-hex sha.
+    """
+    if not _SHA_RE.match(sha):
+        return {"sha": sha, "runs": []}
+    rows = _graph_store().sparql(_RUNS_QUERY.format(paper=f"{PALIM}paper/{sha}"))
+    runs = [{"parser": r["parser"], "model": r["model"], "count": int(r["n"])} for r in rows]
+    return {"sha": sha, "runs": runs}
+
+
+@app.get("/paper/{sha}/parse/{parser}")
+def paper_parse(sha: str, parser: str):
+    """Serve the cached RAW parse output (JSON/Markdown) for `sha`+`parser`.
+
+    Read-only file serve from the parse-once cache (no parse, no GPU). 400 on a
+    non-hex sha or unknown parser; 404 if that parser's output isn't cached.
+    """
+    if not _SHA_RE.match(sha):
+        raise HTTPException(status_code=400, detail="non-hex sha")
+    if parser not in ParserCache.PARSERS:
+        raise HTTPException(status_code=400, detail=f"unknown parser: {parser}")
+    path = ParserCache().get_output(sha, parser)
+    if path is None:
+        raise HTTPException(status_code=404, detail=f"no cached {parser} output for {sha[:12]}")
+    media = "application/json" if path.suffix == ".json" else "text/plain; charset=utf-8"
+    return FileResponse(path, media_type=media)
+
+
+@app.get("/paper/{sha}/spans/{parser}")
+def paper_spans(sha: str, parser: str) -> dict:
+    """The parser's projected text spans (page + text) — the "Parser" funnel tab.
+
+    Reads the parse-once cache and runs the SAME per-parser span adapter extraction
+    consumes (`extract._load_spans`). Read-only: no LLM, no GPU, no spend. This is
+    the granular "so many values" view that narrows into Schema then Gold. Chandra
+    (no geometry) yields count 0. 400 non-hex/unknown parser; 404 if uncached.
+    """
+    if not _SHA_RE.match(sha):
+        raise HTTPException(status_code=400, detail="non-hex sha")
+    if parser not in ParserCache.PARSERS:
+        raise HTTPException(status_code=400, detail=f"unknown parser: {parser}")
+    path = ParserCache().get_output(sha, parser)
+    if path is None:
+        raise HTTPException(status_code=404, detail=f"no cached {parser} output for {sha[:12]}")
+    try:  # a mis-shaped (but valid-JSON) cache file must degrade to empty, not 500 a read route
+        spans = _load_spans(parser, path.read_text(encoding="utf-8"))
+    except (AttributeError, TypeError, KeyError, ValueError):
+        spans = []
+    # bbox is the parser's NATIVE region (same coord space as /pageinfo) so the viewer
+    # can highlight where the parser read each span — see how the parser carved the page.
+    return {"sha": sha, "parser": parser, "count": len(spans),
+            "spans": [{"page": p, "text": t, "bbox": list(b)} for p, t, b in spans]}
+
+
+@lru_cache(maxsize=1)
+def _gold_module():
+    """Load `experiments/ab_extract.py` (GOLD + the benchmark matcher) by file path.
+
+    ponytail: deliberate file-path import, NOT a package import — experiments/ has no
+    __init__, and the engine must not duplicate the gold (ab_extract.py stays the
+    single source of truth, so the viewer's match == the benchmark's). Returns None
+    if the file is absent (installed package without the repo) so the Gold tab
+    degrades to "no gold" instead of 500ing. (alt: extract GOLD to a shared JSON —
+    rejected to avoid touching the live benchmark.)
+    """
+    path = Path("experiments/ab_extract.py")
+    if not path.exists():
+        return None
+    spec = importlib.util.spec_from_file_location("_palim_gold", path)
+    if spec is None or spec.loader is None:
+        return None
+    mod = importlib.util.module_from_spec(spec)
+    try:
+        spec.loader.exec_module(mod)  # top-level is defs + load_dotenv(); main() is __main__-gated
+    except Exception:
+        return None
+    return mod
+
+
+@app.get("/paper/{sha}/gold")
+def paper_gold(sha: str, parser: str | None = None, model: str | None = None) -> dict:
+    """Extracted-vs-gold for one cell — the "Gold" funnel tab.
+
+    Greedy-matches the cell's extracted (type, value) against the paper's gold using
+    the benchmark's own `_matches` predicate (so the numbers equal ab_extract
+    scoring). Reports each gold tuple's matched flag (✓/missed), each extracted
+    value's matched flag (False ⇒ false positive / not-in-gold), and tp/fp/fn +
+    recall/precision. `gold_total` 0 ⇒ no gold for this sha (tab says so).
+    """
+    mod = _gold_module()
+    gold = (getattr(mod, "GOLD", {}) or {}).get(sha, []) if mod else []
+    matches = getattr(mod, "_matches", None) if mod else None
+    preds = [(t["slot_path"], t["value"]) for t in _collect_triples(sha, parser, model)]
+    matched_gold = [False] * len(gold)
+    pred_hit = [False] * len(preds)
+    if matches is not None:
+        for pi, (pt, pv) in enumerate(preds):  # same greedy order as ab_extract._score_preds
+            for gi, (gt, gv) in enumerate(gold):
+                if not matched_gold[gi] and matches(pt, pv, gt, gv):
+                    matched_gold[gi] = pred_hit[pi] = True
+                    break
+    tp = sum(matched_gold)
+    return {
+        "sha": sha,
+        "gold_total": len(gold),
+        "tp": tp, "fn": len(gold) - tp, "fp": sum(1 for h in pred_hit if not h),
+        "recall": tp / len(gold) if gold else 0.0,
+        "precision": tp / len(preds) if preds else 0.0,
+        "gold": [{"type": g[0], "value": g[1], "matched": matched_gold[i]}
+                 for i, g in enumerate(gold)],
+        "extracted": [{"type": p[0], "value": p[1], "matched": pred_hit[i]}
+                      for i, p in enumerate(preds)],
+    }
+
+
+@app.get("/paper/{sha}/export")
+def paper_export(sha: str, parser: str | None = None, model: str | None = None,
+                 format: str = "json"):
+    """Export the current (optionally parser/model-filtered) view as JSON or CSV."""
+    triples = _collect_triples(sha, parser, model)
+    if format == "csv":
+        buf = io.StringIO()
+        w = csv.writer(buf)
+        w.writerow(["measurement", "slot", "value", "unit", "confidence",
+                    "page", "bbox", "parser", "model", "source_text"])
+        for t in triples:
+            w.writerow([t["id"], t["slot_path"], t["value"], t["unit"], t["confidence"],
+                        t["page"], json.dumps(t["bbox"]), t["parser_name"], t["model"],
+                        t["source_text"]])
+        return Response(
+            content=buf.getvalue(), media_type="text/csv",
+            headers={"Content-Disposition": f'attachment; filename="palimpsest-{sha[:12]}.csv"'},
+        )
     return {"sha": sha, "triples": triples}
 
 
