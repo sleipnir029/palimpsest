@@ -32,12 +32,17 @@ Screen {
     margin: 1 0 0 0;
 }
 
-/* Agent reply: the bright top layer (markdown), a blank line below it. */
+/* Agent reply: the bright top layer (markdown), a blank line below it. The Markdown
+   widget ships a built-in `padding: 0 2 0 2`; zero it so the reply's left edge lines up
+   under the user's `❯`, with the traces one step further in (their margin below). */
 .msg-agent {
     margin: 0 0 1 0;
+    padding: 0;
 }
 
-/* Tool traces: the faded underwriting showing through, indented under the turn. */
+/* Tool traces: the faded underwriting showing through, indented under the turn. Now a
+   Collapsible per tool — strip its default surface card (border-top + surface bg +
+   padding) back to a flat sepia line so it reads as underwriting, not a panel. */
 .trace {
     color: $secondary;
     margin: 0 0 0 2;
@@ -46,6 +51,30 @@ Screen {
 .trace-error {
     color: $error;
     margin: 0 0 0 2;
+}
+
+Collapsible.trace, Collapsible.trace-error {
+    background: $background;
+    border-top: none;
+    padding: 0;
+    height: auto;
+}
+
+Collapsible.trace > CollapsibleTitle {
+    color: $secondary;
+    padding: 0;
+}
+
+Collapsible.trace-error > CollapsibleTitle {
+    color: $error;
+    padding: 0;
+}
+
+/* Expanded body: indented one step under its title, faded. */
+Collapsible.trace > Contents,
+Collapsible.trace-error > Contents {
+    padding: 0 0 0 2;
+    color: $secondary;
 }
 
 #dockbottom {

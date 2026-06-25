@@ -21,6 +21,7 @@ DEVIATIONS.md. View updates always hop to the main thread via ``call_from_thread
 from __future__ import annotations
 
 import threading
+import time
 
 from rich.text import Text
 from textual import events, work
@@ -28,7 +29,7 @@ from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.containers import Vertical, VerticalScroll
 from textual.message import Message
-from textual.widgets import Markdown, Static, TextArea
+from textual.widgets import Collapsible, Markdown, Static, TextArea
 
 from ..agent import Agent, build_agent
 from ..cost import CostMeter
@@ -114,6 +115,10 @@ class PromptArea(TextArea):
 
 class PalimpsestApp(App):
     CSS_PATH = "styles.tcss"
+    # ponytail: app-level mouse selection off — dodges a Textual 8.2.7 assert that
+    # crashes on MouseDown over a markdown table mid-rebuild (screen.py:1896). Terminal-
+    # native selection (Option-drag macOS, Shift elsewhere) still copies text.
+    ALLOW_SELECT = False
     BINDINGS = [
         ("ctrl+q", "quit", "Quit"),
         ("ctrl+l", "clear_log", "Clear log"),
@@ -141,6 +146,15 @@ class PalimpsestApp(App):
         # flight. The buffer is mirrored to the transcript once, on seal.
         self._stream_widget: Markdown | None = None
         self._stream_buf = ""
+        # Render throttle (A1): Markdown.update re-parses the whole buffer, so calling it
+        # per-delta is O(n²) and freezes the UI on long replies. Render at most ~10 Hz;
+        # _seal_stream does the final flush so nothing is lost. monotonic clock, main
+        # thread only (deltas arrive via call_from_thread).
+        self._stream_last_render = 0.0
+        # The tool trace renders one collapsible per call: mounted (title "… running…")
+        # when the call fires, its title+body filled when the result arrives. Holds the
+        # in-flight (collapsible, body, name, args) between those two events; None = idle.
+        self._pending_tool: tuple[Collapsible, Static, str, str] | None = None
         # Input history (A5): submitted lines, recalled with up/down when the
         # autocomplete menu is closed. _history_idx is the cursor (None = not recalling).
         self._history: list[str] = []
@@ -405,6 +419,7 @@ class PalimpsestApp(App):
         self._set_status("· working…")
         self._stream_widget = None  # fresh reply: don't append to a stale widget
         self._stream_buf = ""
+        self._pending_tool = None  # no half-open tool collapsible carried across turns
         self._run_agent(text)
 
     @work(thread=True)
@@ -430,50 +445,97 @@ class PalimpsestApp(App):
         self.call_from_thread(self._show_event, event)
 
     def _show_event(self, event: dict) -> None:
+        # Runs on the main thread (via call_from_thread). A render glitch here would
+        # reach Textual's dispatcher and panic the whole app, so it's the one main-thread
+        # path left to guard (the worker + monitor already are). Degrade to a visible note.
+        try:
+            self._render_event(event)
+        except Exception as exc:  # noqa: BLE001 — never let a render error tear the app down
+            self.monitor.issues.append({"kind": "exception", "detail": f"render: {exc!r}"})
+            try:
+                self._emit("trace", f"⚠ render error: {exc}", classes="trace-error")
+            except Exception:  # noqa: BLE001 — last resort: swallow rather than re-raise
+                pass
+
+    def _render_event(self, event: dict) -> None:
         etype = event.get("type")
         if etype == "assistant_delta":  # A1: streamed reply text
             self._stream_append(event["text"])
             return
         if etype == "stage":  # B1: pipeline progress under the active tool
-            self._emit("trace", f"   · {event['text']}", classes="trace")
+            self._emit("trace", f"· {event['text']}", classes="trace")
             return
         if etype == "tool_call":
             self._seal_stream()  # any streamed text precedes this call — finalize it
+            name = event["name"]
             args = ", ".join(str(v) for v in (event["input"] or {}).values())
-            self._emit("trace", f"→ {event['name']}({args})", classes="trace")
+            # One collapsible per tool: a tidy title now (args clipped), the body filled
+            # when the result lands. Mirror the full "→ name(args)" line to the transcript
+            # seam (tests assert label + ordering) via _emit, which also mounts the widget.
+            args_disp = args if len(args) <= 60 else args[:60] + "…"
+            body = Static("")
+            col = Collapsible(body, title=f"{name}({args_disp}) — running…", collapsed=True, classes="trace")
+            self._pending_tool = (col, body, name, args_disp)
+            self._emit("trace", f"→ {name}({args})", widget=col)
             return
-        # tool_result
+
+        # tool_result: summarise into the collapsible title, full detail in its body.
         name = event.get("name")
         content = str(event["content"])
+        is_error = bool(event.get("is_error"))
         if name == "edit_file" and content.startswith("edited "):
-            # A4: render the unified diff with +/- coloring instead of truncating it.
-            self._emit("trace", content, renderable=_diff_text(content), classes="trace")
-            return
-        # A4/B2: bash + extract_paper are supervision-relevant (the command run, the
-        # graph mutation) — show them in full rather than clipped to 200 chars.
-        cap = _FULL_TRUNCATE if name in ("bash", "extract_paper") else _TRUNCATE
-        snippet = content if len(content) <= cap else content[:cap] + "…"
-        marker = "✗" if event.get("is_error") else "←"
-        self._emit(
-            "trace", f"{marker} {snippet}",
-            classes="trace-error" if event.get("is_error") else "trace",
-        )
+            # A4: the unified diff (with +/- colouring) is the detail worth keeping.
+            body_render, summary, mirror = _diff_text(content), "edited", content
+        else:
+            # A4/B2: bash + extract_paper are supervision-relevant (the command run, the
+            # graph mutation) — keep their full output; clip everything else.
+            cap = _FULL_TRUNCATE if name in ("bash", "extract_paper") else _TRUNCATE
+            snippet = content if len(content) <= cap else content[:cap] + "…"
+            marker = "✗" if is_error else "←"
+            mirror = f"{marker} {snippet}"  # unchanged transcript seam (truncation/marker)
+            nlines = content.count("\n") + 1 if content.strip() else 0
+            summary = "error" if is_error else (f"{nlines} lines" if nlines else "ok")
+            body_render = Text(snippet, style="red") if is_error else snippet
+
+        cls = "trace-error" if is_error else "trace"
+        if self._pending_tool is not None:  # fill the collapsible from the matching call
+            col, body, cname, cargs = self._pending_tool
+            col.title = f"{cname}({cargs}) — {summary}"
+            if is_error:
+                col.add_class("trace-error")
+            body.update(body_render)
+            self._pending_tool = None
+            self.transcript.append(("trace", mirror))  # widget already mounted; mirror only
+        else:  # a result with no preceding call (e.g. a direct error) — mount fresh
+            col = Collapsible(Static(body_render), title=f"{name or 'tool'} — {summary}", collapsed=True, classes=cls)
+            self._emit("trace", mirror, widget=col)
 
     def _stream_append(self, delta: str) -> None:
         """Append a streamed text delta to the live reply widget (A1), mounting it on
-        the first delta. Not mirrored to the transcript until seal."""
+        the first delta. The buffer accumulates every delta, but the costly
+        Markdown.update render is throttled to ~10 Hz (see _stream_last_render) so a
+        long reply doesn't re-parse the whole buffer per token and freeze the UI.
+        _seal_stream guarantees the final render. Not mirrored to the transcript until
+        seal."""
         if self._stream_widget is None:
             self._stream_widget = Markdown(classes="msg-agent")
             self.query_one("#log", VerticalScroll).mount(self._stream_widget)
+            self._stream_last_render = 0.0  # force a render on the first delta
         self._stream_buf += delta
+        now = time.monotonic()
+        if now - self._stream_last_render < 0.1:
+            return  # coalesce: a later delta (or seal) will render the accrued buffer
+        self._stream_last_render = now
         self._stream_widget.update(self._stream_buf)
         self.query_one("#log", VerticalScroll).scroll_end(animate=False)
 
     def _seal_stream(self) -> None:
-        """Finalize the live reply widget: mirror its text to the transcript once and
-        stop appending (a later turn's text starts a fresh widget)."""
+        """Finalize the live reply widget: flush the last accrued deltas (the throttle
+        may have skipped them), mirror its text to the transcript once, and stop
+        appending (a later turn's text starts a fresh widget)."""
         if self._stream_widget is None:
             return
+        self._stream_widget.update(self._stream_buf)  # final flush: catch throttled tail
         self.transcript.append(("agent", self._stream_buf))
         self._stream_widget = None
         self._stream_buf = ""
@@ -503,6 +565,7 @@ class PalimpsestApp(App):
         # so the next delta starts a fresh one instead of updating a detached widget.
         self._stream_widget = None
         self._stream_buf = ""
+        self._pending_tool = None  # the removed children include any open tool collapsible
 
     def action_cancel_turn(self) -> None:
         # Esc first dismisses an open autocomplete menu (doesn't cancel the turn).
