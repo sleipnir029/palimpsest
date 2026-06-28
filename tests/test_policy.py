@@ -10,9 +10,11 @@ from __future__ import annotations
 
 import pytest
 
-from palimpsest import policy
+from palimpsest import policy, sandbox
 from palimpsest.policy import PolicyViolation, assert_bash_allowed, assert_writable
 from palimpsest.tools.bash import bash
+
+_NO_SANDBOX = sandbox.mechanism() is None  # gate enforcement tests off unsupported CI
 from palimpsest.tools.edit_file import edit_file
 from palimpsest.tools.write_file import write_file
 
@@ -130,7 +132,10 @@ def test_edit_file_reports_missing_and_ambiguous(ws):
 
 # --- bash -------------------------------------------------------------------
 
-def test_bash_runs_in_workspace_cwd(ws):
+def test_bash_runs_in_workspace_cwd(ws, monkeypatch):
+    # cwd-pinning is orthogonal to the sandbox; force the fence off so this asserts
+    # the plumbing deterministically on platforms with no sandbox mechanism.
+    monkeypatch.setattr("palimpsest.config.get_setting", lambda *a, **k: "off")
     (ws / "marker.txt").write_text("", encoding="utf-8")
     out = bash("ls")
     assert "marker.txt" in out and "[exit 0]" in out
@@ -141,12 +146,28 @@ def test_bash_refuses_unmetered_spend(ws):
         bash("python -m palimpsest demo papers/x.pdf")
 
 
-def test_bash_is_not_filesystem_confined(ws, tmp_path):
-    # Documents the escape-hatch design (B1): bash is cwd-pinned but NOT fenced —
-    # a shell can write outside the workspace via an absolute path. This is a
-    # tested, explicit design fact, not a hidden gap; the code-enforced boundary
-    # is write_file/edit_file, not bash.
-    outside = tmp_path.parent / "bash_escaped.txt"
+@pytest.mark.skipif(_NO_SANDBOX, reason="no OS sandbox mechanism on this platform")
+def test_bash_writes_are_confined_to_workspace(ws):
+    # The new contract: with the sandbox on (default), a shell write OUTSIDE the
+    # workspace is refused by the OS — the escape hatch can no longer escape. Target
+    # a home sentinel (not a temp sibling — $TMPDIR is an allowed scratch area).
+    import pathlib
+
+    outside = pathlib.Path.home() / ".palimpsest_sandbox_leakcheck_policy"
+    outside.unlink(missing_ok=True)
+    try:
+        out = bash(f'echo escaped > "{outside}"')
+        assert not outside.exists()  # the write never landed
+        assert "[exit 0]" not in out
+    finally:
+        outside.unlink(missing_ok=True)  # and the command reported failure
+
+
+def test_bash_unconfined_when_sandbox_off(ws, tmp_path, monkeypatch):
+    # The documented override: `/config set bash_sandbox off` restores the raw,
+    # unfenced escape hatch (the human's responsibility).
+    monkeypatch.setattr("palimpsest.config.get_setting", lambda *a, **k: "off")
+    outside = tmp_path.parent / "bash_optout.txt"
     bash(f'echo escaped > "{outside}"')
     assert outside.exists()
     outside.unlink()

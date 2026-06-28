@@ -58,6 +58,7 @@ def _within(path: Path, root: Path) -> bool:
 # paths from config rather than these literals.
 _PROTECTED_DIRS = {"store", "cache"}
 _PROTECTED_NAMES = {"config.txt", ".env"}  # secrets — set via config.set_value, not write_file
+_PROTECTED_SUFFIXES = (".db", ".key")  # ledger + key material; single source for the sandbox too
 
 
 def is_secret_path(path: str) -> bool:
@@ -100,7 +101,7 @@ def assert_writable(path: str) -> Path:
             f"protected: {rel.parts[0]}/ is written only via the pipeline "
             "(provenance/cache), never by direct file edits"
         )
-    if p.name in _PROTECTED_NAMES or p.suffix in (".db", ".key"):
+    if p.name in _PROTECTED_NAMES or p.suffix in _PROTECTED_SUFFIXES:
         raise PolicyViolation(
             f"protected: {p.name} — secrets/ledger are not agent-writable"
         )
