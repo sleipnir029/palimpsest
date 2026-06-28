@@ -272,3 +272,29 @@ def test_undo_raises_if_reset_moves_head(ws, monkeypatch):
     monkeypatch.setattr(versioning.porcelain, "reset", reset_then_rewind)
     with pytest.raises(RuntimeError, match="append-only invariant broken"):
         versioning.undo_last_turn()
+
+
+def test_recent_history_lists_commits_with_turn_tags(ws):
+    (ws / "a.txt").write_text("1", encoding="utf-8")
+    versioning.checkpoint("first checkpoint")
+    tag = versioning.tag_turn()                       # tags HEAD as a turn boundary
+    (ws / "b.txt").write_text("2", encoding="utf-8")
+    versioning.checkpoint("second checkpoint")
+
+    hist = versioning.recent_history(10)
+    assert [h["title"] for h in hist] == ["second checkpoint", "first checkpoint"]  # newest first
+    # the tagged commit carries its turn tag; the later untagged one does not
+    by_title = {h["title"]: h for h in hist}
+    assert by_title["first checkpoint"]["tag"] == tag
+    assert by_title["second checkpoint"]["tag"] is None
+    assert all(len(h["sha"]) == 8 for h in hist)
+
+
+def test_recent_history_honors_limit_and_empty_repo(ws, tmp_path, monkeypatch):
+    for i in range(5):
+        (ws / f"f{i}.txt").write_text(str(i), encoding="utf-8")
+        versioning.checkpoint(f"c{i}")
+    assert len(versioning.recent_history(3)) == 3   # capped
+
+    monkeypatch.setenv("PALIMPSEST_WORKSPACE", str(tmp_path / "bare"))  # never ensure_repo'd
+    assert versioning.recent_history() == []        # no repo → empty, not an error

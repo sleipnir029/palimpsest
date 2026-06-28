@@ -503,9 +503,19 @@ class PalimpsestApp(App):
         self._emit("user", text, renderable=Text(f"❯ {text}", style="bold"), classes="msg-user")
 
         if text.startswith("/"):
-            self._emit("system", dispatch(self, text), classes="trace")  # T27: before the agent
-            self._set_status(self._status_text())  # a /use or /budget may have changed it
-            return
+            parts = text.lstrip("/").split()
+            # /review is the one slash command that runs the AGENT (a session-summary
+            # turn) rather than returning a string — fall through to the run path with
+            # a synthesized prompt. It costs budget, gated like any other turn.
+            if parts and parts[0] == "review":
+                from .slash import REVIEW_PROMPT
+
+                extra = " ".join(parts[1:]).strip()  # /review <focus> narrows the ask
+                text = f"{REVIEW_PROMPT}\n\nFocus especially on: {extra}" if extra else REVIEW_PROMPT
+            else:
+                self._emit("system", dispatch(self, text), classes="trace")  # T27: before the agent
+                self._set_status(self._status_text())  # a /use or /budget may have changed it
+                return
 
         # Clear any stale cancel left set by a late Esc as the previous turn ended
         # (input was still disabled then) — otherwise this fresh run would cancel

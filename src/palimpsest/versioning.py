@@ -181,6 +181,32 @@ def _undo_target(repo: Repo, turns: list[tuple[bytes, str]]) -> tuple[bytes, str
     return turns[1] if len(turns) >= 2 else None
 
 
+def recent_history(limit: int = 20) -> list[dict]:
+    """Recent workspace commits, newest-first, for a read-only ``/git`` view.
+
+    Each entry is ``{"sha": <8-char>, "title": <first commit line>, "tag": <turn
+    tag or None>}`` — the per-action checkpoints with their per-turn tag markers,
+    so the human can see what the agent changed turn by turn. Empty list when the
+    workspace isn't a git repo or has no commits (mirrors the best-effort contract
+    of the other readers here).
+    """
+    root = workspace_root()
+    if not (root / ".git").exists():
+        return []
+    repo = Repo(str(root))
+    try:
+        repo.head()
+    except KeyError:
+        return []  # no commits yet this session
+    tag_by_commit = {sha: tag for sha, tag in _turn_tags_from_head(repo)}
+    out: list[dict] = []
+    for entry in repo.get_walker(max_entries=limit):
+        c = entry.commit
+        title = c.message.decode("utf-8", "replace").splitlines()[0]
+        out.append({"sha": c.id.decode()[:8], "title": title, "tag": tag_by_commit.get(c.id)})
+    return out
+
+
 def undo_last_turn() -> UndoResult:
     """Restore the workspace to the previous turn's state, recorded as a new commit.
 

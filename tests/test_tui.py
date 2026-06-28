@@ -901,3 +901,45 @@ def test_streamed_reply_link_opens_once(tmp_path, monkeypatch):
             assert opened == ["https://streamed.example"]  # once, not twice
 
     asyncio.run(_drive())
+
+
+def test_review_slash_runs_agent_turn(tmp_path):
+    """/review is intercepted in the submit path and run as an AGENT turn with the
+    synthesized review prompt — not handled as a string slash command."""
+    from palimpsest.tui.slash import REVIEW_PROMPT
+
+    meter = CostMeter(str(tmp_path / "t.db"))
+    agent = _StubAgent(meter)
+    app = PalimpsestApp(agent=agent, cost_meter=meter)
+
+    async def _drive() -> None:
+        async with app.run_test() as pilot:
+            app.query_one("#prompt", PromptArea).text = "/review"
+            await pilot.press("enter")
+            await app.workers.wait_for_complete()
+            await pilot.pause()
+            assert agent.last == REVIEW_PROMPT          # agent actually ran the review
+            assert app.query_one("#prompt", PromptArea).disabled is False
+            # the user sees their command echoed, not the synthesized prompt
+            assert ("user", "/review") in app.transcript
+
+    asyncio.run(_drive())
+
+
+def test_review_with_args_narrows_the_prompt(tmp_path):
+    """/review <focus> appends the focus to the synthesized prompt (not dropped)."""
+    from palimpsest.tui.slash import REVIEW_PROMPT
+
+    meter = CostMeter(str(tmp_path / "t.db"))
+    agent = _StubAgent(meter)
+    app = PalimpsestApp(agent=agent, cost_meter=meter)
+
+    async def _drive() -> None:
+        async with app.run_test() as pilot:
+            app.query_one("#prompt", PromptArea).text = "/review the notebook work"
+            await pilot.press("enter")
+            await app.workers.wait_for_complete()
+            await pilot.pause()
+            assert agent.last == f"{REVIEW_PROMPT}\n\nFocus especially on: the notebook work"
+
+    asyncio.run(_drive())
