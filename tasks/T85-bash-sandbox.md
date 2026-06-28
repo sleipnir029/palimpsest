@@ -50,5 +50,13 @@ Empirically validated: write inside ok; write/rm/symlink-target outside blocked;
 - Reads + network open by design (not an exfiltration fence).
 - `sandbox-exec` is Apple-deprecated (still shipped/functional, used by Chromium/Claude Code).
 - Linux `bwrap` path is best-effort and **unverified** on the macOS dev box; its `*.db`/`*.key`/
-  `.env` suffix denies are Seatbelt-only (bwrap binds are path-based) — verify before Linux deploy.
+  `.env`/`.git` denies are Seatbelt-only (bwrap binds are path-based) — verify before Linux deploy.
 - Global `*.db` deny means the agent can't create a scratch sqlite db anywhere (matches `write_file`).
+- Only the per-user `$TMPDIR` is writable; the world-shared `/tmp` is NOT (so bash can't drop/clobber
+  files other users read). A tool that hardcodes `/tmp` instead of `$TMPDIR` will get "Operation not
+  permitted".
+- `pip install` / writes to site-packages fail under the sandbox (outside the workspace); the agent
+  must use the workspace or the human opts out for an install.
+- The workspace's own `.git` is denied to bash (protects the audit/undo net from `rm -rf .git`);
+  read-only git still works, and the engine's checkpointing writes `.git` out-of-band via dulwich.
+  When the sandbox is opted OUT, bash can again tamper with `.git` — git is then an aid, not a guarantee.

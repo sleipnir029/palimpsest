@@ -13,10 +13,10 @@ import pytest
 from palimpsest import policy, sandbox
 from palimpsest.policy import PolicyViolation, assert_bash_allowed, assert_writable
 from palimpsest.tools.bash import bash
-
-_NO_SANDBOX = sandbox.mechanism() is None  # gate enforcement tests off unsupported CI
 from palimpsest.tools.edit_file import edit_file
 from palimpsest.tools.write_file import write_file
+
+_NO_SANDBOX = sandbox.mechanism() is None  # gate enforcement tests off unsupported CI
 
 
 @pytest.fixture
