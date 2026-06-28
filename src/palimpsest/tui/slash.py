@@ -449,6 +449,38 @@ def _issues(app, args: list[str]) -> str:
     return "\n".join(lines)
 
 
+def _git(app, args: list[str]) -> str:
+    """show the workspace action history — per-tool checkpoints + per-turn tags"""
+    from .. import versioning
+
+    hist = versioning.recent_history(20)
+    if not hist:
+        return "no workspace history yet — the agent hasn't changed any files."
+    lines = ["workspace history (newest first):"]
+    for h in hist:
+        tag = f"   ⟵ {h['tag']}" if h["tag"] else ""
+        lines.append(f"  {h['sha']}  {h['title']}{tag}")
+    return "\n".join(lines)
+
+
+# /review runs an AGENT turn (app.py submit intercepts it before dispatch and runs
+# REVIEW_PROMPT), so the agent narrates the session and may consult `git`/
+# workspace_status. The _review handler below is therefore UNREACHABLE — it exists
+# only so /review carries a docstring for /help and the autocomplete menu.
+REVIEW_PROMPT = (
+    "Review this session for me. Summarize what you did: the files you created or "
+    "changed in the workspace and why, the key findings, and anything still open or "
+    "uncertain. Ground it in the actual per-action history — run "
+    "`git log --oneline --decorate -20` (the workspace is a git repo) and/or use "
+    "workspace_status — don't just recall from memory. Keep it concise and skimmable."
+)
+
+
+def _review(app, args: list[str]) -> str:
+    """have the agent review and summarize this session's actions and changes"""
+    return "（/review runs an agent turn — type it at the prompt in the TUI）"
+
+
 SLASH_COMMANDS: dict[str, Callable] = {
     "help": _help,
     "quit": _quit,
@@ -464,6 +496,8 @@ SLASH_COMMANDS: dict[str, Callable] = {
     "undo": _undo,
     "view": _view,
     "issues": _issues,
+    "git": _git,
+    "review": _review,
 }
 
 
@@ -489,7 +523,7 @@ def dispatch(app, line: str) -> str:
 # `sonnet`); de-advertised, not removed, so persisted *_model=anthropic rows survive.
 VISIBLE_COMMANDS = (
     "help", "quit", "budget", "cost", "use", "theme", "resume", "clear", "export",
-    "config", "undo", "view", "issues",
+    "config", "undo", "view", "issues", "git", "review",
 )
 
 _PROVIDER_GLOSS = {

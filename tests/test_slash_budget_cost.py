@@ -336,3 +336,33 @@ def test_resume_empty_session(tmp_path):
     app = _resume_app(tmp_path, [])
     assert "no prior session" in dispatch(app, "/resume")
     assert app.agent.messages == []  # nothing clobbered when there's nothing to load
+
+
+# /git + /review ------------------------------------------------------------
+def test_git_shows_workspace_history(tmp_path, monkeypatch):
+    """/git renders the workspace action tree from versioning.recent_history."""
+    from palimpsest import versioning
+
+    monkeypatch.setattr(versioning, "_last_tagged", None)
+    monkeypatch.setattr(versioning, "_turn", 0)
+    versioning.ensure_repo()  # workspace is tmp_path (autouse fixture)
+    (tmp_path / "note.md").write_text("hi", encoding="utf-8")
+    versioning.checkpoint("did a thing")
+    versioning.tag_turn()
+
+    out = dispatch(_app(tmp_path), "/git")
+    assert "workspace history" in out
+    assert "did a thing" in out
+    assert "turn-" in out  # the turn tag marker is shown
+
+
+def test_git_empty_when_no_repo(tmp_path):
+    out = dispatch(_app(tmp_path), "/git")  # tmp workspace, never ensure_repo'd
+    assert "no workspace history" in out
+
+
+def test_review_command_is_registered_and_listed():
+    """/review is dispatch-known (for /help + menu); the TUI runs it as an agent turn."""
+    assert "review" in slash.VISIBLE_COMMANDS
+    assert "review" in slash.SLASH_COMMANDS
+    assert slash.REVIEW_PROMPT.strip()  # a non-empty prompt the TUI submits
