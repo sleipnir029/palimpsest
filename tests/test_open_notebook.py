@@ -46,6 +46,7 @@ def _in_tmp_repo(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     (tmp_path / "notebooks").mkdir()  # engine templates live here
     _FakePopen.instances = []
+    mod._PROCESSES.clear()  # don't leak fakes into the atexit reaper / other tests
     monkeypatch.setattr(mod.subprocess, "Popen", _FakePopen)
     yield
 
@@ -118,6 +119,42 @@ def test_rejects_path_traversal_in_name():
     with pytest.raises(PolicyViolation):
         open_notebook("../../escape", content="pwned\n")
     assert not Path("escape.py").exists()  # nothing written outside the workspace
+
+
+def test_reap_notebooks_terminates_and_clears(monkeypatch):
+    """reap_notebooks SIGTERMs running editors, SIGKILLs stragglers, empties the list."""
+
+    class _Proc:
+        def __init__(self, running: bool, hang: bool = False):
+            self._running = running
+            self._hang = hang
+            self.terminated = self.killed = False
+
+        def poll(self):
+            return None if self._running else 0
+
+        def terminate(self):
+            self.terminated = True
+
+        def wait(self, timeout=None):
+            if self._hang:
+                raise mod.subprocess.TimeoutExpired(cmd="marimo", timeout=timeout)
+            return 0
+
+        def kill(self):
+            self.killed = True
+
+    running = _Proc(running=True)
+    straggler = _Proc(running=True, hang=True)
+    done = _Proc(running=False)
+    monkeypatch.setattr(mod, "_PROCESSES", [running, straggler, done])
+
+    mod.reap_notebooks()
+
+    assert running.terminated and not running.killed   # terminated, exited cleanly
+    assert straggler.terminated and straggler.killed   # hung → escalated to kill
+    assert not done.terminated                         # already exited → left alone
+    assert mod._PROCESSES == []                         # list drained
 
 
 def test_marimo_dying_before_url_raises(monkeypatch):

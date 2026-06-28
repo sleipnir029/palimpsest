@@ -31,6 +31,10 @@ from .policy import workspace_root
 # €-spend marks worth calling out in the digest (mirrors the TUI's warn ladder).
 _BUDGET_MARKS = (10, 20, 30, 40, 50)
 
+# Cap the in-memory issue list so a very long session can't grow it unbounded;
+# the digest and /issues only ever show the tail, so older issues are dropped.
+_MAX_ISSUES = 500
+
 
 class SessionMonitor:
     """Observe an agent session: log tool traces + cost, surface issues."""
@@ -50,6 +54,11 @@ class SessionMonitor:
         self.tool_timings: list[tuple[str, float]] = []
         self._pending: tuple[str, float] | None = None  # (tool name, start) — serial loop
         self._last_total: float | None = None
+
+    def _add_issue(self, issue: dict) -> None:
+        """Append an issue, bounding the list to the last ``_MAX_ISSUES``."""
+        self.issues.append(issue)
+        del self.issues[:-_MAX_ISSUES]  # no-op while len <= cap (_MAX_ISSUES must be > 0)
 
     # --- observation -------------------------------------------------------
     def observe(self, event: dict) -> None:
@@ -77,7 +86,7 @@ class SessionMonitor:
         content = str(event.get("content", ""))
         snippet = content if len(content) <= 200 else content[:200] + "…"
         if event.get("is_error"):
-            self.issues.append({"kind": "tool_error", "tool": name, "detail": content})
+            self._add_issue({"kind": "tool_error", "tool": name, "detail": content})
             self._log(f"✗ [{name} {elapsed:.2f}s] {snippet}", {**event, "elapsed_s": elapsed})
         else:
             self._log(f"← [{name} {elapsed:.2f}s] {snippet}", {**event, "elapsed_s": elapsed})
@@ -102,13 +111,13 @@ class SessionMonitor:
             # distinctly so the digest reads "budget", not a generic exception.
             ok = False
             error = f"{type(exc).__name__}: {exc}"
-            self.issues.append({"kind": "budget", "prompt": prompt, "detail": str(exc)})
+            self._add_issue({"kind": "budget", "prompt": prompt, "detail": str(exc)})
             self._log(f"!!! {error}", {"type": "budget", "detail": error})
             reply = f"[budget] {error}"
         except Exception as exc:  # noqa: BLE001 — the monitor surfaces, never crashes the demo
             ok = False
             error = f"{type(exc).__name__}: {exc}"
-            self.issues.append({"kind": "exception", "prompt": prompt, "detail": error})
+            self._add_issue({"kind": "exception", "prompt": prompt, "detail": error})
             self._log(f"!!! {error}\n{traceback.format_exc()}", {"type": "exception", "detail": error})
             reply = f"[error] {error}"
         seconds = time.monotonic() - start
@@ -127,7 +136,7 @@ class SessionMonitor:
         prev = self._last_total if self._last_total is not None else 0.0
         for mark in _BUDGET_MARKS:
             if prev < mark <= total:
-                self.issues.append({"kind": "budget", "detail": f"spend crossed €{mark} (now €{total:.2f})"})
+                self._add_issue({"kind": "budget", "detail": f"spend crossed €{mark} (now €{total:.2f})"})
         self._last_total = total
 
     # --- digest ------------------------------------------------------------
