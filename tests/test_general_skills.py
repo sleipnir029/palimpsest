@@ -14,14 +14,14 @@ from palimpsest.store import RDFStore
 def test_general_skills_registered_not_quarantined():
     loader = SkillLoader()
     names = loader.names()
-    for n in ("notebook-analysis", "report-writing"):
+    for n in ("notebook-analysis", "report-writing", "marimo-pairing"):
         assert n in names, f"{n} should be registered"
         assert n not in loader.invalid
 
 
 def test_general_skills_check_skill_passes():
     loader = SkillLoader()
-    for n in ("notebook-analysis", "report-writing"):
+    for n in ("notebook-analysis", "report-writing", "marimo-pairing"):
         report = validate_skill(n, loader, resolve_iris=False)
         assert report.kind == "task"
         assert report.ok, render_report(report)
