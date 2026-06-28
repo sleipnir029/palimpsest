@@ -93,9 +93,13 @@ the original extraction-only core — don't shrink it back to a one-shot extract
   schema) are off-limits because they're *outside the workspace*.
 - The RDF graph + cost ledger are written **only via the pipeline** (provenance +
   budget enforced); `write_file` refuses them even inside a workspace.
-- `bash` is a **supervised escape hatch** (Claude Code model): cwd-pinned + a
-  foot-gun spend guard, but NOT filesystem-fenced. Don't claim otherwise. Budget
-  is enforced in-process; bash subprocess spend is the human's responsibility.
+- `bash` is **OS-sandboxed by default** (`src/palimpsest/sandbox.py`: macOS
+  Seatbelt / Linux bwrap): file writes/deletes are confined to the workspace
+  (reads + network stay open), and `store/`/`cache/`/`*.db`/secrets are denied
+  to it too. Fail-closed — no sandbox mechanism → `bash` refuses; `/config set
+  bash_sandbox off` restores the raw, unfenced escape hatch (the human's
+  responsibility). `bash` is still **not** a spend gate: the foot-gun guard is
+  best-effort and the €-budget is enforced in-process, not in bash.
 - New agent tools register via `@register` in `src/palimpsest/tools/`; build the
   agent through `agent.build_agent()` (CLI + TUI share it) — don't re-duplicate.
 

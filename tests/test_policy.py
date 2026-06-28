@@ -135,7 +135,7 @@ def test_edit_file_reports_missing_and_ambiguous(ws):
 def test_bash_runs_in_workspace_cwd(ws, monkeypatch):
     # cwd-pinning is orthogonal to the sandbox; force the fence off so this asserts
     # the plumbing deterministically on platforms with no sandbox mechanism.
-    monkeypatch.setattr("palimpsest.config.get_setting", lambda *a, **k: "off")
+    monkeypatch.setenv("bash_sandbox", "off")
     (ws / "marker.txt").write_text("", encoding="utf-8")
     out = bash("ls")
     assert "marker.txt" in out and "[exit 0]" in out
@@ -166,7 +166,7 @@ def test_bash_writes_are_confined_to_workspace(ws):
 def test_bash_unconfined_when_sandbox_off(ws, tmp_path, monkeypatch):
     # The documented override: `/config set bash_sandbox off` restores the raw,
     # unfenced escape hatch (the human's responsibility).
-    monkeypatch.setattr("palimpsest.config.get_setting", lambda *a, **k: "off")
+    monkeypatch.setenv("bash_sandbox", "off")
     outside = tmp_path.parent / "bash_optout.txt"
     bash(f'echo escaped > "{outside}"')
     assert outside.exists()

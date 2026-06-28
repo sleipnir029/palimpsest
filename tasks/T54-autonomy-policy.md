@@ -38,6 +38,9 @@ ANTHROPIC_API_KEY="" pixi run pytest tests/test_policy.py -q   # 16 passed
 - `tests/test_policy.py` (new), `.gitignore` (ignore `workspace/`)
 
 ## Out of scope / deferred
-- OS-sandboxing bash (would make its fs boundary code-enforced) — deferred; git checkpointing covers
-  the realistic risk.
+- ~~OS-sandboxing bash (would make its fs boundary code-enforced) — deferred; git checkpointing covers
+  the realistic risk.~~ **Done in T85** — bash is now OS-sandboxed (writes workspace-confined) by
+  default, fail-closed. The `test_bash_is_not_filesystem_confined` fact from this card is inverted
+  there (`test_bash_writes_are_confined_to_workspace`); the unconfined behavior survives only behind
+  the explicit `bash_sandbox=off` opt-out.
 - Per-workspace vs global graph/cache/ledger paths — portability phase.

@@ -5,8 +5,9 @@
 
 ## Why
 "Human supervises and verifies" only works if everything the agent does is auditable and undoable.
-This is also the mitigation that makes T54's unfenced `bash` acceptable: in-workspace actions become
-fully reversible.
+This is also the audit/undo net behind `bash` — originally the sole mitigation for the unfenced shell
+(T54), and still the net when the OS sandbox is opted out (T85): in-workspace actions become fully
+reversible.
 
 ## What was built
 - `src/palimpsest/versioning.py`:

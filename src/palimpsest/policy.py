@@ -5,16 +5,18 @@ edit, create, and run content *in that workspace*. The STRUCTURED write tools �
 ``write_file``/``edit_file`` — route through ``assert_writable`` here, so the
 agent cannot reason its way around the workspace boundary: it is enforced in
 code, not suggested in a prompt. That is the thesis's central claim made
-concrete. ``bash`` is the deliberate exception — a supervised escape hatch
-(cwd-pinned but NOT filesystem-fenced; see bash.py) whose integrity relies on the
-human + git, the same model Claude Code uses for shell access.
+concrete. ``bash`` is cwd-pinned here and, by default, OS-sandboxed in
+``sandbox.py`` (Seatbelt/bwrap) so even the shell escape hatch can only write
+inside the workspace; the human can drop that fence (``bash_sandbox=off``), and
+git remains the audit/undo net either way.
 
 The workspace root is configurable via ``$PALIMPSEST_WORKSPACE``. In development
 (engine + tests live in this repo) it defaults to a gitignored ``./workspace``
 sandbox, so the write/edit tools have a real playground that cannot touch the
 engine (``src/palimpsest/``) or the test fixtures (this repo's ``store/``,
-``cache/``, ``papers/``) — they are simply *outside the workspace*. (bash can
-reach those via an absolute path; it is trusted-but-supervised, not fenced.) In
+``cache/``, ``papers/``) — they are simply *outside the workspace*. (bash is
+OS-sandboxed to the workspace by default — see sandbox.py — though reads/network
+stay open and the human can disable it.) In
 deployment the root is the spawned folder and the same logic applies unchanged;
 there the graph store / parser cache / ledger live *inside* the workspace, and
 the protected-path rules below keep them off-limits to write_file/edit_file.
@@ -31,10 +33,11 @@ class PolicyViolation(Exception):
 
 
 def workspace_root() -> Path:
-    """Absolute root for write_file/edit_file confinement and bash's default cwd.
+    """Absolute root for write_file/edit_file confinement and bash's cwd + sandbox.
 
-    (write_file/edit_file are *confined* here; bash only *defaults* its cwd here —
-    bash is not fenced. See the module docstring.)
+    write_file/edit_file are *confined* here in code; bash defaults its cwd here
+    AND (by default) has its writes OS-sandbox-confined to this root — see
+    sandbox.py. The same root is the write boundary for both paths.
     """
     return Path(os.environ.get("PALIMPSEST_WORKSPACE", "workspace")).resolve()
 
@@ -51,11 +54,11 @@ def _within(path: Path, root: Path) -> bool:
 # the RDF graph store and parser cache (provenance) and the cost ledger (budget),
 # plus the read-only secrets config. Matched workspace-relative.
 #
-# NOTE these protect the *structured* write tools (write_file/edit_file) only, and
-# match by top-level dir name / filename convention. They are NOT a defence against
-# `bash` (which can write any path — see bash.py) and a ledger renamed off `.db`
-# would slip through; a deployment that relocates these should derive the protected
-# paths from config rather than these literals.
+# NOTE these gate the *structured* write tools (write_file/edit_file) by top-level
+# dir name / filename convention, AND the bash sandbox reuses the same literals to
+# deny bash writes to them (sandbox.py). Matching is by convention, so a ledger
+# renamed off `.db` would slip the write_file check; a deployment that relocates
+# these should derive the protected paths from config rather than these literals.
 _PROTECTED_DIRS = {"store", "cache"}
 _PROTECTED_NAMES = {"config.txt", ".env"}  # secrets — set via config.set_value, not write_file
 _PROTECTED_SUFFIXES = (".db", ".key")  # ledger + key material; single source for the sandbox too

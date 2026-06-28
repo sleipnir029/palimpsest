@@ -20,7 +20,7 @@ import os
 import signal
 import subprocess
 
-from palimpsest import config, sandbox
+from palimpsest import sandbox
 from palimpsest.policy import PolicyViolation, assert_bash_allowed, workspace_root
 
 from . import register
@@ -48,8 +48,9 @@ def bash(command: str, timeout: float = 30) -> str:
     root.mkdir(parents=True, exist_ok=True)  # a fresh sandbox may not exist yet
 
     # Default: run under the OS sandbox (writes confined to the workspace). The human
-    # can drop the fence with `/config set bash_sandbox off` for the raw escape hatch.
-    if config.get_setting("bash_sandbox", "on") != "off":
+    # can drop the fence with `/config set bash_sandbox off` — which writes the env var
+    # (config.set_value), so read the toggle from there, the same place it's set.
+    if os.environ.get("bash_sandbox", "on").strip().lower() != "off":
         if sandbox.mechanism() is None:  # fail-closed: no fence available → refuse
             raise PolicyViolation(
                 "bash sandbox required but no OS mechanism is available on this "
