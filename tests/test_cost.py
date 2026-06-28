@@ -12,6 +12,15 @@ def test_default_budget(tmp_path):
     assert m.total_eur() == 0.0
 
 
+def test_close_is_idempotent_and_blocks_further_use(tmp_path):
+    m = CostMeter(str(tmp_path / "c.db"))
+    m.record_llm("anthropic", 1.0)
+    m.close()
+    m.close()  # second close must not raise
+    with pytest.raises(Exception):  # post-close access fails loudly, not silently
+        m.total_eur()
+
+
 def test_record_and_total(tmp_path):
     m = CostMeter(str(tmp_path / "c.db"))
     m.record_llm("anthropic", 1.50, "extraction call")

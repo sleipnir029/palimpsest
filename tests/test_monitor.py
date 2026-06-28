@@ -218,3 +218,17 @@ def test_summary_counts_issues(tmp_path):
     assert "1 exception" in summary
     # max_turns=2 dispatched mon_fails twice -> two is_error tool results
     assert "2 tool error" in summary
+
+
+def test_issues_list_is_bounded(tmp_path):
+    """A very long session can't grow the issue list unbounded; the tail is kept."""
+    from palimpsest.monitor import _MAX_ISSUES
+
+    monitor = SessionMonitor(log_dir=tmp_path)
+    for i in range(_MAX_ISSUES + 100):
+        monitor._add_issue({"kind": "tool_error", "tool": "t", "detail": str(i)})
+
+    assert len(monitor.issues) == _MAX_ISSUES
+    assert monitor.issues[-1]["detail"] == str(_MAX_ISSUES + 99)  # newest kept
+    assert monitor.issues[0]["detail"] == str(100)               # oldest 100 dropped
+    monitor.summary()  # still renders with a full list

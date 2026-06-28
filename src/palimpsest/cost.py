@@ -109,6 +109,10 @@ class CostMeter:
         )
         self.conn.commit()
 
+    def close(self) -> None:
+        """Close the SQLite connection. Idempotent; safe to call on app exit."""
+        self.conn.close()
+
     def set_budget(self, new_cap: int) -> str:
         spent = self.total_eur()
         if new_cap < spent:

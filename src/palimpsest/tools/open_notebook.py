@@ -19,6 +19,7 @@ Templates are read-only engine assets at the repo-root ``notebooks/``.
 
 from __future__ import annotations
 
+import atexit
 import re
 import shutil
 import subprocess
@@ -27,10 +28,35 @@ from pathlib import Path
 from ..policy import assert_writable, workspace_root
 from . import register
 
-# Spawned marimo processes are tracked here but NOT yet reaped (teardown is
-# deferred — MVP relies on user Ctrl+C). Module level (not on the agent) so this
-# tool needs nothing from agent.py / the TUI; a future shutdown hook can drain it.
+# Spawned marimo editors are tracked here and reaped on interpreter exit (and
+# eagerly by the TUI's on_unmount). Module level (not on the agent) so this tool
+# needs nothing from agent.py / the TUI. Without this, every notebook the agent
+# opens leaks a marimo server that outlives the session (seen in the wild: the
+# agent had to `lsof -ti:2718 | kill` its own server).
 _PROCESSES: list[subprocess.Popen] = []
+
+
+def reap_notebooks() -> None:
+    """Terminate every marimo editor this process spawned. Idempotent.
+
+    Registered via ``atexit`` and also called from the TUI's ``on_unmount`` so
+    the servers die promptly on quit rather than lingering until interpreter
+    teardown. SIGTERM first, then SIGKILL any straggler after a short grace.
+    """
+    terminated = []
+    for proc in _PROCESSES:
+        if proc.poll() is None:  # still running — already-exited ones need nothing
+            proc.terminate()
+            terminated.append(proc)
+    for proc in terminated:
+        try:
+            proc.wait(timeout=3)
+        except subprocess.TimeoutExpired:
+            proc.kill()  # ponytail: SIGKILL straggler; per-notebook stop if ever needed
+    _PROCESSES.clear()
+
+
+atexit.register(reap_notebooks)
 
 # marimo may announce localhost or the loopback IP depending on host config.
 _URL_RE = re.compile(r"http://(?:localhost|127\.0\.0\.1):\d+\S*")

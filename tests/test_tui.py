@@ -757,3 +757,26 @@ def test_slash_quit_exits_the_app(tmp_path):
             assert app._exit is True
 
     asyncio.run(_drive())
+
+
+def test_on_unmount_closes_ledger_only_when_idle(tmp_path):
+    """N1 gate: closing the ledger mid-turn would drop a worker's cost write, so
+    on_unmount closes it ONLY when no turn is in flight (prompt enabled)."""
+    meter = CostMeter(str(tmp_path / "t.db"))
+    app = PalimpsestApp(agent=_StubAgent(meter), cost_meter=meter)
+
+    async def _drive() -> None:
+        async with app.run_test():
+            calls: list[str] = []
+            app.cost_meter.close = lambda: calls.append("closed")  # spy, no real close
+            prompt = app.query_one("#prompt", PromptArea)
+
+            prompt.disabled = True        # turn in flight
+            app.on_unmount()
+            assert calls == []            # skipped — worker may still be writing
+
+            prompt.disabled = False       # idle
+            app.on_unmount()
+            assert calls == ["closed"]    # now safe to close
+
+    asyncio.run(_drive())

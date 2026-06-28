@@ -232,6 +232,30 @@ class PalimpsestApp(App):
         except Exception:  # noqa: BLE001 — history is a convenience, never fatal
             self._history = []
 
+    def on_unmount(self) -> None:
+        """Release resources on quit: kill spawned marimo editors, close the ledger.
+
+        Best-effort — a teardown hiccup must not raise out of app shutdown. The
+        atexit reaper is the backstop, but doing it here kills the servers
+        promptly on /quit rather than leaving them until interpreter exit.
+        """
+        from ..tools.open_notebook import reap_notebooks
+
+        try:
+            reap_notebooks()
+        except Exception:  # noqa: BLE001 — teardown is best-effort
+            pass
+        # Close the ledger ONLY if no turn is in flight. Quitting mid-turn leaves the
+        # worker thread still writing cost rows (input disabled == turn running); a
+        # close() underneath it would raise "closed database" and DROP a paid call's
+        # spend — brushing the €-budget invariant. If a turn is live, skip close and
+        # let process exit reclaim the fd. Stays inside cost.py's single-access contract.
+        try:
+            if not self.query_one("#prompt", PromptArea).disabled:
+                self.cost_meter.close()
+        except Exception:  # noqa: BLE001 — teardown is best-effort
+            pass
+
     def _refresh_topbar(self) -> None:
         self.query_one("#topbar", Static).update(f"palimpsest · {self.theme}")
 
@@ -482,7 +506,7 @@ class PalimpsestApp(App):
         try:
             self._render_event(event)
         except Exception as exc:  # noqa: BLE001 — never let a render error tear the app down
-            self.monitor.issues.append({"kind": "exception", "detail": f"render: {exc!r}"})
+            self.monitor._add_issue({"kind": "exception", "detail": f"render: {exc!r}"})
             try:
                 self._emit("trace", f"⚠ render error: {exc}", classes="trace-error")
             except Exception:  # noqa: BLE001 — last resort: swallow rather than re-raise
