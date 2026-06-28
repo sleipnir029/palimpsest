@@ -780,3 +780,124 @@ def test_on_unmount_closes_ledger_only_when_idle(tmp_path):
             assert calls == ["closed"]    # now safe to close
 
     asyncio.run(_drive())
+
+
+def test_menu_windows_around_selection(tmp_path):
+    """The command list is taller than the CSS cap; the menu windows around the
+    selection so the highlighted row is always rendered, with a position hint."""
+    meter = CostMeter(str(tmp_path / "t.db"))
+    app = PalimpsestApp(agent=_StubAgent(meter), cost_meter=meter)
+    app._menu = [f"cmd{i}" for i in range(20)]
+    app._menu_glosses = ["" for _ in range(20)]
+    app._menu_usage = None
+    app._menu_label_slash = True
+
+    app._menu_idx = 18
+    rendered = app._render_menu().plain
+    assert "❯ /cmd18" in rendered                 # selection visible despite clip
+    assert "19/20" in rendered                    # position indicator
+    assert rendered.count("cmd") <= app._MENU_WINDOW  # windowed, not the whole list
+
+    app._menu_idx = 0
+    assert "❯ /cmd0" in app._render_menu().plain   # top selection shows the head
+
+    app._menu_idx = 19                              # bottom (wrap target of up-from-0)
+    assert "❯ /cmd19" in app._render_menu().plain
+
+
+def test_ctx_counts_cached_tokens(tmp_path):
+    """ctx must reflect the real window: with prompt caching, input_tokens is only
+    the uncached tail, so the cached-read bulk has to be summed in."""
+    meter = CostMeter(str(tmp_path / "t.db"))
+    agent = _StubAgent(meter)
+    app = PalimpsestApp(agent=agent, cost_meter=meter)
+    agent.last_usage = {
+        "input_tokens": 100, "cache_read_input_tokens": 24000,
+        "cache_creation_input_tokens": 0, "output_tokens": 50,
+    }
+    status = app._status_text().plain
+    assert "ctx ~24.1k" in status   # not the ~0.1k input_tokens-only undercount
+
+
+def test_markdown_link_click_opens_browser_exactly_once(tmp_path, monkeypatch):
+    """The real click path: the reply Markdown is built with open_links=False so
+    Textual doesn't ALSO open the href — the message bubbles to our handler alone.
+    Without open_links=False this fires twice (the bug this guards)."""
+    import webbrowser
+    from textual.widgets import Markdown
+
+    meter = CostMeter(str(tmp_path / "t.db"))
+    app = PalimpsestApp(agent=_StubAgent(meter), cost_meter=meter)
+    opened: list[str] = []
+    monkeypatch.setattr(webbrowser, "open", lambda u: opened.append(u))
+
+    async def _drive() -> None:
+        async with app.run_test() as pilot:
+            app.query_one("#prompt", PromptArea).text = "hi"
+            await pilot.press("enter")
+            await app.workers.wait_for_complete()
+            await pilot.pause()
+            md = app.query(Markdown).first()          # the rendered agent reply
+            md.post_message(Markdown.LinkClicked(md, "https://example.com/paper"))
+            await pilot.pause()
+            assert opened == ["https://example.com/paper"]  # exactly once, not twice
+
+    asyncio.run(_drive())
+
+
+def test_markdown_link_bare_path_becomes_file_url(tmp_path, monkeypatch):
+    """A bare local path that exists is opened as a file:// URL (the reason the
+    custom handler exists at all); a path that doesn't is passed through."""
+    import webbrowser
+
+    f = tmp_path / "figure.svg"
+    f.write_text("<svg/>")
+    meter = CostMeter(str(tmp_path / "t.db"))
+    app = PalimpsestApp(agent=_StubAgent(meter), cost_meter=meter)
+    opened: list[str] = []
+    monkeypatch.setattr(webbrowser, "open", lambda u: opened.append(u))
+
+    class _Evt:
+        def __init__(self, href):
+            self.href = href
+
+    app.on_markdown_link_clicked(_Evt(str(f)))
+    app.on_markdown_link_clicked(_Evt("does/not/exist.svg"))
+    assert opened == [f.resolve().as_uri(), "does/not/exist.svg"]
+
+
+def test_streamed_reply_link_opens_once(tmp_path, monkeypatch):
+    """The streaming reply widget (the production path) is also built with
+    open_links=False, so a clicked link in streamed text opens exactly once."""
+    import webbrowser
+    from textual.widgets import Markdown
+
+    class _StreamAgent:
+        def __init__(self, meter):
+            self.cost_meter = meter
+            self.on_event = None  # app assigns its observer
+
+        def run(self, text):
+            md = "see [paper](https://streamed.example)"
+            if self.on_event is not None:
+                self.on_event({"type": "assistant_delta", "text": md})
+            self.cost_meter.record_llm("stub", 0.01)
+            return md
+
+    meter = CostMeter(str(tmp_path / "t.db"))
+    app = PalimpsestApp(agent=_StreamAgent(meter), cost_meter=meter)
+    opened: list[str] = []
+    monkeypatch.setattr(webbrowser, "open", lambda u: opened.append(u))
+
+    async def _drive() -> None:
+        async with app.run_test() as pilot:
+            app.query_one("#prompt", PromptArea).text = "hi"
+            await pilot.press("enter")
+            await app.workers.wait_for_complete()
+            await pilot.pause()
+            md = app.query(Markdown).first()  # the sealed streamed reply
+            md.post_message(Markdown.LinkClicked(md, "https://streamed.example"))
+            await pilot.pause()
+            assert opened == ["https://streamed.example"]  # once, not twice
+
+    asyncio.run(_drive())

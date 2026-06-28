@@ -292,16 +292,44 @@ class PalimpsestApp(App):
             out.append(f"    ⚠ {n} issue{'' if n == 1 else 's'}", style=theme.error)
         # ctx: last-turn prompt size = the live context the agent carries (A3). Reuses
         # agent.last_usage, no tokenizer. Hidden until the first turn records usage.
-        toks = (getattr(self.agent, "last_usage", None) or {}).get("input_tokens", 0)
+        # With prompt caching, input_tokens is only the UNCACHED delta (~0.1k) — the
+        # bulk of the context sits in cache_read; sum all three input-side counts so
+        # ctx reflects the real window, not the tiny cache-miss tail.
+        u = getattr(self.agent, "last_usage", None) or {}
+        toks = (
+            u.get("input_tokens", 0)
+            + u.get("cache_read_input_tokens", 0)
+            + u.get("cache_creation_input_tokens", 0)
+        )
         if toks:
             out.append(f"    ctx ~{toks / 1000:.1f}k", style=theme.secondary)
         # line 2 — the three model roles + a quiet command/keybind hint
         out.append(f"\n{orch} · extract:{extr} · parse:{parser}", style=theme.secondary)
-        out.append("      /help · ^y copy", style=f"dim {theme.secondary}")
+        out.append("      /help · ctrl+y copy", style=f"dim {theme.secondary}")
         return out
 
     def _set_status(self, text) -> None:
         self.query_one("#status", Static).update(text)
+
+    def on_markdown_link_clicked(self, event: Markdown.LinkClicked) -> None:
+        """Open a link from an agent reply in the browser.
+
+        The reply Markdown widgets are built with ``open_links=False`` so Textual
+        doesn't also open the href (it would, by default — double-open). We own the
+        click solely to add what the default lacks: a bare local path (a figure or
+        notebook the agent wrote) is turned into a file:// URL so it opens too;
+        anything already carrying a scheme is opened as-is, via the same
+        ``webbrowser.open`` the ``/view`` command uses.
+        """
+        import webbrowser
+        from pathlib import Path
+
+        href = event.href
+        if "://" not in href:
+            p = Path(href).expanduser()
+            if p.exists():
+                href = p.resolve().as_uri()
+        webbrowser.open(href)
 
     # slash autocomplete -----------------------------------------------------
     def on_text_area_changed(self, event: TextArea.Changed) -> None:
@@ -343,16 +371,32 @@ class PalimpsestApp(App):
         widget.update(self._render_menu())
         widget.display = True
 
+    # Visible row budget for the menu: CSS caps #cmdmenu at 12 lines (border 2 +
+    # an optional usage header 1 + this trailing position line 1 → 8 rows fit).
+    _MENU_WINDOW = 8
+
     def _render_menu(self) -> Text:
         out = Text()
         if self._menu_usage:  # a usage header (arg mode) sits above the value rows
             out.append(f"{self._menu_usage}\n", style="dim")
-        for i, tok in enumerate(self._menu):
+        n = len(self._menu)
+        # Window the rows so the highlighted one is always shown — the list is taller
+        # than the CSS cap (13 commands, plus arg lists), so without this the bottom
+        # rows are silently clipped and unreachable.
+        if n > self._MENU_WINDOW:
+            start = min(max(0, self._menu_idx - self._MENU_WINDOW // 2), n - self._MENU_WINDOW)
+        else:
+            start = 0
+        end = min(n, start + self._MENU_WINDOW)
+        for i in range(start, end):
+            tok = self._menu[i]
             gloss = self._menu_glosses[i] if i < len(self._menu_glosses) else ""
             selected = i == self._menu_idx
             label = f"/{tok}" if self._menu_label_slash else tok
             out.append(f"{'❯' if selected else ' '} {label}", style="bold" if selected else "")
             out.append(f"   {gloss}\n", style="" if selected else "dim")
+        if n > self._MENU_WINDOW:  # show position so the clip is legible, not silent
+            out.append(f"  ⋯ {self._menu_idx + 1}/{n}  ↑↓", style="dim")
         return out
 
     def _menu_open(self) -> bool:
@@ -587,7 +631,7 @@ class PalimpsestApp(App):
         _seal_stream guarantees the final render. Not mirrored to the transcript until
         seal."""
         if self._stream_widget is None:
-            self._stream_widget = Markdown(classes="msg-agent")
+            self._stream_widget = Markdown(classes="msg-agent", open_links=False)
             self.query_one("#log", VerticalScroll).mount(self._stream_widget)
             self._stream_last_render = 0.0  # force a render on the first delta
         self._stream_buf += delta
@@ -621,7 +665,7 @@ class PalimpsestApp(App):
             self._emit("trace", reply, classes="trace")
         elif not had_stream and reply:
             # Nothing streamed (non-streaming fallback): mount as the bright reply.
-            self._emit("agent", reply, widget=Markdown(reply, classes="msg-agent"))
+            self._emit("agent", reply, widget=Markdown(reply, classes="msg-agent", open_links=False))
         self._set_status(self._status_text())
         prompt = self.query_one("#prompt", PromptArea)
         prompt.disabled = False
