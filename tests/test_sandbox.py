@@ -63,20 +63,37 @@ def test_wrap_argv_shape_on_this_platform(tmp_path):
 
 def test_bash_fails_closed_without_mechanism(tmp_path, monkeypatch):
     monkeypatch.setenv("PALIMPSEST_WORKSPACE", str(tmp_path))
+    monkeypatch.delenv("bash_sandbox", raising=False)             # default-on
     monkeypatch.setattr(sandbox, "mechanism", lambda: None)        # pretend none available
-    monkeypatch.setattr("palimpsest.config.get_setting", lambda *a, **k: "on")
     with pytest.raises(PolicyViolation, match="sandbox required"):
         bash("echo hi")
 
 
 def test_bash_optout_skips_sandbox(tmp_path, monkeypatch):
     monkeypatch.setenv("PALIMPSEST_WORKSPACE", str(tmp_path))
-    monkeypatch.setattr("palimpsest.config.get_setting", lambda *a, **k: "off")
+    monkeypatch.setenv("bash_sandbox", "off")
     called = {}
     monkeypatch.setattr(sandbox, "wrap", lambda *a, **k: called.setdefault("wrapped", True) or [])
     out = bash("echo hi")
     assert "wrapped" not in called   # the sandbox was never invoked
     assert "hi" in out and "[exit 0]" in out
+
+
+def test_optout_via_config_set_value_actually_disables(tmp_path, monkeypatch, outside):
+    """B1 regression: `/config set bash_sandbox off` calls config.set_value (→ env),
+    and bash reads the toggle from env — so the documented opt-out really disables the
+    fence. Drives the real config write, not a stubbed get_setting."""
+    import os
+
+    from palimpsest import config
+
+    monkeypatch.setenv("PALIMPSEST_WORKSPACE", str(tmp_path))
+    try:
+        config.set_value("bash_sandbox", "off")  # exactly what the /config handler runs
+        bash(f'echo hi > "{outside}"')
+        assert outside.exists()  # write escaped the workspace → the fence is really off
+    finally:
+        os.environ.pop("bash_sandbox", None)
 
 
 # --- real enforcement (gated on a mechanism existing) -----------------------
