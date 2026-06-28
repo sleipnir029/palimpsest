@@ -3,8 +3,9 @@
 The agent is spawned in a workspace; every mutating action is committed to a git
 repo *inside that workspace*, so the human can see the tree in any git viewer and
 undo anything (``git revert``). This is the audit/undo net behind bash's escape
-hatch (and the only net when the OS sandbox is opted out): in-workspace changes
-are fully reversible and auditable.
+hatch — the sandbox denies bash any write to this ``.git`` so the net itself is
+tamper-resistant, and when the sandbox is opted out git remains the (now best-
+effort) net: in-workspace changes are fully reversible and auditable.
 
 Two granularities (Rahat's choice): a commit per write action (``checkpoint``,
 fine-grained undo) and a lightweight tag per agent turn (``tag_turn``, a readable

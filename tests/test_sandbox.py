@@ -42,6 +42,7 @@ def test_seatbelt_profile_confines_and_protects(tmp_path):
     assert f'(subpath "{root}")' in prof          # workspace is writable
     assert f'(subpath "{root}/store")' in prof    # ...but store/ re-denied
     assert f'(subpath "{root}/cache")' in prof
+    assert f'(subpath "{root}/.git")' in prof     # the audit/undo repo is protected
     assert r'(regex #"\.db$")' in prof            # ledger denied
     assert r'(regex #"\.key$")' in prof           # key material denied
     assert r'(regex #"/\.env$")' in prof          # secrets denied
@@ -181,9 +182,11 @@ def test_timeout_kills_the_process_group(tmp_path, monkeypatch):
 @pytest.mark.skipif(_NO_SANDBOX, reason="no OS sandbox mechanism on this platform")
 def test_db_write_inside_temp_still_blocked(tmp_path, monkeypatch):
     """N1 ($TMPDIR allow) must not widen the boundary: a *.db write is denied even in
-    the allowed temp tree, exactly as inside the workspace."""
+    the allowed (per-user) temp tree, exactly as inside the workspace."""
+    import tempfile
+
     monkeypatch.setenv("PALIMPSEST_WORKSPACE", str(tmp_path))
-    leak = Path("/private/tmp/palimpsest_sb_leak.db")
+    leak = Path(tempfile.gettempdir()).resolve() / "palimpsest_sb_leak.db"  # an ALLOWED temp dir
     leak.unlink(missing_ok=True)
     try:
         out = bash(f'echo x > "{leak}"')
@@ -191,6 +194,33 @@ def test_db_write_inside_temp_still_blocked(tmp_path, monkeypatch):
         assert "[exit 0]" not in out
     finally:
         leak.unlink(missing_ok=True)
+
+
+@pytest.mark.skipif(_NO_SANDBOX, reason="no OS sandbox mechanism on this platform")
+def test_workspace_git_protected_from_bash(tmp_path, monkeypatch):
+    """The workspace's own .git is the audit/undo net — bash must not be able to
+    overwrite or delete it (the engine writes it out-of-band via dulwich)."""
+    monkeypatch.setenv("PALIMPSEST_WORKSPACE", str(tmp_path))
+    (tmp_path / ".git").mkdir()
+    (tmp_path / ".git" / "config").write_text("[core]\n", encoding="utf-8")
+    assert "[exit 0]" not in bash("echo PWN > .git/config")        # can't tamper
+    assert (tmp_path / ".git" / "config").read_text() == "[core]\n"
+    bash("rm -rf .git")                                            # can't destroy
+    assert (tmp_path / ".git" / "config").exists()
+
+
+@pytest.mark.skipif(_NO_SANDBOX, reason="no OS sandbox mechanism on this platform")
+def test_world_shared_tmp_not_writable(tmp_path, monkeypatch):
+    """Only the per-user $TMPDIR is writable; the world-shared /tmp is denied so bash
+    can't drop/clobber files other users or processes consume."""
+    monkeypatch.setenv("PALIMPSEST_WORKSPACE", str(tmp_path))
+    target = f"/tmp/palimpsest_world_probe_{abs(hash(str(tmp_path)))}"
+    try:
+        out = bash(f'echo x > "{target}"')
+        assert not Path(target).exists()
+        assert "[exit 0]" not in out
+    finally:
+        Path(target).unlink(missing_ok=True)
 
 
 @pytest.mark.skipif(_NO_SANDBOX, reason="no OS sandbox mechanism on this platform")

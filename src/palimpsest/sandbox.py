@@ -61,6 +61,11 @@ def seatbelt_profile(root: Path) -> str:
     # ponytail: paths are embedded as quoted Seatbelt strings; a workspace path
     # containing a literal `"` would break the profile — not a real case here.
     denies = [f'    (subpath "{r}/{d}")' for d in sorted(_PROTECTED_DIRS)]
+    # The workspace's own git repo IS the audit/undo net — deny bash any write to it
+    # so a stray `rm -rf .git` can't destroy the safety net. The engine's dulwich
+    # checkpointing runs in the parent process (unsandboxed), so this doesn't touch
+    # versioning; read-only git (log/status/diff) still works under the sandbox.
+    denies += [f'    (subpath "{r}/.git")']
     denies += [f'    (regex #"{re.escape(s)}$")' for s in _PROTECTED_SUFFIXES]  # \.db$  \.key$
     denies += [f'    (regex #"/{re.escape(n)}$")' for n in sorted(_PROTECTED_NAMES)]
     return (
@@ -69,11 +74,10 @@ def seatbelt_profile(root: Path) -> str:
         "(deny file-write*)\n"
         "(allow file-write*\n"
         f'    (subpath "{r}")\n'
+        # Only the PER-USER temp dir ($TMPDIR) is writable — enough for mktemp/tempfile.
+        # The world-shared /tmp is deliberately NOT allowed (it would let bash drop or
+        # clobber files other users/processes read — outside the intended blast radius).
         f'    (subpath "{systmp}")\n'
-        # intentional shared-scratch allowance (world temp); the *.db/*.key/.env
-        # denies below still apply here, so no protected material can land in temp.
-        '    (subpath "/private/tmp")\n'
-        '    (subpath "/private/var/tmp")\n'
         '    (literal "/dev/null") (literal "/dev/stdout") (literal "/dev/stderr")\n'
         '    (subpath "/dev/fd") (regex #"^/dev/tty"))\n'
         "(deny file-write*\n" + "\n".join(denies) + ")"
