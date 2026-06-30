@@ -480,3 +480,45 @@ misfires on T73, **relax or revert** rather than adding another special case. Th
 are conservative-by-design (re-derivation only acts on an unambiguous single-occurrence
 adjacent prefix; misses leave the model's value untouched), so the expected failure mode
 is a miss, not a corruption — but validate, don't assume.
+
+---
+
+## Finding #5 correction — re-score on the 47-tuple gold (2026-06-29)
+
+*The Finding #5 and addendum recall figures above are **40-tuple reachable-recall**
+(hit / (gt_total − coverage_gap)), computed while the gold stood at 40. The gold later
+extended to **47** (the +7 verified PEMWE/stability additions from the gold-thinness
+review), and the stamped `results/llm_matrix_t74_2026-06-21.csv` is scored on **47** with
+**plain recall** (tp / gt_total). Re-aggregating that CSV across the 5 papers (per-paper
+gt_total = 19/10/5/11/2 = 47) gives the figures below. These are the ones the supervisor
+report uses; they supersede the 40-tuple numbers above.*
+
+**Multi-pass / ensemble, 47-tuple plain recall (from the stamped CSV):**
+
+| arm (docling unless noted) | recall |
+|---|---|
+| gemini-lite raw | 81% (38/47) |
+| gemini-lite requery | 87% (41/47) |
+| gemini-lite union-k3 | 87% (41/47) |
+| deepseek-flash raw | 94% (44/47) |
+| deepseek-flash requery | 89% (42/47) |
+| deepseek-flash reason-first @8k | 40% (19/47) |
+| deepseek-flash reason-first @16k | 66% (31/47) |
+| **model-union (flash ∪ lite), docling** | **100% (47/47)** |
+| **model-union (flash ∪ lite), paddle** | **91% (43/47)** |
+
+What holds and what changes versus the 40-tuple narrative:
+
+- **Holds.** model-union is the standout (docling 100% = 47/47): the two cheap models'
+  errors are decorrelated, so the union recovers the seven added figure/PEMWE values that a
+  single run misses. requery is two-faced (gemini-lite 81→87, deepseek-flash 94→89).
+  reason-first is harmful even at a 16k cap (66% < raw 94%).
+- **Changes.** The "requery = sonnet single-shot, ~12× cheaper" line no longer holds: at 87%
+  requery does not reach frontier. gemini-lite single-run reads 81% here versus "92%" on the
+  40-tuple gold, purely from the larger denominator (the same 38 values: 38/41 ≈ 93%,
+  38/47 ≈ 81%).
+- **Frontier comparator.** The T72 frontier rows (sonnet, GPT) were not re-scored on 47 —
+  only the cheap arms in `rescore.json` were — so a like-for-like 47-tuple frontier figure
+  does not yet exist. On the 41-tuple grid, sonnet docling = 95%; the 47-tuple frontier
+  re-score is part of the scaled run. The report compares the ensemble against the 41-tuple
+  frontier only approximately and says so.

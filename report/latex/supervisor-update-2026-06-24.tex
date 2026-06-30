@@ -1,0 +1,53 @@
+\documentclass{template}
+
+\graphicspath{{../figures/}{logos/}}
+
+% --- Unicode glyphs used in the body, mapped for pdfLaTeX -----------------
+\usepackage{textcomp}
+\DeclareUnicodeCharacter{00B1}{\ensuremath{\pm}}
+\DeclareUnicodeCharacter{00B5}{\ensuremath{\mu}}
+\DeclareUnicodeCharacter{00B9}{\textsuperscript{1}}
+\DeclareUnicodeCharacter{00D7}{\ensuremath{\times}}
+\DeclareUnicodeCharacter{2074}{\textsuperscript{4}}
+\DeclareUnicodeCharacter{207B}{\textsuperscript{\ensuremath{-}}}
+\DeclareUnicodeCharacter{2082}{\textsubscript{2}}
+\DeclareUnicodeCharacter{2083}{\textsubscript{3}}
+\DeclareUnicodeCharacter{2084}{\textsubscript{4}}
+\DeclareUnicodeCharacter{2093}{\textsubscript{x}}
+\DeclareUnicodeCharacter{2192}{\ensuremath{\rightarrow}}
+\DeclareUnicodeCharacter{2194}{\ensuremath{\leftrightarrow}}
+\DeclareUnicodeCharacter{222A}{\ensuremath{\cup}}
+\DeclareUnicodeCharacter{2248}{\ensuremath{\approx}}
+\DeclareUnicodeCharacter{2261}{\ensuremath{\equiv}}
+\DeclareUnicodeCharacter{2265}{\ensuremath{\geq}}
+\DeclareUnicodeCharacter{2273}{\ensuremath{\gtrsim}}
+\DeclareUnicodeCharacter{2713}{\ensuremath{\checkmark}}
+\DeclareUnicodeCharacter{2717}{\ensuremath{\times}}
+% -------------------------------------------------------------------------
+
+% pandoc emits \tightlist for compact lists; define it (class doesn't)
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+% wrapping table column (fraction of \linewidth) so wide tables fit the margin
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1\linewidth}}
+
+% absorb the occasional long unbreakable monospace file path rather than overflow
+\setlength{\emergencystretch}{3cm}
+
+\titre{palimpsest: Interim Benchmark Report and System Status}
+\soustitre{\normalsize\normalfont Parser-conditional extraction accuracy, cost, and the
+next experimental phase\\
+MSc Mini-Thesis in Materials Engineering, RWTH Aachen}
+\eleves{Rakibuzzaman Rahat}
+\enseignant{452880}
+\datevar{29 June 2026}
+
+\begin{document}
+
+\fairepagedegarde
+
+\fairetabledesmatieres
+
+\input{_supervisor_body}
+
+\end{document}
