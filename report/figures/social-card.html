@@ -1,0 +1,110 @@
+<!doctype html>
+<!-- Source for the 1280x640 GitHub social-preview card. Render at 1280x640 and
+     screenshot the viewport (see scripts note in the README/PR). -->
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  :root {
+    --ink: #15110c; --ink2: #1d1812; --parch: #e9dcc2;
+    --copper: #b5651d; --gold: #d8b65a; --sepia: #8a7a5c;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1280px; height: 640px; }
+  body {
+    background: radial-gradient(120% 140% at 18% 12%, var(--ink2) 0%, var(--ink) 60%);
+    color: var(--parch);
+    font-family: Georgia, 'Times New Roman', serif;
+    overflow: hidden; position: relative;
+  }
+  /* the palimpsest motif: faint, overlapping erased "writing" under the clean text */
+  .under {
+    position: absolute; inset: 0; overflow: hidden;
+    font-family: Georgia, serif; color: var(--parch);
+  }
+  .under span {
+    position: absolute; white-space: nowrap; opacity: .05;
+    color: var(--gold); font-style: italic;
+  }
+  .frame {
+    position: absolute; inset: 36px;
+    border: 1px solid rgba(181,101,29,.45); border-radius: 6px;
+  }
+  .wrap {
+    position: relative; z-index: 2;
+    height: 100%; padding: 92px 96px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .kicker {
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    letter-spacing: .42em; text-transform: uppercase;
+    font-size: 17px; color: var(--sepia); margin-bottom: 18px;
+  }
+  h1 {
+    font-size: 150px; line-height: .92; font-weight: 700;
+    letter-spacing: -2px; color: var(--parch);
+  }
+  h1 .dot { color: var(--copper); }
+  .rule { width: 132px; height: 4px; background: var(--copper); margin: 26px 0 24px; border-radius: 2px; }
+  .tag { font-size: 31px; line-height: 1.32; color: #f0e6d0; max-width: 1000px; }
+  .tag .accent { color: var(--gold); font-style: italic; }
+  .chips { margin-top: 30px; display: flex; gap: 14px; flex-wrap: wrap; }
+  .chip {
+    font-family: ui-monospace, Menlo, monospace; font-size: 16px;
+    color: var(--parch); padding: 9px 16px; border-radius: 999px;
+    border: 1px solid rgba(216,182,90,.4); background: rgba(216,182,90,.06);
+  }
+  .foot {
+    position: absolute; z-index: 2; left: 96px; bottom: 60px;
+    font-family: ui-monospace, Menlo, monospace; font-size: 16px; color: var(--sepia);
+  }
+  .badge {
+    position: absolute; z-index: 2; right: 96px; bottom: 58px; text-align: right;
+    font-family: ui-monospace, Menlo, monospace; font-size: 15px; color: var(--sepia);
+  }
+  .badge b { color: var(--gold); font-weight: 600; }
+</style>
+</head>
+<body>
+  <div class="under" id="under"></div>
+  <div class="frame"></div>
+
+  <div class="wrap">
+    <div class="kicker">autonomous research agent</div>
+    <h1>palimpsest<span class="dot">.</span></h1>
+    <div class="rule"></div>
+    <div class="tag">Turns scientific PDFs into a <span class="accent">provenance-tracked,
+      ontology-aligned</span> RDF knowledge graph — every fact traces back to its box on the page.</div>
+    <div class="chips">
+      <div class="chip">constrained autonomy</div>
+      <div class="chip">provenance on every triple</div>
+      <div class="chip">RDF · SPARQL</div>
+      <div class="chip">sandboxed shell</div>
+      <div class="chip">€-budget cap</div>
+    </div>
+  </div>
+
+  <div class="foot">MSc mini-thesis · RWTH Aachen</div>
+  <div class="badge">parse → extract → <b>graph</b> → query</div>
+
+  <script>
+    // scatter faint erased "writing" — the palimpsest layer
+    const frags = ["η = 236 mV @ 10 mA cm⁻²", "Tafel 42 mV dec⁻¹", "OER", "IrO₂",
+      "PROV-O", "?paper ?parser ?page ?bbox", "EMMO ECHO", "overpotential",
+      "deepseek-v4-flash", "SHA-256 parse-once", "RuO₂ // Nafion 117",
+      "∂(cell voltage)/∂t", "LinkML", "stability 1000 h", "pyoxigraph"];
+    const u = document.getElementById('under');
+    let y = -20;
+    for (let i = 0; i < 26; i++) {
+      const s = document.createElement('span');
+      s.textContent = frags[i % frags.length];
+      s.style.top = y + 'px';
+      s.style.left = (-60 + (i * 137) % 1400) + 'px';
+      s.style.fontSize = (26 + (i * 13) % 30) + 'px';
+      s.style.transform = 'rotate(' + (((i * 7) % 10) - 5) + 'deg)';
+      u.appendChild(s);
+      y += 26;
+    }
+  </script>
+</body>
+</html>
