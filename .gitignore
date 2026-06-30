@@ -221,10 +221,14 @@ __marimo__/
 palimpsest.db
 cache/
 store/
-# tighten/backup variants (store.tight, store.coarse.bak, …) — data, never tracked
+# tighten/backup variants (store.tight, store.coarse.bak, store_copy, …) — data, never tracked
 store.*/
+store_copy/
 notes/
 workspace/
+
+# Playwright MCP browser-automation scratch (console/page traces)
+.playwright-mcp/
 
 # generated TUI theme gallery (scripts/preview_themes.py)
 theme-preview/
