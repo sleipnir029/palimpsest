@@ -8,6 +8,7 @@ families stay in sync with upstream EMMO.
 """
 from __future__ import annotations
 
+import hashlib
 from functools import cache
 from pathlib import Path
 
@@ -17,14 +18,64 @@ from rdflib import OWL, RDFS, Graph, URIRef
 EMMO_ECHO = "https://w3id.org/emmo/domain/electrochemistry"
 _CACHE = Path.home() / ".cache" / "palimpsest" / "echo.ttl"
 
-# H2KG (T47): the bare release IRI does not resolve; the base namespace
-# content-negotiates to this GitHub file (pinned @main, verified 2026-06-10).
+# H2KG (T47): the bare release IRI does not resolve (re-verified 2026-07-27:
+# https://w3id.org/h2kg/hydrogen-ontology/releases/1.0.0 still 404s). T87 moves
+# off the @main branch file onto the published ODK *base* artefact — base, not
+# full, because base carries only the axioms H2KG itself asserts, which is what
+# an alignment or an extension proposal targets.
 H2KG_NS = "https://w3id.org/h2kg/hydrogen-ontology#"
-H2KG_TTL_URL = (
-    "https://raw.githubusercontent.com/ViMiLabs/AIMWORKS/main"
-    "/ontology_release/output/ontology/core_schema.ttl"
-)
-_H2KG_CACHE = Path.home() / ".cache" / "palimpsest" / "h2kg_core.ttl"
+H2KG_TTL_URL = "https://vimilabs.github.io/AIMWORKS/odk/artifacts/base.ttl"
+_H2KG_CACHE = Path.home() / ".cache" / "palimpsest" / "h2kg_base.ttl"
+
+# Pinned digests (T87). Both upstreams are moving targets served from unversioned
+# URLs, and both have already drifted: ECHO grew 4273 -> 4302 owl:Class between
+# 2026-06-01 and 2026-07-27, and H2KG's released base.ttl differs from the @main
+# core_schema.ttl this module used to fetch. Without a pin, every measured number
+# silently reshapes itself under the next upstream build.
+#
+# Bumping a digest is a deliberate act, not a chore: re-run tests/test_ontology.py
+# and re-run any experiment whose numbers appear in the write-up.
+ECHO_SHA256 = "27acb504e1e2453e30a3799ba5283ca2934b8c95b931440ec9806c9baef2fb14"
+H2KG_SHA256 = "2cd2eb1c1956f2fd77aeb83ce4b5806f167d84b3bfdb854d8802c80527ae9e2f"
+
+
+def _pinned(url: str, dest: Path, sha256: str, label: str) -> Path:
+    """Fetch `url` into `dest`, guaranteeing its content digest is `sha256`.
+
+    Verifies on every load, not just on download. A cache written under an
+    earlier pin — or truncated by a Ctrl-C — is otherwise indistinguishable
+    from a good one, and would keep passing tests while quietly serving stale
+    axioms. A mismatched cache is re-fetched once; if the fresh copy still
+    mismatches, upstream genuinely moved and that must fail loudly.
+
+    Atomic write: a crash mid-download leaves no truncated .ttl behind that
+    would poison every future call with `rdflib.BadSyntax`.
+    """
+    def digest() -> str | None:
+        return hashlib.sha256(dest.read_bytes()).hexdigest() if dest.exists() else None
+
+    if digest() != sha256:
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        resp = httpx.get(url, follow_redirects=True, timeout=60.0)
+        resp.raise_for_status()
+        tmp = dest.with_name(dest.name + ".tmp")
+        tmp.write_bytes(resp.content)
+        tmp.replace(dest)
+
+    actual = digest()
+    if actual == sha256:
+        return dest
+
+    # Don't leave unverified bytes where the next call would treat them as a cache
+    # and skip straight to re-downloading 4.6 MB before raising the same error.
+    dest.unlink(missing_ok=True)
+    raise RuntimeError(
+        f"{label} digest mismatch — upstream moved.\n"
+        f"  url:      {url}\n"
+        f"  expected: {sha256}\n"
+        f"  actual:   {actual}\n"
+        f"Review the new release, then bump the pin in {__file__}."
+    )
 
 # Verified verbatim from palimpsest-v2-design.md Appendix E (lines 651-672).
 # Each entry is regression-tested in tests/test_ontology.py against the live
@@ -43,20 +94,9 @@ KNOWN_IRIS: dict[str, str] = {
 
 @cache
 def echo_graph() -> Graph:
-    """Load the ECHO turtle into an rdflib Graph. Cached to disk on first call.
-
-    Atomic write: a Ctrl-C mid-download leaves no truncated .ttl behind that
-    would poison every future call with `rdflib.BadSyntax`.
-    """
-    if not _CACHE.exists():
-        _CACHE.parent.mkdir(parents=True, exist_ok=True)
-        resp = httpx.get(EMMO_ECHO, follow_redirects=True, timeout=60.0)
-        resp.raise_for_status()
-        tmp = _CACHE.with_suffix(".ttl.tmp")
-        tmp.write_bytes(resp.content)
-        tmp.replace(_CACHE)
+    """Load the pinned ECHO turtle into an rdflib Graph, disk-cached."""
     g = Graph()
-    g.parse(_CACHE, format="ttl")
+    g.parse(_pinned(EMMO_ECHO, _CACHE, ECHO_SHA256, "EMMO ECHO"), format="ttl")
     return g
 
 
@@ -90,20 +130,9 @@ def echo_iri_exists(iri: str) -> bool:
 
 @cache
 def h2kg_graph() -> Graph:
-    """Load the H2KG core schema into an rdflib Graph, cached to disk on first call.
-
-    Mirrors echo_graph(): atomic write so a Ctrl-C mid-download leaves no
-    truncated .ttl that would poison future calls.
-    """
-    if not _H2KG_CACHE.exists():
-        _H2KG_CACHE.parent.mkdir(parents=True, exist_ok=True)
-        resp = httpx.get(H2KG_TTL_URL, follow_redirects=True, timeout=60.0)
-        resp.raise_for_status()
-        tmp = _H2KG_CACHE.with_suffix(".ttl.tmp")
-        tmp.write_bytes(resp.content)
-        tmp.replace(_H2KG_CACHE)
+    """Load the pinned H2KG base artefact into an rdflib Graph, disk-cached."""
     g = Graph()
-    g.parse(_H2KG_CACHE, format="ttl")
+    g.parse(_pinned(H2KG_TTL_URL, _H2KG_CACHE, H2KG_SHA256, "H2KG base"), format="ttl")
     return g
 
 
