@@ -6,8 +6,10 @@ description: >-
   Aligned to EMMO Domain Electrochemistry (ECHO) for concepts, QUDT for units,
   PROV-O for extraction provenance, and schema.org for bibliographic metadata.
   palimpsest-local IRIs are used (with skos:closeMatch to nearest EMMO term)
-  where EMMO has not yet minted a concept; each such case carries a
-  TODO_EMMO_UPSTREAM: comment naming the term to request.
+  where EMMO has not yet minted a concept. The upstream term requests that were
+  once recorded here as inline comments now live in
+  eval/gold/emmo_upstream_gold.yaml (T88), where they serve as a held-out
+  evaluation set for the ontology-extension agent; do not re-add them here.
 license: MIT
 version: 0.1.0
 
@@ -67,8 +69,6 @@ classes:
   TafelSlope:
     is_a: Measurement
     class_uri: palimpsest:TafelSlope
-    # TODO_EMMO_UPSTREAM: request TafelSlope / TafelEquation as siblings of
-    # ButlerVolmerEquation under ElectrochemicalRelation.
     close_mappings:
       - emmo:electrochemistry_d48ea516_5cac_4f86_bc88_21b6276c0938  # ButlerVolmerEquation
       - h2kg:TafelSlope  # official H2KG home (a h2kg:Property) for this local class
@@ -95,7 +95,6 @@ classes:
   MassActivity:
     is_a: Measurement
     class_uri: palimpsest:MassActivity
-    # TODO_EMMO_UPSTREAM: request MassActivity under Electrocatalyst-related metrics.
     related_mappings:
       - emmo:electrochemistry_a3b53904_22b1_42a9_a515_c8a3aed7e841  # Electrocatalyst
     close_mappings:
@@ -105,7 +104,6 @@ classes:
   TurnoverFrequency:
     is_a: Measurement
     class_uri: palimpsest:TurnoverFrequency
-    # TODO_EMMO_UPSTREAM: request TurnoverFrequency as Electrocatalyst metric.
     related_mappings:
       - emmo:electrochemistry_a3b53904_22b1_42a9_a515_c8a3aed7e841  # Electrocatalyst
     close_mappings:
@@ -126,7 +124,6 @@ classes:
   SpecificActivity:
     is_a: Measurement
     class_uri: palimpsest:SpecificActivity
-    # TODO_EMMO_UPSTREAM: request SpecificActivity (ECSA-normalized current) as an Electrocatalyst metric.
     related_mappings:
       - emmo:electrochemistry_a3b53904_22b1_42a9_a515_c8a3aed7e841  # Electrocatalyst
     description: OER current normalized to electrochemically active surface area (mA/cm2_ECSA).
@@ -134,7 +131,6 @@ classes:
   Stability:
     is_a: Measurement
     class_uri: palimpsest:Stability
-    # TODO_EMMO_UPSTREAM: request Stability/Durability as an Electrocatalyst performance metric.
     related_mappings:
       - emmo:electrochemistry_a3b53904_22b1_42a9_a515_c8a3aed7e841  # Electrocatalyst
     description: Duration a catalyst sustains OER at a held current density (hours).
@@ -146,7 +142,6 @@ classes:
   PEMWECellVoltage:
     is_a: Measurement
     class_uri: palimpsest:PEMWECellVoltage
-    # TODO_EMMO_UPSTREAM: request CellVoltage as a full-cell electrochemical property.
     close_mappings:
       - h2kg:CellVoltage  # official H2KG home (a h2kg:Property) for this local class
     description: Full-cell operating voltage at a stated cell current density (PEMWE single cell).
@@ -154,7 +149,6 @@ classes:
   DegradationRate:
     is_a: Measurement
     class_uri: palimpsest:DegradationRate
-    # TODO_EMMO_UPSTREAM: request a voltage-degradation-rate durability metric.
     close_mappings:
       - h2kg:CellVoltageIncreaseRate  # "Cell Voltage Increase Rate" (a h2kg:Property)
     description: Rate of cell-voltage rise during a PEMWE durability hold (mV/h).
@@ -170,7 +164,6 @@ classes:
 
   Electrolyte:
     class_uri: palimpsest:Electrolyte
-    # TODO_EMMO_UPSTREAM: request OER-electrolyte qualifier subclasses.
     related_mappings:
       - emmo:electrochemistry_6592d8cc_4ce4_42ca_b010_6bfc4a8444d2  # AcidicElectrolyte
       - emmo:electrochemistry_615cff2a_be95_4e65_9471_98db23f4c878  # AlkalineElectrolyte
@@ -221,9 +214,6 @@ classes:
   # future card needs those, add slots and drop this comment.
   OxygenEvolutionReaction:
     class_uri: palimpsest:OxygenEvolutionReaction
-    # TODO_EMMO_UPSTREAM: request OxygenEvolutionReaction as subclass of AnodicReaction.
-    # H2KG also lacks a native OER reaction class (only h2kg:OERPerformanceDataset) —
-    # shared-upstream gap, not a one-sided palimpsest gap; see T43.
     close_mappings:
       - emmo:electrochemistry_a0580fa9_5073_44af_b33e_7adbc83892d0  # AnodicReaction
     broad_mappings:
@@ -277,7 +267,6 @@ slots:
   tafel_slope:
     range: float
     slot_uri: palimpsest:tafelSlope
-    # TODO_EMMO_UPSTREAM: request TafelSlope / TafelEquation as siblings of ButlerVolmerEquation.
     close_mappings:
       - emmo:electrochemistry_d48ea516_5cac_4f86_bc88_21b6276c0938  # ButlerVolmerEquation
     unit:
@@ -312,7 +301,6 @@ slots:
   mass_activity:
     range: float
     slot_uri: palimpsest:massActivity
-    # TODO_EMMO_UPSTREAM: request MassActivity under Electrocatalyst metrics.
     related_mappings:
       - emmo:electrochemistry_a3b53904_22b1_42a9_a515_c8a3aed7e841  # Electrocatalyst
     unit:
@@ -323,7 +311,6 @@ slots:
   turnover_frequency:
     range: float
     slot_uri: palimpsest:turnoverFrequency
-    # TODO_EMMO_UPSTREAM: request TurnoverFrequency under Electrocatalyst metrics.
     related_mappings:
       - emmo:electrochemistry_a3b53904_22b1_42a9_a515_c8a3aed7e841
     unit:
@@ -347,8 +334,6 @@ slots:
   electrode_potential_vs_rhe:
     range: float
     slot_uri: palimpsest:potentialVsRHE
-    # TODO_EMMO_UPSTREAM: request reference-electrode-qualified subclasses
-    # (vs RHE, vs SHE, vs Ag/AgCl).
     close_mappings:
       - emmo:electrochemistry_f509645f_eb27_470e_9112_7ab828ed40d3  # ElectrodePotential
     unit:

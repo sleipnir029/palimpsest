@@ -74,9 +74,11 @@ linkml_meta = LinkMLMeta({'default_prefix': 'palimpsest',
                     'for concepts, QUDT for units, PROV-O for extraction '
                     'provenance, and schema.org for bibliographic metadata. '
                     'palimpsest-local IRIs are used (with skos:closeMatch to '
-                    'nearest EMMO term) where EMMO has not yet minted a concept; '
-                    'each such case carries a TODO_EMMO_UPSTREAM: comment naming '
-                    'the term to request.',
+                    'nearest EMMO term) where EMMO has not yet minted a concept. '
+                    'The upstream term requests that were once recorded here as '
+                    'inline comments now live in eval/gold/emmo_upstream_gold.yaml '
+                    '(T88), where they serve as a held-out evaluation set for the '
+                    'ontology-extension agent; do not re-add them here.',
      'id': 'https://w3id.org/palimpsest/v1',
      'imports': ['linkml:types'],
      'license': 'MIT',
