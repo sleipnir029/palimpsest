@@ -32,7 +32,11 @@ GOLD = Path("eval/gold/emmo_upstream_gold.yaml")
 # placement_blind: false. Generated artefacts inherit the same content.
 ACCEPTED_IN_SCHEMA = {"schema/palimpsest.yaml"}
 
-_TEXT_SUFFIXES = {".md", ".yaml", ".yml", ".py", ".txt", ".toml", ".json", ".ttl"}
+# .tex and .html are here because report/latex/ carries rendered twins of the .md
+# reports. Omitting them made an entire directory of restated placements structurally
+# invisible — including where the thesis chapters will land.
+_TEXT_SUFFIXES = {".md", ".yaml", ".yml", ".py", ".txt", ".toml", ".json", ".ttl",
+                  ".tex", ".html"}
 
 
 def _tracked_text_files() -> list[Path]:
@@ -80,10 +84,16 @@ def _answer_iris(gold: dict) -> list[tuple[str, str]]:
     this scan missed the ontology-extension skill quoting `closed_by_iri` verbatim.
     A gap whose `proposed_parent_label` is "(unstated)" is skipped by the pair scan
     entirely, so without this it has no guard at all.
+
+    Scanning only the two "answer" IRIs left the placement IRIs unguarded, and those
+    leak the same way: an IRI-to-label lookup table states a parent without ever typing
+    the gap's own name, so the pair scan cannot fire either.
     """
     out = []
     for g in gold["gaps"]:
-        for field in ("closed_by_iri", "false_friend_iri"):
+        for field in ("closed_by_iri", "false_friend_iri",
+                      "proposed_parent_iri", "proposed_parent_iri_alt",
+                      "proposed_sibling_iri"):
             if g.get(field):
                 out.append((g["id"], g[field].split("#")[-1]))
     return out

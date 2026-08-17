@@ -3,7 +3,7 @@
 Loaded on demand with `read_file`, not injected into the prompt.
 
 All rates below are from `experiments/results/ontology_conventions.json`, measured over
-the **927 ECHO-local `owl:Class`** in the pinned artefact — not the 4,302 classes in the
+the **947 ECHO-local `owl:Class`** in the pinned artefact — not the 4,334 classes in the
 merged closure, which include EMMO core and chemical-substance and follow different
 conventions.
 
@@ -30,11 +30,11 @@ echo:electrochemistry_3f2a91c4_8d17_4e0b_9a55_1c7ee0b4d2f9
 
 ## Required, with measured base rates
 
-Presence, over the 927 ECHO-local classes:
+Presence, over the 947 ECHO-local classes:
 
 | Predicate | Present | Note |
 |---|---|---|
-| `skos:prefLabel` | 100.0% | exactly one (927/927); CamelCase for classes |
+| `skos:prefLabel` | 100.0% | exactly one (947/947); CamelCase for classes |
 | `rdfs:label` | 100.0% | exactly one |
 | any description | 100.0% | `elucidation` **or** `definition` **or** `conceptualisation` |
 | `rdfs:subClassOf` | 100.0% | at least one; quantities take two (see below) |
@@ -45,7 +45,7 @@ with presence:
 
 | | `@en` on all values |
 |---|---|
-| `skos:prefLabel` | 90.5% (88 of 927 carry a plain literal) |
+| `skos:prefLabel` | 90.7% (88 of 947 carry a plain literal) |
 | `elucidation` | 99.8% |
 
 Tag your own `@en`. The gate treats a missing tag as a defect even though upstream is
@@ -53,19 +53,28 @@ not fully consistent about it.
 
 `elucidation` IRI: `https://w3id.org/emmo#EMMO_967080e5_2f42_4eb2_a3a9_c58143e835f9`
 
-## Not required — despite the prose docs
+## Not required
 
 | Predicate | Rate on ECHO-local | Note |
 |---|---|---|
-| any external definition source | 26.8% | cite when you have it; not mandatory |
-| `skos:altLabel` | 32.5% | advisory |
-| `IEVReference` | 17.8% | |
-| `hasIUPACName` | **0.0%** | lives in EMMO core, not ECHO |
+| any external definition source | 29.6% | cite when you have it; not mandatory |
+| `skos:altLabel` | 32.9% | advisory |
+| `IEVReference` | 17.4% | the most-used source by a wide margin |
+| `iupacReference` | 6.5% | the IUPAC Gold Book pointer ECHO actually uses |
+| `dbpediaReference` | 2.2% | |
+| `pubChemReference` | 0.1% | |
 | `ISO80000Reference` | **0.0%** | lives in EMMO core |
 | `qudtReference` | **0.0%** | lives in EMMO core |
 
-The "ECHO requires IUPAC-sourced definitions" claim appears in EMMO's documentation and
-is not borne out by the artefact. Do not fabricate a citation to satisfy it.
+ECHO's new-term issue template lists `skos:prefLabel` and `elucidation` as the required
+fields and the external references as optional, which is exactly what the artefact
+shows. Do not fabricate a citation to satisfy a rule that does not exist.
+
+> An earlier version of this sheet measured `hasIUPACName` — a substance-nomenclature
+> annotation carried by no ECHO-local class — and concluded from its 0% that ECHO never
+> cites IUPAC while its documentation demands it. Both halves were wrong: the citation
+> predicate is `iupacReference` (6.5%), and the documentation asks for it only as an
+> option. Every IRI in this sheet is now checked against its label in the test suite.
 
 ## IRI minting
 

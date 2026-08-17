@@ -116,10 +116,10 @@ _SKILL_DIR = Path("skills/general/ontology-extension")
 @pytest.mark.parametrize(
     "doc,claim,path,expected",
     [
-        ("SKILL.md", "ECHO-local class count", ("echo", "n_classes_local"), "927"),
+        ("SKILL.md", "ECHO-local class count", ("echo", "n_classes_local"), "947"),
         ("SKILL.md", "H2KG real term count", ("h2kg", "n_individuals_h2kg_ns"), "2,176"),
         ("references/echo-conventions.md", "ECHO-local class count",
-         ("echo", "n_classes_local"), "927"),
+         ("echo", "n_classes_local"), "947"),
         ("references/h2kg-term-shape.md", "H2KG real term count",
          ("h2kg", "n_individuals_h2kg_ns"), "2,176"),
     ],

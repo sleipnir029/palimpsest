@@ -15,8 +15,22 @@ from pathlib import Path
 import httpx
 from rdflib import OWL, RDFS, Graph, URIRef
 
-EMMO_ECHO = "https://w3id.org/emmo/domain/electrochemistry"
-_CACHE = Path.home() / ".cache" / "palimpsest" / "echo.ttl"
+EMMO_ECHO = "https://w3id.org/emmo/domain/electrochemistry"  # namespace base, not a fetch URL
+
+# Fetch from the *tagged release asset*, not from EMMO_ECHO. The w3id IRI content-
+# negotiates to a rolling gh-pages deploy that is rebuilt without a version change, so
+# a digest over it fails on every upstream rebuild — including rebuilds that say nothing
+# new (blank-node order is not stable). The release asset for a given tag never moves.
+#
+# The two are not byte-identical even at the same version: at 0.37.2 they carry the same
+# 4334 owl:Class / 947 ECHO-local terms but disagree on ~190 rdfs:isDefinedBy triples,
+# attributing the same term to different source modules. Prefer the tagged artefact.
+ECHO_VERSION = "0.37.2"  # published 2026-08-10
+ECHO_TTL_URL = (
+    "https://github.com/emmo-repo/domain-electrochemistry/releases/download"
+    f"/{ECHO_VERSION}/electrochemistry.ttl"
+)
+_CACHE = Path.home() / ".cache" / "palimpsest" / f"echo_{ECHO_VERSION}.ttl"
 
 # H2KG (T47): the bare release IRI does not resolve (re-verified 2026-07-27:
 # https://w3id.org/h2kg/hydrogen-ontology/releases/1.0.0 still 404s). T87 moves
@@ -27,15 +41,20 @@ H2KG_NS = "https://w3id.org/h2kg/hydrogen-ontology#"
 H2KG_TTL_URL = "https://vimilabs.github.io/AIMWORKS/odk/artifacts/base.ttl"
 _H2KG_CACHE = Path.home() / ".cache" / "palimpsest" / "h2kg_base.ttl"
 
-# Pinned digests (T87). Both upstreams are moving targets served from unversioned
-# URLs, and both have already drifted: ECHO grew 4273 -> 4302 owl:Class between
-# 2026-06-01 and 2026-07-27, and H2KG's released base.ttl differs from the @main
-# core_schema.ttl this module used to fetch. Without a pin, every measured number
-# silently reshapes itself under the next upstream build.
+# Pinned digests (T87). Without a pin every measured number silently reshapes itself
+# under the next upstream build, and both upstreams do move: ECHO went 4273 -> 4302 ->
+# 4334 owl:Class between 2026-06-01 and 2026-08-10, and H2KG's released base.ttl differs
+# from the @main core_schema.ttl this module used to fetch.
 #
-# Bumping a digest is a deliberate act, not a chore: re-run tests/test_ontology.py
-# and re-run any experiment whose numbers appear in the write-up.
-ECHO_SHA256 = "27acb504e1e2453e30a3799ba5283ca2934b8c95b931440ec9806c9baef2fb14"
+# ECHO is pinned to a tagged release asset, so the digest is stable by construction and
+# a bump is a deliberate version choice. H2KG has no tags and no releases at all, so its
+# pin is still a digest over a rolling URL and WILL break on any upstream rebuild —
+# that asymmetry is a finding about the two projects, not an inconsistency here.
+#
+# Bumping is a deliberate act, not a chore: re-run tests/test_ontology.py AND
+# experiments/ontology_conventions.py, then update every figure quoted from it.
+# 0.37.2 moved ECHO-local 927 -> 947, which is the denominator for every mined rate.
+ECHO_SHA256 = "8b54675e700ad97d2fc12094044f4d82fdc07897099a0e8897a2ebae6a63e252"
 H2KG_SHA256 = "2cd2eb1c1956f2fd77aeb83ce4b5806f167d84b3bfdb854d8802c80527ae9e2f"
 
 
@@ -96,7 +115,7 @@ KNOWN_IRIS: dict[str, str] = {
 def echo_graph() -> Graph:
     """Load the pinned ECHO turtle into an rdflib Graph, disk-cached."""
     g = Graph()
-    g.parse(_pinned(EMMO_ECHO, _CACHE, ECHO_SHA256, "EMMO ECHO"), format="ttl")
+    g.parse(_pinned(ECHO_TTL_URL, _CACHE, ECHO_SHA256, "EMMO ECHO"), format="ttl")
     return g
 
 

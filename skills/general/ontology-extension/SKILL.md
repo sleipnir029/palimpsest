@@ -57,7 +57,7 @@ One gap renders **twice**, and the two renderings are not stylistic variants:
 | | EMMO ECHO | H2KG |
 |---|---|---|
 | A metric is a | `owl:Class` | `owl:NamedIndividual` typed to an upper class |
-| Scale | 927 ECHO-local classes (230 restrictions on them; 2,894 across the merged closure) | 19 classes, **2,176** terms, **0 restrictions** |
+| Scale | 947 ECHO-local classes (233 restrictions on them; 2,907 across the merged closure) | 19 classes, **2,176** terms, **0 restrictions** |
 | Identifier | opaque UUID hash IRI | readable fragment |
 | Axioms | real DL ontology | effectively a SKOS vocabulary in OWL clothing |
 
@@ -71,7 +71,7 @@ there to attach them to.
 
 ## 3. ECHO term shape
 
-Required on every proposed ECHO class. Presence rates over the 927 ECHO-local classes:
+Required on every proposed ECHO class. Presence rates over the 947 ECHO-local classes:
 
 - `skos:prefLabel`, **exactly one**, CamelCase — present on 100%
 - `rdfs:label`, exactly one — present on 100%
@@ -82,7 +82,7 @@ Required on every proposed ECHO class. Presence rates over the 927 ECHO-local cl
   99.5% conformant
 
 **Language tags are a separate, weaker convention — do not confuse them with presence.**
-Every ECHO-local class has a `prefLabel`, but only **90.5%** have one that is `@en`-tagged
+Every ECHO-local class has a `prefLabel`, but only **90.7%** have one that is `@en`-tagged
 throughout (88 carry a plain literal). `elucidation` is tagged 99.8% of the time. Tag
 yours `@en`; just do not assume upstream always did.
 
@@ -99,11 +99,13 @@ ElectricPotential` **and** `subClassOf ElectrochemicalQuantity`;
 `ElectrochemicalKineticQuantity`. A quantity with only a domain parent will be
 challenged — `emmocheck`'s `test_quantity_dimension` exists to enforce the other half.
 
-**What ECHO does NOT require, despite its own documentation saying otherwise:** an
-external definition source. Only 26.8% of ECHO-local classes cite one, and
-`hasIUPACName` / `ISO80000Reference` / `qudtReference` are at **0%** — those live in
-the EMMO core layer. Cite IUPAC when you have it; do not treat it as mandatory, and do
-not invent a citation to satisfy a rule that does not exist.
+**What ECHO does NOT require:** an external definition source. 29.6% of ECHO-local
+classes cite one — `IEVReference` 17.4%, `wikidataReference` 12.0%, `iupacReference`
+6.5% — while `ISO80000Reference` and `qudtReference` are at **0%** and belong to the
+EMMO core layer beneath. ECHO's own new-term issue template agrees: `skos:prefLabel`
+and `elucidation` are the required fields and the external references are listed as
+optional. Cite IUPAC when you have it; do not invent a citation to satisfy a rule that
+does not exist.
 
 ## 4. H2KG term shape
 
