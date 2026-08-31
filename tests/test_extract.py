@@ -440,13 +440,18 @@ def test_cache_miss_raises(tmp_path):
 
 
 def test_chandra_no_geometry_extracts_nothing(tmp_path):
-    """Chandra is markdown → no spans → no pages → no LLM call, empty result."""
+    """Chandra is markdown → no spans → no pages → no LLM call, error reported."""
     sha = "7" * 64
     cache = _seed_cache(tmp_path, sha, parser_name="chandra",
                         parser_text="# Title\n\nThe overpotential was 236 mV.\n", suffix=".md")
     stub = _StubProvider(json.dumps({"items": []}))
     valid, errors = extract(paper_sha=sha, parser_name="chandra", provider=stub, cache=cache)
-    assert valid == [] and errors == []
+    assert valid == []
+    assert len(errors) == 1
+    exc, ctx = errors[0]
+    assert isinstance(exc, ValueError)
+    assert "no citable spans" in str(exc)
+    assert ctx["parser_name"] == "chandra"
     assert stub.calls == 0  # no spans → never calls the LLM
 
 
@@ -566,7 +571,7 @@ def test_schema_for_prompt_strips_runtime_evidence_fields():
         ("docling",
          json.dumps({"texts": [{"text": "overpotential 236 mV",
              "prov": [{"page_no": 1, "bbox": {"l": 60, "t": 200, "r": 500, "b": 180}}]}]}),
-         (60.0, 200.0, 500.0, 180.0)),
+         (60.0, 180.0, 500.0, 200.0)),
     ],
 )
 def test_per_parser_projection_and_resolution(parser, parser_text, expected_bbox):
@@ -586,7 +591,7 @@ def test_docling_table_projected():
     spans = _load_spans("docling", json.dumps(data))
     assert len(spans) == 1
     page_no, text, bbox = spans[0]
-    assert page_no == 2 and bbox == (10.0, 90.0, 400.0, 60.0)
+    assert page_no == 2 and bbox == (10.0, 60.0, 400.0, 90.0)
     assert "236 mV" in text
 
 

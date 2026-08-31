@@ -80,10 +80,6 @@ def canonical_unit(measurement_class_name: str) -> str | None:
 # voltage rate) is never what triggers a reject — palimpsest is general, not OER-only.
 # Ceilings are DELIBERATELY GENEROUS — reject blunders, never a physically unusual but
 # real value. Slots without a clear ceiling are omitted (magnitude_ok → True).
-# DegradationRate is DELIBERATELY OMITTED: magnitude alone cannot separate a µV/h-as-mV/h
-# blunder from a genuine high accelerated-stress rate, AND a correctly converted value is
-# blocked upstream by the mis-citation guard anyway — that needs unit re-derivation from
-# the cited span (deferred), not a bound here.
 # ponytail: static ceilings, not unit re-derivation; widen one if a real value is ever
 # wrongly rejected.
 PLAUSIBLE_MAX: dict[str, float] = {
@@ -95,6 +91,9 @@ PLAUSIBLE_MAX: dict[str, float] = {
     "Stability": 1e5,               # h
     "PEMWECellVoltage": 5.0,        # V (a mV-under-V blunder ⇒ ~1900 ≫ 5)
     "ChargeTransferCoefficient": 2.0,
+    "ECSA": 5000.0,                 # cm2 (geometric); catches absurd values like 3.5e16
+    "ExchangeCurrentDensity": 1000.0,  # mA/cm2
+    "DegradationRate": 100.0,       # mV/h; catches unconverted values (e.g. 460 from audit)
 }
 
 
@@ -128,8 +127,8 @@ _MILLI_CANON = re.compile(r"^m([VA])\b")
 # Accepted source prefixes a small value could plausibly be PRINTED in for a milli slot:
 # micro (two encodings + ascii), nano, milli (the canonical itself → ×1 no-op). NOT
 # centi/kilo/mega — those are coarse, don't occur for these quantities, and would only
-# fire via a false match (and DegradationRate has no magnitude ceiling to catch the
-# damage). 'µ'/'u' both map to micro; the span is unicode-normalised to 'µ' first.
+# fire via a false match. 'µ'/'u' both map to micro; the span is unicode-normalised
+# to 'µ' first.
 _PREFIX_FACTOR = {"µ": 1e-6, "u": 1e-6, "n": 1e-9, "m": 1e-3}
 
 
@@ -210,7 +209,7 @@ def _unit_signature(unit: str | None) -> frozenset[tuple[str, int]]:
     """
     s = (unit or "").translate(_SUPERSCRIPTS).lower()
     s = re.sub(r"\\,|\\", " ", s)        # LaTeX thin-space / stray backslashes
-    s = re.sub(r"[{}]", "", s)           # LaTeX braces: ^{-1} -> ^-1
+    s = re.sub(r"[{}$]", "", s)          # LaTeX braces + dollar signs: ^{-1} -> ^-1
     s = re.sub(r"_[a-z0-9]+", "", s)     # subscript qualifiers: A g-1_ir -> A g-1
     s = s.replace("^", "")               # s^-1 -> s-1, cm^2 -> cm2
     if not s.strip():

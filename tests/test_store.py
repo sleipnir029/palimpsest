@@ -11,6 +11,8 @@ Covers:
 
 from __future__ import annotations
 
+import math
+
 import pytest
 
 from schema.generated.pydantic import (
@@ -365,3 +367,13 @@ def test_t71_pemwe_cell_voltage_inserts():
     )
     assert len(rows) == 1
     assert float(rows[0]["v"]) == 1.75
+
+
+@pytest.mark.parametrize("bad_value", [float("nan"), float("inf"), float("-inf")])
+def test_refuses_non_finite_value(bad_value):
+    """M5: NaN and Infinity must not reach the RDF graph."""
+    store = RDFStore()
+    op = Overpotential(value=bad_value, unit_label="mV", evidence=_evidence())
+    with pytest.raises(ValueError, match="non-finite value"):
+        store.insert_extraction(op, run_id="r1")
+    assert len(store) == 0

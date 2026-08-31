@@ -143,6 +143,7 @@ def test_pemwe_overlay_does_not_shadow_universal_keys():
         (r"A g^{-1}_{Ir}", "A/g", True),   # the LaTeX form mineru actually emits
         ("cm²", "cm2", True),
         ("mA cm⁻²", "mA/cm2", True),
+        ("mA cm$^{-2}$", "mA/cm2", True),  # LaTeX dollar signs from LLM echo
         ("mV/dec", "mV/decade", True),     # dec/decade synonym
         ("mV", "mV", True),
         ("", "dimensionless", True),       # blank label == dimensionless
@@ -161,8 +162,7 @@ def test_units_match(emitted, canonical, expected):
 # a value in a prefixed unit (mV) under the canonical label (V) and pass C2 with a
 # value ~1000× too large. magnitude_ok bounds |value| per slot to catch that. It checks
 # only an UPPER ceiling on |value| — never a sign or lower bound — so real negatives
-# (HER overpotential) pass; and DegradationRate is intentionally untracked (magnitude
-# can't separate the µV/h blunder from a real high accelerated-stress rate).
+# (HER overpotential) pass.
 import pytest as _pytest
 from palimpsest.normalize import magnitude_ok
 
@@ -178,8 +178,18 @@ from palimpsest.normalize import magnitude_ok
         ("Overpotential", 2000.0, True),      # ceiling inclusive
         ("Overpotential", 236000.0, False),   # V emitted under an mV label
         ("Stability", 400.0, True),
-        # DegradationRate intentionally NOT magnitude-guarded → always allowed here.
+        # ECSA (cm2, geometric)
+        ("ECSA", 150.0, True),
+        ("ECSA", 5000.0, True),               # ceiling inclusive
+        ("ECSA", 3.5e16, False),              # absurd value caught
+        # ExchangeCurrentDensity (mA/cm2)
+        ("ExchangeCurrentDensity", 0.01, True),
+        ("ExchangeCurrentDensity", 1000.0, True),  # ceiling inclusive
+        ("ExchangeCurrentDensity", 5000.0, False),
+        # DegradationRate (mV/h)
         ("DegradationRate", 22.0, True),
+        ("DegradationRate", 100.0, True),     # ceiling inclusive
+        ("DegradationRate", 460.0, False),    # unconverted value from audit
         ("UnknownType", 1e9, True),           # untracked slot → never reject
         ("Overpotential", None, True),        # null handled elsewhere; don't crash here
     ],

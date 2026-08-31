@@ -30,6 +30,7 @@ reconstructable) and the link is now a stable IRI, not an anonymous activity.
 
 from __future__ import annotations
 
+import math
 import uuid
 from enum import Enum
 from typing import Any
@@ -130,6 +131,9 @@ class RDFStore:
                 f"refuse to insert {type(instance).__name__} without Evidence "
                 "(CLAUDE.md provenance non-negotiable)"
             )
+
+        if instance.value is not None and not math.isfinite(instance.value):
+            raise ValueError(f"non-finite value: {instance.value}")
 
         m_iri = NamedNode(f"{PALIM}measurement/{uuid.uuid4()}")
         paper_iri = NamedNode(f"{PALIM}paper/{ev.paper.sha256}")

@@ -218,6 +218,7 @@ __marimo__/
 .streamlit/secrets.toml
 
 # palimpsest
+mini-thesis/
 palimpsest.db
 cache/
 store/
@@ -232,6 +233,9 @@ workspace/
 
 # generated TUI theme gallery (scripts/preview_themes.py)
 theme-preview/
+
+# presentation decks
+*.pdf
 
 # macOS
 .DS_Store

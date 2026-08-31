@@ -280,7 +280,10 @@ def _spans_paddle(data: Any) -> list[Span]:
 
 def _docling_bbox(b: Any) -> tuple[float, float, float, float] | None:
     if isinstance(b, dict) and all(k in b for k in ("l", "t", "r", "b")):
-        return (float(b["l"]), float(b["t"]), float(b["r"]), float(b["b"]))
+        # docling uses BOTTOMLEFT origin (y increases upward), so t > b.
+        # Normalise to top-left origin (y0 < y1) with min/max.
+        y0, y1 = min(float(b["t"]), float(b["b"])), max(float(b["t"]), float(b["b"]))
+        return (float(b["l"]), y0, float(b["r"]), y1)
     return None
 
 
@@ -427,12 +430,54 @@ def _value_digits(value: Any) -> str:
         return ""
 
 
+def _extract_paper_metadata(sha: str) -> tuple[str | None, str | None]:
+    """Best-effort DOI and title from the PDF's first page text.
+
+    Returns ``(doi, title)``; either may be ``None`` when not found or the PDF
+    is not on disk (offline tests, scanned-only pages).  Cheap, local, no LLM.
+    """
+    pdf = _pdf_for_sha(sha)
+    if pdf is None:
+        return None, None
+    import fitz  # heavy; only when a PDF is actually present
+
+    try:
+        with fitz.open(pdf) as doc:
+            text = doc[0].get_text() if doc.page_count else ""
+    except Exception:
+        return None, None
+
+    doi: str | None = None
+    m = re.search(r"(10\.\d{4,}/\S+)", text)
+    if m:
+        doi = m.group(1).rstrip(".,;:)]\">'")
+
+    _SKIP = {"article", "letter", "review", "communication", "perspective",
+             "editorial", "research", "research article", "original article",
+             "full paper", "short communication", "original research"}
+    title: str | None = None
+    for line in text.splitlines():
+        stripped = line.strip()
+        if not stripped:
+            continue
+        if stripped.lower() in _SKIP:
+            continue
+        if stripped.startswith("http"):
+            continue
+        title = stripped
+        break
+
+    return doi, title
+
+
 def _resolve_spans(
     ev: Any,
     spans: list[Span],
     paper_sha: str,
     parser_name: str,
     value: Any = None,
+    paper_doi: str | None = None,
+    paper_title: str | None = None,
 ) -> dict | None:
     """Build a full Evidence dict from the cited GLOBAL span ids, or ``None`` if invalid.
 
@@ -456,20 +501,26 @@ def _resolve_spans(
     cited = [spans[i] for i in ids if isinstance(i, int) and 0 <= i < len(spans)]
     if not cited:
         return None
+    # Build the Paper sub-dict once (sha256 mandatory; doi/title best-effort).
+    paper_dict: dict[str, str] = {"sha256": paper_sha}
+    if paper_doi is not None:
+        paper_dict["doi"] = paper_doi
+    if paper_title is not None:
+        paper_dict["title"] = paper_title
     # Pin to the value-bearing span (granular) when the value is unambiguous.
     vd = _value_digits(value)
     if len(vd) >= 2:
         for p, t, b in cited:
             if vd in re.sub(r"\D", "", t):
                 return {
-                    "paper": {"sha256": paper_sha}, "page": p,
+                    "paper": paper_dict, "page": p,
                     "bbox_x0": b[0], "bbox_y0": b[1], "bbox_x1": b[2], "bbox_y1": b[3],
                     "source_text": t, "parser_name": parser_name,
                 }
     # Fallback: union bbox + concatenated text (multi-span value, <2 digits, or no value).
     bboxes = [b for _p, _t, b in cited]
     return {
-        "paper": {"sha256": paper_sha},
+        "paper": paper_dict,
         "page": cited[0][0],
         "bbox_x0": min(b[0] for b in bboxes),
         "bbox_y0": min(b[1] for b in bboxes),
@@ -500,6 +551,8 @@ def _process_items(
     parser_name: str,
     valid: list[BaseModel],
     errors: list[tuple[Exception, dict]],
+    paper_doi: str | None = None,
+    paper_title: str | None = None,
 ) -> None:
     """Resolve GLOBAL span citations, validate, and route each item to valid/errors."""
     for item in items:
@@ -511,7 +564,8 @@ def _process_items(
 
         if type_name in _MEASUREMENT_NAMES:
             evidence = _resolve_spans(item.get("evidence"), spans, paper_sha, parser_name,
-                                      value=item.get("value"))
+                                      value=item.get("value"),
+                                      paper_doi=paper_doi, paper_title=paper_title)
             if evidence is None:
                 errors.append((
                     ValueError(
@@ -728,9 +782,17 @@ def extract(
     system = _build_system_prompt(skill_body, jsonschema_str, norm)
 
     spans = _load_spans(parser_name, parser_text)
+    paper_doi, paper_title = _extract_paper_metadata(paper_sha)
     valid: list[BaseModel] = []
     errors: list[tuple[Exception, dict]] = []
     if not spans:  # no geometry (e.g. Chandra) → nothing citable
+        errors.append((
+            ValueError(
+                f"parser '{parser_name}' produced no citable spans "
+                f"(no geometry/bbox data); extraction requires spans"
+            ),
+            {"paper_sha": paper_sha, "parser_name": parser_name},
+        ))
         return valid, errors
 
     # One call over the full projection (consistent + cheap); fall back to per-page
@@ -770,7 +832,8 @@ def extract(
         except ValueError as exc:
             errors.append((exc, {"batch": batch}))
             continue
-        _process_items(items, spans, paper_sha, parser_name, valid, errors)
+        _process_items(items, spans, paper_sha, parser_name, valid, errors,
+                       paper_doi=paper_doi, paper_title=paper_title)
 
     # Tighten each Evidence box to the exact value text via the PDF text layer, so
     # boxes are value-tight and in ONE coordinate space (PDF points) the viewer can
