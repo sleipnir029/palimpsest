@@ -218,7 +218,6 @@ __marimo__/
 .streamlit/secrets.toml
 
 # palimpsest
-mini-thesis/
 palimpsest.db
 cache/
 store/
