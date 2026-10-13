@@ -141,7 +141,7 @@ def echo_iri_exists(iri: str) -> bool:
     """True if `iri` is declared as an owl:Class in ECHO.
 
     The skill-consistency gate (T69) resolves `emmo:` hash IRIs taken verbatim
-    from the schema (class_uri / close_mappings); emmo_iri() resolves by label,
+    from the schema (class_uri / close_ and related_mappings); emmo_iri() resolves by label,
     so it can't answer this. Catches a typo'd or upstream-removed ECHO hash.
     """
     return (URIRef(iri), None, OWL.Class) in echo_graph()

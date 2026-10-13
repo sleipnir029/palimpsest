@@ -136,7 +136,7 @@ _MILLI_CANON = re.compile(r"^m([VA])\b")
 _PREFIX_FACTOR = {"µ": 1e-6, "u": 1e-6, "n": 1e-9, "m": 1e-3, "": 1.0}
 # A whole number (not the tail of a decimal or of a longer number), and the unit glued
 # to it: optional prefix + base, the base not followed by a letter other than those
-# that continue a unit (h, s, c(m), d(ec)), so "2 Variation" is not read as volts.
+# that continue a unit (h, s, c(m), d(ec), R(HE)), so "2 Variation" is not read as volts.
 _NUM = re.compile(r"(?<![\d.])\d+(?:\.\d+)?")
 _RANGE_SEP = re.compile(r"\s*(?:[-–—−~]|to)\s*")
 _THOUSANDS = re.compile(r"(?<=\d),(?=\d{3}(?!\d))")
@@ -158,7 +158,7 @@ def _span_numbers(text: str, base: str) -> list[tuple[float, str, str | None, bo
     ("2.3–2.8 µV") takes the high end's unit with ``carried=True``.
     """
     txt = _THOUSANDS.sub("", _clean_units(text))
-    unit_re = re.compile(r"\s*([µunm]?)\s*" + base + r"(?![abe-gi-rt-zA-Z])")
+    unit_re = re.compile(r"\s*([µunm]?)\s*" + base + r"(?![abe-gi-rt-zA-QS-Z])")
     out: list[list] = []
     for m in _NUM.finditer(txt):
         um = unit_re.match(txt, m.end())
@@ -192,6 +192,14 @@ def check_milli_value(
 
     A wrong rescale corrupts silently while a refusal is recorded with its reason, so
     every ambiguous case refuses rather than converts.
+
+    Deliberately strict and limited (recorded in tests/test_normalize.py):
+      - the match is numeric to 1e-6, so a rounded value (52.6 for "52.63"), a decimal
+        comma ("1,234" reads as 1234), a space thousands separator ("1 500") or powers
+        of ten ("1.2 × 10^1") do not match and refuse as miscite;
+      - a conversion is accepted from whatever number carries a unit, so the check
+        cannot tell an electrode potential of 1.53 V from an overpotential of 1530 mV;
+      - signs are not read: "−22 µV/h" accepts +0.022 (as the digit guard did).
     """
     mc = _MILLI_CANON.match(canonical or "")
     if not mc or value is None or not source_text:

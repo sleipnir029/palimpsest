@@ -239,5 +239,5 @@ def test_span_unit_mismatch_has_its_own_bucket(tmp_path):
     drops = [{"stage": "extract", "reason": reason} for _ in range(3)]
     _record(log, n_extracted=0, n_inserted=0, n_errors=3, errors_json=json.dumps(drops))
     out = diagnose_run(SHA_A, "mineru", run_log=log)
-    assert "span prefix mismatch" in out
+    assert "span unit mismatch" in out
     assert "schema/validation error" not in out

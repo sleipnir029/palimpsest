@@ -343,6 +343,48 @@ def test_unit_aware_citation_check_review_examples(tmp_path, span, value, stored
         assert valid == [] and len(errors) == 1 and reason in str(errors[0][0])
 
 
+def test_converted_value_pins_to_its_own_span(tmp_path):
+    """A converted value (0.022 for a printed "22 µV/h") cited across two spans pins to
+    the span that states it, not the union box — the same box the raw 22 would get."""
+    sha = "5" * 64
+    page = [
+        {"type": "text", "content": "Fig. 7 shows the durability test.", "bbox": [10, 10, 500, 30]},
+        {"type": "text", "content": "degradation rate: 22 µV/h", "bbox": [10, 400, 500, 420]},
+    ]
+    cache = _seed_cache(tmp_path, sha, parser_text=json.dumps([page]))
+    for value in (0.022, 22.0):
+        resp = {"items": [{"type": "DegradationRate", "value": value, "unit_label": "mV/h",
+                           "evidence": {"spans": [0, 1]}}]}
+        valid, errors = extract(paper_sha=sha, provider=_StubProvider(json.dumps(resp)),
+                                cache=cache)
+        assert errors == [] and valid[0].value == pytest.approx(0.022)
+        assert valid[0].evidence.source_text == "degradation rate: 22 µV/h"
+        assert (valid[0].evidence.bbox_y0, valid[0].evidence.bbox_y1) == (400, 420)
+
+
+def test_span_unit_mismatch_keeps_the_raw_item(tmp_path):
+    """The refusal records the item as the model emitted it, unconverted."""
+    sha = "4" * 64
+    page = [{"type": "text", "content": "unsupported Ir NPs (460 V/h).", "bbox": [10, 10, 500, 30]}]
+    cache = _seed_cache(tmp_path, sha, parser_text=json.dumps([page]))
+    item = {"type": "DegradationRate", "value": 460.0, "unit_label": "mV/h", "evidence": _ev(0)}
+    valid, errors = extract(paper_sha=sha, provider=_StubProvider(json.dumps({"items": [item]})),
+                            cache=cache)
+    assert valid == [] and errors[0][1] == item
+
+
+@pytest.mark.parametrize("value,ok", [(30.0, True), (31.0, False)])
+def test_non_milli_slot_keeps_the_digit_guard(tmp_path, value, ok):
+    """Stability (canonical h) is outside the unit-aware check: plain digit guard."""
+    sha = "3" * 64
+    page = [{"type": "text", "content": "stable for 30 h at 10 mA cm-2", "bbox": [10, 10, 500, 30]}]
+    cache = _seed_cache(tmp_path, sha, parser_text=json.dumps([page]))
+    resp = {"items": [{"type": "Stability", "value": value, "unit_label": "h", "evidence": _ev(0)}]}
+    valid, errors = extract(paper_sha=sha, provider=_StubProvider(json.dumps(resp)), cache=cache)
+    assert (len(valid) == 1) is ok
+    assert ok or "mis-citation" in str(errors[0][0])
+
+
 def test_reason_first_response_parses_and_drops_reasoning(tmp_path):
     """T74 arm B's whole premise: a leading `reasoning` key on the outer object is
     IGNORED by _parse_response (json.loads then body["items"]), so reason-then-format

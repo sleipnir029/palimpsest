@@ -478,6 +478,7 @@ def _resolve_spans(
     value: Any = None,
     paper_doi: str | None = None,
     paper_title: str | None = None,
+    canonical: str | None = None,
 ) -> dict | None:
     """Build a full Evidence dict from the cited GLOBAL span ids, or ``None`` if invalid.
 
@@ -485,9 +486,12 @@ def _resolve_spans(
     contains the measured ``value``'s digits — that span's granular bbox + verbatim
     text. This keeps the source box tight (one line/cell) instead of the coarse
     UNION of every cited span, which made every value from one region share one
-    block-level box. The digit test mirrors the mis-citation guard; values with
-    fewer than 2 digits can't be disambiguated, so they fall back to the union (also
-    used when no cited span carries the value, or no value is supplied).
+    block-level box. The digit test mirrors the mis-citation guard's digit rule. A
+    converted value on a milli-V/A slot (0.022 mV/h for a printed "22 µV/h") shares
+    no digits with its span, so when ``canonical`` is given and no digits match, the
+    span that ``check_milli_value`` accepts is pinned instead. Values with fewer than
+    2 digits can't be disambiguated, so they fall back to the union (also used when
+    no cited span carries the value, or no value is supplied).
     ``paper.sha256`` + ``parser_name`` are injected. Returns ``None`` when ``ev`` has
     no usable ``spans`` (caller routes to ``errors``).
     """
@@ -510,13 +514,18 @@ def _resolve_spans(
     # Pin to the value-bearing span (granular) when the value is unambiguous.
     vd = _value_digits(value)
     if len(vd) >= 2:
-        for p, t, b in cited:
-            if vd in re.sub(r"\D", "", t):
-                return {
-                    "paper": paper_dict, "page": p,
-                    "bbox_x0": b[0], "bbox_y0": b[1], "bbox_x1": b[2], "bbox_y1": b[3],
-                    "source_text": t, "parser_name": parser_name,
-                }
+        pinned = next((c for c in cited if vd in re.sub(r"\D", "", c[1])), None)
+        if pinned is None and canonical:
+            pinned = next((c for c in cited
+                           if (check_milli_value(value, c[1], canonical) or ("",))[0] == "ok"),
+                          None)
+        if pinned is not None:
+            p, t, b = pinned
+            return {
+                "paper": paper_dict, "page": p,
+                "bbox_x0": b[0], "bbox_y0": b[1], "bbox_x1": b[2], "bbox_y1": b[3],
+                "source_text": t, "parser_name": parser_name,
+            }
     # Fallback: union bbox + concatenated text (multi-span value, <2 digits, or no value).
     bboxes = [b for _p, _t, b in cited]
     return {
@@ -565,7 +574,8 @@ def _process_items(
         if type_name in _MEASUREMENT_NAMES:
             evidence = _resolve_spans(item.get("evidence"), spans, paper_sha, parser_name,
                                       value=item.get("value"),
-                                      paper_doi=paper_doi, paper_title=paper_title)
+                                      paper_doi=paper_doi, paper_title=paper_title,
+                                      canonical=canonical_unit(type_name))
             if evidence is None:
                 errors.append((
                     ValueError(
@@ -582,7 +592,8 @@ def _process_items(
             # not converted ("460 V/h" labelled mV/h, a raw range low end) is refused.
             # Other slots keep the digit-substring test. If the value is not in the
             # span, the model likely cited the wrong span → refuse rather than attach a
-            # wrong bbox. Lenient: values with fewer than two digits are exempt.
+            # wrong bbox. Values with fewer than two digits are exempt from the
+            # mis-citation refusal only, not from the span unit mismatch.
             v = item.get("value")
             vd = _value_digits(v)
             milli = check_milli_value(v, evidence["source_text"], canonical_unit(type_name))

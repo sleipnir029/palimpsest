@@ -286,6 +286,13 @@ _QR = "potential rising from 32 mV to 126 mV over 1,000 h of operation"
         (250.0, "236 and 250 mV for A and B", "mV", OK, 250.0),
         (1200.0, "η of 1,200 mV", "mV", OK, 1200.0),         # thousands comma
         (-236.0, "η = −236 mV for HER", "mV", OK, -236.0),   # sign kept
+        (1466.0, "E = 1.466 VRHE at 10 mA", "mV", OK, 1466.0),  # V glued to RHE still volts
+        # recorded strictness (see the check_milli_value docstring): these refuse
+        (52.6, "52.63 mV dec-1", "mV/decade", MISCITE, None),  # rounded by the model
+        (1.234, "1,234 mV", "mV", MISCITE, None),             # decimal comma reads as 1234
+        (1500.0, "1 500 mV", "mV", MISCITE, None),            # space thousands separator
+        # recorded limitation: a converted reading of another quantity is accepted
+        (1530.0, "1.53 V vs RHE", "mV", OK, 1530.0),
     ],
 )
 def test_check_milli_value_review_examples(value, source, canonical, verdict, expected):
