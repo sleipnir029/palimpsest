@@ -486,12 +486,13 @@ def _resolve_spans(
     contains the measured ``value``'s digits — that span's granular bbox + verbatim
     text. This keeps the source box tight (one line/cell) instead of the coarse
     UNION of every cited span, which made every value from one region share one
-    block-level box. The digit test mirrors the mis-citation guard's digit rule. A
-    converted value on a milli-V/A slot (0.022 mV/h for a printed "22 µV/h") shares
-    no digits with its span, so when ``canonical`` is given and no digits match, the
-    span that ``check_milli_value`` accepts is pinned instead. Values with fewer than
-    2 digits can't be disambiguated, so they fall back to the union (also used when
-    no cited span carries the value, or no value is supplied).
+    block-level box. The test mirrors the citation guard: on a milli-V/A slot
+    (``canonical`` given) the first span ``check_milli_value`` accepts is pinned, so a
+    converted value (0.022 mV/h for a printed "22 µV/h") pins to the span that states
+    it and a digit substring elsewhere ("Table S1236" for 236) does not win; failing
+    that, or on other slots, the first span containing the value's digits. Values
+    with fewer than 2 digits can't be disambiguated, so they fall back to the union
+    (also used when no cited span carries the value, or no value is supplied).
     ``paper.sha256`` + ``parser_name`` are injected. Returns ``None`` when ``ev`` has
     no usable ``spans`` (caller routes to ``errors``).
     """
@@ -514,11 +515,11 @@ def _resolve_spans(
     # Pin to the value-bearing span (granular) when the value is unambiguous.
     vd = _value_digits(value)
     if len(vd) >= 2:
-        pinned = next((c for c in cited if vd in re.sub(r"\D", "", c[1])), None)
-        if pinned is None and canonical:
-            pinned = next((c for c in cited
-                           if (check_milli_value(value, c[1], canonical) or ("",))[0] == "ok"),
-                          None)
+        pinned = next((c for c in cited
+                       if (check_milli_value(value, c[1], canonical) or ("",))[0] == "ok"),
+                      None) if canonical else None
+        if pinned is None:
+            pinned = next((c for c in cited if vd in re.sub(r"\D", "", c[1])), None)
         if pinned is not None:
             p, t, b = pinned
             return {

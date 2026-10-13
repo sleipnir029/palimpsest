@@ -38,8 +38,9 @@ _RULES = [
       "(e.g. V vs mV)")),
     (lambda s, r: s == "extract" and "span unit mismatch" in r,
      ("span unit mismatch",
-      "the value is printed in another unit and was not converted; re-extract, "
-      "or check the parser kept the unit prefix (OCR can drop a µ)")),
+      "the value is printed in another unit and was not converted to the "
+      "canonical unit (the model did not convert, or the OCR dropped a prefix); "
+      "re-extract")),
     (lambda s, r: s == "extract" and "mis-citation" in r,
      ("mis-citation", _REEXTRACT_NOISE)),
     (lambda s, r: s == "extract" and "no valid span citation" in r,

@@ -240,6 +240,18 @@ OK, MISCITE, UNIT = "ok", "miscite", "unit"
         (3.0, "Fig 3-5 µV/h shown", "mV/h", UNIT, None),            # hyphen never bridges a µ in
         (2.0, "samples 2-8 µV/h plot", "mV/h", UNIT, None),
         (100.0, "100-5 µV/h", "mV/h", UNIT, None),
+        # OCR glues the next word to the unit (re-review 2026-10-13):
+        (22.0, "rate 22µVat 2 A", "mV/h", OK, 0.022),              # prefixed: still µV
+        (0.022, "rate 22µVat 2 A", "mV/h", OK, 0.022),
+        (0.236, "η = 0.236Vin acid", "mV", UNIT, None),            # bare V glued to a word
+        (236.0, "η = 0.236Vin acid", "mV", MISCITE, None),         # not read as volts either
+        (1.53, "E = 1.53VvsRHE", "mV", UNIT, None),
+        (2.0, "Fig 2 Variation of", "mV", OK, 2.0),                # a word after a space: no unit
+        (0.236, "η = 0.236 Vin acid", "mV", OK, 0.236),            # recorded limit: space, then word
+        (1.53, "E = 1.53 Vvs. RHE", "mV", UNIT, None),             # "vs" continues a volt
+        (1530.0, "E = 1.53 Vvs. RHE", "mV", OK, 1530.0),
+        (0.2, "η = 0.2–0.236Vin", "mV", UNIT, None),               # "?" carries to the low end
+        (5.0, "5 nAnoparticle", "mA cm-2", OK, 5.0),               # n before a word: not rescaled
     ],
 )
 def test_check_milli_value(value, source, canonical, verdict, expected):
@@ -258,7 +270,7 @@ _Z = ("(degradation rate: 22 μV/h,Figs.7e) and 2 A/cm (degradation rate: 52 μV
       "achieving an 89%reduction in degradation rate compared to unsupported Ir NPs (460 μV/h).")
 _ZP = _Z.replace("(460 μV/h)", "(460 V/h)")  # paddle: OCR dropped the µ
 _QP = r"the 1,5o0-h test oa  s $2.3–2.8\mu\mathrm{V}\mathrm{h}^{-1}$  eee e e ee"
-_QR = "potential rising from 32 mV to 126 mV over 1,000 h of operation"
+_QR = "voltage degradation ranging from 32 mV to 126 mV over 1,000 h"
 
 
 @_pytest.mark.parametrize(

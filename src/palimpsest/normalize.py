@@ -135,8 +135,13 @@ _MILLI_CANON = re.compile(r"^m([VA])\b")
 # factor 1.
 _PREFIX_FACTOR = {"µ": 1e-6, "u": 1e-6, "n": 1e-9, "m": 1e-3, "": 1.0}
 # A whole number (not the tail of a decimal or of a longer number), and the unit glued
-# to it: optional prefix + base, the base not followed by a letter other than those
-# that continue a unit (h, s, c(m), d(ec), R(HE)), so "2 Variation" is not read as volts.
+# to it: optional prefix + base, a bare base not followed by a letter other than those
+# that continue a unit (h, s, c(m), d(ec), R(HE), "vs"), so "2 Variation" is not read as
+# volts. A µ- or m-prefixed base reads as a unit whatever follows, since OCR glues words
+# to it ("22µVat", "236mVinanacid"); u and n keep the bare-base rule, so "5 nAnoparticle"
+# is not rescaled. A bare base glued to both the number and a lowercase word ("0.236Vin")
+# may be volts or the start of a word: prefix "?", which always refuses. With a space
+# before it ("0.236 Vin") the base is read as no unit and the value is kept as emitted.
 _NUM = re.compile(r"(?<![\d.])\d+(?:\.\d+)?")
 _RANGE_SEP = re.compile(r"\s*(?:[-–—−~]|to)\s*")
 _THOUSANDS = re.compile(r"(?<=\d),(?=\d{3}(?!\d))")
@@ -154,16 +159,20 @@ def _span_numbers(text: str, base: str) -> list[tuple[float, str, str | None, bo
     """Every whole number in ``text`` as ``(number, printed, prefix, carried)``.
 
     ``prefix`` is the metric prefix of a ``base`` unit glued to the number ("" for a
-    bare base, ``None`` for no such unit). A range low end with no unit of its own
-    ("2.3–2.8 µV") takes the high end's unit with ``carried=True``.
+    bare base, ``None`` for no such unit, "?" for a bare base glued to a word). A range
+    low end with no unit of its own ("2.3–2.8 µV") takes the high end's unit with
+    ``carried=True``.
     """
     txt = _THOUSANDS.sub("", _clean_units(text))
-    unit_re = re.compile(r"\s*([µunm]?)\s*" + base + r"(?![abe-gi-rt-zA-QS-Z])")
+    word = r"(?!(?!vs)[abe-gi-rt-zA-QS-Z])"  # not followed by a word (but "vs" is fine)
+    unit_re = re.compile(r"\s*([µm])\s*" + base + r"|\s*([un])\s*" + base + word
+                         + r"|\s*()" + base + word + r"|()" + base + r"(?=[abe-gi-rt-z])")
     out: list[list] = []
     for m in _NUM.finditer(txt):
         um = unit_re.match(txt, m.end())
-        out.append([float(m.group()), m.group(), um.group(1) if um else None, False,
-                    m.start(), m.end()])
+        prefix = (None if not um else "?" if um.group(4) is not None
+                  else um.group(1) or um.group(2) or "")
+        out.append([float(m.group()), m.group(), prefix, False, m.start(), m.end()])
     for lo, hi in zip(out, out[1:]):
         if lo[2] is None and hi[2] is not None:
             sep = _RANGE_SEP.match(txt, lo[5])
@@ -188,7 +197,8 @@ def check_milli_value(
       ``("miscite", None)``  v is not printed in the span in any form;
       ``("unit", printed)``  v is printed in another unit and was not converted, or
                              the conversion is ambiguous (e.g. "460 V/h" labelled
-                             mV/h, a raw range low end) → the caller refuses.
+                             mV/h, a raw range low end, "0.236Vin" where the V may
+                             start a word) → the caller refuses.
 
     A wrong rescale corrupts silently while a refusal is recorded with its reason, so
     every ambiguous case refuses rather than converts.
@@ -210,7 +220,7 @@ def check_milli_value(
         return None
     nums = _span_numbers(source_text, mc.group(1))
     a = abs(v)
-    if any(p is not None and math.isclose(n * _PREFIX_FACTOR[p] / 1e-3, a, rel_tol=1e-6)
+    if any(p in _PREFIX_FACTOR and math.isclose(n * _PREFIX_FACTOR[p] / 1e-3, a, rel_tol=1e-6)
            for n, _s, p, _c in nums):
         return ("ok", v)
     same = [(s, p, c) for n, s, p, c in nums if math.isclose(n, a, rel_tol=1e-6)]
@@ -222,7 +232,8 @@ def check_milli_value(
     if len(prefixes) == 1 and prefixes <= {"µ", "u", "n"} and not any(c for *_x, c in same):
         return ("ok", v * (_PREFIX_FACTOR[prefixes.pop()] / 1e-3))
     s, p, c = next(x for x in same if x[1] is not None)
-    return ("unit", f"{s} {p}{mc.group(1)}" + (" (range end)" if c else ""))
+    return ("unit", f"{s} {p.strip('?')}{mc.group(1)}" + (" (range end)" if c else "")
+            + (" (glued to a word)" if p == "?" else ""))
 
 
 # Map unicode superscript characters to ASCII so `s⁻¹` reads as `s-1`.

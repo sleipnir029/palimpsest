@@ -362,6 +362,48 @@ def test_converted_value_pins_to_its_own_span(tmp_path):
         assert (valid[0].evidence.bbox_y0, valid[0].evidence.bbox_y1) == (400, 420)
 
 
+def test_pin_prefers_the_span_the_check_accepts(tmp_path):
+    """On a milli slot the pin follows the unit-aware check, so a digit substring in an
+    earlier cited span ("S1236" for 236) does not pin it and get it refused."""
+    sha = "2" * 64
+    page = [
+        {"type": "text", "content": "see Table S1236", "bbox": [10, 10, 500, 30]},
+        {"type": "text", "content": "an overpotential of 236 mV", "bbox": [10, 400, 500, 420]},
+    ]
+    cache = _seed_cache(tmp_path, sha, parser_text=json.dumps([page]))
+    resp = {"items": [{"type": "Overpotential", "value": 236.0, "unit_label": "mV",
+                       "evidence": {"spans": [0, 1]}}]}
+    valid, errors = extract(paper_sha=sha, provider=_StubProvider(json.dumps(resp)), cache=cache)
+    assert errors == [] and valid[0].evidence.source_text == "an overpotential of 236 mV"
+
+
+def test_pin_skips_a_unit_refused_span(tmp_path):
+    """A first span that holds the digits but in another unit ("0.236Vin") does not pin
+    the value when a later span states it in the canonical unit."""
+    sha = "0" * 64
+    page = [
+        {"type": "text", "content": "η = 0.236Vin acid", "bbox": [10, 10, 500, 30]},
+        {"type": "text", "content": "an overpotential of 236 mV", "bbox": [10, 400, 500, 420]},
+    ]
+    cache = _seed_cache(tmp_path, sha, parser_text=json.dumps([page]))
+    resp = {"items": [{"type": "Overpotential", "value": 236.0, "unit_label": "mV",
+                       "evidence": {"spans": [0, 1]}}]}
+    valid, errors = extract(paper_sha=sha, provider=_StubProvider(json.dumps(resp)), cache=cache)
+    assert errors == [] and valid[0].evidence.source_text == "an overpotential of 236 mV"
+
+
+def test_volts_label_on_mv_slot_stops_at_the_citation_check(tmp_path):
+    """Intended: a value labelled and printed in V on an mV slot now refuses at the
+    citation check as a span unit mismatch, before the unit-signature gate sees it."""
+    sha = "1" * 64
+    page = [{"type": "text", "content": "an overpotential of 0.236 V", "bbox": [10, 10, 500, 30]}]
+    cache = _seed_cache(tmp_path, sha, parser_text=json.dumps([page]))
+    resp = {"items": [{"type": "Overpotential", "value": 0.236, "unit_label": "V",
+                       "evidence": _ev(0)}]}
+    valid, errors = extract(paper_sha=sha, provider=_StubProvider(json.dumps(resp)), cache=cache)
+    assert valid == [] and "span unit mismatch" in str(errors[0][0])
+
+
 def test_span_unit_mismatch_keeps_the_raw_item(tmp_path):
     """The refusal records the item as the model emitted it, unconverted."""
     sha = "4" * 64
