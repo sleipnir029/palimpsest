@@ -228,3 +228,16 @@ def test_drop_nudge_fires_only_on_real_drops():
 
 def test_drop_nudge_silent_when_nothing_dropped():
     assert _drop_nudge(0, "papers/x.pdf", "mineru") == ""
+
+
+def test_span_unit_mismatch_has_its_own_bucket(tmp_path):
+    """The unit-aware citation check's refusal (2026-10-13) must not fall through to
+    'schema/validation error'; the reason string is extract.py's real str(exc)."""
+    log = _log(tmp_path)
+    reason = ("span unit mismatch for DegradationRate: value 460.0 is printed as "
+              "'460 V' in the cited span, not in 'mV/h'")
+    drops = [{"stage": "extract", "reason": reason} for _ in range(3)]
+    _record(log, n_extracted=0, n_inserted=0, n_errors=3, errors_json=json.dumps(drops))
+    out = diagnose_run(SHA_A, "mineru", run_log=log)
+    assert "span prefix mismatch" in out
+    assert "schema/validation error" not in out

@@ -36,6 +36,10 @@ _RULES = [
      ("unit mismatch",
       "re-extract after aligning the skill / normalize canonical units "
       "(e.g. V vs mV)")),
+    (lambda s, r: s == "extract" and "span unit mismatch" in r,
+     ("span prefix mismatch",
+      "the value is printed in another unit and was not converted; re-extract, "
+      "or check the parser kept the unit prefix (OCR can drop a µ)")),
     (lambda s, r: s == "extract" and "mis-citation" in r,
      ("mis-citation", _REEXTRACT_NOISE)),
     (lambda s, r: s == "extract" and "no valid span citation" in r,

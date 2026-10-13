@@ -198,50 +198,95 @@ def test_magnitude_ok(type_name, value, expected):
     assert magnitude_ok(type_name, value) is expected
 
 
-# T74 — unit re-derivation. Models emit the raw source number under the canonical
-# label without converting ("22 µV/h" → value=22, label="mV/h", 1000× too big).
-# rederive_milli_value rescales using the cited span's OWN metric prefix, for
-# milli-prefixed linear units only (mV*, mA*). Tested against the real (messy,
-# OCR/LaTeX) spans from the corpus, and against spans that must NOT change.
-from palimpsest.normalize import rederive_milli_value
+# T74 — unit-aware citation check (revised 2026-10-13). Models emit the number printed
+# in the cited span either converted ("22 µV/h" → 0.022 mV/h) or raw under the canonical
+# label (22 "mV/h", 1000× too big). check_milli_value accepts the conversion, re-derives
+# the raw value from the span's OWN metric prefix, and refuses ("unit") a value printed
+# in another unit that it cannot safely re-derive — milli-prefixed linear units only
+# (mV*, mA*). Tested against the real (messy, OCR/LaTeX) spans from the corpus.
+from palimpsest.normalize import check_milli_value
+
+OK, MISCITE, UNIT = "ok", "miscite", "unit"
 
 
 @_pytest.mark.parametrize(
-    "value,source,canonical,expected",
+    "value,source,canonical,verdict,expected",
     [
-        # the bug, in every form the parsers actually produced:
-        (22.0, "rate: 22 μV/h, Figs", "mV/h", 0.022),          # greek mu
-        (22.0, "rate: 22 µV/h, Figs", "mV/h", 0.022),          # micro sign
-        (22.0, "rate: 22 μ V/h, Figs", "mV/h", 0.022),         # space after prefix
-        (52.0, "of 52 µV/h), achieving", "mV/h", 0.052),
-        (2.8, r"2.8\mu\mathrm{V}\mathrm{h}^{-1}", "mV/h", 0.0028),  # LaTeX
-        (2.8, "2.3–2.8 µV h -1 . To", "mV/h", 0.0028),          # range HIGH end is adjacent → converts
-        (2.3, "2.3–2.8 µV h -1 . To", "mV/h", 2.3),             # range LOW end not adjacent → SAFE MISS (no range bridge)
-        # must NOT change — canonical-unit spans (same milli prefix or no prefix):
-        (236.0, "236 mV, which is", "mV", 236.0),
-        (236.0, "236mVinanacid medium", "mV", 236.0),           # no space, trailing junk
-        (52.6, "52.6 mV dec -1 ", "mV/decade", 52.6),
-        # excluded slots (canonical not milli-V/A) → never touched:
-        (30.0, "30 h, which is", "h", 30.0),                    # Stability
-        (1.83, "1.83V i@ 2 A/cm2", "V", 1.83),                  # PEMWECellVoltage (no m-prefix canonical)
-        (None, "whatever", "mV/h", None),
-        # --- adversarial must-NOT-change (review findings) ---
-        (22.0, "value 1225 µV/h reported", "mV/h", 22.0),       # B1: "22" is a substring of 1225, not a token
-        (2.0, "2 electrodes, 2 µV/h", "mV/h", 2.0),             # B2: first "2" has no adjacent unit → don't scan on
-        (5.0, "5 cV applied", "mV", 5.0),                       # B3: centi not an accepted prefix
-        (22.0, "22 kV/h test", "mV/h", 22.0),                   # B3: kilo not accepted
-        (5.0, "load 5}{kV elsewhere", "mV", 5.0),               # B4: brace-merge must not mint a prefix
-        (2.0, "tested 2 times at 0.022 mV/h", "mV/h", 2.0),     # value adjacent to no prefix → unchanged
-        # --- re-review findings (B5/B6): ambiguity & hyphen-bridge must NOT corrupt ---
-        (5.0, "5 µV noise floor; signal was 5 mV/h", "mV/h", 5.0),   # B5: value occurs twice → ambiguous → unchanged
-        (3.0, "Fig 3-5 µV/h shown", "mV/h", 3.0),                    # B6: hyphen must not bridge "3" to "µV"
-        (2.0, "samples 2-8 µV/h plot", "mV/h", 2.0),                 # B6: same, leading count
-        (100.0, "100-5 µV/h", "mV/h", 100.0),                        # B6: no range bridge
+        # raw prefixed value → re-derived, in every form the parsers actually produced:
+        (22.0, "rate: 22 μV/h, Figs", "mV/h", OK, 0.022),          # greek mu
+        (22.0, "rate: 22 µV/h, Figs", "mV/h", OK, 0.022),          # micro sign
+        (22.0, "rate: 22 μ V/h, Figs", "mV/h", OK, 0.022),         # space after prefix
+        (52.0, "of 52 µV/h), achieving", "mV/h", OK, 0.052),
+        (2.8, r"2.8\mu\mathrm{V}\mathrm{h}^{-1}", "mV/h", OK, 0.0028),  # LaTeX
+        (2.8, "2.3–2.8 µV h -1 . To", "mV/h", OK, 0.0028),          # range HIGH end converts
+        # canonical-unit spans (same milli prefix, or no unit glued on) → unchanged:
+        (236.0, "236 mV, which is", "mV", OK, 236.0),
+        (236.0, "236mVinanacid medium", "mV", OK, 236.0),           # no space, trailing junk
+        (52.6, "52.6 mV dec -1 ", "mV/decade", OK, 52.6),
+        (5.0, "5 cV applied", "mV", OK, 5.0),                       # centi not a prefix → no unit
+        (22.0, "22 kV/h test", "mV/h", OK, 22.0),                   # kilo not a prefix → no unit
+        (5.0, "load 5}{kV elsewhere", "mV", OK, 5.0),               # brace-merge must not mint a prefix
+        (2.0, "tested 2 times at 0.022 mV/h", "mV/h", OK, 2.0),     # value has no unit glued on
+        (5.0, "5 µV noise floor; signal was 5 mV/h", "mV/h", OK, 5.0),  # one reading agrees
+        # excluded slots (canonical not milli-V/A) and non-values → check does not apply:
+        (30.0, "30 h, which is", "h", None, None),                  # Stability
+        (1.83, "1.83V i@ 2 A/cm2", "V", None, None),                # PEMWECellVoltage
+        (None, "whatever", "mV/h", None, None),
+        # not printed at all → miscite:
+        (22.0, "value 1225 µV/h reported", "mV/h", MISCITE, None),  # 22 is not a token of 1225
+        # printed in another unit and not safely re-derivable → refuse:
+        (2.3, "2.3–2.8 µV h -1 . To", "mV/h", UNIT, None),          # raw range LOW end
+        (2.0, "2 electrodes, 2 µV/h", "mV/h", UNIT, None),          # ambiguous: two readings
+        (3.0, "Fig 3-5 µV/h shown", "mV/h", UNIT, None),            # hyphen never bridges a µ in
+        (2.0, "samples 2-8 µV/h plot", "mV/h", UNIT, None),
+        (100.0, "100-5 µV/h", "mV/h", UNIT, None),
     ],
 )
-def test_rederive_milli_value(value, source, canonical, expected):
-    got = rederive_milli_value(value, source, canonical)
-    if expected is None:
+def test_check_milli_value(value, source, canonical, verdict, expected):
+    got = check_milli_value(value, source, canonical)
+    if verdict is None:
         assert got is None
+    elif verdict == OK:
+        assert got[0] == OK and got[1] == _pytest.approx(expected, rel=1e-9)
     else:
-        assert got == _pytest.approx(expected, rel=1e-9)
+        assert got[0] == verdict
+
+
+# The examples the thesis review asked to be re-tested (2026-10-13), on the cited span
+# texts the 24 June 2026 run actually stored. Comments give the 24 June outcome.
+_Z = ("(degradation rate: 22 μV/h,Figs.7e) and 2 A/cm (degradation rate: 52 μV/h), "
+      "achieving an 89%reduction in degradation rate compared to unsupported Ir NPs (460 μV/h).")
+_ZP = _Z.replace("(460 μV/h)", "(460 V/h)")  # paddle: OCR dropped the µ
+_QP = r"the 1,5o0-h test oa  s $2.3–2.8\mu\mathrm{V}\mathrm{h}^{-1}$  eee e e ee"
+_QR = "potential rising from 32 mV to 126 mV over 1,000 h of operation"
+
+
+@_pytest.mark.parametrize(
+    "value,source,canonical,verdict,expected",
+    [
+        (0.022, _Z, "mV/h", OK, 0.022),      # was refused (mis-citation): correct conversion
+        (0.052, _Z, "mV/h", OK, 0.052),      # was refused
+        (0.46, _Z, "mV/h", OK, 0.46),        # was refused
+        (22.0, _Z, "mV/h", OK, 0.022),       # was re-derived to 0.022
+        (22.0, _Z + " " + _Z, "mV/h", OK, 0.022),  # docling duplicate paragraph: was stored as 22
+        (460.0, _ZP, "mV/h", UNIT, None),    # was INSERTED as 460 mV/h (1000× too large)
+        (0.46, _ZP, "mV/h", MISCITE, None),  # was refused; the span no longer shows the µ
+        (2.3, _QP, "mV/h", UNIT, None),      # was INSERTED as 2.3 mV/h (1000× too large)
+        (2.8, _QP, "mV/h", OK, 0.0028),      # was re-derived to 0.0028
+        (0.0023, _QP, "mV/h", OK, 0.0023),   # was refused: correct conversion
+        (0.0028, _QP, "mV/h", OK, 0.0028),   # was refused: correct conversion
+        (0.00255, _QP, "mV/h", MISCITE, None),  # model-computed midpoint: still refused
+        (0.126, _QR, "mV/h", MISCITE, None),    # model-computed rate: still refused
+        (0.079, _QR, "mV/h", MISCITE, None),    # model-computed rate: still refused
+        (126.0, _QR, "mV/h", OK, 126.0),     # passes here; gate 6 (100 mV/h) refuses it
+        (236.0, "the overpotential was 236 mV at 10 mA cm-2", "mV", OK, 236.0),
+        (999.0, "the overpotential was 236 mV at 10 mA cm-2", "mV", MISCITE, None),
+        (236.0, "η of 0.236 V vs RHE", "mV", OK, 236.0),     # V → mV conversion
+        (0.236, "η of 0.236 V vs RHE", "mV", UNIT, None),    # raw volts under mV
+        (250.0, "236 and 250 mV for A and B", "mV", OK, 250.0),
+        (1200.0, "η of 1,200 mV", "mV", OK, 1200.0),         # thousands comma
+        (-236.0, "η = −236 mV for HER", "mV", OK, -236.0),   # sign kept
+    ],
+)
+def test_check_milli_value_review_examples(value, source, canonical, verdict, expected):
+    test_check_milli_value(value, source, canonical, verdict, expected)

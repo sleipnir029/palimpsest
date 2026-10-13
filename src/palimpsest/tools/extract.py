@@ -40,7 +40,7 @@ from typing import Any
 from pydantic import BaseModel, ValidationError
 
 from palimpsest.normalize import (
-    build_normalization_prompt, canonical_unit, magnitude_ok, rederive_milli_value,
+    build_normalization_prompt, canonical_unit, check_milli_value, magnitude_ok,
     units_match,
 )
 
@@ -575,11 +575,29 @@ def _process_items(
                     raw,
                 ))
                 continue
-            # Mis-citation guard: the cited span(s) should contain the value's
-            # digits. If not, the model likely cited the wrong span → refuse rather
-            # than attach a wrong bbox. Lenient (skips trivially short digit runs).
-            vd = _value_digits(item.get("value"))
-            if len(vd) >= 2 and vd not in re.sub(r"\D", "", evidence["source_text"]):
+            # Mis-citation guard: the cited span(s) should contain the value. For a
+            # milli-V/A slot the check is unit-aware (normalize.check_milli_value): a
+            # correct conversion ("22 µV/h" → 0.022 mV/h) passes, a raw prefixed value
+            # (22) is re-derived to canonical, and a value printed in another unit but
+            # not converted ("460 V/h" labelled mV/h, a raw range low end) is refused.
+            # Other slots keep the digit-substring test. If the value is not in the
+            # span, the model likely cited the wrong span → refuse rather than attach a
+            # wrong bbox. Lenient: values with fewer than two digits are exempt.
+            v = item.get("value")
+            vd = _value_digits(v)
+            milli = check_milli_value(v, evidence["source_text"], canonical_unit(type_name))
+            if milli is not None and milli[0] == "unit":
+                errors.append((
+                    ValueError(
+                        f"span unit mismatch for {type_name}: value {v!r} is printed as "
+                        f"{milli[1]!r} in the cited span, not in {canonical_unit(type_name)!r}"
+                    ),
+                    raw,
+                ))
+                continue
+            found = (vd in re.sub(r"\D", "", evidence["source_text"]) if milli is None
+                     else milli[0] == "ok")
+            if len(vd) >= 2 and not found:
                 errors.append((
                     ValueError(
                         f"likely mis-citation for {type_name}: value {item.get('value')!r} "
@@ -589,15 +607,8 @@ def _process_items(
                 ))
                 continue
             item["evidence"] = evidence
-            # Unit re-derivation (T74): models often emit the raw number printed in the
-            # span under the canonical label without converting (e.g. "22 µV/h" →
-            # value=22, unit_label="mV/h", 1000× off). Re-derive from the span's own
-            # metric prefix so the stored value is truly canonical. Safe here: the
-            # mis-citation guard just confirmed the emitted number IS the one in the
-            # span, so it is in the span's units, not pre-converted. No-op unless the
-            # span uses a different metric prefix on a milli-canonical V/A unit.
-            item["value"] = rederive_milli_value(
-                item.get("value"), evidence["source_text"], canonical_unit(type_name))
+            if milli is not None and milli[0] == "ok":
+                item["value"] = milli[1]
 
         _coerce_confidence(item)  # never let an optional confidence sink the item
         _coerce_condition(item)  # salvage stringy numeric condition fields
@@ -624,8 +635,7 @@ def _process_items(
             # (e.g. mV) under the canonical label (V) without conversion — the value is
             # then ~1000× too large but dimensionally "correct". Reject values whose
             # magnitude exceeds the slot's plausible ceiling so an unconverted reading
-            # can't slip in. (Tracked slots only; DegradationRate is intentionally not
-            # guarded here — see normalize.PLAUSIBLE_MAX.)
+            # can't slip in. (Tracked slots only — see normalize.PLAUSIBLE_MAX.)
             if not magnitude_ok(type_name, getattr(inst, "value", None)):
                 errors.append((
                     ValueError(

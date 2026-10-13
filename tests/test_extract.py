@@ -297,7 +297,7 @@ def test_unit_rederivation_converts_microvolt_per_hour(tmp_path):
     """T74 end-to-end: a model emits the raw span number (22) under the canonical
     'mV/h' label from a span that actually states 'µV/h'. The pipeline must store the
     re-derived canonical value 0.022 (not 22), having passed mis-citation (22 is in
-    the span), C2 (label==canonical), and C3 (DegradationRate unguarded)."""
+    the span), C2 (label==canonical), and C3 (0.022 is under the ceiling)."""
     sha = "7" * 64
     page = [{"type": "text", "content": "very low voltage degradation (degradation rate: 22 µV/h)",
              "bbox": [10, 10, 500, 30]}]
@@ -310,6 +310,37 @@ def test_unit_rederivation_converts_microvolt_per_hour(tmp_path):
     assert len(valid) == 1
     assert valid[0].value == 0.022  # 22 µV/h re-derived to canonical mV/h
     assert valid[0].evidence.source_text.endswith("22 µV/h)")  # provenance intact
+
+
+@pytest.mark.parametrize(
+    "span,value,stored,reason",
+    [
+        # correct conversion: refused as a mis-citation on 24 June 2026, now kept
+        ("compared to unsupported Ir NPs (460 µV/h).", 0.46, 0.46, None),
+        # OCR dropped the µ: inserted as 460 mV/h on 24 June, now refused at the citation
+        ("compared to unsupported Ir NPs (460 V/h).", 460.0, None, "span unit mismatch"),
+        # raw range low end: inserted as 2.3 mV/h on 24 June, now refused
+        ("the 1,500-h test was 2.3–2.8 µV h-1 only", 2.3, None, "span unit mismatch"),
+        # converted range low end: refused on 24 June, now kept
+        ("the 1,500-h test was 2.3–2.8 µV h-1 only", 0.0023, 0.0023, None),
+        # a rate the model computed itself is not in the span: still refused
+        ("rising from 32 mV to 126 mV over 1,000 h", 0.126, None, "mis-citation"),
+    ],
+)
+def test_unit_aware_citation_check_review_examples(tmp_path, span, value, stored, reason):
+    """The thesis-review examples (2026-10-13) through the whole extract path."""
+    sha = "6" * 64
+    page = [{"type": "text", "content": span, "bbox": [10, 10, 500, 30]}]
+    cache = _seed_cache(tmp_path, sha, parser_text=json.dumps([page]))
+    resp = {"items": [
+        {"type": "DegradationRate", "value": value, "unit_label": "mV/h", "evidence": _ev(0)},
+    ]}
+    valid, errors = extract(paper_sha=sha, provider=_StubProvider(json.dumps(resp)), cache=cache)
+    if reason is None:
+        assert errors == [] and len(valid) == 1
+        assert valid[0].value == pytest.approx(stored)
+    else:
+        assert valid == [] and len(errors) == 1 and reason in str(errors[0][0])
 
 
 def test_reason_first_response_parses_and_drops_reasoning(tmp_path):

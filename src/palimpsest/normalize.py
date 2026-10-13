@@ -15,8 +15,10 @@ override (advisor-widened from card-literal enum-only to also cover units).
 """
 from __future__ import annotations
 
+import math
 import re
 from pathlib import Path
+from typing import Any
 
 import yaml
 
@@ -80,8 +82,8 @@ def canonical_unit(measurement_class_name: str) -> str | None:
 # voltage rate) is never what triggers a reject — palimpsest is general, not OER-only.
 # Ceilings are DELIBERATELY GENEROUS — reject blunders, never a physically unusual but
 # real value. Slots without a clear ceiling are omitted (magnitude_ok → True).
-# ponytail: static ceilings, not unit re-derivation; widen one if a real value is ever
-# wrongly rejected.
+# Static ceilings, a backstop behind check_milli_value below; widen one if a real value
+# is ever wrongly rejected.
 PLAUSIBLE_MAX: dict[str, float] = {
     "Overpotential": 2000.0,        # mV
     "TafelSlope": 1000.0,           # mV/decade
@@ -114,22 +116,30 @@ def magnitude_ok(measurement_class_name: str, value: float | None) -> bool:
     return abs(value) <= cap
 
 
-# T74 — unit re-derivation. The deeper half of the C2/C3 unit story: models routinely
-# emit the RAW number printed in the source under the canonical label, without doing the
-# conversion the prompt asks for ("22 µV/h" → value=22, unit_label="mV/h" — 1000× too
-# big). C2 can't catch it (label is canonical) and a magnitude bound can't separate it
-# from a real value. The fix is to re-derive the value from the cited span's OWN metric
-# prefix. SCOPE: only milli-prefixed LINEAR first-units (mV·, mA·) — Overpotential,
-# TafelSlope, ExchangeCurrentDensity, SpecificActivity, DegradationRate. Area units
-# (cm2) are excluded (prefix scaling there is squared, not linear) and so is everything
-# without an m-prefixed V/A canonical, via the `^m[VA]` gate below.
+# Unit-aware citation check (T74, revised 2026-10-13 after the thesis review). Models
+# emit the number printed in the cited span either converted to the canonical unit
+# ("22 µV/h" → 0.022 mV/h) or raw under the canonical label ("22 µV/h" → 22 "mV/h",
+# 1000× too big). The 24 June 2026 run handled this with a digit-substring guard
+# followed by a re-derivation step, which refused every correct conversion (0.022's
+# digits are not in "22 µV/h") and let two raw values through (an OCR-dropped µ,
+# "460 V/h", and a range low end, "2.3–2.8 µV h-1"). check_milli_value replaces both
+# for the milli-prefixed LINEAR canonicals (mV·, mA·): Overpotential, TafelSlope,
+# ExchangeCurrentDensity, SpecificActivity, DegradationRate. Area units (cm2) and
+# everything without an m-prefixed V/A canonical keep the plain digit guard, via the
+# `^m[VA]` gate below.
 _MILLI_CANON = re.compile(r"^m([VA])\b")
-# Accepted source prefixes a small value could plausibly be PRINTED in for a milli slot:
-# micro (two encodings + ascii), nano, milli (the canonical itself → ×1 no-op). NOT
-# centi/kilo/mega — those are coarse, don't occur for these quantities, and would only
-# fire via a false match. 'µ'/'u' both map to micro; the span is unicode-normalised
-# to 'µ' first.
-_PREFIX_FACTOR = {"µ": 1e-6, "u": 1e-6, "n": 1e-9, "m": 1e-3}
+# Accepted source prefixes a value could plausibly be PRINTED in for a milli slot:
+# micro (two encodings + ascii), nano, milli. NOT centi/kilo/mega — those are coarse,
+# don't occur for these quantities, and would only fire via a false match. 'µ'/'u' both
+# map to micro; the span is unicode-normalised to 'µ' first. A bare base ("460 V") is
+# factor 1.
+_PREFIX_FACTOR = {"µ": 1e-6, "u": 1e-6, "n": 1e-9, "m": 1e-3, "": 1.0}
+# A whole number (not the tail of a decimal or of a longer number), and the unit glued
+# to it: optional prefix + base, the base not followed by a letter other than those
+# that continue a unit (h, s, c(m), d(ec)), so "2 Variation" is not read as volts.
+_NUM = re.compile(r"(?<![\d.])\d+(?:\.\d+)?")
+_RANGE_SEP = re.compile(r"\s*(?:[-–—−~]|to)\s*")
+_THOUSANDS = re.compile(r"(?<=\d),(?=\d{3}(?!\d))")
 
 
 def _clean_units(text: str) -> str:
@@ -140,51 +150,71 @@ def _clean_units(text: str) -> str:
     return text.replace("μ", "µ")  # GREEK SMALL LETTER MU → MICRO SIGN
 
 
-def rederive_milli_value(value: float | None, source_text: str, canonical: str | None) -> float:
-    """Rescale ``value`` to a milli-canonical unit using the cited span's metric prefix.
+def _span_numbers(text: str, base: str) -> list[tuple[float, str, str | None, bool]]:
+    """Every whole number in ``text`` as ``(number, printed, prefix, carried)``.
 
-    Returns ``value`` unchanged unless: the canonical unit is milli-prefixed on a V/A
-    base (e.g. ``mV/h``), AND the span states *this* value with a DIFFERENT metric
-    prefix immediately attached to that base (e.g. ``22 µV/h``). Then the stored value
-    is corrected to canonical (22 µV/h → 0.022 mV/h).
-
-    Safety (hardened over two reviews): convert ONLY when the value's printed form
-    appears EXACTLY ONCE in the span as a whole numeric token (digit boundaries, so
-    ``22`` never matches inside ``1225``) AND an accepted prefix + base is IMMEDIATELY
-    adjacent to it (whitespace only). Two corruption classes drove this:
-      - if the value occurs more than once (``5 µV noise; signal 5 mV/h``) we cannot
-        tell which is the measurement → ambiguous → leave it unchanged;
-      - there is NO range bridging (``Fig 3-5 µV/h`` must not rescale the ``3``), so a
-        range low-end (``2.3–2.8 µV/h`` → 2.3) is a deliberate safe MISS; the high-end
-        (2.8, adjacent to the unit) still converts.
-    Only micro/nano/milli prefixes are accepted. A missed conversion is safe (the value
-    is left as the model emitted it); a wrong rescale corrupts — so every ambiguous case
-    misses. Runs after the mis-citation guard.
+    ``prefix`` is the metric prefix of a ``base`` unit glued to the number ("" for a
+    bare base, ``None`` for no such unit). A range low end with no unit of its own
+    ("2.3–2.8 µV") takes the high end's unit with ``carried=True``.
     """
-    if value is None or not canonical or not source_text:
-        return value
-    mc = _MILLI_CANON.match(canonical)
-    if not mc:
-        return value
-    base = mc.group(1)
-    txt = _clean_units(source_text)
-    # An accepted prefix + base immediately after the number (whitespace only) — no
-    # range tail, so a hyphen between two numbers can never bridge a foreign unit in.
-    unit_re = re.compile(r"\s*([µunm])\s*" + base)
-    forms = {"%g" % value}
-    if value == int(value):
-        forms.add(str(int(value)))
-    for s in forms:
-        # whole-number token: not glued to other digits, not the head of a decimal
-        occ = list(re.finditer(r"(?<!\d)" + re.escape(s) + r"(?!\d)(?!\.\d)", txt))
-        if len(occ) != 1:
-            continue  # 0 → try next form; >1 → ambiguous → leave value unchanged
-        um = unit_re.match(txt, occ[0].end())  # anchored at the end of THAT token
-        if um:
-            fac = _PREFIX_FACTOR.get(um.group(1))
-            if fac is not None:
-                return value * (fac / 1e-3)  # source-prefix → milli
-    return value
+    txt = _THOUSANDS.sub("", _clean_units(text))
+    unit_re = re.compile(r"\s*([µunm]?)\s*" + base + r"(?![abe-gi-rt-zA-Z])")
+    out: list[list] = []
+    for m in _NUM.finditer(txt):
+        um = unit_re.match(txt, m.end())
+        out.append([float(m.group()), m.group(), um.group(1) if um else None, False,
+                    m.start(), m.end()])
+    for lo, hi in zip(out, out[1:]):
+        if lo[2] is None and hi[2] is not None:
+            sep = _RANGE_SEP.match(txt, lo[5])
+            if sep and sep.end() == hi[4]:
+                lo[2], lo[3] = hi[2], True
+    return [(n, s, p, c) for n, s, p, c, _a, _b in out]
+
+
+def check_milli_value(
+    value: Any, source_text: str, canonical: str | None,
+) -> tuple[str, Any] | None:
+    """Check an emitted value against the cited span, prefix-aware, for a milli slot.
+
+    Returns ``None`` when the check does not apply (canonical not milli on a V/A base,
+    or a non-numeric value) and the caller keeps the plain digit guard. Otherwise:
+
+      ``("ok", v)``          a number in the span, read in its own unit, converts to v
+                             (a correct conversion; also the canonical unit itself);
+      ``("ok", v)``          v is printed with no unit glued to it (table cell, list);
+      ``("ok", v')``         v is printed raw with a µ/n prefix, every occurrence the
+                             same, none a range low end → re-derived to canonical;
+      ``("miscite", None)``  v is not printed in the span in any form;
+      ``("unit", printed)``  v is printed in another unit and was not converted, or
+                             the conversion is ambiguous (e.g. "460 V/h" labelled
+                             mV/h, a raw range low end) → the caller refuses.
+
+    A wrong rescale corrupts silently while a refusal is recorded with its reason, so
+    every ambiguous case refuses rather than converts.
+    """
+    mc = _MILLI_CANON.match(canonical or "")
+    if not mc or value is None or not source_text:
+        return None
+    try:
+        v = float(value)
+    except (TypeError, ValueError):
+        return None
+    nums = _span_numbers(source_text, mc.group(1))
+    a = abs(v)
+    if any(p is not None and math.isclose(n * _PREFIX_FACTOR[p] / 1e-3, a, rel_tol=1e-6)
+           for n, _s, p, _c in nums):
+        return ("ok", v)
+    same = [(s, p, c) for n, s, p, c in nums if math.isclose(n, a, rel_tol=1e-6)]
+    if not same:
+        return ("miscite", None)
+    if all(p is None for _s, p, _c in same):
+        return ("ok", v)
+    prefixes = {p for _s, p, _c in same}
+    if len(prefixes) == 1 and prefixes <= {"µ", "u", "n"} and not any(c for *_x, c in same):
+        return ("ok", v * (_PREFIX_FACTOR[prefixes.pop()] / 1e-3))
+    s, p, c = next(x for x in same if x[1] is not None)
+    return ("unit", f"{s} {p}{mc.group(1)}" + (" (range end)" if c else ""))
 
 
 # Map unicode superscript characters to ASCII so `s⁻¹` reads as `s-1`.
