@@ -7,7 +7,7 @@ module verifies that declaration, in code, at skill-load time:
       `schema/palimpsest.yaml` (offline, hard: a miss means extraction can't
       work, so `SkillLoader` quarantines the skill);
   (b) IRI resolution — each target's `emmo:`/`h2kg:` IRIs (class_uri +
-      close_mappings) resolve in the live ontologies via `ontology.py`
+      close_mappings + related_mappings) resolve in the live ontologies via `ontology.py`
       (network, advisory: surfaced on demand by the `check_skill` tool).
 
 The match is EXACT on purpose. Both sides — the skill's declaration and the
@@ -37,7 +37,7 @@ def _schema_doc() -> dict:
 
 @cache
 def measurement_classes() -> dict[str, dict]:
-    """`{class_name: {class_uri, close_mappings}}` for every `is_a: Measurement`.
+    """`{class_name: {class_uri, close_mappings, related_mappings}}` per `is_a: Measurement`.
 
     The abstract `Measurement` base (no `is_a`) and non-measurement classes
     (Paper, Condition, Evidence, …) are excluded — `targets:` are the concrete
@@ -49,6 +49,7 @@ def measurement_classes() -> dict[str, dict]:
             out[name] = {
                 "class_uri": body.get("class_uri"),
                 "close_mappings": list(body.get("close_mappings") or []),
+                "related_mappings": list(body.get("related_mappings") or []),
             }
     return out
 
@@ -175,6 +176,7 @@ def validate_skill(name: str, loader, *, resolve_iris: bool = True) -> SkillRepo
             if mc[t]["class_uri"]:
                 candidates.append(mc[t]["class_uri"])
             candidates.extend(mc[t]["close_mappings"])
+            candidates.extend(mc[t]["related_mappings"])
             for curie in candidates:
                 prefix, local = _prefix_local(curie)
                 if prefix not in ("emmo", "h2kg"):

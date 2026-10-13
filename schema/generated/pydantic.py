@@ -186,9 +186,9 @@ class TafelSlope(Measurement):
     Slope of overpotential vs log(current density) in the Tafel region.
     """
     linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta({'class_uri': 'palimpsest:TafelSlope',
-         'close_mappings': ['emmo:electrochemistry_d48ea516_5cac_4f86_bc88_21b6276c0938',
-                            'h2kg:TafelSlope'],
-         'from_schema': 'https://w3id.org/palimpsest/v1'})
+         'close_mappings': ['h2kg:TafelSlope'],
+         'from_schema': 'https://w3id.org/palimpsest/v1',
+         'related_mappings': ['emmo:electrochemistry_d48ea516_5cac_4f86_bc88_21b6276c0938']})
 
     value: Optional[float] = Field(default=None, description="""Numeric value of the measurement, in the unit named by unit_label.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:value'} })
     unit_label: Optional[str] = Field(default=None, description="""Human-readable unit (e.g. \"mV\", \"mA/cm2\"); QUDT IRI on the typed class.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Measurement'], 'slot_uri': 'palimpsest:unitLabel'} })

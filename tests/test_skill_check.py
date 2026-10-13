@@ -178,6 +178,27 @@ def test_unresolved_external_iri_warns_offline(monkeypatch):
     assert not report.ok
 
 
+def test_related_mappings_are_resolved_too(monkeypatch):
+    """Advisory IRI path (€0): a target's related_mappings are resolved as well as its
+    class_uri and close_mappings (added 2026-10-13, when one TafelSlope mapping moved
+    from close to related). The CURIEs are read from the schema, not hard-coded."""
+    from palimpsest import ontology
+    from palimpsest.skill_check import measurement_classes, schema_prefixes
+
+    loader = SkillLoader()
+    targets = validate_skill("oer-extraction", loader, resolve_iris=False).checks
+    related = sorted({c for t in targets for c in measurement_classes()[t.name]["related_mappings"]
+                      if c.startswith("emmo:")})
+    assert related  # the schema does carry related mappings on oer targets
+    base = schema_prefixes()["emmo"]
+    bad = {base + c.split(":", 1)[1] for c in related}
+    monkeypatch.setattr(ontology, "echo_iri_exists", lambda iri: iri not in bad)
+    monkeypatch.setattr(ontology, "h2kg_iri", lambda frag: frag)
+    report = validate_skill("oer-extraction", loader, resolve_iris=True)
+    assert {curie for _cls, curie in report.unresolved_iris} == set(related)
+    assert not report.ok
+
+
 # ---- the check_skill tool --------------------------------------------------
 
 def test_check_skill_unknown_name_is_friendly():

@@ -69,8 +69,13 @@ classes:
   TafelSlope:
     is_a: Measurement
     class_uri: palimpsest:TafelSlope
-    close_mappings:
+    # 2026-10-13 (thesis review): was close_mappings. A Tafel slope is a parameter
+    # derived from the Butler-Volmer equation, not interchangeable with it, so the
+    # relation is skos:relatedMatch. Every thesis run used the closeMatch version
+    # (git tag thesis-as-submitted).
+    related_mappings:
       - emmo:electrochemistry_d48ea516_5cac_4f86_bc88_21b6276c0938  # ButlerVolmerEquation
+    close_mappings:
       - h2kg:TafelSlope  # official H2KG home (a h2kg:Property) for this local class
     description: Slope of overpotential vs log(current density) in the Tafel region.
 
@@ -267,7 +272,7 @@ slots:
   tafel_slope:
     range: float
     slot_uri: palimpsest:tafelSlope
-    close_mappings:
+    related_mappings:  # was close_mappings until 2026-10-13; see the TafelSlope class
       - emmo:electrochemistry_d48ea516_5cac_4f86_bc88_21b6276c0938  # ButlerVolmerEquation
     unit:
       ucum_code: mV/decade
