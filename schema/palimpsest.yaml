@@ -125,7 +125,8 @@ classes:
     description: Electrochemically active surface area.
 
   # T52 (closes T18a F3, ground-truth-driven): two metric classes this corpus
-  # reports but the schema lacked. palimpsest-local IRIs (no clean ECHO/H2KG term).
+  # reports but the schema lacked. palimpsest-local IRIs (no clean ECHO/H2KG term;
+  # H2KG's Specific Activity does not state its area or mass basis, so no closeMatch).
   SpecificActivity:
     is_a: Measurement
     class_uri: palimpsest:SpecificActivity
