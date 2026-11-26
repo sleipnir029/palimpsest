@@ -14,9 +14,9 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/sleipnir029/palimpsest/raw/main/docs/media/palimpsest-walkthrough.mp4"><img src="docs/media/walkthrough-preview.gif" alt="palimpsest demo: the agent answers from the knowledge graph, then clicking a value jumps to its exact box on the PDF page" width="820"></a>
+  <a href="https://rzaman.site/palimpsest/media/palimpsest-walkthrough.mp4"><img src="docs/media/walkthrough-preview.gif" alt="palimpsest demo: the agent answers from the knowledge graph, then clicking a value jumps to its exact box on the PDF page" width="820"></a>
   <br>
-  <a href="https://github.com/sleipnir029/palimpsest/raw/main/docs/media/palimpsest-walkthrough.mp4"><b>▶ Watch the full walkthrough (82 s)</b></a>: one real session on an open-access OER paper, from question to checked, traceable values.
+  <a href="https://rzaman.site/palimpsest/media/palimpsest-walkthrough.mp4"><b>▶ Watch the full walkthrough (82 s)</b></a>: one real session on an open-access OER paper, from question to checked, traceable values.
 </p>
 
 ## Contents
