@@ -256,6 +256,9 @@ cached, so each PDF is parsed once per parser.
   in the right units and traceable to its source. They do not prove the paper was read
   the way a scientist would read it, so check what matters. That is what the viewer is
   for.
+- **No catalyst field yet.** Which catalyst a value belongs to is kept in its stored
+  source text, not as a structured slot, so "all overpotentials of Ir-Co₃O₄" is not a
+  single SPARQL query yet.
 - **Small evaluation so far.** The extraction was evaluated on five OER papers. A larger
   held-out set and a second domain are the next steps.
 

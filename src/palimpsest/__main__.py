@@ -42,7 +42,7 @@ def main() -> None:
 
         ap = argparse.ArgumentParser(prog=f"python -m palimpsest {sys.argv[1]}")
         ap.add_argument("pdf")
-        ap.add_argument("--parser", default="docling")
+        ap.add_argument("--parser", default="docling", choices=external.PARSERS)
         ap.add_argument("--skill", default="oer-extraction")
         if sys.argv[1] == "prompt":
             ap.add_argument("--out", help="write the prompt here instead of stdout")
@@ -59,7 +59,16 @@ def main() -> None:
         else:
             ap.add_argument("--response", required=True, help="file with the JSON answer")
             a = ap.parse_args(sys.argv[2:])
-            print(external.ingest(a.pdf, a.response, a.parser, a.skill))
+            try:
+                print(external.ingest(a.pdf, a.response, a.parser, a.skill))
+            except OSError as exc:
+                if "LOCK" not in str(exc):
+                    raise
+                sys.exit("the graph store is locked: stop the viewer (or other palimpsest "
+                         "process) and run ingest again")
+            from .tools.extraction_report import extraction_report
+
+            print(extraction_report(a.pdf, a.parser))  # what was dropped, and why
         return
 
     # Init the workspace git repo so the agent's actions are logged + undoable.

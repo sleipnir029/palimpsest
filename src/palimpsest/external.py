@@ -5,7 +5,8 @@ extraction model: `render_prompt` returns the exact prompt `extract()` would sen
 (skill + schema + numbered text spans), the agent writes its JSON answer to a file,
 and `ingest` feeds that answer through the normal pipeline. The checks stay in code:
 span resolution, digits-in-span, units, schema, SHACL, and provenance attached by
-code from the cited span ids. palimpsest makes no paid call, so nothing is metered.
+code from the cited span ids. Both functions refuse a PDF without a cached parse, so
+palimpsest makes no paid call (no LLM, no GPU); ingest logs a €0 ledger row as audit.
 """
 
 from __future__ import annotations
@@ -23,6 +24,18 @@ from .tools.read_paper import read_paper
 
 EXTERNAL_MODEL = "external-agent"
 _ZERO_USAGE = {"input_tokens": 0, "output_tokens": 0}
+PARSERS = ("docling", "mineru", "dots", "paddle")  # the ones with citable spans
+
+
+def _cached_sha(pdf: str | Path, parser_name: str, db_path: str) -> str:
+    if parser_name not in PARSERS:
+        raise ValueError(f"parser must be one of {', '.join(PARSERS)}, not {parser_name!r}")
+    sha = read_paper(str(pdf))["sha256"]
+    if ParserCache(db_path).get_output(sha, parser_name) is None:
+        raise FileNotFoundError(
+            f"no cached {parser_name} parse for {Path(pdf).name}; bring-your-own-agent mode "
+            "works on parsed papers only (parsing new PDFs: README, 'Parsing your own PDFs')")
+    return sha
 
 
 class _Capture:
@@ -35,7 +48,8 @@ class _Capture:
 
     def complete(self, system, messages, **_kw):
         self.calls.append((system, messages[0]["content"]))
-        return LLMResponse(text="[]", tool_calls=[], usage=dict(_ZERO_USAGE), raw={})
+        return LLMResponse(text='{"items": []}', tool_calls=[], usage=dict(_ZERO_USAGE),
+                           raw={})
 
 
 class _Replay:
@@ -55,22 +69,30 @@ class _Replay:
 
 
 def render_prompt(pdf: str | Path, parser_name: str = "docling",
-                  skill_name: str = "oer-extraction") -> str:
-    """The exact extraction prompt for a cached parse of `pdf`, as one markdown text."""
-    sha = read_paper(str(pdf))["sha256"]
+                  skill_name: str = "oer-extraction", *, db_path: str = "palimpsest.db") -> str:
+    """The exact extraction prompt for a cached parse of `pdf`, as one text."""
+    sha = _cached_sha(pdf, parser_name, db_path)
     cap = _Capture()
-    extract(sha, parser_name, skill_name, provider=cap)
-    if len(cap.calls) != 1:
+    _valid, errors = extract(sha, parser_name, skill_name, provider=cap,
+                             cache=ParserCache(db_path))
+    if not cap.calls:
+        reason = errors[0][0] if errors else "no prompt was produced"
+        raise RuntimeError(f"cannot build a prompt for {parser_name}: {reason}")
+    if len(cap.calls) > 1:
         raise RuntimeError(
             f"this paper needs {len(cap.calls)} prompts (too long for one); "
             "use an API-key model instead (see README)")
     system, user = cap.calls[0]
     return (
-        "# palimpsest extraction prompt\n\n"
-        "Act as the extraction model. Follow the system instructions, read the user "
-        "message, and save ONLY the JSON answer (no prose, no code fences) to a file. "
-        "Then run `pixi run python -m palimpsest ingest <pdf> --response <file>`.\n\n"
-        f"## System\n\n{system}\n\n## User\n\n{user}\n"
+        "<<<INSTRUCTIONS>>>\n"
+        "Act as the extraction model. Follow the SYSTEM text, read the USER text, and "
+        "save ONLY the JSON answer (no prose, no code fences) to a file. The USER text "
+        "lists the whole paper, not one page. If one paragraph appears in two spans on "
+        "different pages, cite the span on the page where the number is printed.\n"
+        f"Then run exactly:\n  pixi run python -m palimpsest ingest {pdf} --parser "
+        f"{parser_name} --skill {skill_name} --response <file>\n"
+        f"Span ids are valid only for the {parser_name} parse.\n\n"
+        f"<<<SYSTEM>>>\n{system}\n\n<<<USER>>>\n{user}\n"
     )
 
 
@@ -78,12 +100,13 @@ def ingest(pdf: str | Path, response: str | Path, parser_name: str = "docling",
            skill_name: str = "oer-extraction", *, store: RDFStore | None = None,
            db_path: str = "palimpsest.db") -> dict:
     """Run the agent's saved answer through the pipeline (gates + provenance insert)."""
+    _cached_sha(pdf, parser_name, db_path)  # never start a parse from here
     return run_paper(
         Path(pdf), parser_name, skill_name,
         store=store if store is not None else RDFStore("store"),
         cache=ParserCache(db_path),
         cost_meter=CostMeter(db_path),
         run_log=ExtractionRunLog(db_path),
-        provider=_Replay(Path(response).read_text(encoding="utf-8")),
+        provider=_Replay(Path(response).read_text(encoding="utf-8-sig")),
         extraction_model=EXTERNAL_MODEL,
     )
