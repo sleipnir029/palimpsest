@@ -63,8 +63,14 @@ top as new, linked records instead of overwriting the original.
 
 ## How it works
 
-The language model proposes; the code decides. (Amber: the model. Blue: code.
-Source: [docs/figures/how-it-works.mmd](docs/figures/how-it-works.mmd).)
+The language model proposes; the code decides (amber: the model, blue: code).
+
+<p align="center">
+  <img src="docs/figures/how-it-works.png" alt="How palimpsest works: who does the work, the extraction pipeline with eight checks in code, domain knowledge files, the knowledge graph and how it is used" width="900">
+</p>
+
+<details>
+<summary>Diagram source (Mermaid)</summary>
 
 ```mermaid
 flowchart TB
@@ -125,6 +131,8 @@ flowchart TB
     class checks,insert,parser,spans,fences code
     class drop bad
 ```
+
+</details>
 
 1. **Parse once.** A document parser (docling, MinerU, dots.ocr or PaddleOCR; Chandra
    is wired in too but gives no page coordinates, so its text can't be cited)
