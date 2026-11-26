@@ -374,7 +374,7 @@ Python function calls.
 
 palimpsest started as an MSc mini-thesis in Materials Engineering at RWTH Aachen
 University, carried out at IET-3 (Theory and Computation of Energy Materials),
-Forschungszentrum Jülich. Thanks to Prof. Michael Eikerling, Dr. Mehrtoos Eslamibidgoli
+Forschungszentrum Jülich. Thanks to Prof. Michael Eikerling, Dr. M. Eslamibidgoli
 and Dr. Kourosh Malek for supervision and for the ontology work this builds on.
 
 Ontologies: [EMMO](https://emmo-repo.github.io/) and its electrochemistry domain ECHO,
