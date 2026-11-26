@@ -113,11 +113,15 @@ apart. Its terms come from community ontologies:
 - **H2KG**, the hydrogen knowledge graph from the AIMWORKS project: 9 of 11 classes carry
   a `skos:closeMatch` to an H2KG term.
 - **QUDT** units with UCUM codes, and **PROV-O** for provenance.
+- In the graph, each value is stored with its class IRI (the ECHO term where one
+  exists), value, unit label, conditions and PROV-O evidence. The H2KG and QUDT
+  mappings are declared in the schema, not repeated on every value.
 - The ontology versions are pinned by SHA-256, and every IRI the schema uses resolves.
 
 <p align="center">
-  <img src="docs/figures/ontology-binding.png" alt="One extracted value: emmo:Overpotential, qudt unit, skos:closeMatch h2kg:Overpotential, prov:wasDerivedFrom evidence" width="600">
+  <img src="docs/figures/ontology-binding.png" alt="Schematic: how one extracted value relates to EMMO, QUDT, H2KG and PROV-O" width="600">
 </p>
+<p align="center"><em>Schematic of how one value relates to the ontologies; the exact triples differ (see above).</em></p>
 
 ## FAIR data, honestly
 
