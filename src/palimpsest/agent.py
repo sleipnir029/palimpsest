@@ -8,6 +8,8 @@ the paid call and recorded after.
 
 from __future__ import annotations
 
+import json
+
 from jsonschema import ValidationError, validate
 
 from .cost import BudgetExceeded
@@ -35,6 +37,9 @@ def _cost_eur(usage: dict, prices: dict | None = None) -> float:
     table = prices or _PRICE_USD
     usd = sum(usage.get(key, 0) * rate for key, rate in table.items())
     return usd * _USD_TO_EUR
+
+
+_MAX_REPEATS = 2  # identical tool calls allowed per user request
 
 
 class Agent:
@@ -98,6 +103,11 @@ class Agent:
             if present
         ]
 
+        # Runaway guard: an identical tool call (same name + same input) gets the
+        # same result, so a third repeat within this request is refused instead of
+        # re-run (an agent stuck re-issuing one query otherwise burns all max_turns).
+        seen: dict[str, int] = {}
+
         for turn in range(self.max_turns):
             # Turn boundary: bail before the next paid call if cancellation was
             # requested (T65). Stops a runaway without raising MaxTurnsExceeded.
@@ -141,7 +151,17 @@ class Agent:
             results = []
             for call in resp.tool_calls:
                 self._emit({"type": "tool_call", "name": call["name"], "input": call["input"]})
-                result = self._dispatch(call)
+                key = call["name"] + json.dumps(call["input"], sort_keys=True, default=str)
+                seen[key] = seen.get(key, 0) + 1
+                if seen[key] > _MAX_REPEATS:
+                    result = {
+                        "type": "tool_result", "tool_use_id": call["id"], "is_error": True,
+                        "content": (f"error: [repeat] this exact {call['name']} call already "
+                                    f"ran {_MAX_REPEATS} times in this request with the same "
+                                    "result; change the arguments or answer with what you have."),
+                    }
+                else:
+                    result = self._dispatch(call)
                 self._emit({
                     "type": "tool_result",
                     "name": call["name"],

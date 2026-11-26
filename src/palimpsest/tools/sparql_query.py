@@ -30,4 +30,22 @@ def sparql_query(query: str) -> str:
     from palimpsest.store import RDFStore
 
     rows = RDFStore("store").sparql(query)
-    return json.dumps(rows, indent=2, default=str)
+    out = json.dumps(rows, indent=2, default=str)
+    notes = _prefix_notes(query)
+    return ("\n".join(notes) + "\n" + out) if notes else out
+
+
+def _prefix_notes(query: str) -> list[str]:
+    """Flag a palimpsest prefix declared with the wrong IRI (e.g. https for PROV-O):
+    such a query silently matches nothing, and the agent may retry it unchanged."""
+    import re
+
+    from palimpsest.store import _PREFIX
+
+    notes = []
+    for name, iri in re.findall(r"PREFIX\s+(\w+:)\s*<([^>]*)>", query, re.IGNORECASE):
+        want = _PREFIX.get(name)
+        if want and iri != want:
+            notes.append(f"note: you declared PREFIX {name} <{iri}>, but the graph uses "
+                         f"<{want}>; patterns with {name} will not match.")
+    return notes
