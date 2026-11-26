@@ -226,6 +226,8 @@ def _use(app, args: list[str]) -> str:
     if model is not None and model not in known and not spec.get("free"):
         return f"unknown {provider} model: {model}. options: {', '.join(known)}"
 
+    if model is not None and model.startswith("<"):
+        return f"give the model name your server serves: /use {role} {provider} <model>"
     if "env" in spec and model is not None:  # these providers read the model from env
         config.set_value(spec["env"], model)
     if role in ("orchestration", "orch"):
@@ -233,6 +235,8 @@ def _use(app, args: list[str]) -> str:
     # extraction
     if "env" in spec:
         config.set_setting("extraction_model", provider, db_path=db)
+        from ..tools.extract import _PROVIDER_CACHE  # rebuild with the new model/env
+        _PROVIDER_CACHE.pop(provider, None)
         return f"extraction → {provider} ({model or 'default'}) — applies to the next extract_paper"
     factory = _factory_for(provider, model)  # deepseek/anthropic → a priced factory
     config.set_setting("extraction_model", factory, db_path=db)

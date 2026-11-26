@@ -321,7 +321,11 @@ def build_agent(provider=None, cost_meter=None) -> "Agent":
         name = get_setting("orchestration_model", "deepseek", db_path=cost_meter.db_path)
         if name not in ORCHESTRATION_PROVIDERS:
             name = "deepseek"
-        provider = build_provider(name)
+        try:
+            provider = build_provider(name)
+        except ValueError as exc:  # e.g. a self-hosted model whose URL/model isn't set here
+            print(f"warning: {exc}; using deepseek for this session")
+            provider = build_provider("deepseek")
     return Agent(
         provider=provider,
         cost_meter=cost_meter,

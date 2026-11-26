@@ -234,7 +234,8 @@ Use whichever provider you have a key for:
 | Extraction | DeepSeek (default), Anthropic, Gemini, OpenRouter, your own Anthropic- or OpenAI-compatible server | `/use extraction <provider> [model]` |
 
 **Your own model.** If your lab or institute serves an open model on its own GPUs,
-point palimpsest at it and no text leaves your network:
+point palimpsest at that model server (not a gateway or proxy). With both roles on it,
+the language-model calls stay on your network; parsing new PDFs still uses RunPod.
 
 - An Anthropic-compatible endpoint (`LOCAL_ANTHROPIC_BASE_URL`, `LOCAL_ANTHROPIC_MODEL`)
   can run both the agent and the extraction. The model must support tool calls.
@@ -242,6 +243,7 @@ point palimpsest at it and no text leaves your network:
   by vLLM, Ollama or LM Studio, can run the extraction.
 
 Then `/use orchestration local-anthropic <model>` or `/use extraction local-openai <model>`.
+Both roles of `local-anthropic` read the same `LOCAL_ANTHROPIC_MODEL`, so they use one model.
 Set `LOCAL_PRICE_IN=0` and `LOCAL_PRICE_OUT=0` for free inference; otherwise the budget
 meter counts these calls at Claude Sonnet rates. The bring-your-own-coding-agent route
 also works with a local model if your coding agent is configured to use one.

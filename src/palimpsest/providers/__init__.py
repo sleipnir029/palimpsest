@@ -35,23 +35,25 @@ def _openrouter():
         prices=prices,
     )
 
-def _local_prices() -> dict:
-    """USD/token for a self-hosted model: LOCAL_PRICE_IN/OUT (USD per 1M tokens) if set
-    (0/0 for free inference on your own GPUs), else Sonnet rates, a conservative
-    ceiling so the €-cap is never under-counted for a model of unknown cost."""
+def _local_rates() -> tuple[float, float]:
+    """USD per 1M tokens for a self-hosted model: LOCAL_PRICE_IN/OUT if set (0/0 for
+    free inference on your own GPUs), else Sonnet rates, a conservative ceiling so the
+    €-cap is never under-counted for a model of unknown cost."""
     pin, pout = os.environ.get("LOCAL_PRICE_IN"), os.environ.get("LOCAL_PRICE_OUT")
     if pin and pout:
-        return {"input_tokens": float(pin) / 1_000_000, "output_tokens": float(pout) / 1_000_000}
-    return {"input_tokens": 3.0 / 1_000_000, "output_tokens": 15.0 / 1_000_000}
+        rin, rout = float(pin), float(pout)
+        if rin < 0 or rout < 0:
+            raise ValueError("LOCAL_PRICE_IN/OUT must be >= 0")
+        return rin, rout
+    return 3.0, 15.0
 
 
 def _local_endpoint(kind: str) -> tuple[str, str]:
-    base = os.environ.get(f"LOCAL_{kind}_BASE_URL")
-    model = os.environ.get(f"LOCAL_{kind}_MODEL")
-    if not (base and model):
-        raise ValueError(f"set LOCAL_{kind}_BASE_URL and LOCAL_{kind}_MODEL "
-                         "(your self-hosted endpoint and model name)")
-    return base, model
+    missing = [v for v in (f"LOCAL_{kind}_BASE_URL", f"LOCAL_{kind}_MODEL")
+               if not os.environ.get(v)]
+    if missing:
+        raise ValueError(f"set {' and '.join(missing)} (your self-hosted endpoint and model name)")
+    return os.environ[f"LOCAL_{kind}_BASE_URL"], os.environ[f"LOCAL_{kind}_MODEL"]
 
 
 def _local_anthropic():
@@ -60,16 +62,19 @@ def _local_anthropic():
     base, model = _local_endpoint("ANTHROPIC")
     p = AnthropicProvider(api_key=os.environ.get("LOCAL_ANTHROPIC_API_KEY") or "none",
                           model=model, base_url=base, name=model)
-    p.prices = _local_prices()
-    return p
+    # _priced also prices the cache tiers (at the input rate) the Anthropic wire reports;
+    # a two-key table would let cached input tokens through at €0.
+    return _priced(p, *_local_rates())
 
 
 def _local_openai():
     """A model you host behind an OpenAI-compatible endpoint (/v1/chat/completions).
     EXTRACTION ONLY, like the other OpenAI-compat providers."""
     base, model = _local_endpoint("OPENAI")
+    rin, rout = _local_rates()
     return OpenAICompatProvider(model=model, base_url=base, api_key_env="LOCAL_OPENAI_API_KEY",
-                                name=model, prices=_local_prices())
+                                name=model, prices={"input_tokens": rin / 1_000_000,
+                                                    "output_tokens": rout / 1_000_000})
 
 
 def _priced(provider, input_usd: float, output_usd: float, *, cache_read=None, cache_create=None):
