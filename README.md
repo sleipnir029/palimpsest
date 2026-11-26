@@ -63,11 +63,71 @@ top as new, linked records instead of overwriting the original.
 
 ## How it works
 
-<p align="center">
-  <img src="docs/figures/pipeline.png" alt="Parse → project spans → LLM extract → 8 gates → insert with provenance → SPARQL" width="860">
-</p>
+The language model proposes; the code decides. (Amber: the model. Blue: code.
+Source: [docs/figures/how-it-works.mmd](docs/figures/how-it-works.mmd).)
 
-1. **Parse once.** A document parser (docling, MinerU, dots.ocr, PaddleOCR or Chandra)
+```mermaid
+flowchart TB
+    you(["You ask and supervise"])
+
+    subgraph ASK["1 · Who does the work"]
+        direction LR
+        agent["<b>palimpsest agent</b><br/>terminal app that calls tools<br/>your API key or your lab's model"]
+        byo["<b>or your own coding agent</b><br/>Claude Code, Codex …<br/>no extra key · already-parsed papers"]
+    end
+    you --> ASK
+
+    fences["<b>Limits in code</b><br/>file writes only inside its workspace<br/>shell in an OS sandbox (on by default)<br/>€ budget checked before every paid call<br/>graph written only by the pipeline<br/>or a correction"]
+    agent -.- fences
+
+    subgraph DOMAIN["Domain knowledge (files, not code)"]
+        direction LR
+        skill["<b>Skill file</b><br/>expert notes, unit rules,<br/>which quantities to extract"]
+        schema["<b>LinkML schema</b><br/>quantity classes · SHACL shapes<br/>answer format"]
+        onto["<b>Ontologies</b><br/>EMMO/ECHO · H2KG<br/>QUDT · PROV-O"]
+        onto -. "terms and mappings" .-> schema
+    end
+
+    subgraph PIPE["2 · Extraction pipeline"]
+        direction TB
+        pdf["PDF paper"] --> parser["<b>PDF parser</b> on a cloud GPU<br/>docling · MinerU · dots.ocr · PaddleOCR<br/>parsed once, cached by file fingerprint"]
+        parser --> spans["<b>Numbered text snippets</b><br/>model sees: [id] · page · text<br/>code keeps: the box on the page"]
+        spans --> llm["<b>Extraction model</b> (its own setting)<br/>proposes each value + the snippet id it came from"]
+        llm --> checks["<b>Checks in code</b>, in this order<br/>1 reply is valid JSON<br/>2 cited snippet exists<br/>3 number is in that snippet<br/>4 fits the schema<br/>5 unit fits the quantity<br/>6 plausible size<br/>7 SHACL shape<br/>8 evidence attached"]
+        checks -- "fails" --> drop["<b>Refused</b><br/>reason logged,<br/>count reported to the agent"]
+        checks -- "passes" --> insert["<b>Insert with provenance</b><br/>page · box · parser from the cited snippet,<br/>plus paper hash · run id"]
+    end
+
+    agent -- "extract a paper" --> pdf
+    byo -. "answers instead of the model" .-> llm
+    skill --> llm
+    schema --> llm
+    schema --> checks
+
+    kg[("<b>Knowledge graph (RDF)</b><br/>value · unit label · conditions<br/>class: ECHO IRI, or local IRI proposed for ECHO<br/>source (PROV-O): paper, page, box, parser")]
+    insert --> kg
+
+    subgraph USE["3 · Use it"]
+        direction LR
+        viewer["<b>Viewer</b><br/>click a value,<br/>PDF jumps to its box"]
+        nb["<b>Notebooks · SPARQL</b><br/>compare papers<br/>and conditions"]
+        corr["<b>Corrections</b><br/>by you or the agent;<br/>separate graph, original kept"]
+    end
+    kg --> viewer
+    kg --> nb
+    viewer --> corr
+    corr -- "wasRevisionOf" --> kg
+
+    classDef model fill:#FDF1DC,stroke:#B7791F,color:#3D2A06
+    classDef code fill:#E3EEF9,stroke:#2B6CB0,color:#0B2545
+    classDef bad fill:#FBE4E4,stroke:#C53030,color:#4A0D0D
+    class llm,byo model
+    class checks,insert,parser,spans,fences code
+    class drop bad
+```
+
+1. **Parse once.** A document parser (docling, MinerU, dots.ocr or PaddleOCR; Chandra
+   is wired in too but gives no page coordinates, so its text can't be cited)
    turns the PDF into text with page coordinates. The output is cached under the
    SHA-256 of the PDF bytes, so no paper is parsed twice.
 2. **Number the spans.** The parsed text is cut into numbered spans, each with a page
@@ -147,7 +207,7 @@ things that would make that reckless are closed in code, not asked for in a prom
 | Writes stay in the workspace | `write_file` / `edit_file` resolve paths and refuse anything outside it | `policy.py` |
 | The shell can't escape either | `bash` runs under an OS sandbox (macOS Seatbelt, Linux bwrap), fail-closed | `sandbox.py` |
 | The graph is pipeline-only | Triples enter only through extraction, with provenance | `pipeline.py`, `store.py` |
-| Spend has a hard cap | A cost meter is checked before every paid call (€50 by default, `/budget` to change) | `cost.py` |
+| Spend has a hard cap | The cost meter is checked before every paid call (each agent turn, each extraction call, each GPU pod) and refuses past the cap (€50 by default, `/budget` to change) | `cost.py` |
 | Everything is undoable | Each action is a git checkpoint inside the workspace; `/undo` restores | `versioning.py` |
 
 ## New domains are files, not code

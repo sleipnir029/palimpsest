@@ -1,0 +1,13 @@
+flowchart TB
+    pdf["Research PDF"] --> parse["<b>Layout parser</b> (cloud GPU)<br/>text cut into numbered snippets,<br/>each with page + box"]
+    parse --> llm["<b>Language model proposes</b><br/>value · unit · conditions<br/>+ the snippet number it read"]
+    llm --> gates["<b>Code decides</b>: 8 checks, including<br/>snippet exists · number is in it<br/>schema · unit · plausible size · SHACL"]
+    gates -- "fails" --> no["Refused,<br/>reason logged"]
+    gates -- "passes" --> kg[("<b>Knowledge graph</b><br/>class (EMMO/ECHO term where one exists)<br/>value · unit · conditions<br/>source: paper, page, box")]
+    kg --> view["<b>Click a value</b><br/>the PDF opens at the exact box"]
+    classDef model fill:#FDF1DC,stroke:#B7791F,color:#3D2A06
+    classDef code fill:#E3EEF9,stroke:#2B6CB0,color:#0B2545
+    classDef bad fill:#FBE4E4,stroke:#C53030,color:#4A0D0D
+    class llm model
+    class parse,gates,kg,view code
+    class no bad

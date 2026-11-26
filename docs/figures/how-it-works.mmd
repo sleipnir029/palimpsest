@@ -1,0 +1,57 @@
+flowchart TB
+    you(["You ask and supervise"])
+
+    subgraph ASK["1 · Who does the work"]
+        direction LR
+        agent["<b>palimpsest agent</b><br/>terminal app that calls tools<br/>your API key or your lab's model"]
+        byo["<b>or your own coding agent</b><br/>Claude Code, Codex …<br/>no extra key · already-parsed papers"]
+    end
+    you --> ASK
+
+    fences["<b>Limits in code</b><br/>file writes only inside its workspace<br/>shell in an OS sandbox (on by default)<br/>€ budget checked before every paid call<br/>graph written only by the pipeline<br/>or a correction"]
+    agent -.- fences
+
+    subgraph DOMAIN["Domain knowledge (files, not code)"]
+        direction LR
+        skill["<b>Skill file</b><br/>expert notes, unit rules,<br/>which quantities to extract"]
+        schema["<b>LinkML schema</b><br/>quantity classes · SHACL shapes<br/>answer format"]
+        onto["<b>Ontologies</b><br/>EMMO/ECHO · H2KG<br/>QUDT · PROV-O"]
+        onto -. "terms and mappings" .-> schema
+    end
+
+    subgraph PIPE["2 · Extraction pipeline"]
+        direction TB
+        pdf["PDF paper"] --> parser["<b>PDF parser</b> on a cloud GPU<br/>docling · MinerU · dots.ocr · PaddleOCR<br/>parsed once, cached by file fingerprint"]
+        parser --> spans["<b>Numbered text snippets</b><br/>model sees: [id] · page · text<br/>code keeps: the box on the page"]
+        spans --> llm["<b>Extraction model</b> (its own setting)<br/>proposes each value + the snippet id it came from"]
+        llm --> checks["<b>Checks in code</b>, in this order<br/>1 reply is valid JSON<br/>2 cited snippet exists<br/>3 number is in that snippet<br/>4 fits the schema<br/>5 unit fits the quantity<br/>6 plausible size<br/>7 SHACL shape<br/>8 evidence attached"]
+        checks -- "fails" --> drop["<b>Refused</b><br/>reason logged,<br/>count reported to the agent"]
+        checks -- "passes" --> insert["<b>Insert with provenance</b><br/>page · box · parser from the cited snippet,<br/>plus paper hash · run id"]
+    end
+
+    agent -- "extract a paper" --> pdf
+    byo -. "answers instead of the model" .-> llm
+    skill --> llm
+    schema --> llm
+    schema --> checks
+
+    kg[("<b>Knowledge graph (RDF)</b><br/>value · unit label · conditions<br/>class: ECHO IRI, or local IRI proposed for ECHO<br/>source (PROV-O): paper, page, box, parser")]
+    insert --> kg
+
+    subgraph USE["3 · Use it"]
+        direction LR
+        viewer["<b>Viewer</b><br/>click a value,<br/>PDF jumps to its box"]
+        nb["<b>Notebooks · SPARQL</b><br/>compare papers<br/>and conditions"]
+        corr["<b>Corrections</b><br/>by you or the agent;<br/>separate graph, original kept"]
+    end
+    kg --> viewer
+    kg --> nb
+    viewer --> corr
+    corr -- "wasRevisionOf" --> kg
+
+    classDef model fill:#FDF1DC,stroke:#B7791F,color:#3D2A06
+    classDef code fill:#E3EEF9,stroke:#2B6CB0,color:#0B2545
+    classDef bad fill:#FBE4E4,stroke:#C53030,color:#4A0D0D
+    class llm,byo model
+    class checks,insert,parser,spans,fences code
+    class drop bad
