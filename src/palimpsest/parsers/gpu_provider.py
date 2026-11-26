@@ -28,6 +28,11 @@ RUNPOD_API = "https://rest.runpod.io/v1"
 EUR_PER_USD = 0.92
 
 
+# Conservative hourly ceiling for the pre-creation budget check (cheap GPUs this
+# project uses cost well under $1/h).
+_PROJECTED_USD_PER_HOUR = 1.0
+
+
 class RunPodSession:
     def __init__(
         self,
@@ -68,6 +73,10 @@ class RunPodSession:
 
     # -- lifecycle -----------------------------------------------------------
     def __enter__(self) -> RunPodSession:
+        # €-cap BEFORE creating a billed pod. The rate is unknown until the pod exists,
+        # so project the worst case: idle_hard seconds at a conservative hourly ceiling.
+        self.cost_meter.check_or_raise(
+            self.idle_hard / 3600 * _PROJECTED_USD_PER_HOUR * EUR_PER_USD)
         try:
             self._start_pod()
             pod = self._await_running()

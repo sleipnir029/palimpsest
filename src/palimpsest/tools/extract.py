@@ -835,6 +835,13 @@ def extract(
         tail += "\n\n" + extra_instruction
     for batch in batches:
         content = full if batch is None else _render_projection(spans, batch)
+        if cost_meter is not None:
+            # €-cap BEFORE the paid call, not only once per agent turn: project this
+            # call (prompt chars/4 in, the provider's max output) and refuse past the cap.
+            from palimpsest.agent import _cost_eur  # lazy: import cycle
+            est = {"input_tokens": (len(system) + len(content)) // 4,
+                   "output_tokens": getattr(provider, "max_tokens", 8192)}
+            cost_meter.check_or_raise(_cost_eur(est, getattr(provider, "prices", None)))
         resp = provider.complete(
             system=system,
             messages=[{"role": "user", "content": content + tail}],

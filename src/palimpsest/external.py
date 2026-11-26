@@ -38,10 +38,14 @@ def _cached_sha(pdf: str | Path, parser_name: str, db_path: str) -> str:
     return sha
 
 
+_FREE = {"input_tokens": 0.0, "output_tokens": 0.0}  # no paid call: never budget-refused
+
+
 class _Capture:
     """Records the prompt extract() sends; answers with no measurements."""
 
     name = EXTERNAL_MODEL
+    prices = _FREE
 
     def __init__(self) -> None:
         self.calls: list[tuple[str, str]] = []
@@ -56,6 +60,7 @@ class _Replay:
     """Returns the coding agent's saved answer as the model's reply (one call only)."""
 
     name = EXTERNAL_MODEL
+    prices = _FREE
 
     def __init__(self, text: str) -> None:
         self.text = text

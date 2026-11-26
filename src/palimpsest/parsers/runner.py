@@ -20,6 +20,7 @@ import uuid
 from pathlib import Path
 
 from ..cache import ParserCache
+from ..cost import BudgetExceeded
 from ..tools.read_paper import read_paper
 from .commands import PARSERS
 from .gpu_provider import RunPodSession
@@ -159,6 +160,8 @@ def parse_with_cache(
                         )
                     finally:
                         pod.pending_work = False
+        except BudgetExceeded:
+            raise  # a budget refusal stops the batch; never log-and-continue it
         except Exception as e:
             # Pod-level failure (create/SSH/teardown raised). All this parser's
             # unseen cells are left unfilled; loop continues to next parser.
