@@ -34,6 +34,34 @@ def main() -> None:
         print(run_paper(Path(sys.argv[2]), store=RDFStore("store")))
         return
 
+    # Bring-your-own-agent: a coding agent plays the extraction model (no API key).
+    if sys.argv[1] in ("prompt", "ingest"):
+        import argparse
+
+        from . import external  # lazy
+
+        ap = argparse.ArgumentParser(prog=f"python -m palimpsest {sys.argv[1]}")
+        ap.add_argument("pdf")
+        ap.add_argument("--parser", default="docling")
+        ap.add_argument("--skill", default="oer-extraction")
+        if sys.argv[1] == "prompt":
+            ap.add_argument("--out", help="write the prompt here instead of stdout")
+            a = ap.parse_args(sys.argv[2:])
+            text = external.render_prompt(a.pdf, a.parser, a.skill)
+            if a.out:
+                from pathlib import Path
+
+                Path(a.out).parent.mkdir(parents=True, exist_ok=True)
+                Path(a.out).write_text(text, encoding="utf-8")
+                print(f"prompt written to {a.out}")
+            else:
+                print(text)
+        else:
+            ap.add_argument("--response", required=True, help="file with the JSON answer")
+            a = ap.parse_args(sys.argv[2:])
+            print(external.ingest(a.pdf, a.response, a.parser, a.skill))
+        return
+
     # Init the workspace git repo so the agent's actions are logged + undoable.
     from .versioning import ensure_repo
 
