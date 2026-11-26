@@ -382,8 +382,9 @@ Python function calls.
 
 palimpsest started as an MSc mini-thesis in Materials Engineering at RWTH Aachen
 University, carried out at IET-3 (Theory and Computation of Energy Materials),
-Forschungszentrum Jülich. Thanks to Prof. Michael Eikerling, Dr. M. Eslamibidgoli
-and Dr. Kourosh Malek for supervision and for the ontology work this builds on.
+Forschungszentrum Jülich. Thanks to Dr. Mehrtoos Eslamibidgoli, my co-supervisor, for
+constant guidance and help, and to Dr. Kourosh Malek and Prof. Michael Eikerling for
+their support throughout the whole project.
 
 Ontologies: [EMMO](https://emmo-repo.github.io/) and its electrochemistry domain ECHO,
 [QUDT](https://qudt.org), [PROV-O](https://www.w3.org/TR/prov-o/), and
