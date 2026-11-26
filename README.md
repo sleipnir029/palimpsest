@@ -230,8 +230,21 @@ Use whichever provider you have a key for:
 
 | Role | Providers | Switch with |
 |---|---|---|
-| Agent loop | DeepSeek (default, `deepseek-v4-flash`), Anthropic (Claude) | `/use orchestration <provider> [model]` |
-| Extraction | DeepSeek (default), Anthropic, Gemini, OpenRouter | `/use extraction <provider> [model]` |
+| Agent loop | DeepSeek (default, `deepseek-v4-flash`), Anthropic (Claude), your own Anthropic-compatible server | `/use orchestration <provider> [model]` |
+| Extraction | DeepSeek (default), Anthropic, Gemini, OpenRouter, your own Anthropic- or OpenAI-compatible server | `/use extraction <provider> [model]` |
+
+**Your own model.** If your lab or institute serves an open model on its own GPUs,
+point palimpsest at it and no text leaves your network:
+
+- An Anthropic-compatible endpoint (`LOCAL_ANTHROPIC_BASE_URL`, `LOCAL_ANTHROPIC_MODEL`)
+  can run both the agent and the extraction. The model must support tool calls.
+- An OpenAI-compatible endpoint (`LOCAL_OPENAI_BASE_URL`, `LOCAL_OPENAI_MODEL`), as served
+  by vLLM, Ollama or LM Studio, can run the extraction.
+
+Then `/use orchestration local-anthropic <model>` or `/use extraction local-openai <model>`.
+Set `LOCAL_PRICE_IN=0` and `LOCAL_PRICE_OUT=0` for free inference; otherwise the budget
+meter counts these calls at Claude Sonnet rates. The bring-your-own-coding-agent route
+also works with a local model if your coding agent is configured to use one.
 
 The default is DeepSeek because it is cheap: one paper costs around a cent. Keys go in
 `.env` (see [.env.example](.env.example)). Every paid call is metered against the

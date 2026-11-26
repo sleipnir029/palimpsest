@@ -49,6 +49,7 @@ _PROVIDERS: dict[str, Callable] = {
     "sonnet": AnthropicProvider,
     "haiku": PROVIDER_FACTORIES["haiku"],
     "anthropic": AnthropicProvider,
+    "local-anthropic": PROVIDER_FACTORIES["local-anthropic"],
 }
 _NOT_IMPLEMENTED = {"gemini"}  # extraction-only (OpenAI-compat, no tool use)
 
@@ -80,6 +81,14 @@ _PROVIDER_MODELS: dict[str, dict] = {
         ("deepseek/deepseek-chat", "DeepSeek via gateway", None),
         ("meta-llama/llama-3.3-70b-instruct", "Llama 3.3 70B", None),
         ("z-ai/glm-4.6", "Zhipu z.ai GLM 4.6", None),
+    ]},
+    "local-anthropic": {"loop": True, "desc": "your own Anthropic-compatible server",
+                        "env": "LOCAL_ANTHROPIC_MODEL", "free": True, "models": [
+        ("<model>", "the model name your server serves (LOCAL_ANTHROPIC_BASE_URL)", None),
+    ]},
+    "local-openai": {"loop": False, "desc": "your own OpenAI-compatible server (extraction only)",
+                     "env": "LOCAL_OPENAI_MODEL", "free": True, "models": [
+        ("<model>", "the model name your server serves (LOCAL_OPENAI_BASE_URL)", None),
     ]},
 }
 
@@ -217,12 +226,12 @@ def _use(app, args: list[str]) -> str:
     if model is not None and model not in known and not spec.get("free"):
         return f"unknown {provider} model: {model}. options: {', '.join(known)}"
 
+    if "env" in spec and model is not None:  # these providers read the model from env
+        config.set_value(spec["env"], model)
     if role in ("orchestration", "orch"):
         return _model(app, [_factory_for(provider, model)])  # constructs + hot-swaps + persists
     # extraction
-    if "env" in spec:  # gateway providers carry the chosen model in an env var
-        if model is not None:
-            config.set_value(spec["env"], model)
+    if "env" in spec:
         config.set_setting("extraction_model", provider, db_path=db)
         return f"extraction → {provider} ({model or 'default'}) — applies to the next extract_paper"
     factory = _factory_for(provider, model)  # deepseek/anthropic → a priced factory

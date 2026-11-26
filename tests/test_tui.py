@@ -679,8 +679,9 @@ def test_menu_for_argument_values():
     # /use is two-level: roles → providers (by role) → models under the provider.
     assert toks("/use ") == ["orchestration", "extraction", "parser"]
     # orchestration offers only loop-capable providers; extraction offers all four.
-    assert toks("/use orchestration ") == ["deepseek", "anthropic"]
-    assert toks("/use extraction ") == ["deepseek", "anthropic", "gemini", "openrouter"]
+    assert toks("/use orchestration ") == ["deepseek", "anthropic", "local-anthropic"]
+    assert toks("/use extraction ") == ["deepseek", "anthropic", "gemini", "openrouter",
+                                       "local-anthropic", "local-openai"]
     # then the chosen provider's models (id + comment).
     assert toks("/use orchestration anthropic ") == ["claude-sonnet-4-6", "claude-haiku-4-5"]
     # partial filtering at the model level + the completion prefix.
@@ -709,7 +710,7 @@ def test_arg_autocomplete_tab_completes(tmp_path):
         async with app.run_test() as pilot:
             app.query_one("#prompt", PromptArea).text = "/use orchestration "
             await pilot.pause()
-            assert app._menu == ["deepseek", "anthropic"]  # provider level
+            assert app._menu == ["deepseek", "anthropic", "local-anthropic"]  # provider level
             await pilot.press("tab")
             await pilot.pause()
             assert app.query_one("#prompt", PromptArea).text == "/use orchestration deepseek "

@@ -29,6 +29,9 @@ _PROVIDER_KEY = {
     "haiku": "ANTHROPIC_API_KEY",
     "gemini": "GEMINI_API_KEY",
     "openrouter": "OPENROUTER_API_KEY",  # extraction-only gateway (CLAUDE.md carve-out)
+    # self-hosted: the endpoint URL is what must be set; a key is optional
+    "local-anthropic": "LOCAL_ANTHROPIC_BASE_URL",
+    "local-openai": "LOCAL_OPENAI_BASE_URL",
 }
 
 

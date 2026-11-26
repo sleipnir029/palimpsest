@@ -35,6 +35,43 @@ def _openrouter():
         prices=prices,
     )
 
+def _local_prices() -> dict:
+    """USD/token for a self-hosted model: LOCAL_PRICE_IN/OUT (USD per 1M tokens) if set
+    (0/0 for free inference on your own GPUs), else Sonnet rates, a conservative
+    ceiling so the €-cap is never under-counted for a model of unknown cost."""
+    pin, pout = os.environ.get("LOCAL_PRICE_IN"), os.environ.get("LOCAL_PRICE_OUT")
+    if pin and pout:
+        return {"input_tokens": float(pin) / 1_000_000, "output_tokens": float(pout) / 1_000_000}
+    return {"input_tokens": 3.0 / 1_000_000, "output_tokens": 15.0 / 1_000_000}
+
+
+def _local_endpoint(kind: str) -> tuple[str, str]:
+    base = os.environ.get(f"LOCAL_{kind}_BASE_URL")
+    model = os.environ.get(f"LOCAL_{kind}_MODEL")
+    if not (base and model):
+        raise ValueError(f"set LOCAL_{kind}_BASE_URL and LOCAL_{kind}_MODEL "
+                         "(your self-hosted endpoint and model name)")
+    return base, model
+
+
+def _local_anthropic():
+    """A model you host (lab / institute server) behind an Anthropic-Messages-compatible
+    endpoint. Speaks the loop's wire format, so it can drive the agent (needs tool use)."""
+    base, model = _local_endpoint("ANTHROPIC")
+    p = AnthropicProvider(api_key=os.environ.get("LOCAL_ANTHROPIC_API_KEY") or "none",
+                          model=model, base_url=base, name=model)
+    p.prices = _local_prices()
+    return p
+
+
+def _local_openai():
+    """A model you host behind an OpenAI-compatible endpoint (/v1/chat/completions).
+    EXTRACTION ONLY, like the other OpenAI-compat providers."""
+    base, model = _local_endpoint("OPENAI")
+    return OpenAICompatProvider(model=model, base_url=base, api_key_env="LOCAL_OPENAI_API_KEY",
+                                name=model, prices=_local_prices())
+
+
 def _priced(provider, input_usd: float, output_usd: float, *, cache_read=None, cache_create=None):
     """Attach a verified per-token USD price table to a provider INSTANCE.
 
@@ -79,12 +116,15 @@ PROVIDER_FACTORIES = {
     "anthropic": AnthropicProvider,
     "gemini": _gemini,                   # reads GEMINI_MODEL (extraction only)
     "openrouter": _openrouter,           # OpenAI-compat gateway, EXTRACTION ONLY
+    "local-anthropic": _local_anthropic, # your own Anthropic-compatible server
+    "local-openai": _local_openai,       # your own OpenAI-compatible server, EXTRACTION ONLY
 }
 
 # Providers that can drive the AGENT LOOP. Only Anthropic-wire endpoints
 # (DeepSeek/Anthropic) support tool use; Gemini/OpenAI are OpenAI-compat →
 # extraction-only (openai_compat raises on tools=). T-app: orchestration stays here.
-ORCHESTRATION_PROVIDERS = ("deepseek", "deepseek-pro", "sonnet", "haiku", "anthropic")
+ORCHESTRATION_PROVIDERS = ("deepseek", "deepseek-pro", "sonnet", "haiku", "anthropic",
+                           "local-anthropic")
 
 
 def build_provider(name: str):
