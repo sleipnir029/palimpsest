@@ -203,3 +203,32 @@ def test_mixed_per_parser_skip(tmp_path, env, fake_pod):
     assert set(result[sha].keys()) == set(PARSERS)
     # docling cell came from cache (the prepopulated file).
     assert "docling.json" in str(result[sha]["docling"])
+
+
+def test_needed_parser_cached_skips_pods(tmp_path, fake_pod):
+    """Only the requested parser is cached and no RunPod config exists → no pod, no
+    KeyError; the cached cell is returned (fresh-clone path with shipped cache/)."""
+    cache = ParserCache(str(tmp_path / "cache.db"), tmp_path / "cache")
+    meter = CostMeter(str(tmp_path / "cost.db"))
+    sha = _sha(FIXTURE)
+    cache.add_paper(sha, FIXTURE.name, 12)
+    _prepopulate(cache, sha, ["docling"], tmp_path / "cache")
+
+    result = runner.parse_with_cache([FIXTURE], meter, cache, need="docling")
+
+    assert fake_pod.instances == []
+    assert set(result[sha].keys()) == {"docling"}
+
+
+def test_missing_template_env_skips_parser_instead_of_raising(tmp_path, fake_pod, monkeypatch):
+    """No RUNPOD_TEMPLATE_* set → each uncached parser is logged + skipped (failure
+    policy), never a bare KeyError escaping to the agent."""
+    for parser in ("DOCLING", "MINERU", "CHANDRA", "DOTS", "PADDLE"):
+        monkeypatch.delenv(f"RUNPOD_TEMPLATE_{parser}", raising=False)
+    cache = ParserCache(str(tmp_path / "cache.db"), tmp_path / "cache")
+    meter = CostMeter(str(tmp_path / "cost.db"))
+
+    result = runner.parse_with_cache([FIXTURE], meter, cache)
+
+    assert fake_pod.instances == []
+    assert result[_sha(FIXTURE)] == {}

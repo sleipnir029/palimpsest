@@ -162,3 +162,16 @@ def test_insert_or_replace_updates_same_key(tmp_path):
     _insert_run(cache, SHA_A, "docling", output_path="v1.json")
     _insert_run(cache, SHA_A, "docling", output_path="v2.json")
     assert cache.get_output(SHA_A, "docling") == cache.cache_dir / "v2.json"
+
+
+def test_get_output_falls_back_to_conventional_file_without_row(tmp_path):
+    # A cache/ shipped without its palimpsest.db (fresh clone): no parser_runs row,
+    # but the blob sits at the runner's convention cache/<sha>/<parser>.<ext>.
+    cache = _mk(tmp_path)
+    d = cache.cache_dir / SHA_A
+    d.mkdir(parents=True)
+    (d / "docling.json").write_text("{}")
+    (d / "chandra.md").write_text("# md")
+    assert cache.get_output(SHA_A, "docling") == d / "docling.json"
+    assert cache.get_output(SHA_A, "chandra") == d / "chandra.md"
+    assert cache.get_output(SHA_A, "mineru") is None

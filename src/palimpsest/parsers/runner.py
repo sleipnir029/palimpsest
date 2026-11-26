@@ -35,11 +35,14 @@ def parse_with_cache(
     pdf_paths: list[Path],
     cost_meter,
     cache: ParserCache,
+    need: str | None = None,
 ) -> dict[str, dict[str, Path]]:
     """Parse PDFs with the 5-parser set; reuse cached outputs; one pod per parser.
 
     Returns `{sha256: {parser_name: Path}}`. Cells are filled from cache where
     available, else from a fresh pod run. Failures are logged + skipped.
+    `need`: the parser the caller will use; if it is cached for every PDF, no pod
+    is started even when other parsers are missing.
     """
 
     # T07 read_paper hashes from the same bytes it would parse, so the cache
@@ -70,6 +73,8 @@ def parse_with_cache(
     # Short-circuit: every sha × every parser already cached → no pod work.
     if all(len(result[sha]) == len(PARSERS) for sha in shas):
         return result
+    if need is not None and all(need in result[sha] for sha in shas):
+        return result
 
     gpus = [g.strip() for g in
             os.environ.get("RUNPOD_GPU", "NVIDIA GeForce RTX 3090").split(",")]
@@ -82,7 +87,11 @@ def parse_with_cache(
             logger.info("parser=%s all cached, skipping pod", parser_name)
             continue
 
-        template_id = os.environ[spec["template_id_env"]]
+        template_id = os.environ.get(spec["template_id_env"])
+        if not template_id:
+            logger.error("parser=%s skipped: %s is not set (RunPod template needed "
+                         "to parse uncached PDFs)", parser_name, spec["template_id_env"])
+            continue
         # idle_hard=2400 covers the chandra worst case (≈1700s on a 12-page paper,
         # T17 pod-verify); ssh timeout=2400 matches. Larger corpora need more.
         # The OUTER try/except guards RunPodSession.__enter__ — pod create or SSH

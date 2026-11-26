@@ -134,7 +134,7 @@ def test_run_paper_persists_drop_reasons(monkeypatch):
 
     a, b, c = OverpotentialA(), TafelSlopeB(), MassActivityC()
 
-    monkeypatch.setattr(pl, "parse_with_cache", lambda pdfs, cm, cache: {"sha-x": {}})
+    monkeypatch.setattr(pl, "parse_with_cache", lambda pdfs, cm, cache, need=None: {"sha-x": {need: Path("x")}})
     # extract: 3 Pydantic-valid instances + 2 pre-validation errors.
     monkeypatch.setattr(pl, "extract", lambda *a_, **k_: (
         [a, b, c],
@@ -243,3 +243,14 @@ def test_pipeline_end_to_end_live(tmp_path):
         "no Overpotential ~236 mV (within 10%) that also retained a currentDensity "
         f"condition (C1 regression); got {[(r['val'], r['cd']) for r in rows]}"
     )
+
+
+def test_run_paper_clear_error_when_parser_output_missing(monkeypatch, tmp_path):
+    """Uncached PDF + no RunPod → a plain-language error naming what to set, not a
+    bare KeyError / 'run T16 first'."""
+    import palimpsest.pipeline as pl
+    monkeypatch.setattr(pl, "parse_with_cache", lambda pdfs, cm, cache, need=None: {"sha-x": {}})
+    with pytest.raises(RuntimeError, match="RUNPOD_TEMPLATE_DOCLING"):
+        pl.run_paper(tmp_path / "new.pdf", parser_name="docling",
+                     cache=object(), cost_meter=object(), store=object(),
+                     run_log=object())

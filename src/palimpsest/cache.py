@@ -96,6 +96,12 @@ class ParserCache:
             (sha256, parser_name),
         ).fetchone()
         if row is None:
+            # No row (e.g. a cache/ shipped without its palimpsest.db): fall back to
+            # the runner's on-disk convention cache/<sha>/<parser>.<json|md>.
+            for ext in (".json", ".md"):
+                path = self.cache_dir / sha256 / f"{parser_name}{ext}"
+                if path.is_file():
+                    return path
             return None
         path = self.cache_dir / row[0]
         # A row whose blob has been deleted is a cache miss, not a stale hit.

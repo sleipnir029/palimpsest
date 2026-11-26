@@ -65,8 +65,14 @@ def run_paper(
 
     # 1. Parse via the cache. All-5-cached → short-circuit, no pod, no spend.
     progress.emit(f"parsing {pdf_path.name} with {parser_name} (cached parses are free)…")
-    mapping = parse_with_cache([pdf_path], cost_meter, cache)
+    mapping = parse_with_cache([pdf_path], cost_meter, cache, need=parser_name)
     sha = next(iter(mapping))
+    if parser_name not in mapping[sha]:
+        raise RuntimeError(
+            f"no {parser_name} output for {pdf_path.name}: it is not in cache/ and "
+            "parsing new PDFs needs RunPod (RUNPOD_API_KEY + RUNPOD_TEMPLATE_"
+            f"{parser_name.upper()}). See README, 'Parsing your own PDFs'."
+        )
 
     # 2. Extract (one LLM call). `valid` are Pydantic-valid Measurements that
     #    already carry Evidence; extract-level `errors` (bad/mis-cited items) are
