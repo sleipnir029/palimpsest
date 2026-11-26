@@ -70,10 +70,10 @@ def workspace_status(papers_dir: str = "papers", *, cache=None, store=None, run_
 
     # --- gather (all read-only) ------------------------------------------
     registered = _registered_papers(cache)          # sha -> {filename, page_count}
-    parsers = _parsers_by_paper(cache)               # sha -> [parser_name, ...]
     graph_counts = _graph_counts(store)              # sha -> int
     runs = run_log.latest_per_paper()                # sha -> run row
     loose = _loose_pdfs(papers_dir, set(registered)) # sha -> filename (unregistered)
+    parsers = _parsers_by_paper(cache, set(registered) | set(loose))  # sha -> [parser]
 
     if not registered and not loose:
         return "workspace status — no papers (read-only, €0)"
@@ -115,10 +115,16 @@ def workspace_status(papers_dir: str = "papers", *, cache=None, store=None, run_
 
     # Loose PDFs on disk the cache has never seen.
     for sha in sorted(loose, key=lambda s: loose[s]):
+        ran = sorted(parsers.get(sha, []))
         lines.append(f"{loose[sha]}  [{sha[:8]} · on disk]")
-        lines.append("  → needs parsing (not in cache)")
+        if ran:  # parse outputs shipped in cache/ (e.g. the bundled example papers)
+            lines.append(f"  → parse cached ({len(ran)}/{len(ParserCache.PARSERS)}: "
+                         f"{', '.join(ran)}) → needs extraction")
+            pending_extract += 1
+        else:
+            lines.append("  → needs parsing (not in cache)")
+            pending_parse += 1
         lines.append("")
-        pending_parse += 1
 
     lines.append(f"pending: {pending_extract} need extraction, {pending_parse} need parsing")
     lines.append("drop reasons per item: extraction_report (T58)")
@@ -143,7 +149,7 @@ def _registered_papers(cache) -> dict[str, dict]:
     return {r[0]: {"filename": r[1], "page_count": r[2]} for r in rows}
 
 
-def _parsers_by_paper(cache) -> dict[str, list[str]]:
+def _parsers_by_paper(cache, shas) -> dict[str, list[str]]:
     rows = cache.conn.execute(
         "SELECT paper_sha256, parser_name FROM parser_runs"
     ).fetchall()
@@ -152,6 +158,11 @@ def _parsers_by_paper(cache) -> dict[str, list[str]]:
         out.setdefault(sha, [])
         if parser not in out[sha]:
             out[sha].append(parser)
+    # Plus parse outputs shipped in cache/<sha>/ without a db row (fresh clone).
+    for sha in shas:
+        for parser in cache.PARSERS:
+            if parser not in out.get(sha, []) and cache.get_output(sha, parser) is not None:
+                out.setdefault(sha, []).append(parser)
     return out
 
 

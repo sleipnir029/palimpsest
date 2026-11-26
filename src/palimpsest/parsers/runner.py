@@ -124,7 +124,12 @@ def parse_with_cache(
                         local_path = (
                             cache_dir / f"{parser_name}{Path(pod_out).suffix}"
                         )
-                        pod.scp_down(pod_out, local_path)
+                        # Download under a temp name, rename on success: a partial
+                        # file must never look like a cached output (get_output's
+                        # on-disk fallback only matches <parser>.json|md).
+                        tmp = local_path.with_name(local_path.name + ".part")
+                        pod.scp_down(pod_out, tmp)
+                        tmp.replace(local_path)
 
                         # Per-paper cost = share of the pod's hourly rate over this
                         # parse's wall seconds. cost_ledger (T05) carries the

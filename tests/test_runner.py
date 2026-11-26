@@ -205,14 +205,14 @@ def test_mixed_per_parser_skip(tmp_path, env, fake_pod):
     assert "docling.json" in str(result[sha]["docling"])
 
 
-def test_needed_parser_cached_skips_pods(tmp_path, fake_pod):
-    """Only the requested parser is cached and no RunPod config exists → no pod, no
-    KeyError; the cached cell is returned (fresh-clone path with shipped cache/)."""
+def test_needed_parser_cached_skips_pods(tmp_path, env, fake_pod):
+    """Fresh clone: only the requested parser's file is on disk (no db row). Even with
+    RunPod configured, `need` must short-circuit: no pod for the other four parsers."""
     cache = ParserCache(str(tmp_path / "cache.db"), tmp_path / "cache")
     meter = CostMeter(str(tmp_path / "cost.db"))
     sha = _sha(FIXTURE)
-    cache.add_paper(sha, FIXTURE.name, 12)
-    _prepopulate(cache, sha, ["docling"], tmp_path / "cache")
+    (tmp_path / "cache" / sha).mkdir(parents=True)
+    (tmp_path / "cache" / sha / "docling.json").write_text("cached")
 
     result = runner.parse_with_cache([FIXTURE], meter, cache, need="docling")
 
@@ -232,3 +232,18 @@ def test_missing_template_env_skips_parser_instead_of_raising(tmp_path, fake_pod
 
     assert fake_pod.instances == []
     assert result[_sha(FIXTURE)] == {}
+
+
+def test_download_goes_through_part_file(tmp_path, env, fake_pod):
+    """The pod output lands under <parser>.<ext>.part first and is renamed on success,
+    so an interrupted download never matches get_output's on-disk fallback."""
+    cache = ParserCache(str(tmp_path / "cache.db"), tmp_path / "cache")
+    meter = CostMeter(str(tmp_path / "cost.db"))
+
+    runner.parse_with_cache([FIXTURE], meter, cache)
+
+    downs = [local for p in fake_pod.instances for _r, local in p.scp_down_calls]
+    assert downs and all(d.endswith(".part") for d in downs)
+    sha = _sha(FIXTURE)
+    assert not list((tmp_path / "cache" / sha).glob("*.part"))
+    assert cache.get_output(sha, "docling") is not None

@@ -142,3 +142,26 @@ def test_empty_workspace(tmp_path):
     out = workspace_status(_empty_dir(tmp_path), cache=cache, store=RDFStore(),
                            run_log=ExtractionRunLog(str(tmp_path / "runs.db")))
     assert "no papers" in out.lower()
+
+
+def test_shipped_cache_without_db_row_is_not_needs_parsing(tmp_path):
+    """Fresh clone: a PDF in papers/ whose parse ships in cache/<sha>/ (no db row) is
+    ready for extraction, not 'needs parsing' (which would send users to RunPod)."""
+    from palimpsest.tools.read_paper import read_paper
+
+    cache = ParserCache(db_path=str(tmp_path / "p.db"), cache_dir=tmp_path / "cache")
+    papers = tmp_path / "papers"
+    papers.mkdir()
+    doc = fitz.open()
+    doc.new_page().insert_text((72, 72), "shipped paper")
+    doc.save(str(papers / "shipped.pdf"))
+    doc.close()
+    sha = read_paper(str(papers / "shipped.pdf"))["sha256"]
+    (tmp_path / "cache" / sha).mkdir(parents=True)
+    (tmp_path / "cache" / sha / "docling.json").write_text("{}")
+
+    out = workspace_status(str(papers), cache=cache, store=RDFStore(),
+                           run_log=ExtractionRunLog(str(tmp_path / "runs.db")))
+
+    assert "needs extraction" in out
+    assert "needs parsing" not in out

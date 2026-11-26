@@ -11,6 +11,7 @@ logged in DEVIATIONS.md.
 
 from __future__ import annotations
 
+import re
 import sqlite3
 from datetime import datetime, timezone
 
@@ -42,6 +43,9 @@ CREATE TABLE IF NOT EXISTS parser_runs (
     FOREIGN KEY (paper_sha256) REFERENCES papers(sha256)
 );
 """
+
+
+_SHA_RE = re.compile(r"[0-9a-f]{64}")
 
 
 def _now() -> str:
@@ -95,13 +99,14 @@ class ParserCache:
             "ORDER BY parsed_at DESC LIMIT 1",
             (sha256, parser_name),
         ).fetchone()
-        if row is None:
+        if row is None and parser_name in self.PARSERS and _SHA_RE.fullmatch(sha256):
             # No row (e.g. a cache/ shipped without its palimpsest.db): fall back to
             # the runner's on-disk convention cache/<sha>/<parser>.<json|md>.
             for ext in (".json", ".md"):
                 path = self.cache_dir / sha256 / f"{parser_name}{ext}"
                 if path.is_file():
                     return path
+        if row is None:
             return None
         path = self.cache_dir / row[0]
         # A row whose blob has been deleted is a cache miss, not a stale hit.

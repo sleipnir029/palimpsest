@@ -21,6 +21,7 @@ from pathlib import Path
 from . import progress
 from .cache import ParserCache
 from .cost import CostMeter
+from .parsers.commands import PARSERS
 from .parsers.runner import parse_with_cache
 from .runs import ExtractionRunLog
 from .store import RDFStore
@@ -65,13 +66,16 @@ def run_paper(
 
     # 1. Parse via the cache. All-5-cached → short-circuit, no pod, no spend.
     progress.emit(f"parsing {pdf_path.name} with {parser_name} (cached parses are free)…")
+    if parser_name not in PARSERS:
+        raise ValueError(f"unknown parser {parser_name!r}; choose one of {', '.join(PARSERS)}")
     mapping = parse_with_cache([pdf_path], cost_meter, cache, need=parser_name)
     sha = next(iter(mapping))
     if parser_name not in mapping[sha]:
         raise RuntimeError(
-            f"no {parser_name} output for {pdf_path.name}: it is not in cache/ and "
-            "parsing new PDFs needs RunPod (RUNPOD_API_KEY + RUNPOD_TEMPLATE_"
-            f"{parser_name.upper()}). See README, 'Parsing your own PDFs'."
+            f"no {parser_name} output for {pdf_path.name}: it is not in cache/ and no "
+            "parse produced it. Parsing a new PDF needs RunPod (RUNPOD_API_KEY + "
+            f"RUNPOD_TEMPLATE_{parser_name.upper()}); if those are set, the pod or parse "
+            "failed, see the log. README: 'Parsing your own PDFs'."
         )
 
     # 2. Extract (one LLM call). `valid` are Pydantic-valid Measurements that

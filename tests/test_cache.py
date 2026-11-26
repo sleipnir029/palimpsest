@@ -175,3 +175,14 @@ def test_get_output_falls_back_to_conventional_file_without_row(tmp_path):
     assert cache.get_output(SHA_A, "docling") == d / "docling.json"
     assert cache.get_output(SHA_A, "chandra") == d / "chandra.md"
     assert cache.get_output(SHA_A, "mineru") is None
+
+
+def test_get_output_fallback_rejects_bad_sha_and_unknown_parser(tmp_path):
+    cache = _mk(tmp_path)
+    (tmp_path / "evil.json").write_text("{}")
+    (cache.cache_dir / SHA_A).mkdir(parents=True)
+    (cache.cache_dir / SHA_A / "foo.json").write_text("{}")
+    (cache.cache_dir / SHA_A / "docling.json.part").write_text("partial")
+    assert cache.get_output("..", "evil") is None
+    assert cache.get_output(SHA_A, "foo") is None
+    assert cache.get_output(SHA_A, "docling") is None  # .part is not a hit
