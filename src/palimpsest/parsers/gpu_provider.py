@@ -73,11 +73,12 @@ class RunPodSession:
 
     # -- lifecycle -----------------------------------------------------------
     def __enter__(self) -> RunPodSession:
-        # €-cap BEFORE creating a billed pod. The rate is unknown until the pod exists,
-        # so project the worst case: idle_hard seconds at a conservative hourly ceiling.
-        self.cost_meter.check_or_raise(
-            self.idle_hard / 3600 * _PROJECTED_USD_PER_HOUR * EUR_PER_USD)
         try:
+            # €-cap BEFORE creating a billed pod. The rate is unknown until the pod
+            # exists, so project idle_hard seconds at a conservative hourly ceiling;
+            # inside the try so a refusal still closes the HTTP client (no pod yet).
+            self.cost_meter.check_or_raise(
+                self.idle_hard / 3600 * _PROJECTED_USD_PER_HOUR * EUR_PER_USD)
             self._start_pod()
             pod = self._await_running()
             self.usd_per_hour = pod.get("adjustedCostPerHr") or pod.get("costPerHr")
@@ -85,6 +86,10 @@ class RunPodSession:
                 raise RuntimeError(
                     f"pod {self.pod_id} returned no usable hourly rate; refusing to bill"
                 )
+            # Re-check with the real rate (a pricier GPU than the ceiling assumed);
+            # a refusal here tears the pod down via the except path.
+            self.cost_meter.check_or_raise(
+                self.idle_hard / 3600 * self.usd_per_hour * EUR_PER_USD)
             # Bill from here: the SSH-handshake retries below are already on the clock.
             self.connect_ts = self.last_activity = time.time()
             self._conn = self._connect_ssh(pod)

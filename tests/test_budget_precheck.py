@@ -111,3 +111,75 @@ def test_external_ingest_not_refused_near_cap():
 
     p = _Replay("{}")
     assert _cost_eur({"input_tokens": 50_000, "output_tokens": 16_000}, p.prices) == 0.0
+
+
+def test_extract_tool_path_is_metered(tmp_path, monkeypatch):
+    """The agent's `extract` tool passes no cost_meter: the config-resolved provider is
+    still a paid call, so it must be checked against (and recorded in) the ledger."""
+    import palimpsest.cost as cost
+    import palimpsest.tools.extract as ex
+    from palimpsest.cache import ParserCache
+
+    monkeypatch.setattr(cost, "_CANONICAL_DB", str(tmp_path / "c.db"))
+    CostMeter("palimpsest.db").record_llm("seed", 49.99)
+    monkeypatch.setattr(ex, "_resolve_extraction_provider", lambda db="": _NeverCall())
+    sha = "c" * 64
+    d = tmp_path / "cache" / sha
+    d.mkdir(parents=True)
+    (d / "mineru.json").write_text(json.dumps([[
+        {"type": "text", "content": "eta = 236 mV", "bbox": [0, 0, 10, 10]}]]))
+    cache = ParserCache(str(tmp_path / "p.db"), tmp_path / "cache")
+    with pytest.raises(BudgetExceeded):
+        ex.extract(sha, "mineru", cache=cache)  # no cost_meter, like Agent._dispatch
+
+
+def test_free_ingest_allowed_even_over_cap(tmp_path):
+    """A €0 bring-your-own-agent call is never refused, even if spend is already over."""
+    from palimpsest.cache import ParserCache
+    from palimpsest.external import _Replay
+    from palimpsest.tools.extract import extract
+
+    sha = "d" * 64
+    d = tmp_path / "cache" / sha
+    d.mkdir(parents=True)
+    (d / "mineru.json").write_text(json.dumps([[
+        {"type": "text", "content": "eta = 236 mV", "bbox": [0, 0, 10, 10]}]]))
+    cache = ParserCache(str(tmp_path / "p.db"), tmp_path / "cache")
+    meter = _meter_at_cap(tmp_path, spent=50.20)  # already over the €50 cap
+    extract(sha, "mineru", provider=_Replay('{"items": []}'), cache=cache, cost_meter=meter)
+
+
+def test_pod_rechecked_with_real_rate(tmp_path, monkeypatch):
+    """A pricier GPU than the $1/h ceiling is refused once its real rate is known,
+    and the pod is torn down."""
+    from palimpsest.parsers import gpu_provider
+
+    monkeypatch.setenv("RUNPOD_API_KEY", "test")
+    meter = _meter_at_cap(tmp_path, spent=48.5)  # $1/h projection (~€0.6) fits, $5/h doesn't
+    s = gpu_provider.RunPodSession(meter, template_id="t", idle_hard=2400)
+    stopped = []
+    monkeypatch.setattr(s, "_start_pod", lambda: setattr(s, "pod_id", "p1"))
+    monkeypatch.setattr(s, "_await_running", lambda: {"costPerHr": 5.0})
+    monkeypatch.setattr(s, "_connect_ssh", lambda pod: (_ for _ in ()).throw(AssertionError("no ssh")))
+    monkeypatch.setattr(s._client, "post", lambda url, **k: stopped.append(url))
+    with pytest.raises(BudgetExceeded):
+        s.__enter__()
+    assert any(u.endswith("/pods/p1/stop") for u in stopped)
+
+
+def test_budget_refusal_in_tool_is_labelled(tmp_path):
+    from palimpsest.agent import Agent
+
+    agent = Agent(provider=None, cost_meter=CostMeter(str(tmp_path / "c.db")), tools={})
+    import palimpsest.agent as agent_mod
+
+    def _refusing_tool(**_):
+        raise BudgetExceeded(49.99, 50.0, 0.1)
+    _refusing_tool.tool_schema = {"input_schema": {"type": "object"}}
+    orig = dict(agent_mod.TOOLS)
+    agent_mod.TOOLS["_refuse"] = _refusing_tool
+    try:
+        out = agent._dispatch({"id": "t1", "name": "_refuse", "input": {}})
+    finally:
+        agent_mod.TOOLS.clear(); agent_mod.TOOLS.update(orig)
+    assert out["is_error"] and "[budget]" in out["content"]

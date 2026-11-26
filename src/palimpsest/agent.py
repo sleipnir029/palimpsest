@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from jsonschema import ValidationError, validate
 
+from .cost import BudgetExceeded
 from .providers.anthropic import StreamCancelled
 from .session import SessionLog
 from .tools import TOOLS
@@ -245,6 +246,8 @@ class Agent:
             return {**block, "content": f"error: invalid arguments: {exc.message}", "is_error": True}
         try:
             block["content"] = str(fn(**call["input"]))
+        except BudgetExceeded as exc:  # a refused paid call inside a tool: say so plainly
+            block.update(content=f"error: [budget] {exc}", is_error=True)
         except Exception as exc:  # noqa: BLE001 — surface any tool failure to the model
             block.update(content=f"error: {exc}", is_error=True)
         else:

@@ -38,7 +38,7 @@ def _cached_sha(pdf: str | Path, parser_name: str, db_path: str) -> str:
     return sha
 
 
-_FREE = {"input_tokens": 0.0, "output_tokens": 0.0}  # no paid call: never budget-refused
+_FREE = {"input_tokens": 0.0, "output_tokens": 0.0}  # no paid call: projected €0, never refused
 
 
 class _Capture:

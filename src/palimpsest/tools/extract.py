@@ -776,7 +776,12 @@ def extract(
     # no-price provider. Guard ONLY the resolved-from-config path: an injected provider
     # (tests, experiments passing prices explicitly) is the caller's responsibility.
     if provider is None:
-        db = cost_meter.db_path if cost_meter is not None else "palimpsest.db"
+        if cost_meter is None:
+            # A config-resolved provider is a paid call (e.g. the agent's `extract`
+            # tool, which passes no meter): always meter it against the shared ledger.
+            from palimpsest.cost import CostMeter  # lazy: import cycle
+            cost_meter = CostMeter("palimpsest.db")
+        db = cost_meter.db_path
         provider = _resolve_extraction_provider(db)
         if cost_meter is not None and getattr(provider, "prices", None) is None:
             raise ValueError(
@@ -839,9 +844,11 @@ def extract(
             # €-cap BEFORE the paid call, not only once per agent turn: project this
             # call (prompt chars/4 in, the provider's max output) and refuse past the cap.
             from palimpsest.agent import _cost_eur  # lazy: import cycle
-            est = {"input_tokens": (len(system) + len(content)) // 4,
+            est = {"input_tokens": (len(system) + len(content) + len(tail)) // 4,
                    "output_tokens": getattr(provider, "max_tokens", 8192)}
-            cost_meter.check_or_raise(_cost_eur(est, getattr(provider, "prices", None)))
+            projected = _cost_eur(est, getattr(provider, "prices", None))
+            if projected > 0:  # a free call (bring-your-own-agent) is never refused
+                cost_meter.check_or_raise(projected)
         resp = provider.complete(
             system=system,
             messages=[{"role": "user", "content": content + tail}],
