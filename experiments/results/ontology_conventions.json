@@ -1,0 +1,213 @@
+{
+  "echo": {
+    "n_classes_merged": 4334,
+    "n_classes_local": 947,
+    "iri_pattern": "^electrochemistry_[0-9a-f]{8}(_[0-9a-f]{4}){3}_[0-9a-f]{12}$",
+    "iri_conformance": 0.9947201689545935,
+    "n_restrictions_merged": 2907,
+    "n_restrictions_local": 233,
+    "n_disjoint_merged": 57,
+    "prefLabel_en_tagged": 0.9070749736008448,
+    "elucidation_en_tagged": 0.9978858350951374,
+    "rates_local": {
+      "skos:prefLabel": 1.0,
+      "skos:altLabel": 0.32946145723336856,
+      "rdfs:label": 1.0,
+      "elucidation": 0.9989440337909187,
+      "wikidataReference": 0.12038014783526928,
+      "qudtReference": 0.0,
+      "wikipediaReference": 0.12038014783526928,
+      "IEVReference": 0.17423442449841606,
+      "ISO80000Reference": 0.0,
+      "iupacReference": 0.06546990496304118,
+      "dbpediaReference": 0.022175290390707498,
+      "pubChemReference": 0.0010559662090813093,
+      "<any description>": 1.0,
+      "<any definition source>": 0.29567053854276665,
+      "rdfs:subClassOf": 1.0
+    },
+    "rates_merged": {
+      "skos:prefLabel": 0.9907706506691278,
+      "skos:altLabel": 0.3659437009690817,
+      "rdfs:label": 0.9907706506691278,
+      "elucidation": 0.9266266728195662,
+      "wikidataReference": 0.24550069220119983,
+      "qudtReference": 0.24180895246885095,
+      "wikipediaReference": 0.17420396862021229,
+      "IEVReference": 0.09090909090909091,
+      "ISO80000Reference": 0.10498384863867097,
+      "iupacReference": 0.0689893862482695,
+      "dbpediaReference": 0.021458237194277804,
+      "pubChemReference": 0.12482694970004615,
+      "<any description>": null,
+      "<any definition source>": null,
+      "rdfs:subClassOf": null
+    },
+    "tiers": {
+      "skos:prefLabel": "REQUIRED",
+      "skos:altLabel": "IGNORE",
+      "rdfs:label": "REQUIRED",
+      "elucidation": "REQUIRED",
+      "wikidataReference": "IGNORE",
+      "qudtReference": "IGNORE",
+      "wikipediaReference": "IGNORE",
+      "IEVReference": "IGNORE",
+      "ISO80000Reference": "IGNORE",
+      "iupacReference": "IGNORE",
+      "dbpediaReference": "IGNORE",
+      "pubChemReference": "IGNORE",
+      "<any description>": "REQUIRED",
+      "<any definition source>": "IGNORE",
+      "rdfs:subClassOf": "REQUIRED"
+    }
+  },
+  "h2kg": {
+    "n_classes": 19,
+    "n_individuals": 3249,
+    "n_individuals_h2kg_ns": 2176,
+    "n_individuals_build_artefacts": 1066,
+    "n_restrictions": 0,
+    "n_subclassof": 7,
+    "n_owl_imports": 0,
+    "n_skos_mappings": 16,
+    "n_echo_classes_reused": 1,
+    "rates_by_type": {
+      "Parameter": {
+        "n": 584,
+        "skos:prefLabel": 0.9982876712328768,
+        "skos:altLabel": 0.7431506849315068,
+        "dcterms:description": 1.0,
+        "rdfs:isDefinedBy": 0.0017123287671232876,
+        "h2kg:appliesToProfile": 0.0,
+        "h2kg:hasQuantityValue": 0.9691780821917808
+      },
+      "Property": {
+        "n": 536,
+        "skos:prefLabel": 1.0,
+        "skos:altLabel": 0.8824626865671642,
+        "dcterms:description": 1.0,
+        "rdfs:isDefinedBy": 0.0,
+        "h2kg:appliesToProfile": 0.0,
+        "h2kg:hasQuantityValue": 0.9720149253731343
+      },
+      "Matter": {
+        "n": 468,
+        "skos:prefLabel": 1.0,
+        "skos:altLabel": 0.6688034188034188,
+        "dcterms:description": 1.0,
+        "rdfs:isDefinedBy": 0.0,
+        "h2kg:appliesToProfile": 0.0,
+        "h2kg:hasQuantityValue": 0.0
+      },
+      "Measurement": {
+        "n": 201,
+        "skos:prefLabel": 1.0,
+        "skos:altLabel": 0.8756218905472637,
+        "dcterms:description": 1.0,
+        "rdfs:isDefinedBy": 0.0,
+        "h2kg:appliesToProfile": 0.0,
+        "h2kg:hasQuantityValue": 0.004975124378109453
+      },
+      "Instrument": {
+        "n": 192,
+        "skos:prefLabel": 1.0,
+        "skos:altLabel": 0.7604166666666666,
+        "dcterms:description": 1.0,
+        "rdfs:isDefinedBy": 0.0,
+        "h2kg:appliesToProfile": 0.0,
+        "h2kg:hasQuantityValue": 0.0
+      },
+      "Manufacturing": {
+        "n": 131,
+        "skos:prefLabel": 1.0,
+        "skos:altLabel": 0.8778625954198473,
+        "dcterms:description": 1.0,
+        "rdfs:isDefinedBy": 0.0,
+        "h2kg:appliesToProfile": 0.0,
+        "h2kg:hasQuantityValue": 0.0
+      },
+      "Data": {
+        "n": 52,
+        "skos:prefLabel": 1.0,
+        "skos:altLabel": 0.7884615384615384,
+        "dcterms:description": 1.0,
+        "rdfs:isDefinedBy": 0.0,
+        "h2kg:appliesToProfile": 0.0,
+        "h2kg:hasQuantityValue": 0.0
+      }
+    },
+    "type_histogram": {
+      "Parameter": 584,
+      "Property": 536,
+      "Matter": 468,
+      "Measurement": 201,
+      "Instrument": 192,
+      "Manufacturing": 131,
+      "Data": 52,
+      "Process": 6,
+      "NormalizationBasis": 6,
+      "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_7729c34e_1ae9_403d_b933_1765885e7f29": 4,
+      "Metadata": 4,
+      "http://www.w3.org/2002/07/owl#Class": 1,
+      "http://www.w3.org/2004/02/skos/core#Concept": 1
+    },
+    "tiers_by_type": {
+      "Parameter": {
+        "skos:prefLabel": "REQUIRED",
+        "skos:altLabel": "WARN",
+        "dcterms:description": "REQUIRED",
+        "rdfs:isDefinedBy": "IGNORE",
+        "h2kg:appliesToProfile": "IGNORE",
+        "h2kg:hasQuantityValue": "REQUIRED"
+      },
+      "Property": {
+        "skos:prefLabel": "REQUIRED",
+        "skos:altLabel": "REQUIRED",
+        "dcterms:description": "REQUIRED",
+        "rdfs:isDefinedBy": "IGNORE",
+        "h2kg:appliesToProfile": "IGNORE",
+        "h2kg:hasQuantityValue": "REQUIRED"
+      },
+      "Matter": {
+        "skos:prefLabel": "REQUIRED",
+        "skos:altLabel": "WARN",
+        "dcterms:description": "REQUIRED",
+        "rdfs:isDefinedBy": "IGNORE",
+        "h2kg:appliesToProfile": "IGNORE",
+        "h2kg:hasQuantityValue": "IGNORE"
+      },
+      "Measurement": {
+        "skos:prefLabel": "REQUIRED",
+        "skos:altLabel": "REQUIRED",
+        "dcterms:description": "REQUIRED",
+        "rdfs:isDefinedBy": "IGNORE",
+        "h2kg:appliesToProfile": "IGNORE",
+        "h2kg:hasQuantityValue": "IGNORE"
+      },
+      "Instrument": {
+        "skos:prefLabel": "REQUIRED",
+        "skos:altLabel": "WARN",
+        "dcterms:description": "REQUIRED",
+        "rdfs:isDefinedBy": "IGNORE",
+        "h2kg:appliesToProfile": "IGNORE",
+        "h2kg:hasQuantityValue": "IGNORE"
+      },
+      "Manufacturing": {
+        "skos:prefLabel": "REQUIRED",
+        "skos:altLabel": "REQUIRED",
+        "dcterms:description": "REQUIRED",
+        "rdfs:isDefinedBy": "IGNORE",
+        "h2kg:appliesToProfile": "IGNORE",
+        "h2kg:hasQuantityValue": "IGNORE"
+      },
+      "Data": {
+        "skos:prefLabel": "REQUIRED",
+        "skos:altLabel": "WARN",
+        "dcterms:description": "REQUIRED",
+        "rdfs:isDefinedBy": "IGNORE",
+        "h2kg:appliesToProfile": "IGNORE",
+        "h2kg:hasQuantityValue": "IGNORE"
+      }
+    }
+  }
+}

@@ -44,12 +44,5 @@ schema-jsonld = "gen-jsonld-context schema/palimpsest.yaml > schema/generated/co
 schema-jsonschema = "gen-json-schema schema/palimpsest.yaml > schema/generated/jsonschema.json"
 schema = { depends-on = ["schema-pydantic", "schema-shacl", "schema-jsonld", "schema-jsonschema"] }
 
-[feature.docs.dependencies]
-matplotlib = "*"
-
-[feature.docs.tasks]
-figures = { cmd = "python mini-thesis/figures/make_figures.py", description = "Generate thesis figures 9-11 (docs env only)" }
-
 [environments]
 default = { solve-group = "default" }
-docs = { features = ["docs"], solve-group = "default" }

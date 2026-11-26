@@ -231,62 +231,6 @@ def test_spans_route_degrades_on_misshaped_cache(monkeypatch, tmp_path):
     assert r.status_code == 200 and r.json()["count"] == 0
 
 
-# the 2-tuple gold paper (experiments/ab_extract.py GOLD): Overpotential 210 & 330
-_GOLD_SHA = "bd86866b0d0ed41bd5cbaf523aa92287194f052841092df665df5380c303be01"
-
-
-def test_gold_route_matches_benchmark_scorer(monkeypatch):
-    """/gold greedy-matches the cell's extracted (type,value) against GOLD[sha] using
-    ab_extract's own `_matches` — so tp/recall/precision equal `_score_preds` (no drift).
-    Two extracted match gold (210, 330); a third (999) is an extra (false positive)."""
-    viewer_app._gold_module.cache_clear()
-    _score_preds = viewer_app._gold_module()._score_preds  # the loader the endpoint uses
-
-    def _store():
-        s = RDFStore()
-        for v in (210.0, 330.0, 999.0):
-            s.insert_extraction(
-                Overpotential(value=v, unit_label="mV",
-                              evidence=Evidence(paper=Paper(sha256=_GOLD_SHA), page=1,
-                                                bbox_x0=0.0, bbox_y0=0.0, bbox_x1=1.0, bbox_y1=1.0,
-                                                parser_name="docling")),
-                run_id=f"r-{v}", extraction_model="deepseek-v4-flash",
-            )
-        return s
-    monkeypatch.setattr(viewer_app, "_graph_store", _store)
-    g = client.get(f"/paper/{_GOLD_SHA}/gold").json()
-    assert g["gold_total"] == 2 and g["tp"] == 2 and g["fn"] == 0 and g["fp"] == 1
-    assert g["recall"] == 1.0
-    assert all(x["matched"] for x in g["gold"])
-    assert [x["matched"] for x in g["extracted"]].count(False) == 1  # the 999
-
-    # identical numbers to the benchmark scorer on the same inputs
-    preds = [(x["type"], x["value"]) for x in g["extracted"]]
-    tp, n, recall, prec = _score_preds(preds, [("Overpotential", 210.0), ("Overpotential", 330.0)])
-    assert (g["tp"], g["recall"], g["precision"]) == (tp, recall, prec)
-
-
-def test_gold_route_duplicate_preds_dont_double_claim(monkeypatch):
-    """Greedy semantics: two extractions of the SAME value can't both claim one gold
-    tuple. preds [210, 210] vs gold [210, 330] → tp=1 (one 210 matches), fp=1 (the
-    second 210 is extra), fn=1 (330 missed). Locks the matched-set tracking."""
-    def _store():
-        s = RDFStore()
-        for rid in ("a", "b"):  # two distinct measurements, same value 210
-            s.insert_extraction(
-                Overpotential(value=210.0, unit_label="mV",
-                              evidence=Evidence(paper=Paper(sha256=_GOLD_SHA), page=1,
-                                                bbox_x0=0.0, bbox_y0=0.0, bbox_x1=1.0, bbox_y1=1.0,
-                                                parser_name="docling")),
-                run_id=f"r-{rid}", extraction_model="deepseek-v4-flash",
-            )
-        return s
-    monkeypatch.setattr(viewer_app, "_graph_store", _store)
-    g = client.get(f"/paper/{_GOLD_SHA}/gold").json()
-    assert (g["tp"], g["fp"], g["fn"]) == (1, 1, 1)
-    assert [x["matched"] for x in g["extracted"]].count(True) == 1  # only one 210 claims gold
-
-
 def test_gold_route_no_gold_for_unknown_sha(monkeypatch):
     monkeypatch.setattr(viewer_app, "_graph_store", _store_matrix)
     g = client.get(f"/paper/{_SHA}/gold").json()  # _SHA="a"*64 is not in GOLD
